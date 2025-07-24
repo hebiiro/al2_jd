@@ -1,0 +1,25 @@
+﻿#pragma once
+
+namespace apn::dark::kuro::theme
+{
+	//
+	// このクラスはItemsViewのテーマをフックしてカスタム描画を実行します。
+	//
+	inline struct ItemsViewRenderer : Renderer
+	{
+		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
+		{
+			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}", theme, part_id, state_id, prop_id);
+
+			const auto& pigment = paint::itemsview_material.pigment;
+
+			switch (prop_id)
+			{
+			case TMT_FILLCOLOR: return *result = pigment.background.color, S_OK;
+			case TMT_TEXTCOLOR: return *result = pigment.text.color, S_OK;
+			}
+
+			return __super::on_get_theme_color(theme, part_id, state_id, prop_id, result);
+		}
+	} itemsview_renderer;
+}
