@@ -42,12 +42,14 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			// テスト用コード。
-			auto window_color = ::GetSysColor(COLOR_WINDOW);
-			auto button_color = ::GetSysColor(COLOR_BTNFACE);
-			auto background_color = ::GetSysColor(COLOR_BACKGROUND);
-			auto menu_color = ::GetSysColor(COLOR_MENU);
-			auto hilight_color = ::GetSysColor(COLOR_HIGHLIGHT);
+			if (0) // テスト用コードです。
+			{
+				auto window_color = ::GetSysColor(COLOR_WINDOW);
+				auto button_color = ::GetSysColor(COLOR_BTNFACE);
+				auto background_color = ::GetSysColor(COLOR_BACKGROUND);
+				auto menu_color = ::GetSysColor(COLOR_MENU);
+				auto hilight_color = ::GetSysColor(COLOR_HIGHLIGHT);
+			}
 
 			// aviutl2ウィンドウを取得します。
 			get_aviutl2_window();

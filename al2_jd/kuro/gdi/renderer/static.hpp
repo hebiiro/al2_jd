@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct StaticRenderer : RendererNc
 	{
@@ -9,8 +9,6 @@ namespace apn::dark::gdi
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, dc, control, brush);
 
 			// スタティックコントロールの背景の色を変更します。
-
-			if (auto theme = skin::theme::manager.get_theme(VSCLASS_STATIC))
 			{
 				// カラーダイアログのスタティックコントロール用の処理です。
 				if (brush == (HBRUSH)::GetStockObject(DC_BRUSH))
@@ -20,7 +18,7 @@ namespace apn::dark::gdi
 				if (my::get_style(control) & SS_SUNKEN && ::GetWindowTextLength(control) == 0)
 					return __super::on_ctl_color(hwnd, message, dc, control, brush);
 
-				return skin::theme::manager.get_fill_brush(dc, brush, theme, STAT_TEXT, PBS_NORMAL);
+				return get_dialog_brush(hwnd, message, dc, control, brush);
 			}
 
 			return __super::on_ctl_color(hwnd, message, dc, control, brush);
@@ -60,11 +58,8 @@ namespace apn::dark::gdi
 
 			if (edge == EDGE_ETCHED && flags == BF_RECT)
 			{
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_STATIC))
-				{
-					if (python.call_draw_figure(current_state->hwnd, theme, dc, STAT_ETCHED_EDGE, 0, rc))
-						return TRUE;
-				}
+				// 凹エッジを描画します。
+				return paint::draw_etched_edge(dc, rc), TRUE;
 			}
 
 			return hive.orig.DrawEdge(dc, rc, edge, flags);
@@ -91,9 +86,13 @@ namespace apn::dark::gdi
 
 //			if (!(options & ETO_IGNORELANGUAGE))
 			{
-				auto theme = skin::theme::manager.get_theme(VSCLASS_STATIC);
-				if (python.call_text_out(current_state->hwnd, theme, dc, STAT_TEXT, 0, x, y, options, rc, text, c, dx))
-					return TRUE;
+				const auto& palette = paint::dialog_material.palette;
+
+				auto part_id = WP_DIALOG;
+				auto state_id = ETS_NORMAL;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 			}
 
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);

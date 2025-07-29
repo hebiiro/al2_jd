@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct ComboBoxExRenderer : Renderer
 	{
@@ -25,11 +25,11 @@ namespace apn::dark::gdi
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}, {/}", dc, left, top, right, bottom);
 
 			// リストボックスアイテムの背景を描画します。
-
-			if (auto theme = skin::theme::manager.get_theme(VSCLASS_LISTBOX))
 			{
+				const auto& palette = paint::listbox_material.palette;
+
 				auto brush = (HBRUSH)::GetCurrentObject(dc, OBJ_BRUSH);
-				auto color = painter::get_brush_color(brush);
+				auto color = paint::get_brush_color(brush);
 
 				auto part_id = EP_EDITTEXT;
 				auto state_id = -1;
@@ -37,11 +37,10 @@ namespace apn::dark::gdi
 				if (color == ::GetSysColor(COLOR_WINDOW)) state_id = ETS_NORMAL;
 				else if (color == ::GetSysColor(COLOR_HIGHLIGHT)) state_id = ETS_SELECTED;
 
-				if (state_id != -1)
+				if (auto pigment = palette.get(part_id, state_id))
 				{
 					auto rc = RECT { left, top, right, bottom };
-					if (python.call_draw_figure(current_state->hwnd, theme, dc, part_id, state_id, &rc))
-						return TRUE;
+					return paint::stylus.draw_rect(dc, &rc, pigment);
 				}
 			}
 
@@ -104,18 +103,19 @@ namespace apn::dark::gdi
 #if 1
 //			if (!(options & (ETO_GLYPH_INDEX | ETO_IGNORELANGUAGE)))
 			{
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_LISTBOX))
-				{
-					auto part_id = EP_EDITTEXT;
-					auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				// リストボックスアイテムの項目を描画します。
 
-					// 選択カラーの場合は
-					if (::GetBkColor(dc) == ::GetSysColor(COLOR_HIGHLIGHT))
-						state_id = ETS_SELECTED; // 選択状態として描画します。
+				const auto& palette = paint::listbox_material.palette;
 
-					if (python.call_text_out(current_state->hwnd, theme, dc, part_id, state_id, x, y, options, rc, text, c, dx))
-						return TRUE;
-				}
+				auto part_id = EP_EDITTEXT;
+				auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				// 選択カラーの場合は
+				if (::GetBkColor(dc) == ::GetSysColor(COLOR_HIGHLIGHT))
+					state_id = ETS_SELECTED; // 選択状態として描画します。
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 			}
 #endif
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);

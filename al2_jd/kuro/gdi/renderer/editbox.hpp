@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct EditBoxRenderer : RendererNc
 	{
@@ -32,7 +32,12 @@ namespace apn::dark::gdi
 					}
 					else if (spin_style & UDS_ALIGNRIGHT)
 					{
-						if (auto theme = skin::theme::manager.get_theme(VSCLASS_EDIT))
+						const auto& palette = paint::editbox_material.palette;
+
+						auto part_id = EP_EDITTEXT;
+						auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+						if (auto pigment = palette.get(part_id, state_id))
 						{
 							my::WindowDC dc(hwnd);
 
@@ -43,9 +48,7 @@ namespace apn::dark::gdi
 							auto fill_rc = *rc;
 							fill_rc.left = fill_rc.right - (window_w - client_w) / 2;
 
-							auto part_id = EP_EDITTEXT;
-							auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
-							python.call_draw_figure(hwnd, theme, dc, part_id, state_id, &fill_rc);
+							paint::stylus.draw_rect(dc, rc, pigment);
 						}
 
 						rc->right += spin_w;
@@ -60,29 +63,30 @@ namespace apn::dark::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}, bk_color = {/hex}, text_color = {/hex}", hwnd, message, dc, control, brush, ::GetBkColor(dc), ::GetTextColor(dc));
 
+
 			// ブラシもしくは背景色がダイアログカラーの場合は
 			if (brush == (HBRUSH)(COLOR_BTNFACE + 1) ||
 				::GetBkColor(dc) == ::GetSysColor(COLOR_BTNFACE))
 			{
-				// スタティックコントロールとして描画します。
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_STATIC))
-				{
-					auto part_id = STAT_TEXT;
-					auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				// ダイアログとして描画します。
+				const auto& palette = paint::dialog_material.palette;
 
-					return skin::theme::manager.get_fill_brush(dc, brush, theme, part_id, state_id);
-				}
+				auto part_id = EP_EDITTEXT;
+				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return pigment->background.get_brush();
 			}
 			else
 			{
 				// エディットボックスとして描画します。
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_EDIT))
-				{
-					auto part_id = EP_EDITTEXT;
-					auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				const auto& palette = paint::editbox_material.palette;
 
-					return skin::theme::manager.get_fill_brush(dc, brush, theme, part_id, state_id);
-				}
+				auto part_id = EP_EDITTEXT;
+				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return pigment->background.get_brush();
 			}
 
 			return __super::on_ctl_color(hwnd, message, dc, control, brush);
@@ -149,31 +153,29 @@ namespace apn::dark::gdi
 				// 背景色がダイアログカラーの場合は
 				if (bk_color == ::GetSysColor(COLOR_BTNFACE))
 				{
-					// スタティックコントロールとして描画します。
-					if (auto theme = skin::theme::manager.get_theme(VSCLASS_STATIC))
-					{
-						auto part_id = STAT_TEXT;
-						auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
+					// ダイアログとして描画します。
+					const auto& palette = paint::dialog_material.palette;
 
-						if (python.call_text_out(current_state->hwnd, theme, dc, part_id, state_id, x, y, options, rc, text, c, dx))
-							return TRUE;
-					}
+					auto part_id = EP_EDITTEXT;
+					auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+					if (auto pigment = palette.get(part_id, state_id))
+						return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 				}
 				else
 				{
 					// エディットボックスとして描画します。
-					if (auto theme = skin::theme::manager.get_theme(VSCLASS_EDIT))
-					{
-						auto part_id = EP_EDITTEXT;
-						auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
+					const auto& palette = paint::editbox_material.palette;
 
-						// 選択カラーの場合は
-						if (bk_color == ::GetSysColor(COLOR_HIGHLIGHT))
-							state_id = ETS_SELECTED; // 選択状態として描画します。
+					auto part_id = EP_EDITTEXT;
+					auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
 
-						if (python.call_text_out(current_state->hwnd, theme, dc, part_id, state_id, x, y, options, rc, text, c, dx))
-							return TRUE;
-					}
+					// 選択カラーの場合は
+					if (bk_color == ::GetSysColor(COLOR_HIGHLIGHT))
+						state_id = ETS_SELECTED; // 選択状態として描画します。
+
+					if (auto pigment = palette.get(part_id, state_id))
+						return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 				}
 			}
 #endif

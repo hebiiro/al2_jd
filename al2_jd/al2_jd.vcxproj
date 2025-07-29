@@ -93,7 +93,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "C:\ProgramData\aviutl2\Plugin\$(TargetName).aui2"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(aviutl2_dir)\data\Plugin\$(TargetName).aui2"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -119,7 +119,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "C:\ProgramData\aviutl2\Plugin\$(TargetName).aui2"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(aviutl2_dir)\data\Plugin\$(TargetName).aui2"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -141,7 +141,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "C:\ProgramData\aviutl2\Plugin\$(TargetName).aui2"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(aviutl2_dir)\data\Plugin\$(TargetName).aui2"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -167,7 +167,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>copy /Y "$(TargetPath)" "C:\ProgramData\aviutl2\Plugin\$(TargetName).aui2"</Command>
+      <Command>copy /Y "$(TargetPath)" "$(aviutl2_dir)\data\Plugin\$(TargetName).aui2"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -179,15 +179,13 @@
     <ClInclude Include="kuro\gdi\renderer\combobox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\comboboxex.hpp" />
     <ClInclude Include="kuro\gdi\renderer\comdlg32\dialog.hpp" />
+    <ClInclude Include="kuro\gdi\renderer\comdlg32\direct_ui_hwnd.hpp" />
     <ClInclude Include="kuro\gdi\renderer\dialog.hpp" />
     <ClInclude Include="kuro\gdi\renderer\editbox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\header.hpp" />
     <ClInclude Include="kuro\gdi\renderer\listbox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\listview.hpp" />
     <ClInclude Include="kuro\gdi\renderer\richedit.hpp" />
-    <ClInclude Include="kuro\gdi\renderer\setting_dialog.hpp" />
-    <ClInclude Include="kuro\gdi\renderer\shell_header.hpp" />
-    <ClInclude Include="kuro\gdi\renderer\shell_listview.hpp" />
     <ClInclude Include="kuro\gdi\renderer\spin.hpp" />
     <ClInclude Include="kuro\gdi\renderer\static.hpp" />
     <ClInclude Include="kuro\gdi\renderer\tab.hpp" />
@@ -202,33 +200,53 @@
     <ClInclude Include="kuro\hook\gdi.hpp" />
     <ClInclude Include="kuro\hook\manager.hpp" />
     <ClInclude Include="kuro\hook\theme.hpp" />
+    <ClInclude Include="kuro\paint\material\button.hpp" />
+    <ClInclude Include="kuro\paint\material\combobox.hpp" />
     <ClInclude Include="kuro\paint\material\dialog.hpp" />
+    <ClInclude Include="kuro\paint\material\editbox.hpp" />
     <ClInclude Include="kuro\paint\material\header.hpp" />
     <ClInclude Include="kuro\paint\material\itemsview.hpp" />
     <ClInclude Include="kuro\paint\material\listbox.hpp" />
+    <ClInclude Include="kuro\paint\material\listview.hpp" />
     <ClInclude Include="kuro\paint\material\menu.hpp" />
     <ClInclude Include="kuro\paint\material\scrollbar.hpp" />
+    <ClInclude Include="kuro\paint\material\spin.hpp" />
+    <ClInclude Include="kuro\paint\material\tab.hpp" />
     <ClInclude Include="kuro\paint\material\tooltip.hpp" />
     <ClInclude Include="kuro\paint\manager.hpp" />
     <ClInclude Include="kuro\paint\material.hpp" />
+    <ClInclude Include="kuro\paint\material\trackbar.hpp" />
+    <ClInclude Include="kuro\paint\material\treeview.hpp" />
     <ClInclude Include="kuro\paint\palette.hpp" />
     <ClInclude Include="kuro\paint\pigment.hpp" />
     <ClInclude Include="kuro\paint\stylus.hpp" />
+    <ClInclude Include="kuro\paint\utils.hpp" />
     <ClInclude Include="kuro\style.hpp" />
-    <ClInclude Include="kuro\theme\renderer\base\header.hpp" />
     <ClInclude Include="kuro\theme\renderer\base\menu.hpp" />
+    <ClInclude Include="kuro\theme\renderer\button.hpp" />
+    <ClInclude Include="kuro\theme\renderer\combobox.hpp" />
+    <ClInclude Include="kuro\theme\renderer\editbox.hpp" />
+    <ClInclude Include="kuro\theme\renderer\header.hpp" />
     <ClInclude Include="kuro\theme\renderer\immersive_start\menu.hpp" />
     <ClInclude Include="kuro\theme\renderer\itemsview.hpp" />
-    <ClInclude Include="kuro\theme\renderer\itemsview\header.hpp" />
+    <ClInclude Include="kuro\theme\renderer\listbox.hpp" />
+    <ClInclude Include="kuro\theme\renderer\listview.hpp" />
     <ClInclude Include="kuro\theme\renderer\menu.hpp" />
     <ClInclude Include="kuro\theme\renderer\scrollbar.hpp" />
+    <ClInclude Include="kuro\theme\renderer\spin.hpp" />
+    <ClInclude Include="kuro\theme\renderer\static.hpp" />
+    <ClInclude Include="kuro\theme\renderer\tab.hpp" />
     <ClInclude Include="kuro\theme\renderer\tooltip.hpp" />
     <ClInclude Include="kuro\theme\from_vsclass.hpp" />
     <ClInclude Include="kuro\theme\from_handle.hpp" />
     <ClInclude Include="kuro\theme\manager.hpp" />
     <ClInclude Include="kuro\theme\name.hpp" />
     <ClInclude Include="kuro\theme\renderer.hpp" />
+    <ClInclude Include="kuro\theme\renderer\trackbar.hpp" />
+    <ClInclude Include="kuro\theme\renderer\treeview.hpp" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="test_dialog.hpp" />
     <ClInclude Include="utils.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +260,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="al2_jd.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

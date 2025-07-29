@@ -11,9 +11,6 @@ namespace apn::dark::kuro::theme::immersive_start
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
-			const auto& menu_palette = paint::menu_material.palette;
-
-			if (auto pigment = menu_palette.get(part_id, state_id))
 			{
 				switch (part_id)
 				{
@@ -24,11 +21,15 @@ namespace apn::dark::kuro::theme::immersive_start
 						auto rc2 = *rc;
 						::InflateRect(&rc2, 0, -3);
 
-						return (ToHRESULT)paint::stylus.draw_rect(dc, &rc2, pigment);
+						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
 					}
 				}
 
-				return (ToHRESULT)paint::stylus.draw_rect(dc, rc, pigment);
+				if (draw_rect(dc, rc, palette, part_id, state_id))
+					return S_OK;
 			}
 
 			return __super::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
@@ -40,9 +41,7 @@ namespace apn::dark::kuro::theme::immersive_start
 
 			if (!(text_flags & DT_CALCRECT))
 			{
-				const auto& menu_palette = paint::menu_material.palette;
-
-				if (auto pigment = menu_palette.get(part_id, state_id))
+				if (auto pigment = palette.get(part_id, state_id))
 				{
 					auto options2 = *options;
 					options2.dwFlags |= DTT_TEXTCOLOR;

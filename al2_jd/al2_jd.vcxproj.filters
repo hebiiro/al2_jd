@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="resource">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="framework">
       <UniqueIdentifier>{7f11dba5-0fb0-455f-882d-36166962a4a1}</UniqueIdentifier>
     </Filter>
@@ -29,9 +25,6 @@
     <Filter Include="kuro\theme\renderer">
       <UniqueIdentifier>{f56f4075-7162-4a5c-bd54-9d653f6106ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="kuro\theme\renderer\itemsview">
-      <UniqueIdentifier>{2323ddfd-fb23-4351-ac30-6f6dd84082cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="kuro\theme\renderer\immersive_start">
       <UniqueIdentifier>{fb59a7be-703a-4e3a-9fd4-53cdb66e6d75}</UniqueIdentifier>
     </Filter>
@@ -43,6 +36,10 @@
     </Filter>
     <Filter Include="kuro\gdi\renderer\comdlg32">
       <UniqueIdentifier>{2a7b4353-6efb-4f1c-821f-da3c05c25adf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -85,12 +82,6 @@
     </ClInclude>
     <ClInclude Include="kuro\theme\renderer\base\menu.hpp">
       <Filter>kuro\theme\renderer\base</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\theme\renderer\base\header.hpp">
-      <Filter>kuro\theme\renderer\base</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\theme\renderer\itemsview\header.hpp">
-      <Filter>kuro\theme\renderer\itemsview</Filter>
     </ClInclude>
     <ClInclude Include="kuro\hook\gdi.hpp">
       <Filter>kuro\hook</Filter>
@@ -144,15 +135,6 @@
       <Filter>kuro\gdi\renderer</Filter>
     </ClInclude>
     <ClInclude Include="kuro\gdi\renderer\richedit.hpp">
-      <Filter>kuro\gdi\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\gdi\renderer\setting_dialog.hpp">
-      <Filter>kuro\gdi\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\gdi\renderer\shell_header.hpp">
-      <Filter>kuro\gdi\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\gdi\renderer\shell_listview.hpp">
       <Filter>kuro\gdi\renderer</Filter>
     </ClInclude>
     <ClInclude Include="kuro\gdi\renderer\spin.hpp">
@@ -221,10 +203,82 @@
     <ClInclude Include="kuro\theme\renderer\scrollbar.hpp">
       <Filter>kuro\theme\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>resource</Filter>
+    </ClInclude>
+    <ClInclude Include="test_dialog.hpp" />
+    <ClInclude Include="kuro\theme\renderer\button.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\utils.hpp">
+      <Filter>kuro\paint</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\static.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\listbox.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\combobox.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\combobox.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\editbox.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\editbox.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\trackbar.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\trackbar.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\spin.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\spin.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\tab.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\listview.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\header.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\listview.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\tab.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\treeview.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\treeview.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\button.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\gdi\renderer\comdlg32\direct_ui_hwnd.hpp">
+      <Filter>kuro\gdi\renderer\comdlg32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">
       <Filter>framework</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="al2_jd.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

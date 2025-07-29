@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct TrackBarRenderer : Renderer
 	{
@@ -16,6 +16,7 @@ namespace apn::dark::gdi
 					// デフォルトの塗りつぶし処理をスキップします。
 					return TRUE;
 				}
+#if 0 // aviutl2の場合はこの処理はいらないと思われます。
 			case WM_LBUTTONDOWN:
 				{
 //					MY_TRACE_FUNC("WM_LBUTTONDOWN, {/hex}, {/hex}, {/hex}, {/hex}", current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
@@ -31,6 +32,7 @@ namespace apn::dark::gdi
 
 					return result;
 				}
+#endif
 			}
 
 			return __super::on_subclass_proc(current_state);
@@ -41,14 +43,8 @@ namespace apn::dark::gdi
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, dc, control, brush);
 
 			// トラックバーの背景の色を変更します。
-
-			if (auto theme = skin::theme::manager.get_theme(VSCLASS_TRACKBAR))
-			{
-				if (auto state = skin::theme::manager.get_state(theme, TKP_TRACK, TRS_BACKGROUND))
-					if (auto brush = state->get_fill_brush()) return brush;
-			}
-
-			return __super::on_ctl_color(hwnd, message, dc, control, brush);
+			// トラックバーがダイアログに配置されることを前提に処理しています。
+			return get_dialog_brush(hwnd, message, dc, control, brush);
 		}
 
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
@@ -104,16 +100,20 @@ namespace apn::dark::gdi
 		{
 //			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
 
+			// トラックの選択部分の色を変更します。
 			{
-				// トラックの選択部分の色を変更します。
-
+				// 背景色が選択色の場合は
 				if (::GetBkColor(dc) == ::GetSysColor(COLOR_HIGHLIGHT))
 				{
-					if (auto theme = skin::theme::manager.get_theme(VSCLASS_TRACKBAR))
+					const auto& palette = paint::trackbar_material.palette;
+
+					auto part_id = EP_EDITTEXT;
+					auto state_id = ETS_SELECTED;
+
+					if (auto pigment = palette.get(part_id, state_id))
 					{
-						auto state = skin::theme::manager.get_state(theme, TKP_TRACK, TRS_SELECTED);
-						if (state && state->stuff.fill.color != CLR_NONE)
-							::SetBkColor(dc, state->stuff.fill.color);
+						if (pigment->background.is_valid())
+							::SetBkColor(dc, pigment->background.color);
 					}
 				}
 			}

@@ -16,9 +16,6 @@ namespace apn::dark::kuro::theme
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
-			const auto& menu_palette = paint::menu_material.palette;
-
-			if (auto pigment = menu_palette.get(part_id, state_id))
 			{
 				Clipper clipper(dc, rc_clip);
 
@@ -31,7 +28,10 @@ namespace apn::dark::kuro::theme
 						auto rc2 = *rc;
 						rc2.bottom += 1;
 
-						return (ToHRESULT)paint::stylus.draw_rect(dc, &rc2, pigment);
+						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
 					}
 #if 0
 				case MENU_POPUPBACKGROUND:
@@ -40,7 +40,10 @@ namespace apn::dark::kuro::theme
 
 						auto rc2 = *rc;
 
-						return (ToHRESULT)paint::stylus.draw_rect(dc, &rc2, pigment);
+						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
 					}
 				case MENU_POPUPBORDERS:
 					{
@@ -48,7 +51,10 @@ namespace apn::dark::kuro::theme
 
 						auto rc2 = *rc;
 
-						return (ToHRESULT)paint::stylus.draw_rect(dc, &rc2, pigment);
+						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
 					}
 #endif
 				case MENU_POPUPGUTTER:
@@ -60,7 +66,10 @@ namespace apn::dark::kuro::theme
 						// 後で使うので、ガーターの位置を記憶しておきます。
 						gutter_right = rc2.right;
 
-						return (ToHRESULT)paint::stylus.draw_rect(dc, &rc2, pigment);
+						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
 					}
 				case MENU_POPUPSEPARATOR:
 					{
@@ -69,7 +78,10 @@ namespace apn::dark::kuro::theme
 						auto rc2 = *rc;
 						::InflateRect(&rc2, 0, -2);
 
-						return (ToHRESULT)paint::stylus.draw_rect(dc, &rc2, pigment);
+						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
 					}
 				case MENU_POPUPITEM:
 				case MENU_POPUPITEMFOCUSABLE:
@@ -83,7 +95,8 @@ namespace apn::dark::kuro::theme
 							// ガーターが上書きされないように描画矩形を縮小します。
 							rc2.left = gutter_right;
 
-							return (ToHRESULT)paint::stylus.draw_rect(dc, &rc2, pigment);
+							if (draw_rect(dc, &rc2, palette, part_id, state_id))
+								return S_OK;
 						}
 
 						break;
@@ -93,9 +106,21 @@ namespace apn::dark::kuro::theme
 						switch (state_id)
 						{
 						case MC_CHECKMARKNORMAL:
-						case MC_CHECKMARKDISABLED: return draw_icon(dc, rc, pigment, L"メイリオ", L'✅');
+						case MC_CHECKMARKDISABLED:
+							{
+								if (draw_icon(dc, rc, palette, part_id, state_id, L"メイリオ", L'✅'))
+									return S_OK;
+
+								break;
+							}
 						case MC_BULLETNORMAL:
-						case MC_BULLETDISABLED: return draw_icon(dc, rc, pigment, L"メイリオ", L'⬤');
+						case MC_BULLETDISABLED:
+							{
+								if (draw_icon(dc, rc, palette, part_id, state_id, L"メイリオ", L'⬤'))
+									return S_OK;
+
+								break;
+							}
 						}
 
 						break;
@@ -106,15 +131,43 @@ namespace apn::dark::kuro::theme
 						::InflateRect(&rc2, 6, 6);
 						::OffsetRect(&rc2, 0, -2);
 
-						return draw_icon(dc, &rc2, pigment, L"Meiryo", 0xE013);
+						if (draw_icon(dc, &rc2, palette, part_id, state_id, L"メイリオ", 0xE013))
+							return S_OK;
+
+						break;
 					}
-				case MENU_SYSTEMCLOSE: return draw_icon(dc, rc, pigment, L"Webdings", 0x0072);
-				case MENU_SYSTEMMAXIMIZE: return draw_icon(dc, rc, pigment, L"Webdings", 0x0031);
-				case MENU_SYSTEMMINIMIZE: return draw_icon(dc, rc, pigment, L"Webdings", 0x0030);
-				case MENU_SYSTEMRESTORE: return draw_icon(dc, rc, pigment, L"Webdings", 0x0032);
+				case MENU_SYSTEMCLOSE:
+					{
+						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0072))
+							return S_OK;
+
+						break;
+					}
+				case MENU_SYSTEMMAXIMIZE:
+					{
+						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0031))
+							return S_OK;
+
+						break;
+					}
+				case MENU_SYSTEMMINIMIZE:
+					{
+						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0030))
+							return S_OK;
+
+						break;
+					}
+				case MENU_SYSTEMRESTORE:
+					{
+						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0032))
+							return S_OK;
+
+						break;
+					}
 				}
 
-				return (ToHRESULT)paint::stylus.draw_rect(dc, rc, pigment);
+				if (draw_rect(dc, rc, palette, part_id, state_id))
+					return S_OK;
 			}
 
 			return __super::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
@@ -133,10 +186,8 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
-				const auto& menu_palette = paint::menu_material.palette;
-
-				if (auto pigment = menu_palette.get(part_id, state_id))
-					return (ToHRESULT)paint::stylus.draw_text(dc, rc, text, c, text_flags, pigment);
+				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
+					return S_OK;
 			}
 
 			return __super::on_draw_theme_text(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);

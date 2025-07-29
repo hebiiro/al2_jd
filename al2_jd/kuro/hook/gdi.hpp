@@ -125,8 +125,8 @@ namespace apn::dark::kuro::hook
 		struct {
 			inline static BOOL WINAPI hook_proc(HDC dc, LPCRECT rc, HBRUSH brush)
 			{
-				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/hex}",
-					ret_addr(&dc), dc, safe_string(rc), brush);
+				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/hex} : {/}",
+					ret_addr(&dc), dc, safe_string(rc), brush, ::GetCurrentThreadId());
 
 				return gdi::Renderer::fire_fill_rect(dc, rc, brush);
 			}
@@ -247,8 +247,9 @@ namespace apn::dark::kuro::hook
 #define ETO_REVERSE_INDEX_MAP        0x10000
 #endif
 #endif
-				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/hex}, ({/}), {/}, {/}",
-					ret_addr(&dc), dc, x, y, options, safe_string(rc), safe_string(text, c, options), c);
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/hex}, ({/}), {/}, {/} : {/}",
+					ret_addr(&dc), dc, x, y, options, safe_string(rc),
+					safe_string(text, c, options), c, ::GetCurrentThreadId());
 
 				return gdi::Renderer::fire_ext_text_out_w(dc, x, y, options, rc, text, c, dx);
 			}

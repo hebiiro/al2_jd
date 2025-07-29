@@ -7,16 +7,19 @@ namespace apn::dark::kuro::theme
 	//
 	inline struct ItemsViewRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::listview_material.palette;
+
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}", theme, part_id, state_id, prop_id);
 
-			const auto& pigment = paint::itemsview_material.pigment;
-
-			switch (prop_id)
+			if (auto pigment = palette.get(LVP_LISTITEM, LISS_NORMAL))
 			{
-			case TMT_FILLCOLOR: return *result = pigment.background.color, S_OK;
-			case TMT_TEXTCOLOR: return *result = pigment.text.color, S_OK;
+				switch (prop_id)
+				{
+				case TMT_FILLCOLOR: return *result = pigment->background.color, S_OK;
+				case TMT_TEXTCOLOR: return *result = pigment->text.color, S_OK;
+				}
 			}
 
 			return __super::on_get_theme_color(theme, part_id, state_id, prop_id, result);

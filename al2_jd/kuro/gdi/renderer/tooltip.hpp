@@ -4,6 +4,8 @@ namespace apn::dark::kuro::gdi
 {
 	struct ToolTipRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::tooltip_material.palette;
+
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
@@ -57,15 +59,13 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
 
-			const auto& tooltip_palette = paint::tooltip_material.palette;
-
 			auto part_id = TTP_STANDARD;
 			auto state_id = (int)TTSS_NORMAL;
 
 			if (my::get_style(current_state->hwnd) & TTS_BALLOON)
 				part_id = TTP_BALLOON, state_id = TTBS_NORMAL;
 
-			if (auto pigment = tooltip_palette.get(part_id, state_id))
+			if (auto pigment = palette.get(part_id, state_id))
 				return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);

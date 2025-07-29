@@ -1,15 +1,76 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi::comdlg32
 {
-	struct ShellHeaderRenderer : Renderer
+	struct DirectUIHWNDRenderer : Renderer
 	{
+#if 1
+		// テスト用コードです。
+		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		{
+			switch (current_state->message)
+			{
+			case WM_PAINT:
+				{
+					MY_TRACE_FUNC("WM_PAINT, {/hex}, {/hex}, {/hex}, {/hex}",
+						current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
+
+					// ファイル選択ダイアログの一部の背景を描画します。
+					// (以下の処理では描画を上書きできませんでした)
+
+					auto hwnd = current_state->hwnd;
+					auto dc = my::PaintDC(hwnd);
+					auto rc = my::get_client_rect(hwnd);
+
+					const auto& palette = paint::dialog_material.palette;
+
+					auto part_id = WP_DIALOG;
+					auto state_id = ETS_NORMAL;
+
+					if (auto pigment = palette.get(part_id, state_id))
+						return paint::stylus.draw_rect(dc, &rc, pigment);
+
+					break;
+				}
+			case WM_ERASEBKGND:
+				{
+					MY_TRACE_FUNC("WM_ERASEBKGND, {/hex}, {/hex}, {/hex}, {/hex}",
+						current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
+
+					// ファイル選択ダイアログの一部の背景を描画します。
+					// (以下の処理では描画を上書きできませんでした)
+
+					auto hwnd = current_state->hwnd;
+					auto dc = (HDC)current_state->wParam;
+					auto rc = my::get_client_rect(hwnd);
+
+					const auto& palette = paint::dialog_material.palette;
+
+					auto part_id = WP_DIALOG;
+					auto state_id = ETS_NORMAL;
+
+					if (auto pigment = palette.get(part_id, state_id))
+						return paint::stylus.draw_rect(dc, &rc, pigment);
+
+					break;
+				}
+			}
+
+			return __super::on_subclass_proc(current_state);
+		}
+#endif
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override
 		{
-			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}, bk_color = {/hex}, text_color = {/hex}",
-				hwnd, message, dc, control, brush, ::GetBkColor(dc), ::GetTextColor(dc));
+			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, dc, control, brush);
 
 			return __super::on_ctl_color(hwnd, message, dc, control, brush);
+		}
+
+		virtual BOOL on_rectangle(MessageState* current_state, HDC dc, int left, int top, int right, int bottom) override
+		{
+			MY_TRACE_FUNC("{/hex}, ({/}, {/}, {/}, {/})", dc, left, top, right, bottom);
+
+			return hive.orig.Rectangle(dc, left, top, right, bottom);
 		}
 
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
@@ -64,20 +125,6 @@ namespace apn::dark::gdi
 		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
-
-			if (auto theme = skin::theme::manager.get_theme(VSCLASS_TOOLTIP))
-			{
-				if (my::get_style(current_state->hwnd) & TTS_BALLOON)
-				{
-					if (python.call_text_out(current_state->hwnd, theme, dc, TTP_BALLOON, TTBS_NORMAL, x, y, options, rc, text, c, dx))
-						return TRUE;
-				}
-				else
-				{
-					if (python.call_text_out(current_state->hwnd, theme, dc, TTP_STANDARD, TTSS_NORMAL, x, y, options, rc, text, c, dx))
-						return TRUE;
-				}
-			}
 
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 		}

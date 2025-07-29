@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct TabRenderer : Renderer
 	{
+#if 0
 		virtual LRESULT on_subclass_proc(MessageState* current_state) override
 		{
 			auto hwnd = current_state->hwnd;
@@ -13,40 +14,17 @@ namespace apn::dark::gdi
 
 //			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
-			switch (message)
-			{
-			case WM_NCCREATE:
-				{
-					MY_TRACE_FUNC("WM_NCCREATE, {/hex}, {/hex}, {/hex}", hwnd, wParam, lParam);
-
-					// ダブルバッファリングを有効にします。
-					double_buffer.create(hwnd);
-
-					break;
-				}
-			case WM_NCDESTROY:
-				{
-					MY_TRACE_FUNC("WM_NCDESTROY, {/hex}, {/hex}, {/hex}", hwnd, wParam, lParam);
-
-					// ダブルバッファリングを無効にします。
-					double_buffer.destroy(hwnd);
-
-					break;
-				}
-			}
-
 			return __super::on_subclass_proc(current_state);
 		}
-
+#endif
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
-//			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
+			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
-			if (auto theme = skin::theme::manager.get_theme(VSCLASS_TAB))
-			{
-				if (python.call_draw_figure(current_state->hwnd, theme, dc, 0, 0, rc))
-					return TRUE;
-			}
+			const auto& palette = paint::tab_material.palette;
+
+			if (auto pigment = palette.get(0, 0))
+				return paint::stylus.draw_rect(dc, rc, pigment);
 
 			return hive.orig.FillRect(dc, rc, brush);
 		}

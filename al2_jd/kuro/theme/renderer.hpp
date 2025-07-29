@@ -2,6 +2,7 @@
 
 namespace apn::dark::kuro::theme
 {
+/*
 	//
 	// このクラスはBOOLをHRESULTに変換します。
 	//
@@ -10,17 +11,54 @@ namespace apn::dark::kuro::theme
 		ToHRESULT(BOOL result) : hr(result ? S_OK : E_FAIL) {}
 		operator HRESULT() const { return hr; }
 	};
-
-	// HRESULT型を使用するのはおそらくテーマレンダラーだけなので
-	// 以下のようにラップした方がいいかもしれない。
-	// (ただし、描画APIが増える度にラップしなければならなくなる)
-
+*/
 	//
-	// ピグメントを使用して絵文字を描画します。
+	// パレットを使用して矩形を描画します。
 	//
-	inline HRESULT draw_icon(HDC dc, LPCRECT rc, const paint::Pigment* pigment, LPCWSTR font_name, WCHAR char_code)
+	inline BOOL draw_rect(HDC dc, LPCRECT rc,
+		const paint::Palette& palette, int part_id, int state_id)
 	{
-		return (ToHRESULT)paint::stylus.draw_icon(dc, rc, pigment, font_name, char_code);
+		if (auto pigment = palette.get(part_id, state_id))
+			return paint::stylus.draw_rect(dc, rc, pigment);
+
+		return FALSE;
+	}
+
+	//
+	// パレットを使用して文字列を描画します。
+	//
+	inline BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx,
+		const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
+	{
+		if (auto pigment = palette.get(part_id, state_id))
+			return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment, opaque);
+
+		return FALSE;
+	}
+
+	//
+	// パレットを使用して文字列を描画します。
+	//
+	inline BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags,
+		const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
+	{
+		if (auto pigment = palette.get(part_id, state_id))
+			return paint::stylus.draw_text(dc, rc, text, c, text_flags, pigment, opaque);
+
+		return FALSE;
+	}
+
+	//
+	// パレットを使用して絵文字を描画します。
+	//
+	inline BOOL draw_icon(HDC dc, LPCRECT rc,
+		const paint::Palette& palette, int part_id, int state_id,
+		LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
+	{
+		if (auto pigment = palette.get(part_id, state_id))
+			return paint::stylus.draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
+
+		return FALSE;
 	}
 
 	//
@@ -28,6 +66,45 @@ namespace apn::dark::kuro::theme
 	//
 	struct Renderer
 	{
+/*
+		HRESULT draw_theme_background(const paint::Palette& palette,
+			HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip)
+		{
+			if (draw_rect(dc, rc, palette, part_id, state_id))
+				return S_OK;
+
+			return Renderer::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
+		}
+
+		HRESULT draw_theme_background(const paint::Palette& palette,
+			HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, const DTBGOPTS* options)
+		{
+			if (draw_rect(dc, rc, palette, part_id, state_id))
+				return S_OK;
+
+			return Renderer::on_draw_theme_background_ex(theme, dc, part_id, state_id, rc, options);
+		}
+
+		HRESULT draw_theme_text(const paint::Palette& palette,
+			HTHEME theme, HDC dc, int part_id, int state_id, LPCWSTR text, int c, DWORD text_flags, DWORD text_flags2, LPCRECT rc,
+			BOOL opaque = TRUE)
+		{
+			if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, opaque))
+				return S_OK;
+
+			return Renderer::on_draw_theme_text(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);
+		}
+
+		HRESULT draw_theme_text_ex(const paint::Palette& palette,
+			HTHEME theme, HDC dc, int part_id, int state_id, LPCWSTR text, int c, DWORD text_flags, LPRECT rc, const DTTOPTS* options,
+			BOOL opaque = TRUE)
+		{
+			if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, opaque))
+				return S_OK;
+
+			return Renderer::on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options);
+		}
+*/
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result)
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}", theme, part_id, state_id, prop_id);

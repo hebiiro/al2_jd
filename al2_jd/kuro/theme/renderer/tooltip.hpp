@@ -7,6 +7,8 @@ namespace apn::dark::kuro::theme
 	//
 	inline struct ToolTipRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::tooltip_material.palette;
+
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}", theme, part_id, state_id, prop_id);
@@ -18,10 +20,10 @@ namespace apn::dark::kuro::theme
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
-			const auto& tooltip_palette = paint::tooltip_material.palette;
-
-			if (auto pigment = tooltip_palette.get(part_id, state_id))
-				return (ToHRESULT)paint::stylus.draw_rect(dc, rc, pigment);
+			{
+				if (draw_rect(dc, rc, palette, part_id, state_id))
+					return S_OK;
+			}
 
 			return __super::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
 		}

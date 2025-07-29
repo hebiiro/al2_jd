@@ -1,36 +1,51 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct ListViewRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::listview_material.palette;
+#if 0
+		// テスト用コードです。
+		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		{
+			switch (current_state->message)
+			{
+			case WM_ERASEBKGND:
+				{
+					MY_TRACE_FUNC("WM_ERASEBKGND, {/hex}, {/hex}, {/hex}, {/hex}",
+						current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
+
+					break;
+				}
+			}
+
+			return __super::on_subclass_proc(current_state);
+		}
+#endif
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
+			// 背景色を描画します。
 			{
-				// 背景色を描画します。
+				auto color = paint::get_brush_color(brush);
+				auto part_id = LVP_LISTITEM;
+				auto state_id = LISS_NORMAL;
 
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_LISTVIEW))
+				if (color == ::GetSysColor(COLOR_HIGHLIGHT))
 				{
-					auto color = painter::get_brush_color(brush);
-					auto part_id = LVP_LISTITEM;
-					auto state_id = LISS_NORMAL;
-
-					if (color == ::GetSysColor(COLOR_HIGHLIGHT))
-					{
-						state_id = LISS_HOT;
-					}
-					else if (color == ::GetSysColor(COLOR_BTNFACE))
-					{
-						state_id = LISS_SELECTEDNOTFOCUS;
-					}
-
-					MY_TRACE("color = {/hex}, part_id = {/}, state_id = {/}\n", color, (int)part_id, (int)state_id);
-
-					if (python.call_draw_figure(current_state->hwnd, theme, dc, part_id, state_id, rc))
-						return TRUE;
+					state_id = LISS_HOT;
 				}
+				else if (color == ::GetSysColor(COLOR_BTNFACE))
+				{
+					state_id = LISS_SELECTEDNOTFOCUS;
+				}
+
+				MY_TRACE("color = {/hex}, part_id = {/}, state_id = {/}\n", color, (int)part_id, (int)state_id);
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return paint::stylus.draw_rect(dc, rc, pigment);
 			}
 
 			return hive.orig.FillRect(dc, rc, brush);
@@ -85,36 +100,28 @@ namespace apn::dark::gdi
 #if 1
 //			if (!(options & ETO_IGNORELANGUAGE))
 			{
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_LISTVIEW))
+				if (options == ETO_OPAQUE)
 				{
-					if (options == ETO_OPAQUE)
-					{
-						// セパレータのカラーを指定します。
-
-						auto state = skin::theme::manager.get_state(theme, LVP_LISTITEM, 0);
-
-						if (state && state->stuff.fill.color != CLR_NONE)
-						{
-							::SetBkColor(dc, state->stuff.fill.color);
-
-							return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
-						}
-					}
-
-					auto color = ::GetPixel(dc, x, y);
-					auto part_id = LVP_LISTITEM;
-					auto state_id = LISS_NORMAL;
-					if (auto state = skin::theme::manager.get_state(theme, part_id, state_id))
-					{
-						if (color != state->stuff.fill.color)
-							state_id = LISS_HOT;
-					}
-
-					MY_TRACE("color = {/hex}, part_id = {/}, state_id = {/}\n", color, (int)part_id, (int)state_id);
-
-					if (python.call_text_out(current_state->hwnd, theme, dc, part_id, state_id, x, y, options, rc, text, c, dx))
-						return TRUE;
+					// セパレータを描画します。
+					if (auto pigment = palette.get(LVP_LISTITEM, 0))
+						return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 				}
+
+				auto current_color = ::GetPixel(dc, x, y);
+				auto part_id = LVP_LISTITEM;
+				auto state_id = LISS_NORMAL;
+
+				if (auto pigment = palette.get(part_id, state_id))
+				{
+					if (current_color != pigment->background.color)
+						state_id = LISS_HOT;
+				}
+
+				MY_TRACE("current_color = {/hex}, part_id = {/}, state_id = {/}\n",
+					current_color, (int)part_id, (int)state_id);
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 			}
 #endif
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);

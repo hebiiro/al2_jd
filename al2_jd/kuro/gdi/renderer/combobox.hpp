@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct ComboBoxRenderer : Renderer
 	{
@@ -13,26 +13,26 @@ namespace apn::dark::gdi
 			// ブラシもしくは背景色がダイアログカラーの場合は
 			if (brush == (HBRUSH)(COLOR_BTNFACE + 1) || bk_color == ::GetSysColor(COLOR_BTNFACE))
 			{
-				// スタティックコントロールとして描画します。
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_STATIC))
-				{
-					auto part_id = STAT_TEXT;
-					auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				// ダイアログとして描画します。
+				const auto& palette = paint::dialog_material.palette;
 
-					return skin::theme::manager.get_fill_brush(dc, brush, theme, part_id, state_id);
-				}
+				auto part_id = WP_DIALOG;
+				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return pigment->background.get_brush();
 			}
 			// ブラシもしくは背景色がウィンドウカラーの場合は
 			else if (brush == (HBRUSH)(COLOR_WINDOW + 1) || bk_color == ::GetSysColor(COLOR_WINDOW))
 			{
 				// エディットボックスとして描画します。
-				if (auto theme = skin::theme::manager.get_theme(VSCLASS_EDIT))
-				{
-					auto part_id = EP_EDITTEXT;
-					auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				const auto& palette = paint::editbox_material.palette;
 
-					return skin::theme::manager.get_fill_brush(dc, brush, theme, part_id, state_id);
-				}
+				auto part_id = EP_EDITTEXT;
+				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return pigment->background.get_brush();
 			}
 
 			return __super::on_ctl_color(hwnd, message, dc, control, brush);

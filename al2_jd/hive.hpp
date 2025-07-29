@@ -41,6 +41,16 @@ namespace apn::dark
 		int32_t scrollbar_reduction = 50;
 
 		//
+		// TRUEの場合はファイル選択ダイアログもダークモード化します。
+		//
+		BOOL apply_file_dialog = FALSE;
+
+		//
+		// TRUEの場合はチェックボックス(とラジオボタン)を特殊化します。
+		//
+		BOOL specialize_checkbox = FALSE;
+
+		//
 		// レンダラを使用するかどうかのフラグです。
 		// レンダラの使用を停止したい場合はTRUEに設定します。
 		//

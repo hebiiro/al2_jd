@@ -7,18 +7,30 @@ namespace apn::dark::kuro::gdi
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, dc, control, brush);
-#if 0 // ダイアログもダークモード化する場合はこの処理をオンにします。
+
+			return get_dialog_brush(hwnd, message, dc, control, brush);
+		}
+
+		virtual BOOL on_rectangle(MessageState* current_state, HDC dc, int left, int top, int right, int bottom) override
+		{
+			MY_TRACE_FUNC("{/hex}, ({/}, {/}, {/}, {/})", dc, left, top, right, bottom);
+
+			// 現在のブラシの色を取得します。
+			auto brush = (HBRUSH)::GetCurrentObject(dc, OBJ_BRUSH);
+			auto brush_color = paint::get_brush_color(brush);
+
+			// メッセージボックスの下側を描画します。
+			if (brush_color == ::GetSysColor(COLOR_BTNFACE))
+//			if (brush_color == ::GetSysColor(COLOR_MENU))
 			{
-				auto part_id = WP_DIALOG;
-				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				my::gdi::unique_ptr<HBRUSH> brush(
+					::CreateSolidBrush(style.get_COLORREF(Style::Color::Footer)));
+				auto rc = RECT { left, top, right, bottom };
 
-				const auto& dialog_palette = paint::dialog_material.palette;
-
-				if (auto pigment = dialog_palette.get(part_id, state_id))
-					return pigment->background.get_brush();
+				return hive.orig.FillRect(dc, &rc, brush.get());
 			}
-#endif
-			return __super::on_ctl_color(hwnd, message, dc, control, brush);
+
+			return hive.orig.Rectangle(dc, left, top, right, bottom);
 		}
 
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override

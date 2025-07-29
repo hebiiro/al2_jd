@@ -1,8 +1,10 @@
 ﻿#include "pch.h"
+#include "resource.h"
 #include "app_interface.hpp"
 #include "hive.hpp"
 #include "utils.hpp"
 #include "kuro/style.hpp"
+#include "kuro/paint/utils.hpp"
 #include "kuro/paint/pigment.hpp"
 #include "kuro/paint/palette.hpp"
 #include "kuro/paint/material.hpp"
@@ -10,36 +12,65 @@
 #include "kuro/paint/material/menu.hpp"
 #include "kuro/paint/material/scrollbar.hpp"
 #include "kuro/paint/material/dialog.hpp"
+#include "kuro/paint/material/button.hpp"
+#include "kuro/paint/material/editbox.hpp"
+#include "kuro/paint/material/combobox.hpp"
 #include "kuro/paint/material/listbox.hpp"
-#include "kuro/paint/material/header.hpp"
 #include "kuro/paint/material/tooltip.hpp"
-#include "kuro/paint/material/itemsview.hpp"
+#include "kuro/paint/material/trackbar.hpp"
+#include "kuro/paint/material/spin.hpp"
+#include "kuro/paint/material/tab.hpp"
+#include "kuro/paint/material/header.hpp"
+#include "kuro/paint/material/listview.hpp"
+#include "kuro/paint/material/treeview.hpp"
 #include "kuro/paint/manager.hpp"
+#include "kuro/gdi/renderer.hpp"
+#include "kuro/gdi/renderer_nc.hpp"
+#include "kuro/gdi/renderer/aviutl2.hpp"
+#include "kuro/gdi/renderer/dialog.hpp"
+#include "kuro/gdi/renderer/static.hpp"
+#include "kuro/gdi/renderer/button.hpp"
+#include "kuro/gdi/renderer/editbox.hpp"
+#include "kuro/gdi/renderer/combobox.hpp"
+#include "kuro/gdi/renderer/comboboxex.hpp"
+#include "kuro/gdi/renderer/listbox.hpp"
+#include "kuro/gdi/renderer/tooltip.hpp"
+#include "kuro/gdi/renderer/trackbar.hpp"
+#include "kuro/gdi/renderer/spin.hpp"
+#include "kuro/gdi/renderer/header.hpp"
+#include "kuro/gdi/renderer/listview.hpp"
+#include "kuro/gdi/renderer/treeview.hpp"
+#include "kuro/gdi/renderer/tab.hpp"
+#include "kuro/gdi/renderer/comdlg32/dialog.hpp"
+#include "kuro/gdi/renderer/comdlg32/direct_ui_hwnd.hpp"
+#include "kuro/gdi/manager.hpp"
 #include "kuro/theme/name.hpp"
 #include "kuro/theme/renderer.hpp"
 #include "kuro/theme/renderer/base/menu.hpp"
-#include "kuro/theme/renderer/base/header.hpp"
 #include "kuro/theme/renderer/menu.hpp"
 #include "kuro/theme/renderer/scrollbar.hpp"
+#include "kuro/theme/renderer/static.hpp"
+#include "kuro/theme/renderer/button.hpp"
+#include "kuro/theme/renderer/editbox.hpp"
+#include "kuro/theme/renderer/combobox.hpp"
+#include "kuro/theme/renderer/listbox.hpp"
 #include "kuro/theme/renderer/tooltip.hpp"
+#include "kuro/theme/renderer/trackbar.hpp"
+#include "kuro/theme/renderer/spin.hpp"
+#include "kuro/theme/renderer/tab.hpp"
+#include "kuro/theme/renderer/header.hpp"
+#include "kuro/theme/renderer/listview.hpp"
+#include "kuro/theme/renderer/treeview.hpp"
 #include "kuro/theme/renderer/itemsview.hpp"
-#include "kuro/theme/renderer/itemsview/header.hpp"
 #include "kuro/theme/renderer/immersive_start/menu.hpp"
 #include "kuro/theme/from_handle.hpp"
 #include "kuro/theme/from_vsclass.hpp"
 #include "kuro/theme/manager.hpp"
-#include "kuro/gdi/renderer.hpp"
-#include "kuro/gdi/renderer_nc.hpp"
-//#include "kuro/gdi/renderer/aviutl2.hpp"
-#include "kuro/gdi/renderer/dialog.hpp"
-#include "kuro/gdi/renderer/listbox.hpp"
-#include "kuro/gdi/renderer/tooltip.hpp"
-#include "kuro/gdi/renderer/comdlg32/dialog.hpp"
-#include "kuro/gdi/manager.hpp"
 #include "kuro/hook/gdi.hpp"
 #include "kuro/hook/theme.hpp"
 #include "kuro/hook/call_wnd_proc_ret.hpp"
 #include "kuro/hook/manager.hpp"
+#include "test_dialog.hpp"
 #include "app.hpp"
 
 namespace apn::dark
@@ -53,24 +84,32 @@ namespace apn::dark
 		{
 		case DLL_PROCESS_ATTACH:
 			{
+				::DisableThreadLibraryCalls(hive.instance = instance);
+
 				// このdllがアンロードされないようにします。
 				::LoadLibrary(my::get_module_file_name(instance).c_str());
 #ifdef _DEBUG
-//				if (0)
+				// デバッグ用のコードです。
 				{
-					// デバッグ用のコードです。
-
-					// カスタムロガーを設定します。
-					static struct Logger : my::Tracer::Logger {
-						virtual void output(LPCTSTR raw, LPCTSTR text) override {
-							// SHIFTキーが押されているときだけログを出力します。
-							if (::GetKeyState(VK_SHIFT) < 0) ::OutputDebugString(text);
-						}
-					} logger;
-					my::Tracer::logger = &logger;
+//					if (0)
+					{
+						// カスタムロガーを設定します。
+						static struct Logger : my::Tracer::Logger {
+							virtual void output(LPCTSTR raw, LPCTSTR text) override {
+								// SHIFTキーが押されているときだけログを出力します。
+								if (::GetKeyState(VK_SHIFT) < 0) ::OutputDebugString(text);
+							}
+						} logger;
+						my::Tracer::logger = &logger;
+					}
 				}
 #endif
 				app->dll_init();
+
+				if (0) // テスト用コードです。
+				{
+					TestDialog dialog; dialog.do_modal();
+				}
 
 				break;
 			}
@@ -99,7 +138,7 @@ namespace apn::dark
 			// プラグイン名とプラグイン情報文字列です。
 			//
 			const std::wstring name = L"ダークモード化";
-			const std::wstring information = name + L" r1"; // リリース番号を付与します。
+			const std::wstring information = name + L" r2"; // リリース番号を付与します。
 
 			//
 			// コンストラクタです。

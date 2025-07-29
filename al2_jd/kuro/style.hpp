@@ -283,14 +283,24 @@ namespace apn::dark::kuro
 
 			try
 			{
-				// プログラムデータ内のスタイルファイルのパスを取得します。
-				auto ini_file_name = std::filesystem::path(LR"***(C:\ProgramData\aviutl2\style.conf)***");
+				// メインモジュールがあるフォルダのパスを取得します。
+				auto module_folder_name = my::get_module_file_name(nullptr).parent_path();
+
+				// aviutl2/dataフォルダ内のスタイルファイルのパスを取得します。
+				auto ini_file_name = module_folder_name / L"data" / L"style.conf";
+
+				// スタイルファイルが存在しない場合は
+				if (!std::filesystem::exists(ini_file_name))
+				{
+					// プログラムデータ内のスタイルファイルのパスを取得します。
+					ini_file_name = std::filesystem::path(LR"***(C:\ProgramData\aviutl2\style.conf)***");
+				}
 
 				// スタイルファイルが存在しない場合は
 				if (!std::filesystem::exists(ini_file_name))
 				{
 					// aviutl2フォルダ内のスタイルファイルのパスを取得します。
-					ini_file_name = my::get_module_file_name(nullptr).parent_path() / L"style.conf";
+					ini_file_name = module_folder_name / L"style.conf";
 				}
 
 				// カラー項目を読み込みます。

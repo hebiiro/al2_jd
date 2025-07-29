@@ -1,9 +1,11 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct TreeViewRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::treeview_material.palette;
+
 		virtual LRESULT on_custom_draw(MessageState* current_state) override
 		{
 //			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}",
@@ -24,47 +26,43 @@ namespace apn::dark::gdi
 				{
 					MY_TRACE_HEX(cd->nmcd.uItemState);
 
-					if (auto theme = skin::theme::manager.get_theme(VSCLASS_TREEVIEW))
+					auto part_id = TVP_TREEITEM;
+					auto state_id = TREIS_NORMAL;
+
+					if (cd->nmcd.uItemState & CDIS_DISABLED)
 					{
-						auto part_id = TVP_TREEITEM;
-						auto state_id = TREIS_NORMAL;
-
-						if (cd->nmcd.uItemState & CDIS_DISABLED)
+						state_id = TREIS_DISABLED;
+					}
+					else if (cd->nmcd.uItemState & CDIS_SELECTED)
+					{
+						if (cd->nmcd.uItemState & TREIS_HOT)
 						{
-							state_id = TREIS_DISABLED;
+							state_id = TREIS_HOTSELECTED;
 						}
-						else if (cd->nmcd.uItemState & CDIS_SELECTED)
+						else if (cd->nmcd.uItemState & CDIS_FOCUS)
 						{
-							if (cd->nmcd.uItemState & TREIS_HOT)
-							{
-								state_id = TREIS_HOTSELECTED;
-							}
-							else if (cd->nmcd.uItemState & CDIS_FOCUS)
-							{
-								state_id = TREIS_SELECTED;
-							}
-							else
-							{
-								state_id = TREIS_SELECTEDNOTFOCUS;
-							}
+							state_id = TREIS_SELECTED;
 						}
-						else if (cd->nmcd.uItemState & TREIS_HOT)
+						else
 						{
-							state_id = TREIS_HOT;
+							state_id = TREIS_SELECTEDNOTFOCUS;
 						}
-
-						auto state = skin::theme::manager.get_state(theme, part_id, state_id);
-
-						if (state && state->stuff.fill.color != CLR_NONE)
-							cd->clrTextBk = state->stuff.fill.color;
-
-						if (state && state->stuff.text.color != CLR_NONE)
-							cd->clrText = state->stuff.text.color;
-
-						return CDRF_NEWFONT;
+					}
+					else if (cd->nmcd.uItemState & TREIS_HOT)
+					{
+						state_id = TREIS_HOT;
 					}
 
-					break;
+					if (auto pigment = palette.get(part_id, state_id))
+					{
+						if (pigment->background.is_valid())
+							cd->clrTextBk = pigment->background.color;
+
+						if (pigment->text.is_valid())
+							cd->clrText = pigment->text.color;
+					}
+
+					return CDRF_NEWFONT;
 				}
 			}
 #endif
@@ -76,15 +74,11 @@ namespace apn::dark::gdi
 //			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
 			// アイテムがない部分の背景色を描画します。
-
-			if (auto theme = skin::theme::manager.get_theme(VSCLASS_TREEVIEW))
 			{
-				auto state = skin::theme::manager.get_state(theme, TVP_TREEITEM, TREIS_NORMAL);
-
-				if (state && state->stuff.fill.color != CLR_NONE)
+				if (auto pigment = palette.get(TVP_TREEITEM, TREIS_NORMAL))
 				{
-					painter::fill_rect(dc, rc, state->stuff.fill.color);
-					return TRUE;
+					if (pigment->background.is_valid())
+						return paint::stylus.draw_rect(dc, rc, pigment), TRUE;
 				}
 			}
 

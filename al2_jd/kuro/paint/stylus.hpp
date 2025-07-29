@@ -3,96 +3,6 @@
 namespace apn::dark::kuro::paint
 {
 	//
-	// 指定されたペンの色を返します。
-	//
-	inline COLORREF get_pen_color(HPEN pen)
-	{
-		LOGPEN lp = {};
-		if (::GetObject(pen, sizeof(lp), &lp) != sizeof(lp)) return CLR_NONE;
-		return lp.lopnColor;
-	}
-
-	//
-	// 指定されたブラシの色を返します。
-	//
-	inline COLORREF get_brush_color(HBRUSH brush)
-	{
-		LOGBRUSH lb = {};
-		if (::GetObject(brush, sizeof(lb), &lb) != sizeof(lb)) return CLR_NONE;
-		if (lb.lbStyle != BS_SOLID) return CLR_NONE;
-		return lb.lbColor;
-	}
-
-	//
-	// 指定された矩形とモードで描画領域をクリップします。
-	//
-	inline void clip_rect(HDC dc, LPCRECT rc, int mode = RGN_COPY)
-	{
-		my::gdi::unique_ptr<HRGN> rgn(::CreateRectRgnIndirect(rc));
-
-		::ExtSelectClipRgn(dc, rgn.get(), mode);
-	}
-
-	//
-	// 指定された色で指定された矩形を塗りつぶします。
-	//
-	inline void fill_rect(HDC dc, LPCRECT rc, COLORREF fill_color)
-	{
-		auto w = my::get_width(*rc);
-		auto h = my::get_height(*rc);
-
-		my::gdi::unique_ptr<HBRUSH> brush(::CreateSolidBrush(fill_color));
-		my::gdi::selector brush_selector(dc, brush.get());
-
-		hive.orig.PatBlt(dc, rc->left, rc->top, w, h, PATCOPY);
-	}
-
-	//
-	// 指定された色と幅で指定された矩形の縁を描画します。
-	//
-	inline void frame_rect(HDC dc, LPCRECT rc, COLORREF edge_color, int edge_width)
-	{
-		auto w = my::get_width(*rc);
-		auto h = my::get_height(*rc);
-
-		my::gdi::unique_ptr<HBRUSH> brush(::CreateSolidBrush(edge_color));
-		my::gdi::selector brush_selector(dc, brush.get());
-
-		hive.orig.PatBlt(dc, rc->left, rc->top, w, edge_width, PATCOPY);
-		hive.orig.PatBlt(dc, rc->left, rc->top, edge_width, h, PATCOPY);
-		hive.orig.PatBlt(dc, rc->left, rc->bottom - edge_width, w, edge_width, PATCOPY);
-		hive.orig.PatBlt(dc, rc->right - edge_width, rc->top, edge_width, h, PATCOPY);
-	}
-
-	//
-	// 矩形を描画します。
-	//
-	inline void draw_rect(HDC dc, LPCRECT rc, COLORREF fill_color, COLORREF edge_color, int edge_width)
-	{
-		auto w = my::get_width(*rc);
-		auto h = my::get_height(*rc);
-
-		if (fill_color != CLR_NONE)
-		{
-			my::gdi::unique_ptr<HBRUSH> brush(::CreateSolidBrush(fill_color));
-			my::gdi::selector brush_selector(dc, brush.get());
-
-			hive.orig.PatBlt(dc, rc->left, rc->top, w, h, PATCOPY);
-		}
-
-		if (edge_color != CLR_NONE && edge_width > 0)
-		{
-			my::gdi::unique_ptr<HBRUSH> brush(::CreateSolidBrush(edge_color));
-			my::gdi::selector brush_selector(dc, brush.get());
-
-			hive.orig.PatBlt(dc, rc->left, rc->top, w, edge_width, PATCOPY);
-			hive.orig.PatBlt(dc, rc->left, rc->bottom - edge_width, w, edge_width, PATCOPY);
-			hive.orig.PatBlt(dc, rc->left, rc->top, edge_width, h, PATCOPY);
-			hive.orig.PatBlt(dc, rc->right - edge_width, rc->top, edge_width, h, PATCOPY);
-		}
-	}
-
-	//
 	// このクラスはGDIオブジェクトの属性をDCにセットします。
 	//
 	template <typename T, auto init>
@@ -196,6 +106,11 @@ namespace apn::dark::kuro::paint
 		int old_bk_mode = {};
 
 		//
+		// 以前の背景の色です。
+		//
+		COLORREF old_bk_color = {};
+
+		//
 		// 以前のテキストの色です。
 		//
 		COLORREF old_text_color = {};
@@ -203,11 +118,19 @@ namespace apn::dark::kuro::paint
 		//
 		// コンストラクタです。
 		//
-		TextAttribute(HDC dc, const Pigment* pigment)
+		TextAttribute(HDC dc, const Pigment* pigment, BOOL opaque = TRUE)
 			: dc(dc)
+			, old_bk_mode(::GetBkMode(dc))
+			, old_bk_color(::GetBkColor(dc))
+			, old_text_color(::GetTextColor(dc))
 		{
-			old_bk_mode = ::SetBkMode(dc, TRANSPARENT);
-			old_text_color = ::SetTextColor(dc, pigment->text.color);
+			if (pigment->background.is_valid() && opaque)
+				::SetBkColor(dc, pigment->background.color);
+			else
+				::SetBkMode(dc, TRANSPARENT);
+
+			if (pigment->text.is_valid())
+				::SetTextColor(dc, pigment->text.color);
 		}
 
 		//
@@ -216,6 +139,7 @@ namespace apn::dark::kuro::paint
 		~TextAttribute()
 		{
 			::SetTextColor(dc, old_text_color);
+			::SetBkColor(dc, old_bk_color);
 			::SetBkMode(dc, old_bk_mode);
 		}
 	};
@@ -250,10 +174,10 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して文字列を描画します。
 		//
-		BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx, const Pigment* pigment)
+		BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx, const Pigment* pigment, BOOL opaque = TRUE)
 		{
 			ExtTextOutLocker locker;
-			TextAttribute text_attribute(dc, pigment);
+			TextAttribute text_attribute(dc, pigment, opaque);
 
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 		}
@@ -261,10 +185,10 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して文字列を描画します。
 		//
-		BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const Pigment* pigment)
+		BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const Pigment* pigment, BOOL opaque = TRUE)
 		{
 			ExtTextOutLocker locker;
-			TextAttribute text_attribute(dc, pigment);
+			TextAttribute text_attribute(dc, pigment, opaque);
 
 			return !!::DrawTextW(dc, text, c, (LPRECT)rc, text_flags);
 		}
@@ -272,13 +196,14 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して絵文字を描画します。
 		//
-		BOOL draw_icon(HDC dc, LPCRECT rc, const Pigment* pigment, LPCWSTR font_name, WCHAR char_code)
+		BOOL draw_icon(HDC dc, LPCRECT rc, const Pigment* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
 			ExtTextOutLocker locker;
-			TextAttribute text_attribute(dc, pigment);
+			TextAttribute text_attribute(dc, pigment, FALSE); // 背景は塗りつぶしません。
 
 			auto font_height = my::get_height(*rc);
-			my::gdi::unique_ptr<HFONT> font(::CreateFontW(font_height, 0, 0, 0, 0,
+			my::gdi::unique_ptr<HFONT> font(::CreateFontW(
+				font_height, 0, 0, 0, 0,
 				FALSE, FALSE, FALSE,
 				DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 				DEFAULT_QUALITY, DEFAULT_PITCH, font_name));

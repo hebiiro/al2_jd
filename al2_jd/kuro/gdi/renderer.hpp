@@ -5,7 +5,7 @@ namespace apn::dark::kuro::gdi
 	//
 	// このクラスはGDIレンダラーです。
 	//
-	struct Renderer
+	struct Renderer : std::enable_shared_from_this<Renderer>
 	{
 		//
 		// このクラスは標準化されたウィンドウのクラス名です。
@@ -39,20 +39,23 @@ namespace apn::dark::kuro::gdi
 		//
 		// レンダラーとウィンドウを関連付けます。
 		//
-		inline static void attach(HWND hwnd, const std::shared_ptr<Renderer>& renderer, UINT_PTR subclass_id)
+		void attach(HWND hwnd)
 		{
 			// レンダラーをコレクションに追加します。
-			collection[hwnd] = renderer;
+			collection[hwnd] = shared_from_this();
 
 			// ウィンドウをサブクラス化します。
-			::SetWindowSubclass(hwnd, Renderer::subclass_proc, subclass_id, 0);
+			::SetWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)this, 0);
 		}
 
 		//
 		// レンダラーとウィンドウの関連付けを解除します。
 		//
-		inline static void detach(HWND hwnd)
+		void detach(HWND hwnd)
 		{
+			// ウィンドウのサブクラス化を解除します。
+			::RemoveWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)this);
+
 			// レンダラーをコレクションから削除します。
 			collection.erase(hwnd);
 		}
@@ -86,13 +89,14 @@ namespace apn::dark::kuro::gdi
 			UINT_PTR subclass_id, DWORD_PTR subclass_data)
 		{
 #ifdef _DEBUG
-//			if (0)
+			if (0)
 			{
 				// デバッグ用のコードです。
 
 				auto class_name = my::get_class_name(hwnd);
 
-				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/}", hwnd, message, wParam, lParam, class_name);
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex} : {/}, {/}",
+					hwnd, message, wParam, lParam, class_name, ::GetCurrentThreadId());
 			}
 #endif
 			// レンダラーの使用が抑制されている場合はデフォルト処理のみ行います。
@@ -278,42 +282,37 @@ namespace apn::dark::kuro::gdi
 			return hive.orig.PatBlt(dc, x, y, w, h, rop);
 		}
 
+		//
+		// ダイアログ用のブラシを返します。
+		//
+		inline static HBRUSH get_dialog_brush(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush)
+		{
+			const auto& palette = paint::dialog_material.palette;
+
+			auto part_id = WP_DIALOG;
+			auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+			if (auto pigment = palette.get(part_id, state_id))
+				return pigment->background.get_brush();
+
+			return brush;
+		}
+
 		virtual LRESULT draw_nc_paint(HWND hwnd, HDC dc, const POINT& origin, LPRECT rc)
 		{
-			//
-			// この関数は縁だけを描画します。
-			// その後、描画した分だけ矩形を縮小します。
-			//
-			const auto draw_border = [&](int width, COLORREF color)
-			{
-				my::gdi::unique_ptr<HPEN> pen(::CreatePen(PS_SOLID, width, color));
-				my::gdi::selector pen_selector(dc, pen.get());
-				my::gdi::selector brush_selector(dc, ::GetStockObject(NULL_BRUSH));
-				hive.orig.Rectangle(dc, rc->left, rc->top, rc->right, rc->bottom);
-				::InflateRect(rc, -width, -width);
-			};
-
 			auto style = my::get_style(hwnd);
 			auto ex_style = my::get_ex_style(hwnd);
 
 			if (ex_style & WS_EX_WINDOWEDGE)
-			{
-				draw_border(2, kuro::style.get_COLORREF(Style::Color::WindowBorder));
-			}
+				paint::draw_raised_edge(dc, rc), ::InflateRect(rc, -2, -2);
 			else if (style & WS_BORDER)
-			{
-				draw_border(1, kuro::style.get_COLORREF(Style::Color::WindowBorder));
-			}
+				paint::draw_single_border(dc, rc), ::InflateRect(rc, -1, -1);
 
 			if (ex_style & WS_EX_STATICEDGE)
-			{
-				draw_border(1, kuro::style.get_COLORREF(Style::Color::WindowBorder));
-			}
+				paint::draw_single_sunken_edge(dc, rc), ::InflateRect(rc, -1, -1);
 
 			if (ex_style & WS_EX_CLIENTEDGE)
-			{
-				draw_border(2, kuro::style.get_COLORREF(Style::Color::WindowBorder));
-			}
+				paint::draw_sunken_edge(dc, rc), ::InflateRect(rc, -2, -2);
 
 			if (style & WS_HSCROLL && style & WS_VSCROLL)
 			{
@@ -321,9 +320,13 @@ namespace apn::dark::kuro::gdi
 				corner_rc.top = corner_rc.bottom - ::GetSystemMetrics(SM_CYHSCROLL);
 				corner_rc.left = corner_rc.right - ::GetSystemMetrics(SM_CXVSCROLL);
 
-				my::gdi::unique_ptr<HBRUSH> brush(::CreateSolidBrush(
-					kuro::style.get_COLORREF(Style::Color::Background)));
-				hive.orig.FillRect(dc, &corner_rc, brush.get());
+				const auto& palette = paint::dialog_material.palette;
+
+				auto part_id = WP_DIALOG;
+				auto state_id = ETS_NORMAL;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					paint::stylus.draw_rect(dc, rc, pigment);
 			}
 
 			return 0;

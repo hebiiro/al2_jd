@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct HeaderRenderer : Renderer
 	{
@@ -64,7 +64,7 @@ namespace apn::dark::gdi
 		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
-
+#if 0
 			if (!text && options == ETO_OPAQUE)
 			{
 				if (auto theme = skin::theme::manager.get_theme(VSCLASS_HEADER))
@@ -81,7 +81,7 @@ namespace apn::dark::gdi
 					}
 				}
 			}
-
+#endif
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 		}
 

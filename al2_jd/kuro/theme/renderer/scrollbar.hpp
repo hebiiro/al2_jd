@@ -7,6 +7,8 @@ namespace apn::dark::kuro::theme
 	//
 	inline struct ScrollBarRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::scrollbar_material.palette;
+
 		//
 		// スクロールバーの太さの倍率を返します。
 		//
@@ -18,12 +20,15 @@ namespace apn::dark::kuro::theme
 		//
 		// スクロールバーの背景を描画します。
 		//
-		BOOL draw_background(HDC dc, LPCRECT arg_rc, const auto& palette, int part_id, int state_id)
+		BOOL draw_background(HDC dc, LPCRECT arg_rc)
 		{
-			if (auto pigment = palette.get(part_id, state_id))
-				return paint::stylus.draw_rect(dc, arg_rc, pigment);
+			// 背景はダイアログのマテリアルで描画します。
+			const auto& palette = paint::dialog_material.palette;
 
-			return FALSE;
+			auto part_id = WP_DIALOG;
+			auto state_id = ETS_NORMAL;
+
+			return draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -31,24 +36,18 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_horz_arrow(HDC dc, LPCRECT arg_rc, int part_id, int state_id, BOOL near_arrow)
 		{
-			const auto& palette = paint::scrollbar_material.palette;
+			draw_background(dc, arg_rc);
 
-			draw_background(dc, arg_rc, palette, 0, 0);
-
-			if (auto pigment = palette.get(part_id, state_id))
+			if (paint::scrollbar_material.arrow_as_button)
 			{
-				if (paint::scrollbar_material.arrow_as_button)
-				{
-					auto rc = *arg_rc;
-					auto ratio = get_ratio();
-					::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
-					paint::stylus.draw_rect(dc, &rc, pigment);
-				}
+				auto rc = *arg_rc;
+				auto ratio = get_ratio();
+				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
-				return paint::stylus.draw_icon(dc, arg_rc, pigment, L"メイリオ", near_arrow ? 0xE012 : 0xE013);
+				draw_rect(dc, &rc, palette, part_id, state_id);
 			}
 
-			return FALSE;
+			return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE012 : 0xE013);
 		}
 
 		//
@@ -56,24 +55,18 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_vert_arrow(HDC dc, LPCRECT arg_rc, int part_id, int state_id, BOOL near_arrow)
 		{
-			const auto& palette = paint::scrollbar_material.palette;
+			draw_background(dc, arg_rc);
 
-			draw_background(dc, arg_rc, palette, 0, 0);
-
-			if (auto pigment = palette.get(part_id, state_id))
+			if (paint::scrollbar_material.arrow_as_button)
 			{
-				if (paint::scrollbar_material.arrow_as_button)
-				{
-					auto rc = *arg_rc;
-					auto ratio = get_ratio();
-					::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
-					paint::stylus.draw_rect(dc, &rc, pigment);
-				}
+				auto rc = *arg_rc;
+				auto ratio = get_ratio();
+				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
-				return paint::stylus.draw_icon(dc, arg_rc, pigment, L"メイリオ", near_arrow ? 0xE014 : 0xE015);
+				draw_rect(dc, &rc, palette, part_id, state_id);
 			}
 
-			return FALSE;
+			return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE014 : 0xE015);
 		}
 
 		//
@@ -113,19 +106,13 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_horz_thumb(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			const auto& palette = paint::scrollbar_material.palette;
+			draw_background(dc, arg_rc);
 
-			draw_background(dc, arg_rc, palette, 0, 0);
+			auto rc = *arg_rc;
+			auto ratio = get_ratio();
+			::InflateRect(&rc, 0, -int(my::get_height(rc) * ratio));
 
-			if (auto pigment = palette.get(part_id, state_id))
-			{
-				auto rc = *arg_rc;
-				auto ratio = get_ratio();
-				::InflateRect(&rc, 0, -int(my::get_height(rc) * ratio));
-				return paint::stylus.draw_rect(dc, &rc, pigment);
-			}
-
-			return FALSE;
+			return draw_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -133,19 +120,13 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_vert_thumb(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			const auto& palette = paint::scrollbar_material.palette;
+			draw_background(dc, arg_rc);
 
-			draw_background(dc, arg_rc, palette, 0, 0);
+			auto rc = *arg_rc;
+			auto ratio = get_ratio();
+			::InflateRect(&rc, -int(my::get_width(rc) * ratio), 0);
 
-			if (auto pigment = palette.get(part_id, state_id))
-			{
-				auto rc = *arg_rc;
-				auto ratio = get_ratio();
-				::InflateRect(&rc, -int(my::get_width(rc) * ratio), 0);
-				return paint::stylus.draw_rect(dc, &rc, pigment);
-			}
-
-			return FALSE;
+			return draw_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -153,7 +134,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_horz_lower_track(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_background(dc, arg_rc, paint::scrollbar_material.palette, 0, 0);
+			return draw_background(dc, arg_rc);
 		}
 
 		//
@@ -161,7 +142,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_horz_upper_track(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_background(dc, arg_rc, paint::scrollbar_material.palette, 0, 0);
+			return draw_background(dc, arg_rc);
 		}
 
 		//
@@ -169,7 +150,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_vert_lower_track(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_background(dc, arg_rc, paint::scrollbar_material.palette, 0, 0);
+			return draw_background(dc, arg_rc);
 		}
 
 		//
@@ -177,7 +158,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_vert_upper_track(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_background(dc, arg_rc, paint::scrollbar_material.palette, 0, 0);
+			return draw_background(dc, arg_rc);
 		}
 
 		//
@@ -185,22 +166,9 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_sizebox(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			// 背景はダイアログのマテリアルで描画します。
-			{
-				const auto& palette = paint::dialog_material.palette;
+			draw_background(dc, arg_rc);
 
-				auto part_id = WP_DIALOG;
-				auto state_id = ETS_NORMAL;
-
-				draw_background(dc, arg_rc, palette, part_id, state_id);
-			}
-
-			const auto& palette = paint::scrollbar_material.palette;
-
-			if (auto pigment = palette.get(part_id, state_id))
-				return paint::stylus.draw_icon(dc, arg_rc, pigment, L"Marlett", 0x006F);
-
-			return FALSE;
+			return draw_icon(dc, arg_rc, palette, part_id, state_id, L"Marlett", 0x006F);
 		}
 
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
@@ -225,41 +193,98 @@ namespace apn::dark::kuro::theme
 					case ABS_LEFTHOT:
 					case ABS_LEFTPRESSED:
 					case ABS_LEFTDISABLED:
-						return (ToHRESULT)draw_left(dc, rc, part_id, state_id);
+						{
+							if (draw_left(dc, rc, part_id, state_id))
+								return S_OK;
 
+							break;
+						}
 					case ABS_RIGHTNORMAL:
 					case ABS_RIGHTHOVER:
 					case ABS_RIGHTHOT:
 					case ABS_RIGHTPRESSED:
 					case ABS_RIGHTDISABLED:
-						return (ToHRESULT)draw_right(dc, rc, part_id, state_id);
+						{
+							if (draw_right(dc, rc, part_id, state_id))
+								return S_OK;
 
+							break;
+						}
 					case ABS_UPNORMAL:
 					case ABS_UPHOVER:
 					case ABS_UPHOT:
 					case ABS_UPPRESSED:
 					case ABS_UPDISABLED:
-						return (ToHRESULT)draw_up(dc, rc, part_id, state_id);
+						{
+							if (draw_up(dc, rc, part_id, state_id))
+								return S_OK;
 
+							break;
+						}
 					case ABS_DOWNNORMAL:
 					case ABS_DOWNHOVER:
 					case ABS_DOWNHOT:
 					case ABS_DOWNPRESSED:
 					case ABS_DOWNDISABLED:
-						return (ToHRESULT)draw_down(dc, rc, part_id, state_id);
+						{
+							if (draw_down(dc, rc, part_id, state_id))
+								return S_OK;
+
+							break;
+						}
 					}
 
 					break;
 				}
-			case SBP_THUMBBTNHORZ: return (ToHRESULT)draw_horz_thumb(dc, rc, part_id, state_id);
-			case SBP_THUMBBTNVERT: return (ToHRESULT)draw_vert_thumb(dc, rc, part_id, state_id);
-			case SBP_LOWERTRACKHORZ: return (ToHRESULT)draw_horz_lower_track(dc, rc, part_id, state_id);
-			case SBP_UPPERTRACKHORZ: return (ToHRESULT)draw_horz_upper_track(dc, rc, part_id, state_id);
-			case SBP_LOWERTRACKVERT: return (ToHRESULT)draw_vert_lower_track(dc, rc, part_id, state_id);
-			case SBP_UPPERTRACKVERT: return (ToHRESULT)draw_vert_upper_track(dc, rc, part_id, state_id);
-#if 0 // ダイアログをダークモード化した場合はここをオンにします。
-			case SBP_SIZEBOX: return (ToHRESULT)draw_sizebox(dc, rc, part_id, state_id);
-#endif
+			case SBP_THUMBBTNHORZ:
+				{
+					if (draw_horz_thumb(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case SBP_THUMBBTNVERT:
+				{
+					if (draw_vert_thumb(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case SBP_LOWERTRACKHORZ:
+				{
+					if (draw_horz_lower_track(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case SBP_UPPERTRACKHORZ:
+				{
+					if (draw_horz_upper_track(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case SBP_LOWERTRACKVERT:
+				{
+					if (draw_vert_lower_track(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case SBP_UPPERTRACKVERT:
+				{
+					if (draw_vert_upper_track(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case SBP_SIZEBOX:
+				{
+					if (draw_sizebox(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
 			}
 
 			return __super::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);

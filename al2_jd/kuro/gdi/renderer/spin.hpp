@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-namespace apn::dark::gdi
+namespace apn::dark::kuro::gdi
 {
 	struct SpinRenderer : Renderer
 	{
@@ -19,11 +19,13 @@ namespace apn::dark::gdi
 					auto dc = (HDC)current_state->wParam;
 					auto rc = my::get_client_rect(hwnd);
 
-					if (auto theme = skin::theme::manager.get_theme(VSCLASS_WINDOW))
-					{
-						if (python.call_draw_figure(current_state->hwnd, theme, dc, WP_WINDOW_FACE, 0, &rc))
-							return TRUE;
-					}
+					const auto& palette = paint::dialog_material.palette;
+
+					auto part_id = WP_DIALOG;
+					auto state_id = ETS_NORMAL;
+
+					if (auto pigment = palette.get(part_id, state_id))
+						return paint::stylus.draw_rect(dc, &rc, pigment);
 
 					break;
 				}

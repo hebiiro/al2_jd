@@ -14,6 +14,25 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
+			auto item_normal = Pigment {
+				{ style.get_COLORREF(Style::Color::Background), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto item_disabled = Pigment {
+				{ style.get_COLORREF(Style::Color::Background), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::TextDisable), },
+			};
+
+			auto item_hot = Pigment {
+				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
+//				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
+				{ style.get_COLORREF(Style::Color::Border), 1, },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
 			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, {
 				{ style.get_COLORREF(Style::Color::Background), },
 				{ CLR_NONE },
@@ -26,41 +45,12 @@ namespace apn::dark::kuro::paint
 				{ style.get_COLORREF(Style::Color::TextDisable), },
 			});
 
-			palette.set(MENU_BARITEM, MBI_NORMAL, {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			});
-
-			palette.set(MENU_BARITEM, MBI_DISABLED, {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			});
-
-			palette.set(MENU_BARITEM, MBI_HOT, {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			});
-
-			palette.set(MENU_BARITEM, MBI_DISABLEDHOT, {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			});
-
-			palette.set(MENU_BARITEM, MBI_PUSHED, {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			});
-
-			palette.set(MENU_BARITEM, MBI_DISABLEDPUSHED, {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			});
+			palette.set(MENU_BARITEM, MBI_NORMAL, item_normal);
+			palette.set(MENU_BARITEM, MBI_DISABLED, item_disabled);
+			palette.set(MENU_BARITEM, MBI_HOT, item_hot);
+			palette.set(MENU_BARITEM, MBI_DISABLEDHOT, item_disabled);
+			palette.set(MENU_BARITEM, MBI_PUSHED, item_hot);
+			palette.set(MENU_BARITEM, MBI_DISABLEDPUSHED, item_disabled);
 
 			palette.set(MENU_POPUPBACKGROUND, 0, {
 				{ style.get_COLORREF(Style::Color::Background), },
@@ -95,40 +85,15 @@ namespace apn::dark::kuro::paint
 			palette.set(MENU_POPUPSEPARATOR, 0, popup_separator); // Menu
 			palette.set(MENU_POPUPSEPARATOR, 3, popup_separator); // ImmersiveStart::Menu
 
-			auto mpi_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			palette.set(MENU_POPUPITEM, MPI_NORMAL, item_normal);
+			palette.set(MENU_POPUPITEM, MPI_DISABLED, item_disabled);
+			palette.set(MENU_POPUPITEM, MPI_HOT, item_hot);
+			palette.set(MENU_POPUPITEM, MPI_DISABLEDHOT, item_disabled);
 
-			auto mpi_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
-
-			auto mpi_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ CLR_NONE },
-//				{ style.get_COLORREF(Style::Color::WindowSeparator), 1 },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto mpi_disabled_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
-
-			palette.set(MENU_POPUPITEM, MPI_NORMAL, mpi_normal);
-			palette.set(MENU_POPUPITEM, MPI_DISABLED, mpi_disabled);
-			palette.set(MENU_POPUPITEM, MPI_HOT, mpi_hot);
-			palette.set(MENU_POPUPITEM, MPI_DISABLEDHOT, mpi_disabled_hot);
-
-			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_NORMAL, mpi_normal);
-			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_DISABLED, mpi_disabled);
-			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_HOT, mpi_hot);
-			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_DISABLEDHOT, mpi_disabled_hot);
+			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_NORMAL, item_normal);
+			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_DISABLED, item_disabled);
+			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_HOT, item_hot);
+			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_DISABLEDHOT, item_disabled);
 
 			auto mc_normal = Pigment {
 				{ style.get_COLORREF(Style::Color::Background), },

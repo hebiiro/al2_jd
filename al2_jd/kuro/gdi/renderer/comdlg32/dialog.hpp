@@ -15,8 +15,9 @@ namespace apn::dark::kuro::gdi::comdlg32
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
+			// リストボックスの項目の背景を描画します。
 			{
-				const auto& listbox_palette = paint::listbox_material.palette;
+				const auto& palette = paint::listbox_material.palette;
 
 				auto part_id = EP_EDITTEXT;
 				auto state_id = ETS_NORMAL;
@@ -24,7 +25,7 @@ namespace apn::dark::kuro::gdi::comdlg32
 				if (paint::get_brush_color(brush) != ::GetSysColor(COLOR_WINDOW))
 					state_id = ETS_SELECTED;
 
-				if (auto pigment = listbox_palette.get(part_id, state_id))
+				if (auto pigment = palette.get(part_id, state_id))
 					return paint::stylus.draw_rect(dc, rc, pigment);
 			}
 
@@ -77,9 +78,10 @@ namespace apn::dark::kuro::gdi::comdlg32
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
 
+			// リストボックスの項目の背景を描画します。
 			if (options == ETO_OPAQUE)
 			{
-				const auto& listbox_palette = paint::listbox_material.palette;
+				const auto& palette = paint::listbox_material.palette;
 
 				auto part_id = EP_EDITTEXT;
 				auto state_id = ETS_NORMAL;
@@ -87,7 +89,7 @@ namespace apn::dark::kuro::gdi::comdlg32
 				if (::GetBkColor(dc) != ::GetSysColor(COLOR_WINDOW))
 					state_id = ETS_SELECTED;
 
-				if (auto pigment = listbox_palette.get(part_id, state_id))
+				if (auto pigment = palette.get(part_id, state_id))
 					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 			}
 

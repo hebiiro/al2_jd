@@ -16,16 +16,18 @@ namespace apn::dark::kuro::gdi
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}, bk_color = {/hex}, text_color = {/hex}", hwnd, message, dc, control, brush, ::GetBkColor(dc), ::GetTextColor(dc));
-/*
-			const auto& listbox_palette = paint::listbox_material.palette;
 
-			auto part_id = EP_EDITTEXT;
-			auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+			// リストボックスの背景色を変更します。
+			{
+				const auto& palette = paint::listbox_material.palette;
 
-			if (auto pigment = listbox_palette.get(part_id, state_id))
-				return pigment.get_fill_brush();
+				auto part_id = EP_EDITTEXT;
+				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return pigment->background.get_brush();
 			}
-*/
+
 			return __super::on_ctl_color(hwnd, message, dc, control, brush);
 		}
 
@@ -92,7 +94,7 @@ namespace apn::dark::kuro::gdi
 #if 1
 //			if (!(options & (ETO_GLYPH_INDEX | ETO_IGNORELANGUAGE)))
 			{
-				const auto& listbox_palette = paint::listbox_material.palette;
+				const auto& palette = paint::listbox_material.palette;
 
 				auto part_id = EP_EDITTEXT;
 				auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
@@ -101,7 +103,7 @@ namespace apn::dark::kuro::gdi
 				if (::GetBkColor(dc) == ::GetSysColor(COLOR_HIGHLIGHT))
 					state_id = ETS_SELECTED; // 選択状態として描画します。
 
-				if (auto pigment = listbox_palette.get(part_id, state_id))
+				if (auto pigment = palette.get(part_id, state_id))
 					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 			}
 #endif
