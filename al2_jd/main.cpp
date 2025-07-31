@@ -41,6 +41,7 @@
 #include "kuro/gdi/renderer/listview.hpp"
 #include "kuro/gdi/renderer/treeview.hpp"
 #include "kuro/gdi/renderer/tab.hpp"
+#include "kuro/gdi/renderer/aviutl2/listbox.hpp"
 #include "kuro/gdi/renderer/comdlg32/dialog.hpp"
 #include "kuro/gdi/renderer/comdlg32/direct_ui_hwnd.hpp"
 #include "kuro/gdi/manager.hpp"
@@ -70,6 +71,8 @@
 #include "kuro/hook/theme.hpp"
 #include "kuro/hook/call_wnd_proc_ret.hpp"
 #include "kuro/hook/manager.hpp"
+#include "config_dialog.hpp"
+#include "config_io.hpp"
 #include "test_dialog.hpp"
 #include "app.hpp"
 
@@ -91,7 +94,7 @@ namespace apn::dark
 #ifdef _DEBUG
 				// デバッグ用のコードです。
 				{
-//					if (0)
+					if (0)
 					{
 						// カスタムロガーを設定します。
 						static struct Logger : my::Tracer::Logger {
@@ -148,6 +151,11 @@ namespace apn::dark
 				__super::information = information.c_str();
 				__super::flag = 0;
 				__super::filefilter = L"\0";
+				__super::func_config = [](HWND hwnd, HINSTANCE dll_hinst) -> bool
+				{
+					::ShowWindow(config_dialog, SW_SHOW);
+					return true;
+				};
 			}
 		} input_plugin_table = {}; // ゼロ初期化→メンバ変数初期化→コンストラクタ呼び出しの順を想定しています。
 

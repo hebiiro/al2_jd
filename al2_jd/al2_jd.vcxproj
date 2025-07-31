@@ -173,8 +173,11 @@
   <ItemGroup>
     <ClInclude Include="app.hpp" />
     <ClInclude Include="app_interface.hpp" />
+    <ClInclude Include="config_dialog.hpp" />
+    <ClInclude Include="config_io.hpp" />
     <ClInclude Include="hive.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2.hpp" />
+    <ClInclude Include="kuro\gdi\renderer\aviutl2\listbox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\button.hpp" />
     <ClInclude Include="kuro\gdi\renderer\combobox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\comboboxex.hpp" />

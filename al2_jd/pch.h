@@ -53,6 +53,10 @@ using namespace Gdiplus;
 #include <psapi.h>
 #include <vfw.h>
 #pragma comment(lib, "vfw32.lib")
+#include <dwrite.h>
+#pragma comment(lib, "dwrite.lib")
+#include <wrl/client.h>
+using Microsoft::WRL::ComPtr;
 
 #include "aviutl2_sdk/input2.h"
 

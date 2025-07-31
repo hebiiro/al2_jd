@@ -29,7 +29,14 @@ namespace apn::dark::kuro::gdi
 			if (class_name == WC_BUTTON) return std::make_shared<ButtonRenderer>();
 			if (class_name == WC_EDIT) return std::make_shared<EditBoxRenderer>();
 //			if (class_name == RICHEDIT_CLASS) return std::make_shared<RichEditRenderer>();
-			if (class_name == WC_LISTBOX) return std::make_shared<ListBoxRenderer>();
+			if (class_name == WC_LISTBOX)
+			{
+				// オーナーウィンドウがaviutl2の場合は
+				if (::GetWindow(hwnd, GW_OWNER) == hive.theme_window)
+					return std::make_shared<aviutl2::ListBoxRenderer>();
+				else
+					return std::make_shared<ListBoxRenderer>();
+			}
 			if (class_name == L"ListviewPopup") return std::make_shared<ListBoxRenderer>();
 			if (class_name == L"ComboLBox") return std::make_shared<ListBoxRenderer>();
 			if (class_name == WC_COMBOBOX) return std::make_shared<ComboBoxRenderer>();

@@ -4,23 +4,14 @@ namespace apn::dark::kuro::gdi
 {
 	struct ListBoxRenderer : RendererNc
 	{
-#if 0
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
-		{
-			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}",
-				current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
+		const paint::Palette& palette = paint::listbox_material.palette;
 
-			return __super::on_subclass_proc(current_state);
-		}
-#endif
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}, bk_color = {/hex}, text_color = {/hex}", hwnd, message, dc, control, brush, ::GetBkColor(dc), ::GetTextColor(dc));
 
 			// リストボックスの背景色を変更します。
 			{
-				const auto& palette = paint::listbox_material.palette;
-
 				auto part_id = EP_EDITTEXT;
 				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
 
@@ -94,8 +85,6 @@ namespace apn::dark::kuro::gdi
 #if 1
 //			if (!(options & (ETO_GLYPH_INDEX | ETO_IGNORELANGUAGE)))
 			{
-				const auto& palette = paint::listbox_material.palette;
-
 				auto part_id = EP_EDITTEXT;
 				auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
 

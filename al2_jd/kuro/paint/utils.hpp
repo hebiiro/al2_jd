@@ -132,8 +132,10 @@ namespace apn::dark::kuro::paint
 	//
 	inline void draw_single_raised_edge(HDC dc, LPCRECT rc)
 	{
-		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
-		auto color2 = style.get_COLORREF(Style::Color::ButtonBodyHover);
+		auto color1 = style.get_COLORREF(Style::Color::Border);
+		auto color2 = style.get_COLORREF(Style::Color::Border);
+//		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
+//		auto color2 = style.get_COLORREF(Style::Color::ButtonBodyHover);
 
 		draw_single_edge(dc, rc, color1, color2);
 	}
@@ -143,8 +145,10 @@ namespace apn::dark::kuro::paint
 	//
 	inline void draw_single_sunken_edge(HDC dc, LPCRECT rc)
 	{
-		auto color1 = style.get_COLORREF(Style::Color::ButtonBodyHover);
-		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
+		auto color1 = style.get_COLORREF(Style::Color::Border);
+		auto color2 = style.get_COLORREF(Style::Color::Border);
+//		auto color1 = style.get_COLORREF(Style::Color::ButtonBodyHover);
+//		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
 
 		draw_single_edge(dc, rc, color1, color2);
 	}
@@ -167,10 +171,17 @@ namespace apn::dark::kuro::paint
 	//
 	inline void draw_raised_edge(HDC dc, LPCRECT rc)
 	{
+#if 1
+		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
+		auto color2 = style.get_COLORREF(Style::Color::Border);
+
+		draw_edge(dc, rc, color1, color1, color2, color2);
+#else
 		auto color1 = style.get_COLORREF(Style::Color::ButtonBodyHover);
 		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
 
 		draw_edge(dc, rc, color1, color2, color1, color2);
+#endif
 	}
 
 	//
@@ -178,10 +189,17 @@ namespace apn::dark::kuro::paint
 	//
 	inline void draw_sunken_edge(HDC dc, LPCRECT rc)
 	{
+#if 1
+		auto color1 = style.get_COLORREF(Style::Color::Border);
+		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
+
+		draw_edge(dc, rc, color1, color1, color2, color2);
+#else
 		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
 		auto color2 = style.get_COLORREF(Style::Color::ButtonBodyHover);
 
 		draw_edge(dc, rc, color1, color2, color1, color2);
+#endif
 	}
 
 	//

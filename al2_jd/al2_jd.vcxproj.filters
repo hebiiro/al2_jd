@@ -41,6 +41,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="kuro\gdi\renderer\aviutl2">
+      <UniqueIdentifier>{f74f7b6b-3cc1-41c0-a8af-4226535c83e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -269,6 +272,11 @@
     </ClInclude>
     <ClInclude Include="kuro\gdi\renderer\comdlg32\direct_ui_hwnd.hpp">
       <Filter>kuro\gdi\renderer\comdlg32</Filter>
+    </ClInclude>
+    <ClInclude Include="config_dialog.hpp" />
+    <ClInclude Include="config_io.hpp" />
+    <ClInclude Include="kuro\gdi\renderer\aviutl2\listbox.hpp">
+      <Filter>kuro\gdi\renderer\aviutl2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

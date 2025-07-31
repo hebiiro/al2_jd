@@ -21,6 +21,16 @@ namespace apn::dark
 		HWND theme_window = nullptr;
 
 		//
+		// 使用可能なフォントのコレクションです。
+		//
+		std::unordered_set<std::wstring> available_fonts;
+
+		//
+		// コンフィグのファイル名です。
+		//
+		std::wstring config_file_name;
+
+		//
 		// スキンの角の丸みです。
 		//
 		int32_t ellipse = 5;
@@ -41,6 +51,11 @@ namespace apn::dark
 		int32_t scrollbar_reduction = 50;
 
 		//
+		// TRUEの場合は起動時にaviutl2を最大化します。
+		//
+		BOOL maximize_aviutl2 = FALSE;
+
+		//
 		// TRUEの場合はファイル選択ダイアログもダークモード化します。
 		//
 		BOOL apply_file_dialog = FALSE;
@@ -49,6 +64,32 @@ namespace apn::dark
 		// TRUEの場合はチェックボックス(とラジオボタン)を特殊化します。
 		//
 		BOOL specialize_checkbox = FALSE;
+
+		//
+		// このクラスはフォントプレビューの設定です。
+		//
+		struct Fonts
+		{
+			//
+			// リストボックスのサイズです。
+			//
+			SIZE window_size = { 1000, 800 };
+
+			//
+			// アイテムの高さです。
+			//
+			int item_height = 48;
+
+			//
+			// フォントの高さです。
+			//
+			int font_height = 48;
+
+			//
+			// サンプル文字列の書式です。
+			//
+			std::wstring sample_text_format = L"%font% サンプル0123456789";
+		} fonts;
 
 		//
 		// レンダラを使用するかどうかのフラグです。

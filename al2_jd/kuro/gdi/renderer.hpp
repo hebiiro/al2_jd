@@ -46,6 +46,8 @@ namespace apn::dark::kuro::gdi
 
 			// ウィンドウをサブクラス化します。
 			::SetWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)this, 0);
+
+			on_attach(hwnd);
 		}
 
 		//
@@ -53,6 +55,8 @@ namespace apn::dark::kuro::gdi
 		//
 		void detach(HWND hwnd)
 		{
+			on_detach(hwnd);
+
 			// ウィンドウのサブクラス化を解除します。
 			::RemoveWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)this);
 
@@ -331,6 +335,9 @@ namespace apn::dark::kuro::gdi
 
 			return 0;
 		}
+
+		virtual BOOL on_attach(HWND hwnd) { return TRUE; }
+		virtual BOOL on_detach(HWND hwnd) { return TRUE; }
 
 		virtual LRESULT on_subclass_proc(MessageState* current_state)
 		{

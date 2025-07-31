@@ -1,0 +1,211 @@
+﻿#pragma once
+
+namespace apn::dark
+{
+	//
+	// このクラスはコンフィグダイアログです。
+	//
+	inline struct ConfigDialog : my::Dialog
+	{
+		//
+		// ロックカウントです。
+		//
+		int lock_count = 0;
+
+		virtual void on_update_controls() {}
+		virtual void on_update_config() {}
+		virtual void on_init_dialog() {}
+		virtual void on_command(UINT code, UINT id, HWND control) {}
+
+		//
+		// ロックされている場合はTRUEを返します。
+		// ロックされているときはWM_COMMANDを無視します。
+		//
+		BOOL is_locked() const { return lock_count != 0; }
+
+		//
+		// ロックします。
+		//
+		void lock() { lock_count++; }
+
+		//
+		// ロックを解除します。
+		//
+		void unlock() { lock_count--; }
+
+		//
+		// このクラスはダイアログをロックします。
+		//
+		struct Locker {
+			ConfigDialog* dialog;
+			Locker(ConfigDialog* dialog) : dialog(dialog) { dialog->lock(); }
+			~Locker() { dialog->unlock(); }
+		};
+
+		//
+		// 初期化処理を実行します。
+		//
+		BOOL init()
+		{
+			MY_TRACE_FUNC("");
+
+			{
+				// 初期化中にエディットボックスがコマンドを発行してしまうので、
+				// それを防ぐためにロックしておきます。
+				Locker locker(this);
+
+				if (!__super::create(
+					hive.instance,
+					MAKEINTRESOURCE(IDD_CONFIG_DIALOG),
+					hive.theme_window))
+				{
+					hive.message_box(L"コンフィグダイアログの作成に失敗しました");
+
+					return FALSE;
+				}
+			}
+
+			return app->read_config();
+		}
+
+		//
+		// 後始末処理を実行します。
+		//
+		BOOL exit()
+		{
+			MY_TRACE_FUNC("");
+
+			return __super::destroy();
+		}
+
+		//
+		// コンフィグでコントロールを更新します。
+		//
+		BOOL to_ui()
+		{
+			MY_TRACE_FUNC("");
+
+			if (is_locked()) return FALSE;
+
+			Locker locker(this);
+
+			set_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
+			set_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
+			set_int(IDC_FONTS_FONT_HEIGHT, hive.fonts.font_height);
+			set_int(IDC_FONTS_WINDOW_WIDTH, hive.fonts.window_size.cx);
+			set_int(IDC_FONTS_WINDOW_HEIGHT, hive.fonts.window_size.cy);
+
+			set_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
+			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar_reduction);
+
+			return TRUE;
+		}
+
+		//
+		// コントロールでコンフィグを更新します。
+		//
+		BOOL from_ui(BOOL redraw)
+		{
+			MY_TRACE_FUNC("{/}", redraw);
+
+			if (is_locked()) return FALSE;
+
+			get_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
+			get_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
+			get_int(IDC_FONTS_FONT_HEIGHT, hive.fonts.font_height);
+			get_int(IDC_FONTS_WINDOW_WIDTH, hive.fonts.window_size.cx);
+			get_int(IDC_FONTS_WINDOW_HEIGHT, hive.fonts.window_size.cy);
+
+			get_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
+			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar_reduction);
+
+			if (redraw) app->redraw();
+
+			return TRUE;
+		}
+
+		//
+		// ウィンドウプロシージャです。
+		//
+		virtual LRESULT on_wnd_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
+		{
+			switch (message)
+			{
+			case WM_COMMAND:
+				{
+					// ロックされている場合はWM_COMMANDを処理しません。
+					if (is_locked()) break;
+
+					auto id = LOWORD(wParam);
+					auto code = HIWORD(wParam);
+					auto control = (HWND)lParam;
+
+					switch (id)
+					{
+					case IDC_FONTS_WINDOW_WIDTH:
+					case IDC_FONTS_WINDOW_HEIGHT:
+					case IDC_FONTS_ITEM_HEIGHT:
+					case IDC_FONTS_FONT_HEIGHT:
+					case IDC_FONTS_SAMPLE_TEXT_FORMAT:
+						{
+							if (code == EN_UPDATE)
+								from_ui(FALSE);
+
+							break;
+						}
+					case IDC_SCROLLBAR_REDUCTION:
+						{
+							if (code == EN_UPDATE)
+								from_ui(TRUE);
+
+							break;
+						}
+					case IDC_MAXIMIZE_AVIUTL2:
+						{
+							from_ui(FALSE);
+
+							break;
+						}
+					}
+
+					break;
+				}
+			case WM_NOTIFY:
+				{
+					auto header = (NMHDR*)lParam;
+					if (header->code == UDN_DELTAPOS)
+					{
+						auto nm = (NMUPDOWN*)header;
+						auto edit_id = (UINT)header->idFrom - 1;
+
+						switch (edit_id)
+						{
+						case IDC_ELLIPSE:
+						case IDC_BORDER_WIDTH:
+							{
+								auto value = get_int(edit_id);
+								value += (nm->iDelta > 0) ? -1 : +1;
+								value = std::clamp(value, 0, +100);
+								set_int(edit_id, value);
+								break;
+							}
+						case IDC_SHADOW_DENSITY:
+						case IDC_SCROLLBAR_REDUCTION:
+							{
+								auto value = get_int(edit_id);
+								value += (nm->iDelta > 0) ? -10 : +10;
+								value = std::clamp(value, 0, +100);
+								set_int(edit_id, value);
+								break;
+							}
+						}
+					}
+
+					return FALSE;
+				}
+			}
+
+			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
+		}
+	} config_dialog;
+}

@@ -4,6 +4,7 @@
 //
 #define IDD_MAIN_DIALOG                 100
 #define IDD_TEST_DIALOG                 102
+#define IDD_CONFIG_DIALOG               103
 #define IDC_CHOOSE_COLOR                172
 #define IDC_SKIN_STAT                   1001
 #define IDC_SKIN                        1002
@@ -82,6 +83,18 @@
 #define IDC_RADIO2                      1213
 #define IDC_RADIO_1                     1213
 #define IDC_CHECKBOX_2                  1214
+#define IDC_MAXIMIZE_AVIUTL2            1220
+#define IDC_FONTS_STAT                  11000
+#define IDC_FONTS_WINDOW_SIZE_STAT      11001
+#define IDC_FONTS_WINDOW_WIDTH          11002
+#define IDC_FONTS_WINDOW_HEIGHT         11003
+#define IDC_FONTS_ITEM_HEIGHT_STAT      11004
+#define IDC_FONTS_ITEM_HEIGHT           11005
+#define IDC_FONTS_FONT_HEIGHT_STAT      11006
+#define IDC_FONTS_FONT_HEIGHT           11007
+#define IDC_FONTS_SAMPLE_TEXT_FORMAT_STAT 11008
+#define IDC_FONTS_SAMPLE_TEXT_FORMAT    11009
+#define IDC_FONTS_STAT2                 12000
 
 // Next default values for new objects
 // 
@@ -89,7 +102,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1213
+#define _APS_NEXT_CONTROL_VALUE         1221
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
