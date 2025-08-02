@@ -27,6 +27,7 @@
 #include "kuro/gdi/renderer.hpp"
 #include "kuro/gdi/renderer_nc.hpp"
 #include "kuro/gdi/renderer/aviutl2.hpp"
+#include "kuro/gdi/renderer/menu.hpp"
 #include "kuro/gdi/renderer/dialog.hpp"
 #include "kuro/gdi/renderer/static.hpp"
 #include "kuro/gdi/renderer/button.hpp"
@@ -94,7 +95,7 @@ namespace apn::dark
 #ifdef _DEBUG
 				// デバッグ用のコードです。
 				{
-					if (0)
+//					if (0)
 					{
 						// カスタムロガーを設定します。
 						static struct Logger : my::Tracer::Logger {
@@ -141,7 +142,7 @@ namespace apn::dark
 			// プラグイン名とプラグイン情報文字列です。
 			//
 			const std::wstring name = L"ダークモード化";
-			const std::wstring information = name + L" r2"; // リリース番号を付与します。
+			const std::wstring information = name + L" r4"; // リリース番号を付与します。
 
 			//
 			// コンストラクタです。

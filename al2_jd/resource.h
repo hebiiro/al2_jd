@@ -84,6 +84,7 @@
 #define IDC_RADIO_1                     1213
 #define IDC_CHECKBOX_2                  1214
 #define IDC_MAXIMIZE_AVIUTL2            1220
+#define IDC_OPEN_RECENT_PROJECT         1221
 #define IDC_FONTS_STAT                  11000
 #define IDC_FONTS_WINDOW_SIZE_STAT      11001
 #define IDC_FONTS_WINDOW_WIDTH          11002
@@ -94,7 +95,8 @@
 #define IDC_FONTS_FONT_HEIGHT           11007
 #define IDC_FONTS_SAMPLE_TEXT_FORMAT_STAT 11008
 #define IDC_FONTS_SAMPLE_TEXT_FORMAT    11009
-#define IDC_FONTS_STAT2                 12000
+#define IDC_FONTS_USE_ON_MENU            11010
+#define IDC_FONTS_USE_ON_LISTBOX         11011
 
 // Next default values for new objects
 // 

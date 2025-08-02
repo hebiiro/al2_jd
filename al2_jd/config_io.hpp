@@ -153,12 +153,15 @@ namespace apn::dark
 			read_int(root, "fonts.item_height", hive.fonts.item_height);
 			read_int(root, "fonts.font_height", hive.fonts.font_height);
 			read_string(root, "fonts.sample_text_format", hive.fonts.sample_text_format);
+			read_bool(root, "fonts.use_on_menu", hive.fonts.use_on_menu);
+			read_bool(root, "fonts.use_on_listbox", hive.fonts.use_on_listbox);
 
 			read_int(root, "ellipse", hive.ellipse);
 			read_int(root, "border_width", hive.border_width);
 			read_int(root, "shadow_density", hive.shadow_density);
 			read_int(root, "scrollbar_reduction", hive.scrollbar_reduction);
 			read_bool(root, "maximize_aviutl2", hive.maximize_aviutl2);
+			read_bool(root, "open_recent_project", hive.open_recent_project);
 			read_bool(root, "apply_file_dialog", hive.apply_file_dialog);
 			read_bool(root, "specialize_checkbox", hive.specialize_checkbox);
 			read_window_pos(root, "config_dialog", config_dialog);
@@ -178,12 +181,15 @@ namespace apn::dark
 			write_int(root, "fonts.item_height", hive.fonts.item_height);
 			write_int(root, "fonts.font_height", hive.fonts.font_height);
 			write_string(root, "fonts.sample_text_format", hive.fonts.sample_text_format);
+			write_bool(root, "fonts.use_on_menu", hive.fonts.use_on_menu);
+			write_bool(root, "fonts.use_on_listbox", hive.fonts.use_on_listbox);
 
 			write_int(root, "ellipse", hive.ellipse);
 			write_int(root, "border_width", hive.border_width);
 			write_int(root, "shadow_density", hive.shadow_density);
 			write_int(root, "scrollbar_reduction", hive.scrollbar_reduction);
 			write_bool(root, "maximize_aviutl2", hive.maximize_aviutl2);
+			write_bool(root, "open_recent_project", hive.open_recent_project);
 			write_bool(root, "apply_file_dialog", hive.apply_file_dialog);
 			write_bool(root, "specialize_checkbox", hive.specialize_checkbox);
 			write_window_pos(root, "config_dialog", config_dialog);

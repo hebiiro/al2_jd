@@ -278,6 +278,9 @@
     <ClInclude Include="kuro\gdi\renderer\aviutl2\listbox.hpp">
       <Filter>kuro\gdi\renderer\aviutl2</Filter>
     </ClInclude>
+    <ClInclude Include="kuro\gdi\renderer\menu.hpp">
+      <Filter>kuro\gdi\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">

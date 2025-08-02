@@ -172,9 +172,10 @@ namespace apn::dark::kuro::gdi::aviutl2
 					if (!orig_item_height)
 						orig_item_height = (LONG)::SendMessage(hwnd, LB_GETITEMHEIGHT, 0, 0);
 
+					// フォントを使用して描画する場合は
 					// とりあえずフォント一覧であるフラグをセットします。
 					// このフラグは後続のLB_ADDSTRINGでリセットされる可能性があります。
-					is_fonts_flag = TRUE;
+					is_fonts_flag = hive.fonts.use_on_listbox;
 					nb_checks = 0;
 
 					break;

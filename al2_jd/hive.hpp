@@ -56,6 +56,11 @@ namespace apn::dark
 		BOOL maximize_aviutl2 = FALSE;
 
 		//
+		// TRUEの場合は起動時に最近使ったプロジェクトを開きます。
+		//
+		BOOL open_recent_project = FALSE;
+
+		//
 		// TRUEの場合はファイル選択ダイアログもダークモード化します。
 		//
 		BOOL apply_file_dialog = FALSE;
@@ -89,6 +94,16 @@ namespace apn::dark
 			// サンプル文字列の書式です。
 			//
 			std::wstring sample_text_format = L"%font% サンプル0123456789";
+
+			//
+			// TRUEの場合はメニューでフォントを使用して描画します。
+			//
+			BOOL use_on_menu = TRUE;
+
+			//
+			// TRUEの場合はリストボックスでフォントを使用して描画します。
+			//
+			BOOL use_on_listbox = TRUE;
 		} fonts;
 
 		//

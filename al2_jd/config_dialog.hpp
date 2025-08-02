@@ -94,8 +94,11 @@ namespace apn::dark
 			set_int(IDC_FONTS_FONT_HEIGHT, hive.fonts.font_height);
 			set_int(IDC_FONTS_WINDOW_WIDTH, hive.fonts.window_size.cx);
 			set_int(IDC_FONTS_WINDOW_HEIGHT, hive.fonts.window_size.cy);
+			set_check(IDC_FONTS_USE_ON_MENU, hive.fonts.use_on_menu);
+			set_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
 
 			set_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
+			set_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
 			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar_reduction);
 
 			return TRUE;
@@ -115,8 +118,11 @@ namespace apn::dark
 			get_int(IDC_FONTS_FONT_HEIGHT, hive.fonts.font_height);
 			get_int(IDC_FONTS_WINDOW_WIDTH, hive.fonts.window_size.cx);
 			get_int(IDC_FONTS_WINDOW_HEIGHT, hive.fonts.window_size.cy);
+			get_check(IDC_FONTS_USE_ON_MENU, hive.fonts.use_on_menu);
+			get_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
 
 			get_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
+			get_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
 			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar_reduction);
 
 			if (redraw) app->redraw();
@@ -153,6 +159,13 @@ namespace apn::dark
 
 							break;
 						}
+					case IDC_FONTS_USE_ON_MENU:
+					case IDC_FONTS_USE_ON_LISTBOX:
+						{
+							from_ui(FALSE);
+
+							break;
+						}
 					case IDC_SCROLLBAR_REDUCTION:
 						{
 							if (code == EN_UPDATE)
@@ -161,6 +174,7 @@ namespace apn::dark
 							break;
 						}
 					case IDC_MAXIMIZE_AVIUTL2:
+					case IDC_OPEN_RECENT_PROJECT:
 						{
 							from_ui(FALSE);
 

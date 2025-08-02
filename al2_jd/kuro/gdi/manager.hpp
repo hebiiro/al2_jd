@@ -16,6 +16,7 @@ namespace apn::dark::kuro::gdi
 //			auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 //			auto style = my::get_style(hwnd);
 
+//			if (class_name == L"#32768") return std::make_shared<MenuRenderer>();
 			if (class_name == L"#32770")
 			{
 //				if (instance == ::GetModuleHandleW(L"comdlg32.dll") && style & WS_THICKFRAME)

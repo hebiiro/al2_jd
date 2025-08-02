@@ -188,6 +188,7 @@
     <ClInclude Include="kuro\gdi\renderer\header.hpp" />
     <ClInclude Include="kuro\gdi\renderer\listbox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\listview.hpp" />
+    <ClInclude Include="kuro\gdi\renderer\menu.hpp" />
     <ClInclude Include="kuro\gdi\renderer\richedit.hpp" />
     <ClInclude Include="kuro\gdi\renderer\spin.hpp" />
     <ClInclude Include="kuro\gdi\renderer\static.hpp" />

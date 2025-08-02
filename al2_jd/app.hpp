@@ -230,6 +230,10 @@ namespace apn::dark
 			if (hive.maximize_aviutl2)
 				::ShowWindow(hive.theme_window, SW_MAXIMIZE);
 
+			// 最近使ったプロジェクトを開きます。
+			if (hive.open_recent_project)
+				::PostMessage(hive.theme_window, WM_COMMAND, 0x9C42, 0);
+
 			return TRUE;
 		}
 

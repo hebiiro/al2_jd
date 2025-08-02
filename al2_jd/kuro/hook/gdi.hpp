@@ -17,7 +17,7 @@ namespace apn::dark::kuro::hook
 			DetourTransactionBegin();
 			DetourUpdateThread(::GetCurrentThread());
 
-			auto user32 = (my::addr_t)::GetModuleHandle(_T("user32.dll"));
+			auto user32 = (my::addr_t)::GetModuleHandleW(L"user32.dll");
 			MY_TRACE_HEX(user32);
 #if 0 // テスト用コードです。
 			my::addr_t address1 = ::CallWindowProcW((WNDPROC)get_ret_addr, nullptr, 0, 0, 0);
@@ -44,6 +44,7 @@ namespace apn::dark::kuro::hook
 //			my::hook::attach(DrawStateW);
 			my::hook::attach(ExtTextOutW);
 //			my::hook::attach(PatBlt);
+//			my::hook::attach(InsertMenuW);
 
 			if (DetourTransactionCommit() != NO_ERROR)
 			{
@@ -297,5 +298,19 @@ namespace apn::dark::kuro::hook
 			}
 			inline static decltype(&hook_proc) orig_proc = ::GetSysColorBrush;
 		} GetSysColorBrush;
+
+		//
+		// このクラスは::InsertMenuW()をフックします。
+		//
+		struct {
+			inline static BOOL WINAPI hook_proc(HMENU menu, UINT position, UINT flags, UINT_PTR id, LPCWSTR text)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}, {/hex}",
+					ret_addr(&menu), menu, position, flags, id, text);
+
+				return orig_proc(menu, position, flags, id, text);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::InsertMenuW;
+		} InsertMenuW;
 	} gdi;
 }

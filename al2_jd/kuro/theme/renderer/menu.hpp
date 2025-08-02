@@ -12,6 +12,11 @@ namespace apn::dark::kuro::theme
 		//
 		int gutter_right = {};
 
+		//
+		// ポップアップアイテムの矩形です。
+		//
+		RECT popup_item_rect = {};
+
 		virtual HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
@@ -38,16 +43,15 @@ namespace apn::dark::kuro::theme
 					{
 						// ポップアップメニューの背景を描画します。
 
-						auto rc2 = *rc;
-
-						if (draw_rect(dc, &rc2, palette, part_id, state_id))
-							return S_OK;
+						MY_TRACE("MENU_POPUPBACKGROUND\n");
 
 						break;
 					}
 				case MENU_POPUPBORDERS:
 					{
 						// ポップアップメニューのボーダーを描画します。
+
+						MY_TRACE("MENU_POPUPBORDERS\n");
 
 						auto rc2 = *rc;
 
@@ -87,6 +91,10 @@ namespace apn::dark::kuro::theme
 				case MENU_POPUPITEMFOCUSABLE:
 					{
 						// ポップアップメニューのアイテムを描画します。
+
+						// ここでポップアップアイテムの矩形を取得しておきます。
+						// (後でon_theme_draw_text()内で使用します)
+						popup_item_rect = *rc;
 
 						if (state_id != MPI_HOT)
 						{
@@ -186,6 +194,38 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
+				// フォントを使用して描画する場合は
+				if (hive.fonts.use_on_menu && text && rc)
+				{
+					// メニュー項目名をフォント名とみなします。
+					auto font_name = std::wstring(text, (size_t)c);
+
+					// フォントが使用可能な場合は
+					if (hive.available_fonts.contains(font_name))
+					{
+						auto font_height = my::get_height(*rc);
+
+						my::gdi::unique_ptr<HFONT> font(::CreateFontW(
+							font_height, 0, 0, 0, 0, FALSE, FALSE, FALSE,
+							DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+							DEFAULT_QUALITY, DEFAULT_PITCH, font_name.c_str()));
+						my::gdi::selector font_selector(dc, font.get());
+
+						// メニューの幅は変更できないのでフォント名をそのまま描画します。
+						auto preview_text = font_name;
+//						auto preview_text = my::replace(
+//							hive.fonts.sample_text_format, L"%font%", font_name);
+
+						// 右端まで描画できるように矩形を調整します。
+						auto rc2 = *rc;
+//						rc2.left = popup_item_rect.left;
+						rc2.right = popup_item_rect.right;
+
+						if (draw_text(dc, &rc2, preview_text.c_str(), -1, text_flags, palette, part_id, state_id))
+							return S_OK;
+					}
+				}
+
 				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
 					return S_OK;
 			}
