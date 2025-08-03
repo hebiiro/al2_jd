@@ -155,6 +155,8 @@ namespace apn::dark
 			read_string(root, "fonts.sample_text_format", hive.fonts.sample_text_format);
 			read_bool(root, "fonts.use_on_menu", hive.fonts.use_on_menu);
 			read_bool(root, "fonts.use_on_listbox", hive.fonts.use_on_listbox);
+			read_bool(root, "fonts.use_on_listview", hive.fonts.use_on_listview);
+			read_string(root, "fonts.setting_dialog_name", hive.fonts.setting_dialog_name);
 
 			read_int(root, "ellipse", hive.ellipse);
 			read_int(root, "border_width", hive.border_width);
@@ -183,6 +185,8 @@ namespace apn::dark
 			write_string(root, "fonts.sample_text_format", hive.fonts.sample_text_format);
 			write_bool(root, "fonts.use_on_menu", hive.fonts.use_on_menu);
 			write_bool(root, "fonts.use_on_listbox", hive.fonts.use_on_listbox);
+			write_bool(root, "fonts.use_on_listview", hive.fonts.use_on_listview);
+			write_string(root, "fonts.setting_dialog_name", hive.fonts.setting_dialog_name);
 
 			write_int(root, "ellipse", hive.ellipse);
 			write_int(root, "border_width", hive.border_width);

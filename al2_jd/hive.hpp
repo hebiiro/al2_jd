@@ -104,6 +104,16 @@ namespace apn::dark
 			// TRUEの場合はリストボックスでフォントを使用して描画します。
 			//
 			BOOL use_on_listbox = TRUE;
+
+			//
+			// TRUEの場合はリストビューでフォントを使用して描画します。
+			//
+			BOOL use_on_listview = TRUE;
+
+			//
+			// 「フォントメニューの設定」ダイアログの名前です。
+			//
+			std::wstring setting_dialog_name = L"フォントメニューの設定";
 		} fonts;
 
 		//

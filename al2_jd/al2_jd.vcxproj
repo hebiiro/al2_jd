@@ -177,6 +177,7 @@
     <ClInclude Include="config_io.hpp" />
     <ClInclude Include="hive.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2.hpp" />
+    <ClInclude Include="kuro\gdi\renderer\aviutl2\font_setting\listview.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2\listbox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\button.hpp" />
     <ClInclude Include="kuro\gdi\renderer\combobox.hpp" />

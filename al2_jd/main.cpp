@@ -43,6 +43,7 @@
 #include "kuro/gdi/renderer/treeview.hpp"
 #include "kuro/gdi/renderer/tab.hpp"
 #include "kuro/gdi/renderer/aviutl2/listbox.hpp"
+#include "kuro/gdi/renderer/aviutl2/font_setting/listview.hpp"
 #include "kuro/gdi/renderer/comdlg32/dialog.hpp"
 #include "kuro/gdi/renderer/comdlg32/direct_ui_hwnd.hpp"
 #include "kuro/gdi/manager.hpp"

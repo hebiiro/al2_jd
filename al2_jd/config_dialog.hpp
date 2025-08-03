@@ -96,6 +96,8 @@ namespace apn::dark
 			set_int(IDC_FONTS_WINDOW_HEIGHT, hive.fonts.window_size.cy);
 			set_check(IDC_FONTS_USE_ON_MENU, hive.fonts.use_on_menu);
 			set_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
+			set_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
+			set_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
 
 			set_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
 			set_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
@@ -120,6 +122,8 @@ namespace apn::dark
 			get_int(IDC_FONTS_WINDOW_HEIGHT, hive.fonts.window_size.cy);
 			get_check(IDC_FONTS_USE_ON_MENU, hive.fonts.use_on_menu);
 			get_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
+			get_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
+			get_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
 
 			get_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
 			get_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
@@ -153,6 +157,7 @@ namespace apn::dark
 					case IDC_FONTS_ITEM_HEIGHT:
 					case IDC_FONTS_FONT_HEIGHT:
 					case IDC_FONTS_SAMPLE_TEXT_FORMAT:
+					case IDC_FONTS_SETTING_DIALOG_NAME:
 						{
 							if (code == EN_UPDATE)
 								from_ui(FALSE);
@@ -161,6 +166,7 @@ namespace apn::dark
 						}
 					case IDC_FONTS_USE_ON_MENU:
 					case IDC_FONTS_USE_ON_LISTBOX:
+					case IDC_FONTS_USE_ON_LISTVIEW:
 						{
 							from_ui(FALSE);
 

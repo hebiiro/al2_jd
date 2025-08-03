@@ -47,7 +47,21 @@ namespace apn::dark::kuro::gdi
 			if (class_name == UPDOWN_CLASS) return std::make_shared<SpinRenderer>();
 			if (class_name == WC_TABCONTROL) return std::make_shared<TabRenderer>();
 			if (class_name == WC_HEADER) return std::make_shared<HeaderRenderer>();
-			if (class_name == WC_LISTVIEW) return std::make_shared<ListViewRenderer>();
+			if (class_name == WC_LISTVIEW)
+			{
+				// フォントを使用してリストビューを描画する場合は
+				if (hive.fonts.use_on_listview)
+				{
+					auto parent = ::GetParent(hwnd);
+					MY_TRACE_HWND(parent);
+
+					// 親ウィンドウが「フォントメニューの設定」ダイアログの場合は
+					if (my::get_window_text(parent) == hive.fonts.setting_dialog_name)
+						return std::make_shared<aviutl2::font_setting::ListViewRenderer>();
+				}
+
+				return std::make_shared<ListViewRenderer>();
+			}
 			if (class_name == WC_TREEVIEW) return std::make_shared<TreeViewRenderer>();
 //			if (class_name == TOOLBARCLASSNAME) return std::make_shared<ToolBarRenderer>();
 
