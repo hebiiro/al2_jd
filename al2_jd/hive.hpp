@@ -26,6 +26,11 @@ namespace apn::dark
 		std::unordered_set<std::wstring> available_fonts;
 
 		//
+		// アセットのファイル名です。
+		//
+		std::wstring assets_file_name;
+
+		//
 		// コンフィグのファイル名です。
 		//
 		std::wstring config_file_name;
@@ -115,6 +120,68 @@ namespace apn::dark
 			//
 			std::wstring setting_dialog_name = L"フォントメニューの設定";
 		} fonts;
+
+		//
+		// このクラスはプロジェクトを作成するときの設定です。
+		//
+		struct NewProject
+		{
+			//
+			// 最近使った設定値です。
+			//
+			struct Recent {
+				std::wstring video_width;
+				std::wstring video_height;
+				std::wstring video_rate;
+				std::wstring audio_rate;
+			} recent;
+		} new_project;
+
+		//
+		// このクラスはプリセットの設定です。
+		//
+		struct Presets
+		{
+			//
+			// (全体の)プリセットです。
+			//
+			struct Preset {
+				std::wstring display_name;
+				std::wstring video_width;
+				std::wstring video_height;
+				std::wstring video_rate;
+				std::wstring audio_rate;
+			};
+			std::vector<Preset> preset_collection;
+
+			//
+			// 映像サイズのプリセットです。
+			//
+			struct VideoSize {
+				std::wstring display_name;
+				std::wstring width;
+				std::wstring height;
+			};
+			std::vector<VideoSize> video_size_collection;
+
+			//
+			// 映像レートのプリセットです。
+			//
+			struct VideoRate {
+				std::wstring display_name;
+				std::wstring rate;
+			};
+			std::vector<VideoRate> video_rate_collection;
+
+			//
+			// 音声レートのプリセットです。
+			//
+			struct AudioRate {
+				std::wstring display_name;
+				std::wstring rate;
+			};
+			std::vector<AudioRate> audio_rate_collection;
+		} presets;
 
 		//
 		// レンダラを使用するかどうかのフラグです。

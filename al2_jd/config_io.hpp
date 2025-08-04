@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはコンフィグの入出力を担当します。
 	//
-	inline struct ConfigIO
+	inline struct ConfigIO : IOBase
 	{
 		//
 		// 初期化処理を実行します。
@@ -17,7 +17,7 @@ namespace apn::dark
 			auto module_file_path = my::get_module_file_name(hive.instance);
 			auto config_folder_path = module_file_path.parent_path() / L"al2" / L"config";
 
-			hive.config_file_name = config_folder_path /
+			path = hive.config_file_name = config_folder_path /
 				module_file_path.filename().replace_extension(L".json");
 			MY_TRACE_STR(hive.config_file_name);
 
@@ -48,103 +48,9 @@ namespace apn::dark
 		}
 
 		//
-		// コンフィグを読み込みます。
+		// ノードからフォントプレビューの設定を読み込みます。
 		//
-		BOOL read()
-		{
-			MY_TRACE_FUNC("");
-
-			try
-			{
-				// スコープ終了時にupdate()が呼ばれるようにします。
-				struct Updater {
-					ConfigIO* config_io;
-					Updater(ConfigIO* config_io) : config_io(config_io) {}
-					~Updater() { config_io->update(); }
-				} updater(this);
-
-				// コンフィグファイルが存在しない場合は何もしません。
-				if (!std::filesystem::exists(hive.config_file_name)) return FALSE;
-
-				// ストリームを開きます。
-				std::ifstream ifs(hive.config_file_name);
-
-				// ストリームから読み込みます。
-				return read_stream(ifs);
-			}
-			catch (const std::exception& error)
-			{
-				hive.message_box(my::format(
-					L"{/}を読み込み中にエラーが発生しました\n{/}",
-					hive.config_file_name, my::ws(error.what())));
-
-				return FALSE;
-			}
-
-			return TRUE;
-		}
-
-		//
-		// コンフィグを書き込みます。
-		//
-		BOOL write()
-		{
-			MY_TRACE_FUNC("");
-
-			try
-			{
-				// ファイルパスに変換します。
-				std::filesystem::path path = hive.config_file_name;
-
-				// ファイルパスが空の場合はFALSEを返します。
-				if (path.empty()) return FALSE;
-
-				// フォルダを作成します。
-				std::filesystem::create_directories(path.parent_path());
-
-				// ストリームを開きます。
-				std::ofstream ofs(path);
-
-				// ストリームに書き込みます。
-				return write_stream(ofs);
-			}
-			catch (const std::exception& error)
-			{
-				hive.message_box(my::format(
-					L"{/}を書き込み中にエラーが発生しました\n{/}",
-					hive.config_file_name, my::ws(error.what())));
-
-				return FALSE;
-			}
-
-			return TRUE;
-		}
-
-		//
-		// 指定されたストリームからコンフィグを読み込みます。
-		//
-		virtual BOOL read_stream(std::ifstream& ifs)
-		{
-			nlohmann::json root;
-			ifs >> root;
-			return read_node(root);
-		}
-
-		//
-		// 指定されたストリームにコンフィグを書き込みます。
-		//
-		virtual BOOL write_stream(std::ofstream& ofs)
-		{
-			nlohmann::json root;
-			write_node(root);
-			ofs << root.dump(1, '\t');
-			return TRUE;
-		}
-
-		//
-		// ノードからコンフィグを読み込みます。
-		//
-		virtual BOOL read_node(n_json& root)
+		BOOL read_fonts(n_json& root)
 		{
 			MY_TRACE_FUNC("");
 
@@ -158,23 +64,13 @@ namespace apn::dark
 			read_bool(root, "fonts.use_on_listview", hive.fonts.use_on_listview);
 			read_string(root, "fonts.setting_dialog_name", hive.fonts.setting_dialog_name);
 
-			read_int(root, "ellipse", hive.ellipse);
-			read_int(root, "border_width", hive.border_width);
-			read_int(root, "shadow_density", hive.shadow_density);
-			read_int(root, "scrollbar_reduction", hive.scrollbar_reduction);
-			read_bool(root, "maximize_aviutl2", hive.maximize_aviutl2);
-			read_bool(root, "open_recent_project", hive.open_recent_project);
-			read_bool(root, "apply_file_dialog", hive.apply_file_dialog);
-			read_bool(root, "specialize_checkbox", hive.specialize_checkbox);
-			read_window_pos(root, "config_dialog", config_dialog);
-
 			return TRUE;
 		}
 
 		//
-		// ノードにコンフィグを書き込みます。
+		// ノードにフォントプレビューの設定を書き込みます。
 		//
-		virtual BOOL write_node(n_json& root)
+		BOOL write_fonts(n_json& root)
 		{
 			MY_TRACE_FUNC("");
 
@@ -188,6 +84,65 @@ namespace apn::dark
 			write_bool(root, "fonts.use_on_listview", hive.fonts.use_on_listview);
 			write_string(root, "fonts.setting_dialog_name", hive.fonts.setting_dialog_name);
 
+			return TRUE;
+		}
+
+		//
+		// ノードからプロジェクトを作成の設定を読み込みます。
+		//
+		BOOL read_new_project(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_string(root, "new_project.recent.video_width", hive.new_project.recent.video_width);
+			read_string(root, "new_project.recent.video_height", hive.new_project.recent.video_height);
+			read_string(root, "new_project.recent.video_rate", hive.new_project.recent.video_rate);
+			read_string(root, "new_project.recent.audio_rate", hive.new_project.recent.audio_rate);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにプロジェクトを作成の設定を書き込みます。
+		//
+		BOOL write_new_project(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_string(root, "new_project.recent.video_width", hive.new_project.recent.video_width);
+			write_string(root, "new_project.recent.video_height", hive.new_project.recent.video_height);
+			write_string(root, "new_project.recent.video_rate", hive.new_project.recent.video_rate);
+			write_string(root, "new_project.recent.audio_rate", hive.new_project.recent.audio_rate);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからダークモード化の設定を読み込みます。
+		//
+		BOOL read_kuro(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_int(root, "ellipse", hive.ellipse);
+			read_int(root, "border_width", hive.border_width);
+			read_int(root, "shadow_density", hive.shadow_density);
+			read_int(root, "scrollbar_reduction", hive.scrollbar_reduction);
+			read_bool(root, "maximize_aviutl2", hive.maximize_aviutl2);
+			read_bool(root, "open_recent_project", hive.open_recent_project);
+			read_bool(root, "apply_file_dialog", hive.apply_file_dialog);
+			read_bool(root, "specialize_checkbox", hive.specialize_checkbox);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにダークモード化の設定を書き込みます。
+		//
+		BOOL write_kuro(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
 			write_int(root, "ellipse", hive.ellipse);
 			write_int(root, "border_width", hive.border_width);
 			write_int(root, "shadow_density", hive.shadow_density);
@@ -196,6 +151,35 @@ namespace apn::dark
 			write_bool(root, "open_recent_project", hive.open_recent_project);
 			write_bool(root, "apply_file_dialog", hive.apply_file_dialog);
 			write_bool(root, "specialize_checkbox", hive.specialize_checkbox);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからコンフィグを読み込みます。
+		//
+		virtual BOOL read_node(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_fonts(root);
+			read_new_project(root);
+			read_kuro(root);
+			read_window_pos(root, "config_dialog", config_dialog);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにコンフィグを書き込みます。
+		//
+		virtual BOOL write_node(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_fonts(root);
+			write_new_project(root);
+			write_kuro(root);
 			write_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;

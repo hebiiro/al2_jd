@@ -19,6 +19,10 @@ namespace apn::dark::kuro::gdi
 //			if (class_name == L"#32768") return std::make_shared<MenuRenderer>();
 			if (class_name == L"#32770")
 			{
+				auto text = my::get_window_text(hwnd);
+				if (text == L"プロジェクトを作成")
+					return std::make_shared<aviutl2::new_project::DialogRenderer>();
+
 //				if (instance == ::GetModuleHandleW(L"comdlg32.dll") && style & WS_THICKFRAME)
 /*				if (instance == ::GetModuleHandleW(L"comdlg32.dll"))
 					return std::make_shared<comdlg32::DialogRenderer>();

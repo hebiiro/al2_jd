@@ -47,6 +47,9 @@
     <Filter Include="kuro\gdi\renderer\aviutl2\font_setting">
       <UniqueIdentifier>{a1b66af4-7ad4-4b0f-9f89-81f7c2e4e768}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kuro\gdi\renderer\aviutl2\new_project">
+      <UniqueIdentifier>{a4747c29-5ae3-41e1-81d1-45b1924c501e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -287,6 +290,11 @@
     <ClInclude Include="kuro\gdi\renderer\aviutl2\font_setting\listview.hpp">
       <Filter>kuro\gdi\renderer\aviutl2\font_setting</Filter>
     </ClInclude>
+    <ClInclude Include="kuro\gdi\renderer\aviutl2\new_project\dialog.hpp">
+      <Filter>kuro\gdi\renderer\aviutl2\new_project</Filter>
+    </ClInclude>
+    <ClInclude Include="assets_io.hpp" />
+    <ClInclude Include="io_base.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">

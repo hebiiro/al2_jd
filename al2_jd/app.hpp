@@ -210,6 +210,7 @@ namespace apn::dark
 			get_available_fonts();
 
 			// 各種開始処理を実行します。
+			assets_io.init();
 			config_io.init();
 			kuro::hook::manager.init();
 			kuro::style.init();
@@ -217,6 +218,10 @@ namespace apn::dark
 			kuro::gdi::manager.init(hive.theme_window);
 			kuro::theme::manager.init(hive.theme_window);
 			config_dialog.init();
+
+			// アセットをファイルから読み込みます。
+			// ※アセットは読み込み専用で、書き込みは行われません。
+			read_assets();
 
 			// コンフィグをファイルから読み込みます。
 			// ※コンフィグファイルへの書き込みは
@@ -252,8 +257,29 @@ namespace apn::dark
 			kuro::style.exit();
 			kuro::hook::manager.exit();
 			config_io.exit();
+			assets_io.exit();
 
 			return TRUE;
+		}
+
+		//
+		// アセットファイルを読み込みます。
+		//
+		virtual BOOL read_assets() override
+		{
+			MY_TRACE_FUNC("");
+
+			return assets_io.read();
+		}
+
+		//
+		// アセットファイルに書き込みます。
+		//
+		virtual BOOL write_assets() override
+		{
+			MY_TRACE_FUNC("");
+
+			return assets_io.write();
 		}
 
 		//
