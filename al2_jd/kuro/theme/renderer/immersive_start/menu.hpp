@@ -34,7 +34,21 @@ namespace apn::dark::kuro::theme::immersive_start
 
 			return __super::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
 		}
+#if 0
+		virtual HRESULT on_draw_theme_background_ex(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, const DTBGOPTS* options) override
+		{
+			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), {/hex}", theme, dc, part_id, state_id, safe_string(rc), options);
 
+			return __super::on_draw_theme_background_ex(theme, dc, part_id, state_id, rc, options);
+		}
+
+		virtual HRESULT on_draw_theme_text(HTHEME theme, HDC dc, int part_id, int state_id, LPCWSTR text, int c, DWORD text_flags, DWORD text_flags2, LPCRECT rc) override
+		{
+			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, ({/})", theme, dc, part_id, state_id, safe_string(text, c), text_flags, text_flags2, safe_string(rc));
+
+			return __super::on_draw_theme_text(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);
+		}
+#endif
 		virtual HRESULT on_draw_theme_text_ex(HTHEME theme, HDC dc, int part_id, int state_id, LPCWSTR text, int c, DWORD text_flags, LPRECT rc, const DTTOPTS* options) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/}, {/hex}, ({/}), {/hex}", theme, dc, part_id, state_id, safe_string(text, c), text_flags, safe_string(rc), options);
@@ -43,10 +57,20 @@ namespace apn::dark::kuro::theme::immersive_start
 			{
 				if (auto pigment = palette.get(part_id, state_id))
 				{
-					auto options2 = *options;
-					options2.dwFlags |= DTT_TEXTCOLOR;
-					options2.crText = pigment->text.color;
-					return __super::on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, &options2);
+					// 内部で::FillRect()や::ExtTextOutW()が呼ばれるのでロックします。
+					GdiHookLocker gdi_hook_locker;
+
+					// 構造体のサイズが異なる可能性があるので
+					// 自前でメモリを確保してからコピーします。
+					auto struct_size = sizeof(*options);
+					auto size = options->dwSize;
+					auto buffer = std::make_unique<uint8_t[]>(size);
+					memcpy(buffer.get(), options, size);
+					auto options2 = (DTTOPTS*)buffer.get();
+					options2->dwFlags |= DTT_TEXTCOLOR;
+					options2->crText = pigment->text.color;
+
+					return __super::on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options2);
 				}
 			}
 
