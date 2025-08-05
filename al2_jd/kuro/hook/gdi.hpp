@@ -56,7 +56,7 @@ namespace apn::dark::kuro::hook
 //			hive.orig.CallWindowProcWInternal = CallWindowProcWInternal.orig_proc;
 			hive.orig.Rectangle = Rectangle.orig_proc;
 			hive.orig.FillRect = FillRect.orig_proc;
-//			hive.orig.DrawFrame = DrawFrame.orig_proc;
+			hive.orig.DrawFrame = DrawFrame.orig_proc;
 			hive.orig.DrawFrameControl = DrawFrameControl.orig_proc;
 			hive.orig.FrameRect = FrameRect.orig_proc;
 			hive.orig.DrawEdge = DrawEdge.orig_proc;
@@ -128,6 +128,13 @@ namespace apn::dark::kuro::hook
 			{
 				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/hex} : {/}",
 					ret_addr(&dc), dc, safe_string(rc), brush, ::GetCurrentThreadId());
+
+				if (theme::Renderer::is_gdi_hook_locked())
+				{
+					MY_TRACE("GDIフックがロックされています\n");
+
+					return orig_proc(dc, rc, brush);
+				}
 
 				return gdi::Renderer::fire_fill_rect(dc, rc, brush);
 			}
@@ -251,6 +258,13 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/hex}, ({/}), {/}, {/} : {/}",
 					ret_addr(&dc), dc, x, y, options, safe_string(rc),
 					safe_string(text, c, options), c, ::GetCurrentThreadId());
+
+				if (theme::Renderer::is_gdi_hook_locked())
+				{
+					MY_TRACE("GDIフックがロックされています\n");
+
+					return orig_proc(dc, x, y, options, rc, text, c, dx);
+				}
 
 				return gdi::Renderer::fire_ext_text_out_w(dc, x, y, options, rc, text, c, dx);
 			}

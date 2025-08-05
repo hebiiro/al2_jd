@@ -2,16 +2,6 @@
 
 namespace apn::dark::kuro::theme
 {
-/*
-	//
-	// このクラスはBOOLをHRESULTに変換します。
-	//
-	struct ToHRESULT {
-		HRESULT hr;
-		ToHRESULT(BOOL result) : hr(result ? S_OK : E_FAIL) {}
-		operator HRESULT() const { return hr; }
-	};
-*/
 	//
 	// パレットを使用して矩形を描画します。
 	//
@@ -66,45 +56,24 @@ namespace apn::dark::kuro::theme
 	//
 	struct Renderer
 	{
-/*
-		HRESULT draw_theme_background(const paint::Palette& palette,
-			HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip)
-		{
-			if (draw_rect(dc, rc, palette, part_id, state_id))
-				return S_OK;
+		//
+		// GDIフックのロックカウントです。
+		//
+		inline static thread_local int gdi_hook_lock_count = 0;
 
-			return Renderer::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
-		}
+		//
+		// GDIフックがロックされていない場合はTRUEを返します。
+		//
+		inline static BOOL is_gdi_hook_locked() { return gdi_hook_lock_count != 0; }
 
-		HRESULT draw_theme_background(const paint::Palette& palette,
-			HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, const DTBGOPTS* options)
-		{
-			if (draw_rect(dc, rc, palette, part_id, state_id))
-				return S_OK;
+		//
+		// このクラスはGDIフックをロックします。
+		//
+		struct GdiHookLocker {
+			GdiHookLocker() { MY_TRACE("GDIフックのロックを開始します\n"); gdi_hook_lock_count++; }
+			~GdiHookLocker() { MY_TRACE("GDIフックのロックを終了します\n"); gdi_hook_lock_count--; }
+		};
 
-			return Renderer::on_draw_theme_background_ex(theme, dc, part_id, state_id, rc, options);
-		}
-
-		HRESULT draw_theme_text(const paint::Palette& palette,
-			HTHEME theme, HDC dc, int part_id, int state_id, LPCWSTR text, int c, DWORD text_flags, DWORD text_flags2, LPCRECT rc,
-			BOOL opaque = TRUE)
-		{
-			if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, opaque))
-				return S_OK;
-
-			return Renderer::on_draw_theme_text(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);
-		}
-
-		HRESULT draw_theme_text_ex(const paint::Palette& palette,
-			HTHEME theme, HDC dc, int part_id, int state_id, LPCWSTR text, int c, DWORD text_flags, LPRECT rc, const DTTOPTS* options,
-			BOOL opaque = TRUE)
-		{
-			if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, opaque))
-				return S_OK;
-
-			return Renderer::on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options);
-		}
-*/
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result)
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}", theme, part_id, state_id, prop_id);
