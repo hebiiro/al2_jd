@@ -8,6 +8,16 @@ namespace apn::dark::kuro::theme
 	inline struct Manager
 	{
 		//
+		// メインスレッドのIDです。
+		//
+		const DWORD main_thread_id = ::GetCurrentThreadId();
+
+		//
+		// 現在のスレッドが有効の場合はTRUEを返します。
+		//
+		BOOL is_valid_thread() const { return main_thread_id == ::GetCurrentThreadId(); }
+
+		//
 		// 初期化処理を実行します。
 		//
 		BOOL init(HWND hwnd)

@@ -80,8 +80,11 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}, {/}",
 					ret_addr(&theme), kuro::theme::name.get_safe(theme), part_id, state_id, prop_id);
 
-				if (auto renderer = kuro::theme::from_handle.get(theme))
-					return renderer->on_get_theme_color(theme, part_id, state_id, prop_id, result);
+				if (kuro::theme::manager.is_valid_thread())
+				{
+					if (auto renderer = kuro::theme::from_handle.get(theme))
+						return renderer->on_get_theme_color(theme, part_id, state_id, prop_id, result);
+				}
 
 				return orig_proc(theme, part_id, state_id, prop_id, result);
 			}
@@ -140,8 +143,11 @@ namespace apn::dark::kuro::hook
 					ret_addr(&theme), kuro::theme::name.get_safe(theme), part_id, state_id,
 					safe_string(rc), safe_string(rc_clip));
 
-				if (auto renderer = kuro::theme::from_handle.get(theme))
-					return renderer->on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
+				if (kuro::theme::manager.is_valid_thread())
+				{
+					if (auto renderer = kuro::theme::from_handle.get(theme))
+						return renderer->on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
+				}
 
 				return orig_proc(theme, dc, part_id, state_id, rc, rc_clip);
 			}
@@ -158,8 +164,11 @@ namespace apn::dark::kuro::hook
 					ret_addr(&theme), kuro::theme::name.get_safe(theme), part_id, state_id,
 					safe_string(rc), options);
 
-				if (auto renderer = kuro::theme::from_handle.get(theme))
-					return renderer->on_draw_theme_background_ex(theme, dc, part_id, state_id, rc, options);
+				if (kuro::theme::manager.is_valid_thread())
+				{
+					if (auto renderer = kuro::theme::from_handle.get(theme))
+						return renderer->on_draw_theme_background_ex(theme, dc, part_id, state_id, rc, options);
+				}
 
 				return orig_proc(theme, dc, part_id, state_id, rc, options);
 			}
@@ -176,8 +185,11 @@ namespace apn::dark::kuro::hook
 					ret_addr(&theme), kuro::theme::name.get_safe(theme), part_id, state_id,
 					safe_string(text, c), text_flags, text_flags2, safe_string(rc));
 
-				if (auto renderer = kuro::theme::from_handle.get(theme))
-					return renderer->on_draw_theme_text(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);
+				if (kuro::theme::manager.is_valid_thread())
+				{
+					if (auto renderer = kuro::theme::from_handle.get(theme))
+						return renderer->on_draw_theme_text(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);
+				}
 
 				return orig_proc(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);
 			}
@@ -194,8 +206,11 @@ namespace apn::dark::kuro::hook
 					ret_addr(&theme), kuro::theme::name.get_safe(theme), part_id, state_id,
 					safe_string(text, c), text_flags, safe_string(rc), options);
 
-				if (auto renderer = kuro::theme::from_handle.get(theme))
-					return renderer->on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options);
+				if (kuro::theme::manager.is_valid_thread())
+				{
+					if (auto renderer = kuro::theme::from_handle.get(theme))
+						return renderer->on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options);
+				}
 
 				return orig_proc(theme, dc, part_id, state_id, text, c, text_flags, rc, options);
 			}
@@ -212,8 +227,11 @@ namespace apn::dark::kuro::hook
 					ret_addr(&theme), kuro::theme::name.get_safe(theme), part_id, state_id,
 					safe_string(rc), image_list, image_index);
 
-				if (auto renderer = kuro::theme::from_handle.get(theme))
-					return renderer->on_draw_theme_icon(theme, dc, part_id, state_id, rc, image_list, image_index);
+				if (kuro::theme::manager.is_valid_thread())
+				{
+					if (auto renderer = kuro::theme::from_handle.get(theme))
+						return renderer->on_draw_theme_icon(theme, dc, part_id, state_id, rc, image_list, image_index);
+				}
 
 				return orig_proc(theme, dc, part_id, state_id, rc, image_list, image_index);
 			}
@@ -230,8 +248,11 @@ namespace apn::dark::kuro::hook
 					ret_addr(&theme), kuro::theme::name.get_safe(theme), part_id, state_id,
 					safe_string(dest_rect), edge, flags);
 
-				if (auto renderer = kuro::theme::from_handle.get(theme))
-					return renderer->on_draw_theme_edge(theme, dc, part_id, state_id, dest_rect, edge, flags, content_rect);
+				if (kuro::theme::manager.is_valid_thread())
+				{
+					if (auto renderer = kuro::theme::from_handle.get(theme))
+						return renderer->on_draw_theme_edge(theme, dc, part_id, state_id, dest_rect, edge, flags, content_rect);
+				}
 
 				return orig_proc(theme, dc, part_id, state_id, dest_rect, edge, flags, content_rect);
 			}
