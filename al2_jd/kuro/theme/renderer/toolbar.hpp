@@ -6,13 +6,47 @@ namespace apn::dark::kuro::theme
 	{
 		const paint::Palette& palette = paint::toolbar_material.palette;
 
+		//
+		// ドロップダウンボタンを描画します。
+		//
+		BOOL draw_drop_down_button(HDC dc, LPCRECT arg_rc, int part_id, int state_id, int offset)
+		{
+			auto rc = *arg_rc;
+
+//			::InflateRect(&rc, 8, 8);
+			::OffsetRect(&rc, 2 + offset, -1);
+
+			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE015, 900);
+		}
+
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
+			switch (part_id)
 			{
-				if (draw_rect(dc, rc, palette, part_id, state_id))
-					return S_OK;
+			case 0:
+			case TP_BUTTON:
+			case TP_DROPDOWNBUTTON:
+			case TP_SPLITBUTTON:
+			case TP_SPLITBUTTONDROPDOWN:
+			case TP_SEPARATOR:
+			case TP_SEPARATORVERT:
+				{
+					if (draw_rect(dc, rc, palette, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case TP_DROPDOWNBUTTONGLYPH:
+				{
+					// ドロップダウンボタンを描画します。
+
+					if (draw_drop_down_button(dc, rc, part_id, state_id, 0))
+						return S_OK;
+
+					break;
+				}
 			}
 
 			return hive.orig.DrawThemeBackground(theme, dc, part_id, state_id, rc, rc_clip);

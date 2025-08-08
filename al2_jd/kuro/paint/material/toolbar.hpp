@@ -20,85 +20,90 @@ namespace apn::dark::kuro::paint
 				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
-			auto normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
+			struct {
+				Pigment normal = {
+					{ style.get_COLORREF(Style::Color::ButtonBody), },
+					{ style.get_COLORREF(Style::Color::Border), 1, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+
+				Pigment disabled = {
+					{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
+					{ style.get_COLORREF(Style::Color::Border), 1, },
+					{ style.get_COLORREF(Style::Color::TextDisable), },
+				};
+
+				Pigment hot = {
+					{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
+					{ style.get_COLORREF(Style::Color::Border), 1, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+
+				Pigment pressed = {
+					{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
+					{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+
+				Pigment checked = {
+					{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
+					{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+			} button;
+
+			struct {
+				Pigment normal = {
+					{ style.get_COLORREF(Style::Color::Background), },
+					{ CLR_NONE, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+
+				Pigment disabled = {
+					{ style.get_COLORREF(Style::Color::Background), },
+					{ CLR_NONE, },
+					{ style.get_COLORREF(Style::Color::TextDisable), },
+				};
+
+				Pigment hot = {
+					{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
+	//				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
+					{ style.get_COLORREF(Style::Color::Border), 1, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+
+				Pigment pressed = {
+					{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
+					{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+
+				Pigment checked = {
+					{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
+					{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
+					{ style.get_COLORREF(Style::Color::Text), },
+				};
+			} flat_button;
+
+			const auto set = [&](auto part_id, const auto& button)
+			{
+				palette.set(part_id, 0, background);
+				palette.set(part_id, TS_NORMAL, button.normal);
+				palette.set(part_id, TS_DISABLED, button.disabled);
+				palette.set(part_id, TS_HOT, button.hot);
+				palette.set(part_id, TS_PRESSED, button.pressed);
+				palette.set(part_id, TS_CHECKED, button.checked);
+				palette.set(part_id, TS_HOTCHECKED, button.checked);
 			};
 
-			auto disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
-
-			auto hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto checked = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto button_id = 0;
-			auto flat_button_id = TP_BUTTON;
-
-			palette.set(button_id, 0, background);
-			palette.set(button_id, TS_NORMAL, normal);
-			palette.set(button_id, TS_DISABLED, disabled);
-			palette.set(button_id, TS_HOT, hot);
-			palette.set(button_id, TS_PRESSED, pressed);
-			palette.set(button_id, TS_CHECKED, checked);
-			palette.set(button_id, TS_HOTCHECKED, checked);
-
-			auto flat_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto flat_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
-
-			auto flat_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-//				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto flat_pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto flat_checked = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			palette.set(flat_button_id, 0, background);
-			palette.set(flat_button_id, TS_NORMAL, flat_normal);
-			palette.set(flat_button_id, TS_DISABLED, flat_disabled);
-			palette.set(flat_button_id, TS_HOT, flat_hot);
-			palette.set(flat_button_id, TS_PRESSED, flat_pressed);
-			palette.set(flat_button_id, TS_CHECKED, flat_checked);
-			palette.set(flat_button_id, TS_HOTCHECKED, flat_checked);
+			set(0, button);
+			set(TP_BUTTON, flat_button);
+			set(TP_DROPDOWNBUTTON, flat_button);
+			set(TP_SPLITBUTTON, flat_button);
+			set(TP_SPLITBUTTONDROPDOWN, flat_button);
+			set(TP_SEPARATOR, flat_button);
+			set(TP_SEPARATORVERT, flat_button);
+			set(TP_DROPDOWNBUTTONGLYPH, flat_button);
 		}
 
 		//
