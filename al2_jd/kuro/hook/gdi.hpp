@@ -44,6 +44,8 @@ namespace apn::dark::kuro::hook
 //			my::hook::attach(DrawStateW);
 			my::hook::attach(ExtTextOutW);
 //			my::hook::attach(PatBlt);
+			my::hook::attach(GetSysColor);
+			my::hook::attach(GetSysColorBrush);
 //			my::hook::attach(InsertMenuW);
 
 			if (DetourTransactionCommit() != NO_ERROR)
@@ -64,6 +66,8 @@ namespace apn::dark::kuro::hook
 			hive.orig.DrawStateW = DrawStateW.orig_proc;
 			hive.orig.ExtTextOutW = ExtTextOutW.orig_proc;
 			hive.orig.PatBlt = PatBlt.orig_proc;
+			hive.orig.GetSysColor = GetSysColor.orig_proc;
+			hive.orig.GetSysColorBrush = GetSysColorBrush.orig_proc;
 
 			return TRUE;
 		}
@@ -293,8 +297,7 @@ namespace apn::dark::kuro::hook
 			{
 				MY_TRACE_FUNC("{/hex}, {/}", ret_addr(&color_id), color_id);
 
-				return RGB(255, 128, 0);
-				return orig_proc(color_id);
+				return gdi::Renderer::fire_get_sys_color(color_id);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::GetSysColor;
 		} GetSysColor;
@@ -307,8 +310,7 @@ namespace apn::dark::kuro::hook
 			{
 				MY_TRACE_FUNC("{/hex}, {/}", ret_addr(&color_id), color_id);
 
-				color_id = COLOR_HIGHLIGHT;
-				return orig_proc(color_id);
+				return gdi::Renderer::fire_get_sys_color_brush(color_id);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::GetSysColorBrush;
 		} GetSysColorBrush;

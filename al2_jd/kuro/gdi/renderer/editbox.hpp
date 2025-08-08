@@ -63,10 +63,9 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}, bk_color = {/hex}, text_color = {/hex}", hwnd, message, dc, control, brush, ::GetBkColor(dc), ::GetTextColor(dc));
 
-
 			// ブラシもしくは背景色がダイアログカラーの場合は
 			if (brush == (HBRUSH)(COLOR_BTNFACE + 1) ||
-				::GetBkColor(dc) == ::GetSysColor(COLOR_BTNFACE))
+				::GetBkColor(dc) == hive.orig.GetSysColor(COLOR_BTNFACE))
 			{
 				// ダイアログとして描画します。
 				const auto& palette = paint::dialog_material.palette;
@@ -151,7 +150,7 @@ namespace apn::dark::kuro::gdi
 				auto bk_color = ::GetBkColor(dc);
 
 				// 背景色がダイアログカラーの場合は
-				if (bk_color == ::GetSysColor(COLOR_BTNFACE))
+				if (bk_color == hive.orig.GetSysColor(COLOR_BTNFACE))
 				{
 					// ダイアログとして描画します。
 					const auto& palette = paint::dialog_material.palette;
@@ -171,7 +170,7 @@ namespace apn::dark::kuro::gdi
 					auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
 
 					// 選択カラーの場合は
-					if (bk_color == ::GetSysColor(COLOR_HIGHLIGHT))
+					if (bk_color == hive.orig.GetSysColor(COLOR_HIGHLIGHT))
 						state_id = ETS_SELECTED; // 選択状態として描画します。
 
 					if (auto pigment = palette.get(part_id, state_id))

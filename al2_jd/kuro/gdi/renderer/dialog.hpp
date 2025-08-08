@@ -20,8 +20,8 @@ namespace apn::dark::kuro::gdi
 			auto brush_color = paint::get_brush_color(brush);
 
 			// メッセージボックスの下側を描画します。
-			if (brush_color == ::GetSysColor(COLOR_BTNFACE))
-//			if (brush_color == ::GetSysColor(COLOR_MENU))
+			if (brush_color == hive.orig.GetSysColor(COLOR_BTNFACE))
+//			if (brush_color == hive.orig.GetSysColor(COLOR_MENU))
 			{
 				my::gdi::unique_ptr<HBRUSH> brush(
 					::CreateSolidBrush(style.get_COLORREF(Style::Color::Footer)));

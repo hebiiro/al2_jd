@@ -196,11 +196,13 @@ namespace apn::dark
 
 			if (0) // テスト用コードです。
 			{
-				auto window_color = ::GetSysColor(COLOR_WINDOW);
-				auto button_color = ::GetSysColor(COLOR_BTNFACE);
-				auto background_color = ::GetSysColor(COLOR_BACKGROUND);
-				auto menu_color = ::GetSysColor(COLOR_MENU);
-				auto hilight_color = ::GetSysColor(COLOR_HIGHLIGHT);
+				auto window_color = hive.orig.GetSysColor(COLOR_WINDOW);
+				auto button_color = hive.orig.GetSysColor(COLOR_BTNFACE);
+				auto background_color = hive.orig.GetSysColor(COLOR_BACKGROUND);
+				auto menu_color = hive.orig.GetSysColor(COLOR_MENU);
+				auto hilight_color = hive.orig.GetSysColor(COLOR_HIGHLIGHT);
+
+				int n = 0; // ここでシステムカラーを確認します。
 			}
 
 			// aviutl2ウィンドウを取得します。

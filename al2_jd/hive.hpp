@@ -188,21 +188,7 @@ namespace apn::dark
 		// レンダラの使用を停止したい場合はTRUEに設定します。
 		//
 		thread_local inline static BOOL renderer_locked = FALSE;
-/*
-		//
-		// 現在処理中のビジュアルスタイルです。
-		//
-		thread_local inline static struct {
-			HTHEME theme;
-			int part_id;
-			int state_id;
-			inline void set(HTHEME theme, int part_id, int state_id) {
-				this->theme = theme;
-				this->part_id = part_id;
-				this->state_id = state_id;
-			}
-		} current_processing_vs = { nullptr, 0, 0 };
-*/
+
 		//
 		// このクラスはフックする前のオリジナルのAPIを保持します。
 		//
@@ -218,6 +204,8 @@ namespace apn::dark
 			decltype(&::DrawStateW) DrawStateW;
 			decltype(&::ExtTextOutW) ExtTextOutW;
 			decltype(&::PatBlt) PatBlt;
+			decltype(&::GetSysColor) GetSysColor;
+			decltype(&::GetSysColorBrush) GetSysColorBrush;
 
 			decltype(&::GetThemeColor) GetThemeColor;
 			decltype(&::DrawThemeParentBackground) DrawThemeParentBackground;

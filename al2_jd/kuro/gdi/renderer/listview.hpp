@@ -33,11 +33,11 @@ namespace apn::dark::kuro::gdi
 				auto part_id = LVP_LISTITEM;
 				auto state_id = LISS_NORMAL;
 
-				if (color == ::GetSysColor(COLOR_HIGHLIGHT))
+				if (color == hive.orig.GetSysColor(COLOR_HIGHLIGHT))
 				{
 					state_id = LISS_HOT;
 				}
-				else if (color == ::GetSysColor(COLOR_BTNFACE))
+				else if (color == hive.orig.GetSysColor(COLOR_BTNFACE))
 				{
 					state_id = LISS_SELECTEDNOTFOCUS;
 				}

@@ -89,7 +89,7 @@ namespace apn::dark::kuro::gdi
 				auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
 
 				// 選択カラーの場合は
-				if (::GetBkColor(dc) == ::GetSysColor(COLOR_HIGHLIGHT))
+				if (::GetBkColor(dc) == hive.orig.GetSysColor(COLOR_HIGHLIGHT))
 					state_id = ETS_SELECTED; // 選択状態として描画します。
 
 				if (auto pigment = palette.get(part_id, state_id))

@@ -11,7 +11,7 @@ namespace apn::dark::kuro::gdi
 			auto bk_color = ::GetBkColor(dc);
 
 			// ブラシもしくは背景色がダイアログカラーの場合は
-			if (brush == (HBRUSH)(COLOR_BTNFACE + 1) || bk_color == ::GetSysColor(COLOR_BTNFACE))
+			if (brush == (HBRUSH)(COLOR_BTNFACE + 1) || bk_color == hive.orig.GetSysColor(COLOR_BTNFACE))
 			{
 				// ダイアログとして描画します。
 				const auto& palette = paint::dialog_material.palette;
@@ -23,7 +23,7 @@ namespace apn::dark::kuro::gdi
 					return pigment->background.get_brush();
 			}
 			// ブラシもしくは背景色がウィンドウカラーの場合は
-			else if (brush == (HBRUSH)(COLOR_WINDOW + 1) || bk_color == ::GetSysColor(COLOR_WINDOW))
+			else if (brush == (HBRUSH)(COLOR_WINDOW + 1) || bk_color == hive.orig.GetSysColor(COLOR_WINDOW))
 			{
 				// エディットボックスとして描画します。
 				const auto& palette = paint::editbox_material.palette;

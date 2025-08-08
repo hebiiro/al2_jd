@@ -187,6 +187,11 @@ namespace apn::dark::kuro::gdi
 
 					break;
 				}
+#if 0 // テスト用コードです。
+			case WM_GETTEXT:
+			case WM_GETTEXTLENGTH:
+				return ::DefSubclassProc(hwnd, message, wParam, lParam);
+#endif
 			}
 
 			// 現在のメッセージの状態を保存します。
@@ -272,7 +277,8 @@ namespace apn::dark::kuro::gdi
 
 		inline static BOOL fire_ext_text_out_w(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx)
 		{
-			MY_TRACE_HWND(current_message_state.hwnd);
+			auto hwnd = current_message_state.hwnd;
+			MY_TRACE_HWND(hwnd);
 
 			auto renderer = from_handle(current_message_state.hwnd);
 			if (renderer) return renderer->on_ext_text_out_w(&current_message_state, dc, x, y, options, rc, text, c, dx);
@@ -284,6 +290,20 @@ namespace apn::dark::kuro::gdi
 			auto renderer = from_handle(current_message_state.hwnd);
 			if (renderer) return renderer->on_pat_blt(&current_message_state, dc, x, y, w, h, rop);
 			return hive.orig.PatBlt(dc, x, y, w, h, rop);
+		}
+
+		inline static COLORREF fire_get_sys_color(int color_id)
+		{
+			auto renderer = from_handle(current_message_state.hwnd);
+			if (renderer) return renderer->on_get_sys_color(color_id);
+			return hive.orig.GetSysColor(color_id);
+		}
+
+		inline static HBRUSH fire_get_sys_color_brush(int color_id)
+		{
+			auto renderer = from_handle(current_message_state.hwnd);
+			if (renderer) return renderer->on_get_sys_color_brush(color_id);
+			return hive.orig.GetSysColorBrush(color_id);
 		}
 
 		//
@@ -302,6 +322,47 @@ namespace apn::dark::kuro::gdi
 			return brush;
 		}
 
+		//
+		// ダイアログの背景を描画します。
+		//
+		inline static BOOL draw_dialog_background(HDC dc, LPCRECT rc)
+		{
+#if 0
+			const auto& palette = paint::button_material.palette;
+
+			auto part_id = BP_PUSHBUTTON;
+			auto state_id = PBS_NORMAL;
+#else
+			const auto& palette = paint::dialog_material.palette;
+
+			auto part_id = WP_DIALOG;
+			auto state_id = ETS_NORMAL;
+#endif
+			if (auto pigment = palette.get(part_id, state_id))
+				return paint::stylus.draw_rect(dc, rc, pigment);
+
+			return FALSE;
+		}
+
+		//
+		// ダイアログのテキストを描画します。
+		//
+		inline static BOOL draw_dialog_text(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx)
+		{
+			const auto& palette = paint::dialog_material.palette;
+
+			auto part_id = WP_DIALOG;
+			auto state_id = ETS_NORMAL;
+
+			if (auto pigment = palette.get(part_id, state_id))
+				return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
+
+			return FALSE;
+		}
+
+		//
+		// 非クライアント領域を描画します。
+		//
 		virtual LRESULT draw_nc_paint(HWND hwnd, HDC dc, const POINT& origin, LPRECT rc)
 		{
 			auto style = my::get_style(hwnd);
@@ -414,6 +475,16 @@ namespace apn::dark::kuro::gdi
 		virtual BOOL on_pat_blt(MessageState* current_state, HDC dc, int x, int y, int w, int h, DWORD rop)
 		{
 			return hive.orig.PatBlt(dc, x, y, w, h, rop);
+		}
+
+		virtual COLORREF on_get_sys_color(int color_id)
+		{
+			return hive.orig.GetSysColor(color_id);
+		}
+
+		virtual HBRUSH on_get_sys_color_brush(int color_id)
+		{
+			return hive.orig.GetSysColorBrush(color_id);
 		}
 	};
 }

@@ -103,7 +103,7 @@ namespace apn::dark::kuro::gdi
 			// トラックの選択部分の色を変更します。
 			{
 				// 背景色が選択色の場合は
-				if (::GetBkColor(dc) == ::GetSysColor(COLOR_HIGHLIGHT))
+				if (::GetBkColor(dc) == hive.orig.GetSysColor(COLOR_HIGHLIGHT))
 				{
 					const auto& palette = paint::trackbar_material.palette;
 
