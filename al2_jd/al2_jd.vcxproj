@@ -187,6 +187,7 @@
     <ClInclude Include="kuro\gdi\renderer\comboboxex.hpp" />
     <ClInclude Include="kuro\gdi\renderer\comdlg32\dialog.hpp" />
     <ClInclude Include="kuro\gdi\renderer\comdlg32\direct_ui_hwnd.hpp" />
+    <ClInclude Include="kuro\gdi\renderer\comdlg32\dui_view.hpp" />
     <ClInclude Include="kuro\gdi\renderer\dialog.hpp" />
     <ClInclude Include="kuro\gdi\renderer\editbox.hpp" />
     <ClInclude Include="kuro\gdi\renderer\header.hpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="kuro\hook\theme.hpp" />
     <ClInclude Include="kuro\paint\material\button.hpp" />
     <ClInclude Include="kuro\paint\material\combobox.hpp" />
+    <ClInclude Include="kuro\paint\material\command_module.hpp" />
     <ClInclude Include="kuro\paint\material\dialog.hpp" />
     <ClInclude Include="kuro\paint\material\editbox.hpp" />
     <ClInclude Include="kuro\paint\material\header.hpp" />
@@ -219,7 +221,9 @@
     <ClInclude Include="kuro\paint\material\menu.hpp" />
     <ClInclude Include="kuro\paint\material\scrollbar.hpp" />
     <ClInclude Include="kuro\paint\material\spin.hpp" />
+    <ClInclude Include="kuro\paint\material\sys_color.hpp" />
     <ClInclude Include="kuro\paint\material\tab.hpp" />
+    <ClInclude Include="kuro\paint\material\toolbar.hpp" />
     <ClInclude Include="kuro\paint\material\tooltip.hpp" />
     <ClInclude Include="kuro\paint\manager.hpp" />
     <ClInclude Include="kuro\paint\material.hpp" />
@@ -233,6 +237,8 @@
     <ClInclude Include="kuro\theme\renderer\base\menu.hpp" />
     <ClInclude Include="kuro\theme\renderer\button.hpp" />
     <ClInclude Include="kuro\theme\renderer\combobox.hpp" />
+    <ClInclude Include="kuro\theme\renderer\command_module.hpp" />
+    <ClInclude Include="kuro\theme\renderer\common_items_dialog.hpp" />
     <ClInclude Include="kuro\theme\renderer\editbox.hpp" />
     <ClInclude Include="kuro\theme\renderer\header.hpp" />
     <ClInclude Include="kuro\theme\renderer\immersive_start\menu.hpp" />
@@ -240,10 +246,12 @@
     <ClInclude Include="kuro\theme\renderer\listbox.hpp" />
     <ClInclude Include="kuro\theme\renderer\listview.hpp" />
     <ClInclude Include="kuro\theme\renderer\menu.hpp" />
+    <ClInclude Include="kuro\theme\renderer\preview_pane.hpp" />
     <ClInclude Include="kuro\theme\renderer\scrollbar.hpp" />
     <ClInclude Include="kuro\theme\renderer\spin.hpp" />
     <ClInclude Include="kuro\theme\renderer\static.hpp" />
     <ClInclude Include="kuro\theme\renderer\tab.hpp" />
+    <ClInclude Include="kuro\theme\renderer\toolbar.hpp" />
     <ClInclude Include="kuro\theme\renderer\tooltip.hpp" />
     <ClInclude Include="kuro\theme\from_vsclass.hpp" />
     <ClInclude Include="kuro\theme\from_handle.hpp" />

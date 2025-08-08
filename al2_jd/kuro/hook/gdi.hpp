@@ -263,6 +263,24 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, x, y, options, safe_string(rc),
 					safe_string(text, c, options), c, ::GetCurrentThreadId());
 
+//				if (0)
+				{
+					// コマンドモジュールDCがセットされている場合は
+					if (paint::command_module_material.dc)
+					{
+						// 最後の::ExtTextOutW()呼び出しの場合は
+						if (!rc)
+						{
+							// コマンドモジュールDCをリセットします。
+							paint::command_module_material.dc = {};
+						}
+
+						// ダイアログのテキストを描画します。
+						if (gdi::Renderer::draw_dialog_text(dc, x, y, options, rc, text, c, dx))
+							return TRUE;
+					}
+				}
+
 				if (theme::Renderer::is_gdi_hook_locked())
 				{
 					MY_TRACE("GDIフックがロックされています\n");

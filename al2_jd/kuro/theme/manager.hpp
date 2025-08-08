@@ -64,6 +64,7 @@ namespace apn::dark::kuro::theme
 				register_renderer(VSCLASS_TRACKBAR, &trackbar_renderer);
 				register_renderer(VSCLASS_SPIN, &spin_renderer);
 				register_renderer(VSCLASS_TAB, &tab_renderer);
+				register_renderer(VSCLASS_TOOLBAR, &toolbar_renderer);
 				register_renderer(VSCLASS_HEADER, &header_renderer);
 				register_renderer(VSCLASS_LISTVIEW, &listview_renderer);
 				register_renderer(VSCLASS_TREEVIEW, &treeview_renderer);
@@ -78,6 +79,7 @@ namespace apn::dark::kuro::theme
 				register_renderer(L"Explorer::" VSCLASS_TRACKBAR, &trackbar_renderer);
 				register_renderer(L"Explorer::" VSCLASS_SPIN, &spin_renderer);
 				register_renderer(L"Explorer::" VSCLASS_TAB, &tab_renderer);
+				register_renderer(L"Explorer::" VSCLASS_TOOLBAR, &toolbar_renderer);
 				register_renderer(L"Explorer::" VSCLASS_HEADER, &header_renderer);
 				register_renderer(L"Explorer::" VSCLASS_LISTVIEW, &listview_renderer);
 				register_renderer(L"Explorer::" VSCLASS_TREEVIEW, &treeview_renderer);
@@ -86,13 +88,43 @@ namespace apn::dark::kuro::theme
 				register_renderer(L"ItemsView", &itemsview_renderer);
 				register_renderer(L"ItemsView::" VSCLASS_HEADER, &header_renderer);
 				register_renderer(L"ItemsView::" VSCLASS_LISTVIEW, &listview_renderer);
+//				register_renderer(L"ItemsViewAccessible::" VSCLASS_HEADER, &header_renderer);
 				register_renderer(L"Button-OK;Button", &button_renderer);
 				register_renderer(L"Button-CANCEL;Button", &button_renderer);
+				register_renderer(L"Combobox::" VSCLASS_LISTBOX, &listbox_renderer);
+//				register_renderer(L"CFD::" VSCLASS_EDIT, &editbox_renderer);
 				register_renderer(L"CFD::" VSCLASS_COMBOBOX, &combobox_renderer);
+				register_renderer(L"CFD::" VSCLASS_HEADER, &header_renderer);
+				register_renderer(L"CFD::" VSCLASS_LISTVIEW, &listview_renderer);
+				register_renderer(L"CFD::" VSCLASS_TREEVIEW, &treeview_renderer);
 
+//				register_renderer(L"EditComposited::" VSCLASS_EDIT, &editbox_renderer);
+				register_renderer(L"Placesbar::" VSCLASS_TOOLBAR, &toolbar_renderer);
+				register_renderer(L"AddressComposited::" VSCLASS_COMBOBOX, &combobox_renderer);
+				register_renderer(L"CommandModule", &command_module_renderer);
+//				register_renderer(L"CPLCommandModule::CommandModule", &command_module_renderer);
+//				register_renderer(L"ItemsView::CommandModule", &command_module_renderer);
+				register_renderer(L"PreviewPane", &preview_pane_renderer);
+//				register_renderer(L"NavbarComposited::" L"PreviewPane", &preview_pane_renderer);
+//				register_renderer(L"InactiveNavbarComposited::" L"PreviewPane", &preview_pane_renderer);
+				register_renderer(L"CommonItemsDialog", &common_items_dialog_renderer);
+//				register_renderer(L"ImmersiveStart::" VSCLASS_MENU, &menu_renderer);
+//				register_renderer(L"BBComposited::" VSCLASS_TOOLBAR, &toolbar_renderer);
+//				register_renderer(L"BBComposited::" VSCLASS_TOOLTIP, &tooltip_renderer);
+//				register_renderer(L"Rebar", &rebar_renderer);
+//				register_renderer(L"Navigation", &navigation_renderer);
+//				register_renderer(L"AddressBand", &address_band_renderer);
 
 /*
 * その他のVSCLASS
+L"ButtonStyle"
+L"TooltipStyle"
+L"ListViewStyle" <= VSCLASS_LISTVIEWSTYLE
+L"FlyoutStyle" <= VSCLASS_FLYOUTSTYLE
+L"CONTROLPANELSTYLE" <= VSCLASS_CONTROLPANELSTYLE
+L"TextStyle" <= VSCLASS_TEXTSTYLE
+L"MediaStyle"
+
 L"Link"
 L"EmptyMarkup"
 VSCLASS_REBAR
@@ -106,24 +138,13 @@ L"SearchEditBox"
 L"ReadingPane"
 L"PreviewPane"
 L"ExplorerNavPane"
-L"ButtonStyle"
-L"TooltipStyle"
-L"ListViewStyle" <= VSCLASS_LISTVIEWSTYLE
-L"FlyoutStyle" <= VSCLASS_FLYOUTSTYLE
-L"CONTROLPANELSTYLE" <= VSCLASS_CONTROLPANELSTYLE
-L"TextStyle" <= VSCLASS_TEXTSTYLE
-L"MediaStyle"
 
-L"CommandModule"
-L"CPLCommandModule::CommandModule"
 L"Communications::" VSCLASS_REBAR
 L"InfoBar"
 L"MonthCal"
 L"PROPERTREE"
 L"TryHarder"
-L"EditComposited::Edit"
 L"UISubsetFooter::ControlPanel"
-L"ItemsViewAccessible::Header"
 
 L""
 

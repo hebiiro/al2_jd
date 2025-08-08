@@ -13,9 +13,6 @@ namespace apn::dark::kuro::gdi
 		std::shared_ptr<Renderer> find_renderer(
 			HWND hwnd, const Renderer::NormalizedClassName& class_name)
 		{
-//			auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
-//			auto style = my::get_style(hwnd);
-
 //			if (class_name == L"#32768") return std::make_shared<MenuRenderer>();
 			if (class_name == L"#32770")
 			{
@@ -23,11 +20,15 @@ namespace apn::dark::kuro::gdi
 				if (text == L"プロジェクトを作成")
 					return std::make_shared<aviutl2::new_project::DialogRenderer>();
 
-//				if (instance == ::GetModuleHandleW(L"comdlg32.dll") && style & WS_THICKFRAME)
-/*				if (instance == ::GetModuleHandleW(L"comdlg32.dll"))
+				auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
+				auto comdlg32 = ::GetModuleHandleW(L"comdlg32.dll");
+//				auto style = my::get_style(hwnd);
+
+				if (instance == comdlg32)
+//				if (instance == comdlg32 && style & WS_THICKFRAME)
 					return std::make_shared<comdlg32::DialogRenderer>();
-				else*/
-					return std::make_shared<DialogRenderer>();
+
+				return std::make_shared<DialogRenderer>();
 			}
 
 			if (class_name == WC_STATIC) return std::make_shared<StaticRenderer>();
@@ -67,7 +68,7 @@ namespace apn::dark::kuro::gdi
 				return std::make_shared<ListViewRenderer>();
 			}
 			if (class_name == WC_TREEVIEW) return std::make_shared<TreeViewRenderer>();
-//			if (class_name == TOOLBARCLASSNAME) return std::make_shared<ToolBarRenderer>();
+			if (class_name == TOOLBARCLASSNAME) return std::make_shared<ToolBarRenderer>();
 
 			// aviutl2のメインウィンドウです。
 			if (class_name == L"aviutl2Manager") return std::make_shared<AviUtl2Renderer>();
@@ -76,10 +77,13 @@ namespace apn::dark::kuro::gdi
 //			if (class_name == L"DirectUIHWND") return std::make_shared<comdlg32::DirectUIHWNDRenderer>();
 
 			// DirectUIHWNDの親ウィンドウです。
-//			if (class_name == L"DUIViewWndClassName") return std::make_shared<comdlg32::DirectUIHWNDRenderer>();
+			if (class_name == L"DUIViewWndClassName") return std::make_shared<comdlg32::DUIViewRenderer>();
 
 			// ファイル選択ダイアログのツリービューの親ウィンドウです。
 			if (class_name == L"NamespaceTreeControl") return std::make_shared<Renderer>();
+
+			// コマンドモジュールがドロップダウン表示するポップアップメニューのようなウィンドウです。
+//			if (class_name == L"ViewControlClass") return std::make_shared<Renderer>();
 
 			if (0) // テスト用コードです。
 			{

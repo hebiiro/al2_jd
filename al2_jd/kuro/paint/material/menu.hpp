@@ -65,7 +65,7 @@ namespace apn::dark::kuro::paint
 			});
 
 			palette.set(MENU_POPUPGUTTER, 0, {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
+				{ style.get_COLORREF(Style::Color::TitleHeader), },
 				{ CLR_NONE },
 				{ style.get_COLORREF(Style::Color::Text), },
 			});
@@ -77,7 +77,7 @@ namespace apn::dark::kuro::paint
 			});
 
 			auto popup_separator = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
+				{ style.get_COLORREF(Style::Color::TitleHeader), },
 				{ CLR_NONE },
 				{ style.get_COLORREF(Style::Color::Text), },
 			};

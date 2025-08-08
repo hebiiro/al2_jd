@@ -295,6 +295,30 @@
     </ClInclude>
     <ClInclude Include="assets_io.hpp" />
     <ClInclude Include="io_base.hpp" />
+    <ClInclude Include="kuro\theme\renderer\command_module.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\common_items_dialog.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\preview_pane.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\toolbar.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\command_module.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\toolbar.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\gdi\renderer\comdlg32\dui_view.hpp">
+      <Filter>kuro\gdi\renderer\comdlg32</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\sys_color.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">

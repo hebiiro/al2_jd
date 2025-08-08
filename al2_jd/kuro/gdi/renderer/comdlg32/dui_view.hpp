@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi::comdlg32
 {
-	struct DirectUIHWNDRenderer : Renderer
+	struct DUIViewRenderer : Renderer
 	{
 #if 0
 		// テスト用コードです。
@@ -14,50 +14,6 @@ namespace apn::dark::kuro::gdi::comdlg32
 			auto lParam = current_state->lParam;
 
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
-
-			switch (message)
-			{
-			case WM_PAINT:
-				{
-					MY_TRACE_FUNC("WM_PAINT, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
-
-					// ファイル選択ダイアログの一部の背景を描画します。
-					// (以下の処理では描画を上書きできませんでした)
-
-					auto dc = my::PaintDC(hwnd);
-					auto rc = my::get_client_rect(hwnd);
-
-					const auto& palette = paint::dialog_material.palette;
-
-					auto part_id = WP_DIALOG;
-					auto state_id = ETS_NORMAL;
-
-					if (auto pigment = palette.get(part_id, state_id))
-						return paint::stylus.draw_rect(dc, &rc, pigment);
-
-					break;
-				}
-			case WM_ERASEBKGND:
-				{
-					MY_TRACE_FUNC("WM_ERASEBKGND, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
-
-					// ファイル選択ダイアログの一部の背景を描画します。
-					// (以下の処理では描画を上書きできませんでした)
-
-					auto dc = (HDC)wParam;
-					auto rc = my::get_client_rect(hwnd);
-
-					const auto& palette = paint::dialog_material.palette;
-
-					auto part_id = WP_DIALOG;
-					auto state_id = ETS_NORMAL;
-
-					if (auto pigment = palette.get(part_id, state_id))
-						return paint::stylus.draw_rect(dc, &rc, pigment);
-
-					break;
-				}
-			}
 
 			return __super::on_subclass_proc(current_state);
 		}
@@ -79,6 +35,13 @@ namespace apn::dark::kuro::gdi::comdlg32
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
+
+			// ※ダイアログサイズを変更した場合に呼ばれます。
+			{
+				// ダイアログの背景を描画します。
+				if (draw_dialog_background(dc, rc))
+					return TRUE;
+			}
 
 			return hive.orig.FillRect(dc, rc, brush);
 		}
@@ -128,6 +91,13 @@ namespace apn::dark::kuro::gdi::comdlg32
 		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
+
+			// ※ダイアログサイズを変更した場合に呼ばれます。
+			{
+				// ダイアログのテキストを描画します。
+				if (draw_dialog_text(dc, x, y, options, rc, text, c, dx))
+					return TRUE;
+			}
 
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 		}
