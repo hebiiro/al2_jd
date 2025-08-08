@@ -6,15 +6,13 @@ namespace apn::dark::kuro::gdi
 	{
 		const paint::Palette& palette = paint::treeview_material.palette;
 
-		virtual LRESULT on_custom_draw(MessageState* current_state) override
+		virtual LRESULT on_custom_draw(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-//			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}",
-//				current_state->hwnd, current_state->message,
-//				current_state->wParam, current_state->lParam);
+//			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 #if 1
 			// テキストの色と背景色を指定します。(選択アイテム以外)
 
-			auto cd = (NMTVCUSTOMDRAW*)current_state->lParam;
+			auto cd = (NMTVCUSTOMDRAW*)lParam;
 
 			switch (cd->nmcd.dwDrawStage)
 			{
@@ -66,7 +64,7 @@ namespace apn::dark::kuro::gdi
 				}
 			}
 #endif
-			return __super::on_custom_draw(current_state);
+			return __super::on_custom_draw(hwnd, message, wParam, lParam);
 		}
 
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override

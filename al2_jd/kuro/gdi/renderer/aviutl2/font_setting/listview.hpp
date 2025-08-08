@@ -12,9 +12,9 @@ namespace apn::dark::kuro::gdi::aviutl2::font_setting
 		//
 		// カスタムドローを処理します。
 		//
-		virtual LRESULT on_custom_draw(MessageState* current_state)
+		virtual LRESULT on_custom_draw(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			auto nm = (NMLVCUSTOMDRAW*)current_state->lParam;
+			auto nm = (NMLVCUSTOMDRAW*)lParam;
 
 			MY_TRACE_FUNC("stage = {/hex}, text_color = {/hex}, text_bk_color = {/hex}, sub_item = {/}",
 				nm->nmcd.dwDrawStage, nm->clrText, nm->clrTextBk, nm->iSubItem);
@@ -58,7 +58,7 @@ namespace apn::dark::kuro::gdi::aviutl2::font_setting
 				}
 			}
 
-			return orig_wnd_proc(current_state);
+			return __super::on_custom_draw(hwnd, message, wParam, lParam);
 		}
 	};
 }

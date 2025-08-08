@@ -18,8 +18,7 @@ namespace apn::dark::kuro::gdi
 		//
 		// このクラスはメッセージの状態です。
 		//
-		struct MessageState
-		{
+		struct MessageState {
 			HWND hwnd;
 			UINT message;
 			WPARAM wParam;
@@ -80,9 +79,9 @@ namespace apn::dark::kuro::gdi
 		//
 		// オリジナルのウィンドウプロシージャを呼び出します。
 		//
-		inline static LRESULT CALLBACK orig_wnd_proc(MessageState* current_state)
+		inline static LRESULT CALLBACK orig_wnd_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-			return ::DefSubclassProc(current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
+			return ::DefSubclassProc(hwnd, message, wParam, lParam);
 		}
 
 		//
@@ -106,8 +105,6 @@ namespace apn::dark::kuro::gdi
 			// レンダラーの使用が抑制されている場合はデフォルト処理のみ行います。
 			if (hive.renderer_locked)
 				return ::DefSubclassProc(hwnd, message, wParam, lParam);
-
-			auto message_state = MessageState { hwnd, message, wParam, lParam };
 
 			switch (message)
 			{
@@ -154,7 +151,7 @@ namespace apn::dark::kuro::gdi
 //					MY_TRACE_FUNC("WM_CTLCOLOR, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
 					// デフォルト処理を実行してデフォルトのブラシを取得します。
-					auto brush = (HBRUSH)orig_wnd_proc(&message_state);
+					auto brush = (HBRUSH)orig_wnd_proc(hwnd, message, wParam, lParam);
 
 					auto dc = (HDC)wParam;
 					auto control = (HWND)lParam;
@@ -179,7 +176,7 @@ namespace apn::dark::kuro::gdi
 						{
 							// レンダラーを取得できた場合は処理を任せます。
 							if (auto renderer = from_handle(nm->hwndFrom))
-								return renderer->on_custom_draw(&message_state);
+								return renderer->on_custom_draw(hwnd, message, wParam, lParam);
 
 							break;
 						}
@@ -210,13 +207,15 @@ namespace apn::dark::kuro::gdi
 					// 現在のメッセージの状態を復元します。
 					current_message_state = old_message_state;
 				}
-			} message_state_saver = { message_state };
+			} message_state_saver = {
+				{ hwnd, message, wParam, lParam },
+			};
 
 			// レンダラーを取得できた場合は処理を任せます。
 			if (auto renderer = from_handle(hwnd))
-				return renderer->on_subclass_proc(&message_state);
+				return renderer->on_subclass_proc(hwnd, message, wParam, lParam);
 
-			return orig_wnd_proc(&message_state);
+			return orig_wnd_proc(hwnd, message, wParam, lParam);
 		}
 
 		inline static BOOL fire_rectangle(HDC dc, int left, int top, int right, int bottom)
@@ -400,26 +399,26 @@ namespace apn::dark::kuro::gdi
 		virtual BOOL on_attach(HWND hwnd) { return TRUE; }
 		virtual BOOL on_detach(HWND hwnd) { return TRUE; }
 
-		virtual LRESULT on_subclass_proc(MessageState* current_state)
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			// 最終メッセージの場合は
-			if (current_state->message == WM_NCDESTROY)
+			if (message == WM_NCDESTROY)
 			{
 				// デフォルト処理を実行してから
-				auto result = orig_wnd_proc(current_state);
+				auto result = orig_wnd_proc(hwnd, message, wParam, lParam);
 
 				// デタッチします。
-				detach(current_state->hwnd);
+				detach(hwnd);
 
 				return result;
 			}
 
-			return orig_wnd_proc(current_state);
+			return orig_wnd_proc(hwnd, message, wParam, lParam);
 		}
 
-		virtual LRESULT on_custom_draw(MessageState* current_state)
+		virtual LRESULT on_custom_draw(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-			return orig_wnd_proc(current_state);
+			return orig_wnd_proc(hwnd, message, wParam, lParam);
 		}
 
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush)

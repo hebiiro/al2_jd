@@ -4,16 +4,14 @@ namespace apn::dark::kuro::gdi
 {
 	struct RendererNc : Renderer
 	{
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			switch (current_state->message)
+			switch (message)
 			{
 			case WM_NCPAINT:
 				{
-					MY_TRACE_FUNC("WM_NCPAINT, {/hex}, {/hex}, {/hex}",
-						current_state->hwnd, current_state->wParam, current_state->lParam);
+					MY_TRACE_FUNC("WM_NCPAINT, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
-					auto hwnd = current_state->hwnd;
 					auto style = my::get_style(hwnd);
 
 					// キャプションやスクロールバーが存在する場合は
@@ -22,7 +20,7 @@ namespace apn::dark::kuro::gdi
 						(style & WS_VSCROLL) == WS_VSCROLL)
 					{
 						// 先にデフォルトの描画処理を実行します。
-						__super::on_subclass_proc(current_state);
+						__super::on_subclass_proc(hwnd, message, wParam, lParam);
 					}
 
 					// 非クライアント領域を描画します。
@@ -37,7 +35,7 @@ namespace apn::dark::kuro::gdi
 				}
 			}
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 	};
 }

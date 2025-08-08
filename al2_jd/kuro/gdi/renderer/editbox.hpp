@@ -5,12 +5,12 @@ namespace apn::dark::kuro::gdi
 	struct EditBoxRenderer : RendererNc
 	{
 #if 0
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}",
 				current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 #endif
 		virtual LRESULT draw_nc_paint(HWND hwnd, HDC dc, const POINT& origin, LPRECT rc) override

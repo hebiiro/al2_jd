@@ -4,13 +4,8 @@ namespace apn::dark::kuro::gdi
 {
 	struct AviUtl2Renderer : Renderer
 	{
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			auto hwnd = current_state->hwnd;
-			auto message = current_state->message;
-			auto wParam = current_state->wParam;
-			auto lParam = current_state->lParam;
-
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
 			switch (message)
@@ -26,7 +21,7 @@ namespace apn::dark::kuro::gdi
 				}
 			}
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override

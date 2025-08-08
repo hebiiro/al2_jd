@@ -124,13 +124,8 @@ namespace apn::dark::kuro::gdi::aviutl2
 			return TRUE;
 		}
 #if 1
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			auto hwnd = current_state->hwnd;
-			auto message = current_state->message;
-			auto wParam = current_state->wParam;
-			auto lParam = current_state->lParam;
-
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
 			switch (message)
@@ -210,7 +205,7 @@ namespace apn::dark::kuro::gdi::aviutl2
 				}
 			}
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 #endif
 		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override

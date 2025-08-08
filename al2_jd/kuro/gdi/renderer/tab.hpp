@@ -5,7 +5,7 @@ namespace apn::dark::kuro::gdi
 	struct TabRenderer : Renderer
 	{
 #if 0
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
 			auto hwnd = current_state->hwnd;
 			auto message = current_state->message;
@@ -14,7 +14,7 @@ namespace apn::dark::kuro::gdi
 
 //			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 #endif
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override

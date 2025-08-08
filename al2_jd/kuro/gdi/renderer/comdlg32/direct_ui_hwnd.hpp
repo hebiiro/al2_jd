@@ -6,13 +6,8 @@ namespace apn::dark::kuro::gdi::comdlg32
 	{
 #if 0
 		// テスト用コードです。
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			auto hwnd = current_state->hwnd;
-			auto message = current_state->message;
-			auto wParam = current_state->wParam;
-			auto lParam = current_state->lParam;
-
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
 			switch (message)
@@ -59,7 +54,7 @@ namespace apn::dark::kuro::gdi::comdlg32
 				}
 			}
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 #endif
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override

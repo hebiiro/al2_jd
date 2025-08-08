@@ -4,19 +4,17 @@ namespace apn::dark::kuro::gdi
 {
 	struct SpinRenderer : Renderer
 	{
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-//			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}",
-//				current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
+//			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
-			switch (current_state->message)
+			switch (message)
 			{
 			case WM_ERASEBKGND:
 				{
 					// バディありのスピンボタンの背景を描画します。
 
-					auto hwnd = current_state->hwnd;
-					auto dc = (HDC)current_state->wParam;
+					auto dc = (HDC)wParam;
 					auto rc = my::get_client_rect(hwnd);
 
 					const auto& palette = paint::dialog_material.palette;
@@ -31,7 +29,21 @@ namespace apn::dark::kuro::gdi
 				}
 			}
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
+		}
+
+		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override
+		{
+			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, dc, control, brush);
+
+			return __super::on_ctl_color(hwnd, message, dc, control, brush);
+		}
+
+		virtual BOOL on_rectangle(MessageState* current_state, HDC dc, int left, int top, int right, int bottom) override
+		{
+			MY_TRACE_FUNC("{/hex}, ({/}, {/}, {/}, {/})", dc, left, top, right, bottom);
+
+			return hive.orig.Rectangle(dc, left, top, right, bottom);
 		}
 
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override

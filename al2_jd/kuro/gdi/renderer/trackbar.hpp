@@ -4,9 +4,9 @@ namespace apn::dark::kuro::gdi
 {
 	struct TrackBarRenderer : Renderer
 	{
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			switch (current_state->message)
+			switch (message)
 			{
 			case WM_ERASEBKGND:
 				{
@@ -21,7 +21,7 @@ namespace apn::dark::kuro::gdi
 				{
 //					MY_TRACE_FUNC("WM_LBUTTONDOWN, {/hex}, {/hex}, {/hex}, {/hex}", current_state->hwnd, current_state->message, current_state->wParam, current_state->lParam);
 
-					auto result = __super::on_subclass_proc(current_state);
+					auto result = __super::on_subclass_proc(hwnd, message, wParam, lParam);
 
 					// コモンコントロールをバージョン6にすると、
 					// WM_LBUTTONDOWNでSB_THUMBTRACKが送られてこなくなります。
@@ -35,7 +35,7 @@ namespace apn::dark::kuro::gdi
 #endif
 			}
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override

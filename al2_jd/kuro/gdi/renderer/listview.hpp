@@ -7,9 +7,9 @@ namespace apn::dark::kuro::gdi
 		const paint::Palette& palette = paint::listview_material.palette;
 #if 0
 		// テスト用コードです。
-		virtual LRESULT on_subclass_proc(MessageState* current_state) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			switch (current_state->message)
+			switch (message)
 			{
 			case WM_ERASEBKGND:
 				{
@@ -20,7 +20,7 @@ namespace apn::dark::kuro::gdi
 				}
 			}
 
-			return __super::on_subclass_proc(current_state);
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 #endif
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
