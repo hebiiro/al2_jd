@@ -10,6 +10,6 @@ namespace apn::dark
 		// プラグイン名とプラグイン情報です。
 		//
 		const std::wstring name = L"🐍ダークモード化";
-		const std::wstring information = name + L"🔖r6"; // リリース番号を付与します。
+		const std::wstring information = name + L"🔖r7"; // リリース番号を付与します。
 	} version;
 }
