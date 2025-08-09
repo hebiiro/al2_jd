@@ -266,18 +266,18 @@ namespace apn::dark::kuro::hook
 //				if (0)
 				{
 					// コマンドモジュールDCがセットされている場合は
-					if (paint::command_module_material.dc)
+					if (dc == paint::command_module_material.dc)
 					{
-						// 最後の::ExtTextOutW()呼び出しの場合は
-						if (!rc)
-						{
-							// コマンドモジュールDCをリセットします。
-							paint::command_module_material.dc = {};
-						}
+						MY_TRACE("コマンドモジュールを描画します\n");
 
-						// ダイアログのテキストを描画します。
+						// コマンドモジュールのテキストを描画します。
 						if (gdi::Renderer::draw_dialog_text(dc, x, y, options, rc, text, c, dx))
 							return TRUE;
+					}
+					else
+					{
+						// コマンドモジュールDCをリセットします。
+						paint::command_module_material.dc = {};
 					}
 				}
 

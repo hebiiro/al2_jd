@@ -94,6 +94,8 @@ namespace apn::dark::kuro::paint
 				palette.set(part_id, TS_PRESSED, button.pressed);
 				palette.set(part_id, TS_CHECKED, button.checked);
 				palette.set(part_id, TS_HOTCHECKED, button.checked);
+				palette.set(part_id, TS_NEARHOT, button.normal);
+				palette.set(part_id, TS_OTHERSIDEHOT, button.normal);
 			};
 
 			set(0, button);

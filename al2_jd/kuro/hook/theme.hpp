@@ -97,7 +97,8 @@ namespace apn::dark::kuro::hook
 		struct {
 			inline static COLORREF WINAPI hook_proc(HTHEME theme, int color_id)
 			{
-				MY_TRACE_FUNC("{/hex}, {/}, {/}", ret_addr(&theme), kuro::theme::name.get_safe(theme), color_id);
+				MY_TRACE_FUNC("{/hex}, {/}, {/}",
+					ret_addr(&theme), kuro::theme::name.get_safe(theme), color_id);
 
 				return orig_proc(theme, color_id);
 			}
@@ -110,7 +111,8 @@ namespace apn::dark::kuro::hook
 		struct {
 			inline static HBRUSH WINAPI hook_proc(HTHEME theme, int color_id)
 			{
-				MY_TRACE_FUNC("{/hex}, {/}, {/}", ret_addr(&theme), kuro::theme::name.get_safe(theme), color_id);
+				MY_TRACE_FUNC("{/hex}, {/}, {/}",
+					ret_addr(&theme), kuro::theme::name.get_safe(theme), color_id);
 
 				return orig_proc(theme, color_id);
 			}

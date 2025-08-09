@@ -50,6 +50,9 @@
     <Filter Include="kuro\gdi\renderer\aviutl2\new_project">
       <UniqueIdentifier>{a4747c29-5ae3-41e1-81d1-45b1924c501e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kuro\theme\renderer\search_band">
+      <UniqueIdentifier>{d2283483-cf35-41a4-b8d5-6cddc770a4e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -317,6 +320,24 @@
       <Filter>kuro\gdi\renderer\comdlg32</Filter>
     </ClInclude>
     <ClInclude Include="kuro\paint\material\sys_color.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\rebar.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\explorer_nav_pane.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\address_band.hpp">
+      <Filter>kuro\theme\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\search_band\search_box.hpp">
+      <Filter>kuro\theme\renderer\search_band</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\theme\renderer\search_band\search_editbox.hpp">
+      <Filter>kuro\theme\renderer\search_band</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\address_band.hpp">
       <Filter>kuro\paint\material</Filter>
     </ClInclude>
   </ItemGroup>

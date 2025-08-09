@@ -293,6 +293,9 @@ namespace apn::dark::kuro::gdi
 
 		inline static COLORREF fire_get_sys_color(int color_id)
 		{
+			auto hwnd = current_message_state.hwnd;
+			MY_TRACE_HWND(hwnd);
+
 			auto renderer = from_handle(current_message_state.hwnd);
 			if (renderer) return renderer->on_get_sys_color(color_id);
 			return hive.orig.GetSysColor(color_id);
@@ -300,6 +303,9 @@ namespace apn::dark::kuro::gdi
 
 		inline static HBRUSH fire_get_sys_color_brush(int color_id)
 		{
+			auto hwnd = current_message_state.hwnd;
+			MY_TRACE_HWND(hwnd);
+
 			auto renderer = from_handle(current_message_state.hwnd);
 			if (renderer) return renderer->on_get_sys_color_brush(color_id);
 			return hive.orig.GetSysColorBrush(color_id);

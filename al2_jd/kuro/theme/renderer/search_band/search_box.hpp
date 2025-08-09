@@ -2,11 +2,18 @@
 
 namespace apn::dark::kuro::theme
 {
-	inline struct PreviewPaneRenderer : Renderer
+	inline struct SearchBoxRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::toolbar_material.palette;
+
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
+
+			{
+				if (draw_rect(dc, rc, palette, 0, TS_NORMAL))
+					return S_OK;
+			}
 
 			return hive.orig.DrawThemeBackground(theme, dc, part_id, state_id, rc, rc_clip);
 		}
@@ -14,18 +21,6 @@ namespace apn::dark::kuro::theme
 		HRESULT on_draw_theme_background_ex(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, const DTBGOPTS* options) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), {/hex}", theme, dc, part_id, state_id, safe_string(rc), options);
-
-			switch (part_id)
-			{
-			case 3: // 左側の縁(?)
-			case 4: // 右側の縁(?)
-				{
-					const paint::Palette& palette = paint::dialog_material.palette;
-
-					if (draw_rect(dc, rc, palette, WP_DIALOG, ETS_NORMAL))
-						return S_OK;
-				}
-			}
 
 			return hive.orig.DrawThemeBackgroundEx(theme, dc, part_id, state_id, rc, options);
 		}
@@ -57,5 +52,5 @@ namespace apn::dark::kuro::theme
 
 			return hive.orig.DrawThemeEdge(theme, dc, part_id, state_id, dest_rect, edge, flags, content_rect);
 		}
-	} preview_pane_renderer;
+	} search_box_renderer;
 }

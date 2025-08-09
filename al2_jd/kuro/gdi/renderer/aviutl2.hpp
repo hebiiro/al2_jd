@@ -28,7 +28,8 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
-//			if (0) // コモンダイアログの背景をダークモード化するために必要です。
+			// コモンダイアログが表示されている場合は
+			if (hive.is_comdlg32_visible)
 			{
 				if (brush == hive.orig.GetSysColorBrush(COLOR_WINDOW) ||
 					paint::get_brush_color(brush) == hive.orig.GetSysColor(COLOR_WINDOW))
@@ -42,6 +43,34 @@ namespace apn::dark::kuro::gdi
 			}
 
 			return hive.orig.FillRect(dc, rc, brush);
+		}
+
+		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
+		{
+			MY_TRACE_FUNC("{/hex}, {/}, {/}, options = {/hex}, {/}, {/}, {/}, {/hex}, bk_color = {/hex}, text_color = {/hex}",
+				dc, x, y, options, safe_string(rc), safe_string(text, c, options), c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
+
+			// コモンダイアログが表示されている場合は
+			if (hive.is_comdlg32_visible)
+			{
+				// 背景色を取得します。
+				auto bk_color = ::GetBkColor(dc);
+
+				// エディットボックスとして描画します。
+				const auto& palette = paint::editbox_material.palette;
+
+				auto part_id = EP_EDITTEXT;
+				auto state_id = ETS_NORMAL;
+
+				// 背景色がウィンドウの色ではない場合は
+				if (bk_color != hive.orig.GetSysColor(COLOR_WINDOW))
+					state_id = ETS_SELECTED; // 選択状態として描画します。
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
+			}
+
+			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 		}
 	};
 }

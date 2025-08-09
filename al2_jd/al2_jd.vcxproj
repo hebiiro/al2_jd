@@ -209,6 +209,7 @@
     <ClInclude Include="kuro\hook\gdi.hpp" />
     <ClInclude Include="kuro\hook\manager.hpp" />
     <ClInclude Include="kuro\hook\theme.hpp" />
+    <ClInclude Include="kuro\paint\material\address_band.hpp" />
     <ClInclude Include="kuro\paint\material\button.hpp" />
     <ClInclude Include="kuro\paint\material\combobox.hpp" />
     <ClInclude Include="kuro\paint\material\command_module.hpp" />
@@ -234,12 +235,14 @@
     <ClInclude Include="kuro\paint\stylus.hpp" />
     <ClInclude Include="kuro\paint\utils.hpp" />
     <ClInclude Include="kuro\style.hpp" />
+    <ClInclude Include="kuro\theme\renderer\address_band.hpp" />
     <ClInclude Include="kuro\theme\renderer\base\menu.hpp" />
     <ClInclude Include="kuro\theme\renderer\button.hpp" />
     <ClInclude Include="kuro\theme\renderer\combobox.hpp" />
     <ClInclude Include="kuro\theme\renderer\command_module.hpp" />
     <ClInclude Include="kuro\theme\renderer\common_items_dialog.hpp" />
     <ClInclude Include="kuro\theme\renderer\editbox.hpp" />
+    <ClInclude Include="kuro\theme\renderer\explorer_nav_pane.hpp" />
     <ClInclude Include="kuro\theme\renderer\header.hpp" />
     <ClInclude Include="kuro\theme\renderer\immersive_start\menu.hpp" />
     <ClInclude Include="kuro\theme\renderer\itemsview.hpp" />
@@ -247,7 +250,10 @@
     <ClInclude Include="kuro\theme\renderer\listview.hpp" />
     <ClInclude Include="kuro\theme\renderer\menu.hpp" />
     <ClInclude Include="kuro\theme\renderer\preview_pane.hpp" />
+    <ClInclude Include="kuro\theme\renderer\rebar.hpp" />
     <ClInclude Include="kuro\theme\renderer\scrollbar.hpp" />
+    <ClInclude Include="kuro\theme\renderer\search_band\search_box.hpp" />
+    <ClInclude Include="kuro\theme\renderer\search_band\search_editbox.hpp" />
     <ClInclude Include="kuro\theme\renderer\spin.hpp" />
     <ClInclude Include="kuro\theme\renderer\static.hpp" />
     <ClInclude Include="kuro\theme\renderer\tab.hpp" />

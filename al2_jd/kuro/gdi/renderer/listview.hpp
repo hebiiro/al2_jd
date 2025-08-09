@@ -100,28 +100,36 @@ namespace apn::dark::kuro::gdi
 #if 1
 //			if (!(options & ETO_IGNORELANGUAGE))
 			{
-				if (options == ETO_OPAQUE)
+				if (options == ETO_OPAQUE && rc)
 				{
-					// セパレータを描画します。
-					if (auto pigment = palette.get(LVP_LISTITEM, 0))
+					auto part_id = LVP_LISTITEM;
+					auto state_id = LISS_NORMAL;
+
+					// セパレータの場合は
+					if (my::get_width(*rc) == 1 || my::get_height(*rc) == 1)
+						state_id = (decltype(state_id))0;
+
+					if (auto pigment = palette.get(part_id, state_id))
 						return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 				}
-
-				auto current_color = ::GetPixel(dc, x, y);
-				auto part_id = LVP_LISTITEM;
-				auto state_id = LISS_NORMAL;
-
-				if (auto pigment = palette.get(part_id, state_id))
+				else
 				{
-					if (current_color != pigment->background.color)
-						state_id = LISS_HOT;
+					auto current_color = ::GetPixel(dc, x, y);
+					auto part_id = LVP_LISTITEM;
+					auto state_id = LISS_NORMAL;
+
+					if (auto pigment = palette.get(part_id, state_id))
+					{
+						if (current_color != pigment->background.color)
+							state_id = LISS_HOT;
+					}
+
+					MY_TRACE("current_color = {/hex}, part_id = {/}, state_id = {/}\n",
+						current_color, (int)part_id, (int)state_id);
+
+					if (auto pigment = palette.get(part_id, state_id))
+						return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 				}
-
-				MY_TRACE("current_color = {/hex}, part_id = {/}, state_id = {/}\n",
-					current_color, (int)part_id, (int)state_id);
-
-				if (auto pigment = palette.get(part_id, state_id))
-					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 			}
 #endif
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);

@@ -76,6 +76,11 @@ namespace apn::dark
 		BOOL specialize_checkbox = FALSE;
 
 		//
+		// コモンダイアログが表示されている場合はTRUEになります。
+		//
+		BOOL is_comdlg32_visible = FALSE;
+
+		//
 		// このクラスはフォントプレビューの設定です。
 		//
 		struct Fonts

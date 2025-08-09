@@ -22,6 +22,14 @@ namespace apn::dark::kuro::theme
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
 			{
+				if (part_id == MENU_POPUPCHECKBACKGROUND)
+				{
+					// この処理はクリッピングしないようにします。
+
+					if (draw_rect(dc, rc, palette, part_id, state_id))
+						return S_OK;
+				}
+
 				Clipper clipper(dc, rc_clip);
 
 				switch (part_id)
@@ -34,6 +42,15 @@ namespace apn::dark::kuro::theme
 						rc2.bottom += 1;
 
 						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
+					}
+				case MENU_BARITEM:
+					{
+						// メニューバーの背景を描画します。
+
+						if (draw_rect(dc, rc, palette, part_id, state_id))
 							return S_OK;
 
 						break;

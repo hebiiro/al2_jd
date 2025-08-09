@@ -20,6 +20,7 @@ namespace apn::dark::kuro::paint
 			palette.set(COLOR_HIGHLIGHTTEXT, 0, { style.get_COLORREF(Style::Color::Text) });
 			palette.set(COLOR_BTNFACE, 0, { style.get_COLORREF(Style::Color::ButtonBody) });
 			palette.set(COLOR_BTNTEXT, 0, { style.get_COLORREF(Style::Color::Text) });
+			palette.set(COLOR_BTNHIGHLIGHT, 0, { style.get_COLORREF(Style::Color::ButtonBody) });
 			palette.set(COLOR_GRAYTEXT, 0, { style.get_COLORREF(Style::Color::TextDisable) });
 		}
 

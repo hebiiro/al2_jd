@@ -121,7 +121,7 @@ namespace apn::dark
 		Clipper(HDC dc, LPCRECT rc_clip)
 			: dc(dc)
 		{
-			if (rc_clip)
+			if (rc_clip && !::IsRectEmpty(rc_clip))
 			{
 				auto rc = *rc_clip;
 				::LPtoDP(dc, (LPPOINT)&rc, 2);

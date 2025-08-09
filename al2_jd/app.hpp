@@ -194,17 +194,6 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			if (0) // テスト用コードです。
-			{
-				auto window_color = hive.orig.GetSysColor(COLOR_WINDOW);
-				auto button_color = hive.orig.GetSysColor(COLOR_BTNFACE);
-				auto background_color = hive.orig.GetSysColor(COLOR_BACKGROUND);
-				auto menu_color = hive.orig.GetSysColor(COLOR_MENU);
-				auto hilight_color = hive.orig.GetSysColor(COLOR_HIGHLIGHT);
-
-				int n = 0; // ここでシステムカラーを確認します。
-			}
-
 			// aviutl2ウィンドウを取得します。
 			get_aviutl2_window();
 
@@ -220,6 +209,18 @@ namespace apn::dark
 			kuro::gdi::manager.init(hive.theme_window);
 			kuro::theme::manager.init(hive.theme_window);
 			config_dialog.init();
+
+			if (0) // テスト用コードです。
+			{
+				auto window_color = hive.orig.GetSysColor(COLOR_WINDOW);
+				auto button_color = hive.orig.GetSysColor(COLOR_BTNFACE);
+				auto background_color = hive.orig.GetSysColor(COLOR_BACKGROUND);
+				auto menu_color = hive.orig.GetSysColor(COLOR_MENU);
+				auto hilight_color = hive.orig.GetSysColor(COLOR_HIGHLIGHT);
+				auto button_hilight_color = hive.orig.GetSysColor(COLOR_BTNHIGHLIGHT);
+
+				int n = 0; // ここでシステムカラーを確認します。
+			}
 
 			// アセットをファイルから読み込みます。
 			// ※アセットは読み込み専用で、書き込みは行われません。

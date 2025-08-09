@@ -14,6 +14,30 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
+			auto background = Pigment {
+				{ style.get_COLORREF(Style::Color::Background), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto border = Pigment {
+				{ style.get_COLORREF(Style::Color::WindowBorder), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto gutter = Pigment {
+				{ style.get_COLORREF(Style::Color::TitleHeader), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto separator = Pigment {
+				{ style.get_COLORREF(Style::Color::TitleHeader), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
 			auto item_normal = Pigment {
 				{ style.get_COLORREF(Style::Color::Background), },
 				{ CLR_NONE },
@@ -31,6 +55,18 @@ namespace apn::dark::kuro::paint
 //				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
 				{ style.get_COLORREF(Style::Color::Border), 1, },
 				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto mc_normal = Pigment {
+				{ style.get_COLORREF(Style::Color::Background), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto mc_disabled = Pigment {
+				{ style.get_COLORREF(Style::Color::Background), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::TextDisable), },
 			};
 
 			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, {
@@ -52,38 +88,23 @@ namespace apn::dark::kuro::paint
 			palette.set(MENU_BARITEM, MBI_PUSHED, item_hot);
 			palette.set(MENU_BARITEM, MBI_DISABLEDPUSHED, item_disabled);
 
-			palette.set(MENU_POPUPBACKGROUND, 0, {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			});
+			// Menu
+			palette.set(MENU_POPUPBACKGROUND, 0, background);
+			palette.set(MENU_POPUPBORDERS, 0, border);
+			palette.set(MENU_POPUPGUTTER, 0, gutter);
+			palette.set(MENU_POPUPSEPARATOR, 0, separator);
 
-			palette.set(MENU_POPUPBORDERS, 0, {
-				{ style.get_COLORREF(Style::Color::WindowBorder), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			});
+			// Menu (comdlg32)
+			palette.set(MENU_POPUPBACKGROUND, 1, background);
+			palette.set(MENU_POPUPBORDERS, 1, border);
+			palette.set(MENU_POPUPGUTTER, 1, gutter);
+			palette.set(MENU_POPUPSEPARATOR, 1, separator);
 
-			palette.set(MENU_POPUPGUTTER, 0, {
-				{ style.get_COLORREF(Style::Color::TitleHeader), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			});
-
-			palette.set(MENU_POPUPGUTTER, 3, {
-				{ RGB(255, 0, 0), },
-				{ CLR_NONE },
-				{ RGB(0, 255, 0), },
-			});
-
-			auto popup_separator = Pigment {
-				{ style.get_COLORREF(Style::Color::TitleHeader), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			palette.set(MENU_POPUPSEPARATOR, 0, popup_separator); // Menu
-			palette.set(MENU_POPUPSEPARATOR, 3, popup_separator); // ImmersiveStart::Menu
+			// ImmersiveStart::Menu
+			palette.set(MENU_POPUPBACKGROUND, 3, background);
+			palette.set(MENU_POPUPBORDERS, 3, border);
+			palette.set(MENU_POPUPGUTTER, 3, gutter);
+			palette.set(MENU_POPUPSEPARATOR, 3, separator);
 
 			palette.set(MENU_POPUPITEM, MPI_NORMAL, item_normal);
 			palette.set(MENU_POPUPITEM, MPI_DISABLED, item_disabled);
@@ -95,30 +116,27 @@ namespace apn::dark::kuro::paint
 			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_HOT, item_hot);
 			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_DISABLEDHOT, item_disabled);
 
-			auto mc_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto mc_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
-
 			palette.set(MENU_POPUPCHECK, MC_CHECKMARKNORMAL, mc_normal);
 			palette.set(MENU_POPUPCHECK, MC_CHECKMARKDISABLED, mc_disabled);
 			palette.set(MENU_POPUPCHECK, MC_BULLETNORMAL, mc_normal);
 			palette.set(MENU_POPUPCHECK, MC_BULLETDISABLED, mc_disabled);
+
+			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_DISABLED, mc_disabled);
+			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_NORMAL, mc_normal);
+			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_BITMAP, mc_normal);
+
 			palette.set(MENU_POPUPSUBMENU, MSM_NORMAL, mc_normal);
 			palette.set(MENU_POPUPSUBMENU, MSM_DISABLED, mc_disabled);
+
 			palette.set(MENU_SYSTEMCLOSE, MSYSC_NORMAL, mc_normal);
 			palette.set(MENU_SYSTEMCLOSE, MSYSC_DISABLED, mc_disabled);
+
 			palette.set(MENU_SYSTEMMAXIMIZE, MSYSMX_NORMAL, mc_normal);
 			palette.set(MENU_SYSTEMMAXIMIZE, MSYSMX_DISABLED, mc_disabled);
+
 			palette.set(MENU_SYSTEMMINIMIZE, MSYSMN_NORMAL, mc_normal);
 			palette.set(MENU_SYSTEMMINIMIZE, MSYSMN_DISABLED, mc_disabled);
+
 			palette.set(MENU_SYSTEMRESTORE, MSYSR_NORMAL, mc_normal);
 			palette.set(MENU_SYSTEMRESTORE, MSYSR_DISABLED, mc_disabled);
 		}

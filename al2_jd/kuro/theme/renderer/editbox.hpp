@@ -4,6 +4,8 @@ namespace apn::dark::kuro::theme
 {
 	inline struct EditBoxRenderer : Renderer
 	{
+		const paint::Palette& palette = paint::editbox_material.palette;
+
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
@@ -35,7 +37,30 @@ namespace apn::dark::kuro::theme
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/}, {/hex}, ({/}), {/hex}", theme, dc, part_id, state_id, safe_string(text, c), text_flags, safe_string(rc), options);
 
-			return hive.orig.DrawThemeTextEx(theme, dc, part_id, state_id, text, c, text_flags, rc, options);
+			if (!(text_flags & DT_CALCRECT))
+			{
+				// コモンダイアログから呼ばれます。
+
+				if (auto pigment = palette.get(part_id, state_id))
+				{
+					// 内部で::FillRect()や::ExtTextOutW()が呼ばれるのでロックします。
+					GdiHookLocker gdi_hook_locker;
+
+					// 構造体のサイズが異なる可能性があるので
+					// 自前でメモリを確保してからコピーします。
+					auto struct_size = sizeof(*options);
+					auto size = options->dwSize;
+					auto buffer = std::make_unique<uint8_t[]>(size);
+					memcpy(buffer.get(), options, size);
+					auto options2 = (DTTOPTS*)buffer.get();
+					options2->dwFlags |= DTT_TEXTCOLOR;
+					options2->crText = pigment->text.color;
+
+					return __super::on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options2);
+				}
+			}
+
+			return __super::on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options);
 		}
 
 		HRESULT on_draw_theme_icon(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, HIMAGELIST image_list, int image_index) override

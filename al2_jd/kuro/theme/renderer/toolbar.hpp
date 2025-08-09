@@ -9,12 +9,28 @@ namespace apn::dark::kuro::theme
 		//
 		// ドロップダウンボタンを描画します。
 		//
-		BOOL draw_drop_down_button(HDC dc, LPCRECT arg_rc, int part_id, int state_id, int offset)
+		BOOL draw_drop_down_button(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
+		{
+			auto rc = *arg_rc;
+
+			draw_rect(dc, &rc, palette, part_id, state_id);
+
+			auto width = my::get_width(rc);
+			rc.top = (rc.top + rc.bottom - width) / 2 - 2;
+			rc.bottom = rc.top + width;
+
+			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE015, 900);
+		}
+
+		//
+		// ドロップダウンボタングリフを描画します。
+		//
+		BOOL draw_drop_down_button_glyph(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
 			auto rc = *arg_rc;
 
 //			::InflateRect(&rc, 8, 8);
-			::OffsetRect(&rc, 2 + offset, -1);
+			::OffsetRect(&rc, 2, -1);
 
 			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE015, 900);
 		}
@@ -29,7 +45,6 @@ namespace apn::dark::kuro::theme
 			case TP_BUTTON:
 			case TP_DROPDOWNBUTTON:
 			case TP_SPLITBUTTON:
-			case TP_SPLITBUTTONDROPDOWN:
 			case TP_SEPARATOR:
 			case TP_SEPARATORVERT:
 				{
@@ -38,11 +53,20 @@ namespace apn::dark::kuro::theme
 
 					break;
 				}
+			case TP_SPLITBUTTONDROPDOWN:
+				{
+					// ドロップダウンを描画します。
+
+					if (draw_drop_down_button(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
 			case TP_DROPDOWNBUTTONGLYPH:
 				{
-					// ドロップダウンボタンを描画します。
+					// ドロップダウングリフを描画します。
 
-					if (draw_drop_down_button(dc, rc, part_id, state_id, 0))
+					if (draw_drop_down_button_glyph(dc, rc, part_id, state_id))
 						return S_OK;
 
 					break;
