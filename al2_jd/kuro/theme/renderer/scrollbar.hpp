@@ -47,7 +47,10 @@ namespace apn::dark::kuro::theme
 				draw_rect(dc, &rc, palette, part_id, state_id);
 			}
 
-			return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE012 : 0xE013);
+			auto rc = *arg_rc;
+			::OffsetRect(&rc, 0, -2);
+
+			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE012 : 0xE013);
 		}
 
 		//
