@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "resource.h"
+#include "version.hpp"
 #include "app_interface.hpp"
 #include "hive.hpp"
 #include "utils.hpp"
@@ -158,17 +159,11 @@ namespace apn::dark
 		static struct InputPluginTable : INPUT_PLUGIN_TABLE
 		{
 			//
-			// プラグイン名とプラグイン情報文字列です。
-			//
-			const std::wstring name = L"🐍ダークモード化";
-			const std::wstring information = name + L"🔖r6"; // リリース番号を付与します。
-
-			//
 			// コンストラクタです。
 			//
 			InputPluginTable() {
-				__super::name = name.c_str();
-				__super::information = information.c_str();
+				__super::name = version.name.c_str();
+				__super::information = version.information.c_str();
 				__super::flag = 0;
 				__super::filefilter = L"\0";
 				__super::func_config = [](HWND hwnd, HINSTANCE dll_hinst) -> bool

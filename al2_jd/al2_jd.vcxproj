@@ -270,6 +270,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="test_dialog.hpp" />
     <ClInclude Include="utils.hpp" />
+    <ClInclude Include="version.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

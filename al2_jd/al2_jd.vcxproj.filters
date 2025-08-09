@@ -55,8 +55,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
+      <Filter>framework</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>framework</Filter>
     </ClCompile>
   </ItemGroup>
@@ -339,6 +341,9 @@
     </ClInclude>
     <ClInclude Include="kuro\paint\material\address_band.hpp">
       <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="version.hpp">
+      <Filter>framework</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
