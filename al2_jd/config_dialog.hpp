@@ -101,7 +101,10 @@ namespace apn::dark
 
 			set_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
 			set_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
-			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar_reduction);
+
+			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
+			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
+			set_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
 			return TRUE;
 		}
@@ -127,7 +130,10 @@ namespace apn::dark
 
 			get_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
 			get_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
-			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar_reduction);
+
+			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
+			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
+			get_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
 			if (redraw) app->redraw();
 
@@ -179,6 +185,18 @@ namespace apn::dark
 
 							break;
 						}
+					case IDC_SCROLLBAR_ARROW_AS_BUTTON:
+						{
+							from_ui(TRUE);
+
+							break;
+						}
+					case IDC_SCROLLBAR_HAS_GRIPPER:
+						{
+							from_ui(TRUE);
+
+							break;
+						}
 					case IDC_MAXIMIZE_AVIUTL2:
 					case IDC_OPEN_RECENT_PROJECT:
 						{
@@ -200,16 +218,6 @@ namespace apn::dark
 
 						switch (edit_id)
 						{
-						case IDC_ELLIPSE:
-						case IDC_BORDER_WIDTH:
-							{
-								auto value = get_int(edit_id);
-								value += (nm->iDelta > 0) ? -1 : +1;
-								value = std::clamp(value, 0, +100);
-								set_int(edit_id, value);
-								break;
-							}
-						case IDC_SHADOW_DENSITY:
 						case IDC_SCROLLBAR_REDUCTION:
 							{
 								auto value = get_int(edit_id);

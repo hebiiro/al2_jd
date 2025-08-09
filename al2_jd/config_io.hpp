@@ -48,6 +48,62 @@ namespace apn::dark
 		}
 
 		//
+		// ノードからその他の設定を読み込みます。
+		//
+		BOOL read_etc(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "etc.maximize_aviutl2", hive.maximize_aviutl2);
+			read_bool(root, "etc.open_recent_project", hive.open_recent_project);
+			read_window_pos(root, "config_dialog", config_dialog);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにその他の設定を書き込みます。
+		//
+		BOOL write_etc(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "etc.maximize_aviutl2", hive.maximize_aviutl2);
+			write_bool(root, "etc.open_recent_project", hive.open_recent_project);
+			write_window_pos(root, "config_dialog", config_dialog);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからスクロールバーの設定を読み込みます。
+		//
+		BOOL read_scrollbar(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_int(root, "kuro.scrollbar.reduction", hive.scrollbar.reduction);
+			read_bool(root, "kuro.scrollbar.arrow_as_button", hive.scrollbar.arrow_as_button);
+			read_bool(root, "kuro.scrollbar.has_gripper", hive.scrollbar.has_gripper);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにスクロールバーの設定を書き込みます。
+		//
+		BOOL write_scrollbar(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_int(root, "kuro.scrollbar.reduction", hive.scrollbar.reduction);
+			write_bool(root, "kuro.scrollbar.arrow_as_button", hive.scrollbar.arrow_as_button);
+			write_bool(root, "kuro.scrollbar.has_gripper", hive.scrollbar.has_gripper);
+
+			return TRUE;
+		}
+
+		//
 		// ノードからフォントプレビューの設定を読み込みます。
 		//
 		BOOL read_fonts(n_json& root)
@@ -118,54 +174,16 @@ namespace apn::dark
 		}
 
 		//
-		// ノードからダークモード化の設定を読み込みます。
-		//
-		BOOL read_kuro(n_json& root)
-		{
-			MY_TRACE_FUNC("");
-
-			read_int(root, "ellipse", hive.ellipse);
-			read_int(root, "border_width", hive.border_width);
-			read_int(root, "shadow_density", hive.shadow_density);
-			read_int(root, "scrollbar_reduction", hive.scrollbar_reduction);
-			read_bool(root, "maximize_aviutl2", hive.maximize_aviutl2);
-			read_bool(root, "open_recent_project", hive.open_recent_project);
-			read_bool(root, "apply_file_dialog", hive.apply_file_dialog);
-			read_bool(root, "specialize_checkbox", hive.specialize_checkbox);
-
-			return TRUE;
-		}
-
-		//
-		// ノードにダークモード化の設定を書き込みます。
-		//
-		BOOL write_kuro(n_json& root)
-		{
-			MY_TRACE_FUNC("");
-
-			write_int(root, "ellipse", hive.ellipse);
-			write_int(root, "border_width", hive.border_width);
-			write_int(root, "shadow_density", hive.shadow_density);
-			write_int(root, "scrollbar_reduction", hive.scrollbar_reduction);
-			write_bool(root, "maximize_aviutl2", hive.maximize_aviutl2);
-			write_bool(root, "open_recent_project", hive.open_recent_project);
-			write_bool(root, "apply_file_dialog", hive.apply_file_dialog);
-			write_bool(root, "specialize_checkbox", hive.specialize_checkbox);
-
-			return TRUE;
-		}
-
-		//
 		// ノードからコンフィグを読み込みます。
 		//
 		virtual BOOL read_node(n_json& root)
 		{
 			MY_TRACE_FUNC("");
 
+			read_etc(root);
+			read_scrollbar(root);
 			read_fonts(root);
 			read_new_project(root);
-			read_kuro(root);
-			read_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;
 		}
@@ -177,10 +195,10 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
+			write_etc(root);
+			write_scrollbar(root);
 			write_fonts(root);
 			write_new_project(root);
-			write_kuro(root);
-			write_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;
 		}

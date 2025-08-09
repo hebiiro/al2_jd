@@ -51,11 +51,6 @@ namespace apn::dark
 		int32_t shadow_density = 80;
 
 		//
-		// スクロールバーの縮小率です。
-		//
-		int32_t scrollbar_reduction = 50;
-
-		//
 		// TRUEの場合は起動時にaviutl2を最大化します。
 		//
 		BOOL maximize_aviutl2 = FALSE;
@@ -79,6 +74,27 @@ namespace apn::dark
 		// コモンダイアログが表示されている場合はTRUEになります。
 		//
 		BOOL is_comdlg32_visible = FALSE;
+
+		//
+		// このクラスはスクロールバーの設定です。
+		//
+		struct ScrollBar
+		{
+			//
+			// スクロールバーの縮小率です。
+			//
+			int32_t reduction = 50;
+
+			//
+			// TRUEの場合は矢印をボタンのように描画します。
+			//
+			BOOL arrow_as_button = FALSE;
+
+			//
+			// TRUEの場合はつまみのグリッパーを描画します。
+			//
+			BOOL has_gripper = FALSE;
+		} scrollbar;
 
 		//
 		// このクラスはフォントプレビューの設定です。

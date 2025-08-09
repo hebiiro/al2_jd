@@ -8,11 +8,6 @@ namespace apn::dark::kuro::paint
 	inline struct ScrollBarMaterial : Material
 	{
 		//
-		// TRUEの場合は矢印をボタンのように描画します。
-		//
-		BOOL arrow_as_button = FALSE;
-
-		//
 		// マテリアルの初期化処理を実行します。
 		//
 		virtual void on_init_material() override
@@ -34,10 +29,7 @@ namespace apn::dark::kuro::paint
 			auto button_hot = Pigment {
 				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
 				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ arrow_as_button ?
-					style.get_COLORREF(Style::Color::Text) :
-					style.get_COLORREF(Style::Color::TextSelect),
-				},
+				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
 			auto button_pressed = Pigment {
@@ -125,6 +117,18 @@ namespace apn::dark::kuro::paint
 			palette.set(SBP_UPPERTRACKVERT, SCRBS_HOT, track_hot);
 			palette.set(SBP_UPPERTRACKVERT, SCRBS_PRESSED, track_pressed);
 			palette.set(SBP_UPPERTRACKVERT, SCRBS_DISABLED, track_disabled);
+
+			palette.set(SBP_GRIPPERHORZ, SCRBS_NORMAL, thumb_normal);
+			palette.set(SBP_GRIPPERHORZ, SCRBS_HOVER, thumb_hover);
+			palette.set(SBP_GRIPPERHORZ, SCRBS_HOT, thumb_hot);
+			palette.set(SBP_GRIPPERHORZ, SCRBS_PRESSED, thumb_pressed);
+			palette.set(SBP_GRIPPERHORZ, SCRBS_DISABLED, thumb_disabled);
+
+			palette.set(SBP_GRIPPERVERT, SCRBS_NORMAL, thumb_normal);
+			palette.set(SBP_GRIPPERVERT, SCRBS_HOVER, thumb_hover);
+			palette.set(SBP_GRIPPERVERT, SCRBS_HOT, thumb_hot);
+			palette.set(SBP_GRIPPERVERT, SCRBS_PRESSED, thumb_pressed);
+			palette.set(SBP_GRIPPERVERT, SCRBS_DISABLED, thumb_disabled);
 
 			palette.set(SBP_SIZEBOX, SZB_RIGHTALIGN, size_box_normal);
 		}

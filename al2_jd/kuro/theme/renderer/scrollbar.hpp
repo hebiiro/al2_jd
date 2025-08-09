@@ -14,7 +14,7 @@ namespace apn::dark::kuro::theme
 		//
 		float get_ratio()
 		{
-			return (100 - hive.scrollbar_reduction) / 200.0f;
+			return (100 - hive.scrollbar.reduction) / 200.0f;
 		}
 
 		//
@@ -38,17 +38,17 @@ namespace apn::dark::kuro::theme
 		{
 			draw_background(dc, arg_rc);
 
-			if (paint::scrollbar_material.arrow_as_button)
+			auto rc = *arg_rc;
+
+			if (hive.scrollbar.arrow_as_button)
 			{
-				auto rc = *arg_rc;
 				auto ratio = get_ratio();
 				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
 				draw_rect(dc, &rc, palette, part_id, state_id);
 			}
 
-			auto rc = *arg_rc;
-			::OffsetRect(&rc, 0, -2);
+			::OffsetRect(&rc, 0, my::get_height(rc) / -15); // 少し上にずらします。
 
 			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE012 : 0xE013);
 		}
@@ -60,16 +60,19 @@ namespace apn::dark::kuro::theme
 		{
 			draw_background(dc, arg_rc);
 
-			if (paint::scrollbar_material.arrow_as_button)
+			auto rc = *arg_rc;
+
+			if (hive.scrollbar.arrow_as_button)
 			{
-				auto rc = *arg_rc;
 				auto ratio = get_ratio();
 				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
 				draw_rect(dc, &rc, palette, part_id, state_id);
 			}
 
-			return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE014 : 0xE015);
+			::OffsetRect(&rc, 0, my::get_height(rc) / -15); // 少し上にずらします。
+
+			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE014 : 0xE015);
 		}
 
 		//
@@ -162,6 +165,67 @@ namespace apn::dark::kuro::theme
 		BOOL draw_vert_upper_track(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
 			return draw_background(dc, arg_rc);
+		}
+
+		//
+		// グリッパーの補正サイズです。
+		//
+		inline static const auto gripper_base = 4;
+
+		//
+		// 水平方向のグリッパーを描画します。
+		//
+		BOOL draw_horz_gripper(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
+		{
+			if (!hive.scrollbar.has_gripper) return FALSE;
+
+			auto rc = *arg_rc;
+			auto ratio = get_ratio();
+			::InflateRect(&rc, gripper_base, gripper_base - int(my::get_height(rc) * ratio));
+
+			auto w = my::get_width(rc);
+			auto h = my::get_height(rc);
+
+			if (w > h)
+			{
+				rc.left = (rc.left + rc.right - h) / 2;
+				rc.right = rc.left + h;
+			}
+			else
+			{
+				rc.top = (rc.top + rc.bottom - w) / 2;
+				rc.bottom = rc.top + w;
+			}
+
+			return draw_icon(dc, &rc, palette, part_id, state_id, L"@メイリオ", L'≡');
+		}
+
+		//
+		// 垂直方向のグリッパーを描画します。
+		//
+		BOOL draw_vert_gripper(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
+		{
+			if (!hive.scrollbar.has_gripper) return FALSE;
+
+			auto rc = *arg_rc;
+			auto ratio = get_ratio();
+			::InflateRect(&rc, gripper_base - int(my::get_width(rc) * ratio), gripper_base);
+
+			auto w = my::get_width(rc);
+			auto h = my::get_height(rc);
+
+			if (w > h)
+			{
+				rc.left = (rc.left + rc.right - h) / 2;
+				rc.right = rc.left + h;
+			}
+			else
+			{
+				rc.top = (rc.top + rc.bottom - w) / 2;
+				rc.bottom = rc.top + w;
+			}
+
+			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'≡');
 		}
 
 		//
@@ -281,11 +345,29 @@ namespace apn::dark::kuro::theme
 
 					break;
 				}
+			case SBP_GRIPPERHORZ:
+				{
+					if (draw_horz_gripper(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
+			case SBP_GRIPPERVERT:
+				{
+					if (draw_vert_gripper(dc, rc, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
 			case SBP_SIZEBOX:
 				{
 					if (draw_sizebox(dc, rc, part_id, state_id))
 						return S_OK;
 
+					break;
+				}
+			case SBP_SIZEBOXBKGND:
+				{
 					break;
 				}
 			}
