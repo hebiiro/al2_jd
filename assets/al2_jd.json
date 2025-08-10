@@ -54,47 +54,47 @@
 		],
 		"video_rate": [
 			{
-				"name": "60 fps",
+				"name": "60",
 				"rate": "60"
 			},
 			{
-				"name": "59.94 fps",
+				"name": "59.94",
 				"rate": "59.94"
 			},
 			{
-				"name": "50 fps (PAL)",
+				"name": "50 PAL",
 				"rate": "50"
 			},
 			{
-				"name": "48 fps",
+				"name": "48",
 				"rate": "48"
 			},
 			{
-				"name": "30 fps",
+				"name": "30",
 				"rate": "30"
 			},
 			{
-				"name": "29.97 fps",
+				"name": "29.97",
 				"rate": "29.97"
 			},
 			{
-				"name": "25 fps (PAL)",
+				"name": "25 PAL",
 				"rate": "25"
 			},
 			{
-				"name": "24 fps (NTSC)",
+				"name": "24 NTSC",
 				"rate": "24"
 			},
 			{
-				"name": "23.98 fps",
+				"name": "23.98",
 				"rate": "23.98"
 			},
 			{
-				"name": "20 fps",
+				"name": "20",
 				"rate": "20"
 			},
 			{
-				"name": "10 fps",
+				"name": "10",
 				"rate": "10"
 			}
 		],
