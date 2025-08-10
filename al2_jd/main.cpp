@@ -4,6 +4,7 @@
 #include "app_interface.hpp"
 #include "hive.hpp"
 #include "utils.hpp"
+#include "lockable.hpp"
 #include "kuro/style.hpp"
 #include "kuro/paint/utils.hpp"
 #include "kuro/paint/pigment.hpp"

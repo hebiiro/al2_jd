@@ -176,6 +176,7 @@
     <ClInclude Include="assets_io.hpp" />
     <ClInclude Include="config_dialog.hpp" />
     <ClInclude Include="config_io.hpp" />
+    <ClInclude Include="lockable.hpp" />
     <ClInclude Include="hive.hpp" />
     <ClInclude Include="io_base.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2.hpp" />

@@ -2,38 +2,8 @@
 
 namespace apn::dark::kuro::gdi::aviutl2::new_project
 {
-	struct DialogRenderer : gdi::DialogRenderer
+	struct DialogRenderer : gdi::DialogRenderer, Lockable
 	{
-		//
-		// ロックカウントです。
-		//
-		int lock_count = 0;
-
-		//
-		// ロックされている場合はTRUEを返します。
-		// ロックされているときはWM_COMMANDを無視します。
-		//
-		BOOL is_locked() const { return lock_count != 0; }
-
-		//
-		// ロックします。
-		//
-		void lock() { lock_count++; }
-
-		//
-		// ロックを解除します。
-		//
-		void unlock() { lock_count--; }
-
-		//
-		// このクラスはダイアログをロックします。
-		//
-		struct Locker {
-			DialogRenderer* dialog;
-			Locker(DialogRenderer* dialog) : dialog(dialog) { dialog->lock(); }
-			~Locker() { dialog->unlock(); }
-		};
-
 		inline static constexpr size_t c_video_size_stat = 0;
 		inline static constexpr size_t c_video_width = 1;
 		inline static constexpr size_t c_video_height = 2;

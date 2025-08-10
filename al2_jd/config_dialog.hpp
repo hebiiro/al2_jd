@@ -5,42 +5,12 @@ namespace apn::dark
 	//
 	// このクラスはコンフィグダイアログです。
 	//
-	inline struct ConfigDialog : my::Dialog
+	inline struct ConfigDialog : my::Dialog, Lockable
 	{
-		//
-		// ロックカウントです。
-		//
-		int lock_count = 0;
-
 		virtual void on_update_controls() {}
 		virtual void on_update_config() {}
 		virtual void on_init_dialog() {}
 		virtual void on_command(UINT code, UINT id, HWND control) {}
-
-		//
-		// ロックされている場合はTRUEを返します。
-		// ロックされているときはWM_COMMANDを無視します。
-		//
-		BOOL is_locked() const { return lock_count != 0; }
-
-		//
-		// ロックします。
-		//
-		void lock() { lock_count++; }
-
-		//
-		// ロックを解除します。
-		//
-		void unlock() { lock_count--; }
-
-		//
-		// このクラスはダイアログをロックします。
-		//
-		struct Locker {
-			ConfigDialog* dialog;
-			Locker(ConfigDialog* dialog) : dialog(dialog) { dialog->lock(); }
-			~Locker() { dialog->unlock(); }
-		};
 
 		//
 		// 初期化処理を実行します。

@@ -345,6 +345,7 @@
     <ClInclude Include="version.hpp">
       <Filter>framework</Filter>
     </ClInclude>
+    <ClInclude Include="lockable.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">
