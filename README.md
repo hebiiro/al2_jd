@@ -70,6 +70,8 @@
 
 ## 🔖更新履歴
 
+* 🔖r8 #2025年08月10日
+	* ✨「シーンを作成」「シーンの設定」ダイアログでプリセットから設定を選択できる機能を追加
 * 🔖r7 #2025年08月09日
 	* ⚡️ファイル選択ダイアログ上部への対応を強化
 	* ⚡️スクロールバーのつまみにグリッパーを描画する機能を追加
@@ -89,7 +91,7 @@
 
 ## ⚗️動作確認
 
-* AviUtl ExEdit2 beta5 https://spring-fragrance.mints.ne.jp/aviutl/
+* AviUtl ExEdit2 beta6 https://spring-fragrance.mints.ne.jp/aviutl/
 
 ## 💳クレジット
 
