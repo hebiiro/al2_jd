@@ -17,8 +17,15 @@ namespace apn::dark::kuro::gdi
 			if (class_name == L"#32770")
 			{
 				auto text = my::get_window_text(hwnd);
+
 				if (text == L"プロジェクトを作成")
-					return std::make_shared<aviutl2::new_project::DialogRenderer>();
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(FALSE, FALSE);
+
+				if (text == L"シーンを作成")
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, FALSE);
+
+				if (text == L"シーンの設定")
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, TRUE);
 
 				auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 				auto comdlg32 = ::GetModuleHandleW(L"comdlg32.dll");

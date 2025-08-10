@@ -174,6 +174,38 @@ namespace apn::dark
 		}
 
 		//
+		// ノードからシーンを作成の設定を読み込みます。
+		//
+		BOOL read_new_scene(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_string(root, "new_scene.recent.name", hive.new_scene.recent.name);
+			read_string(root, "new_scene.recent.video_width", hive.new_scene.recent.video_width);
+			read_string(root, "new_scene.recent.video_height", hive.new_scene.recent.video_height);
+			read_string(root, "new_scene.recent.video_rate", hive.new_scene.recent.video_rate);
+			read_string(root, "new_scene.recent.audio_rate", hive.new_scene.recent.audio_rate);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにシーンを作成の設定を書き込みます。
+		//
+		BOOL write_new_scene(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_string(root, "new_scene.recent.name", hive.new_scene.recent.name);
+			write_string(root, "new_scene.recent.video_width", hive.new_scene.recent.video_width);
+			write_string(root, "new_scene.recent.video_height", hive.new_scene.recent.video_height);
+			write_string(root, "new_scene.recent.video_rate", hive.new_scene.recent.video_rate);
+			write_string(root, "new_scene.recent.audio_rate", hive.new_scene.recent.audio_rate);
+
+			return TRUE;
+		}
+
+		//
 		// ノードからコンフィグを読み込みます。
 		//
 		virtual BOOL read_node(n_json& root)
@@ -184,6 +216,7 @@ namespace apn::dark
 			read_scrollbar(root);
 			read_fonts(root);
 			read_new_project(root);
+			read_new_scene(root);
 
 			return TRUE;
 		}
@@ -199,6 +232,7 @@ namespace apn::dark
 			write_scrollbar(root);
 			write_fonts(root);
 			write_new_project(root);
+			write_new_scene(root);
 
 			return TRUE;
 		}

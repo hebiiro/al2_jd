@@ -4,36 +4,51 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 {
 	struct DialogRenderer : gdi::DialogRenderer, Lockable
 	{
-		inline static constexpr size_t c_video_size_stat = 0;
-		inline static constexpr size_t c_video_width = 1;
-		inline static constexpr size_t c_video_height = 2;
-		inline static constexpr size_t c_video_rate_stat = 3;
-		inline static constexpr size_t c_video_rate = 4;
-		inline static constexpr size_t c_audio_rate_stat = 5;
-		inline static constexpr size_t c_audio_rate = 6;
-		inline static constexpr size_t c_ok = 7;
-		inline static constexpr size_t c_nb_default_controls = 8;
+		inline static constexpr size_t c_name_stat = 0;
+		inline static constexpr size_t c_name = 1;
+		inline static constexpr size_t c_video_size_stat = 2;
+		inline static constexpr size_t c_video_width = 3;
+		inline static constexpr size_t c_video_height = 4;
+		inline static constexpr size_t c_video_rate_stat = 5;
+		inline static constexpr size_t c_video_rate = 6;
+		inline static constexpr size_t c_audio_rate_stat = 7;
+		inline static constexpr size_t c_audio_rate = 8;
+		inline static constexpr size_t c_ok = 9;
+		inline static constexpr size_t c_nb_default_controls = 10;
 
-		std::vector<HWND> controls;
+		HWND controls[c_nb_default_controls] = {};
 
 		HWND preset_stat = {}; // "プリセット"のスタティックコントロールです。
-		HWND preset = {}; // コンボボックスです。
+		HWND preset = {}; // "プリセット"のコンボボックスです。
 		HWND swap_video_size = {}; // "縦横反転"のチェックボックスです。
-		HWND video_size_preset = {}; // コンボボックスです。
-		HWND video_rate_preset = {}; // コンボボックスです。
-		HWND audio_rate_preset = {}; // コンボボックスです。
+		HWND name_preset = {}; // "名前プリセット"のコンボボックスです。
+		HWND video_size_preset = {}; // "映像サイズプリセット"のコンボボックスです。
+		HWND video_rate_preset = {}; // "映像レートプリセット"のコンボボックスです。
+		HWND audio_rate_preset = {}; // "音声レートプリセット"のコンボボックスです。
+
+		BOOL is_scene = {};
+		BOOL no_recent = {};
 
 		//
-		// コントロールが不正の場合はTRUEを返します。
+		// コンストラクタです。
 		//
-		BOOL is_invalid_controls() const { return controls.size() < c_nb_default_controls; }
+		DialogRenderer(BOOL is_scene, BOOL no_recent)
+			: is_scene(is_scene)
+			, no_recent(no_recent)
+		{
+		}
 
 		//
-		// コントロールを取得します。
+		// コントロール配列を初期化します。
 		//
-		BOOL get_controls(HWND hwnd)
+		BOOL init_controls(HWND hwnd)
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
+
+			struct Param {
+				DialogRenderer* dialog;
+				int i;
+			} param = { this, 0 };
 
 			// 子ウィンドウを列挙します。
 			::EnumChildWindows(hwnd,
@@ -41,16 +56,35 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 			{
 				MY_TRACE_HWND(child);
 
-				// thisポインタを取得します。
-				auto p = (DialogRenderer*)lParam;
+				// パラメータポインタを取得します。
+				auto p = (Param*)lParam;
 
-				// 子ウィンドウをコレクションに追加します。
-				p->controls.emplace_back(child);
+				// 子ウィンドウを配列に追加します。
+				p->dialog->add_control(child, p->i++);
 
 				return TRUE;
-			}, (LPARAM)this);
+			}, (LPARAM)&param);
 
 			return TRUE;
+		}
+
+		//
+		// コントロールを配列に追加します。
+		//
+		void add_control(HWND control, int i)
+		{
+			if (is_scene)
+			{
+				auto index = c_name_stat + i;
+				if (index < c_nb_default_controls)
+					controls[index] = control;
+			}
+			else
+			{
+				auto index = c_video_size_stat + i;
+				if (index < c_nb_default_controls)
+					controls[index] = control;
+			}
 		}
 
 		//
@@ -59,9 +93,6 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		BOOL change_layout(HWND hwnd)
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
-
-			// コントロールが不正の場合は何もしません。
-			if (is_invalid_controls()) return FALSE;
 
 			//
 			// この関数はコントロール矩形を返します。
@@ -104,8 +135,11 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 				auto x = rcs[c_video_height].right + space.cx;
 
 				{
+					// Y座標の基準となるコントロール(一番上のコントロール)のインデックスです。
+					auto base_control_index = is_scene ? c_name_stat : c_video_size_stat;
+
 					// 追加コントロールの基準Y座標です。
-					auto y = rcs[c_video_size_stat].top;
+					auto y = rcs[base_control_index].top;
 
 					//
 					// この関数はコントロールを作成します。
@@ -140,6 +174,8 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					preset = create_combobox(rcs[c_video_width].left, y, base.cx, base.cy);
 					swap_video_size = create_control(
 						WC_BUTTONW, L"縦横反転", BS_AUTOCHECKBOX, x, y, base.cx, base.cy);
+					if (is_scene)
+						name_preset = create_combobox(x, rcs[c_name_stat].top + offset.cy, base.cx, base.cy);
 					video_size_preset = create_combobox(x, rcs[c_video_size_stat].top + offset.cy, base.cx, base.cy);
 					video_rate_preset = create_combobox(x, rcs[c_video_rate_stat].top + offset.cy, base.cx, base.cy);
 					audio_rate_preset = create_combobox(x, rcs[c_audio_rate_stat].top + offset.cy, base.cx, base.cy);
@@ -154,17 +190,28 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					};
 
 					{
-						// 全体のプリセットのコンボボックスを初期化します。
+						// (全体の)プリセットのコンボボックスを初期化します。
 						auto combobox = preset;
 						customize_combobox(combobox);
 						for (const auto& preset : hive.presets.preset_collection)
 						{
 							if (preset.display_name.empty())
 							{
-								my::combobox::add_text(combobox,
-									my::format(L"{/} x {/} px, {/} fps, {/} Hz",
-										preset.video_width, preset.video_height,
-										preset.video_rate, preset.audio_rate).c_str());
+								if (preset.name.length())
+								{
+									my::combobox::add_text(combobox,
+										my::format(L"{/}, {/} x {/} px, {/} fps, {/} Hz",
+											preset.name,
+											preset.video_width, preset.video_height,
+											preset.video_rate, preset.audio_rate).c_str());
+								}
+								else
+								{
+									my::combobox::add_text(combobox,
+										my::format(L"{/} x {/} px, {/} fps, {/} Hz",
+											preset.video_width, preset.video_height,
+											preset.video_rate, preset.audio_rate).c_str());
+								}
 							}
 							else
 							{
@@ -174,7 +221,24 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					}
 
 					{
-						// 映像サイズのコンボボックスを初期化します。
+						// 名前プリセットのコンボボックスを初期化します。
+						auto combobox = name_preset;
+						customize_combobox(combobox);
+						for (const auto& name : hive.presets.name_collection)
+						{
+							if (name.display_name.empty())
+							{
+								my::combobox::add_text(combobox, name.name.c_str());
+							}
+							else
+							{
+								my::combobox::add_text(combobox, name.display_name.c_str());
+							}
+						}
+					}
+
+					{
+						// 映像サイズプリセットのコンボボックスを初期化します。
 						auto combobox = video_size_preset;
 						customize_combobox(combobox);
 						for (const auto& video_size : hive.presets.video_size_collection)
@@ -192,7 +256,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					}
 
 					{
-						// 映像レートのコンボボックスを初期化します。
+						// 映像レートプリセットのコンボボックスを初期化します。
 						auto combobox = video_rate_preset;
 						customize_combobox(combobox);
 						for (const auto& video_rate : hive.presets.video_rate_collection)
@@ -244,6 +308,8 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 				for (size_t i = 0; i < c_nb_default_controls; i++)
 				{
+					if (!controls[i]) continue;
+
 					auto rc = rcs[i];
 					::OffsetRect(&rc, 0, offset.cy);
 					dwp.set_window_pos(controls[i], nullptr, &rc, SWP_NOZORDER);
@@ -260,8 +326,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
 
-			// コントロールが不正の場合は何もしません。
-			if (is_invalid_controls()) return FALSE;
+			if (no_recent) return FALSE;
 
 			//
 			// この関数は最近使った設定をコントロールに適用します。
@@ -271,10 +336,21 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					::SetWindowText(controls[control_index], setting.c_str());
 			};
 
-			load_recent(hive.new_project.recent.video_width, c_video_width);
-			load_recent(hive.new_project.recent.video_height, c_video_height);
-			load_recent(hive.new_project.recent.video_rate, c_video_rate);
-			load_recent(hive.new_project.recent.audio_rate, c_audio_rate);
+			if (is_scene)
+			{
+//				load_recent(hive.new_scene.recent.name, c_name);
+				load_recent(hive.new_scene.recent.video_width, c_video_width);
+				load_recent(hive.new_scene.recent.video_height, c_video_height);
+				load_recent(hive.new_scene.recent.video_rate, c_video_rate);
+				load_recent(hive.new_scene.recent.audio_rate, c_audio_rate);
+			}
+			else
+			{
+				load_recent(hive.new_project.recent.video_width, c_video_width);
+				load_recent(hive.new_project.recent.video_height, c_video_height);
+				load_recent(hive.new_project.recent.video_rate, c_video_rate);
+				load_recent(hive.new_project.recent.audio_rate, c_audio_rate);
+			}
 
 			return TRUE;
 		}
@@ -286,8 +362,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
 
-			// コントロールが不正の場合は何もしません。
-			if (is_invalid_controls()) return FALSE;
+			if (no_recent) return FALSE;
 
 			//
 			// この関数は最近使った設定をコントロールから取得します。
@@ -296,10 +371,21 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 				setting = my::get_window_text(controls[control_index]);
 			};
 
-			save_recent(hive.new_project.recent.video_width, c_video_width);
-			save_recent(hive.new_project.recent.video_height, c_video_height);
-			save_recent(hive.new_project.recent.video_rate, c_video_rate);
-			save_recent(hive.new_project.recent.audio_rate, c_audio_rate);
+			if (is_scene)
+			{
+//				save_recent(hive.new_scene.recent.name, c_name);
+				save_recent(hive.new_scene.recent.video_width, c_video_width);
+				save_recent(hive.new_scene.recent.video_height, c_video_height);
+				save_recent(hive.new_scene.recent.video_rate, c_video_rate);
+				save_recent(hive.new_scene.recent.audio_rate, c_audio_rate);
+			}
+			else
+			{
+				save_recent(hive.new_project.recent.video_width, c_video_width);
+				save_recent(hive.new_project.recent.video_height, c_video_height);
+				save_recent(hive.new_project.recent.video_rate, c_video_rate);
+				save_recent(hive.new_project.recent.audio_rate, c_audio_rate);
+			}
 
 			return TRUE;
 		}
@@ -321,7 +407,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 					Locker locker(this);
 
-					get_controls(hwnd);
+					init_controls(hwnd);
 					load_recent_setting(hwnd);
 					change_layout(hwnd);
 
@@ -331,13 +417,30 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 				{
 					MY_TRACE_FUNC("WM_COMMAND, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
-					if (is_locked() || is_invalid_controls()) break;
+					//
+					// この関数はコントロールのテキストを変更します。
+					//
+					const auto set_control_text = [this](size_t index, const std::wstring& text)
+					{
+						// コントロールとテキストが両方とも有効の場合は
+						if (controls[index] && text.length())
+						{
+							// コントロールのテキストを変更します。
+							::SetWindowTextW(controls[index], text.c_str());
+						}
+					};
+
+					// ロックされている場合は何もしません。
+					if (is_locked()) break;
 
 					Locker locker(this);
 
 //					auto control_id = LOWORD(wParam);
 					auto code = HIWORD(wParam);
 					auto control = (HWND)lParam;
+
+					// コントロールが無効の場合は何もしません。
+					if (!control) break;
 
 					if (control == controls[c_ok])
 					{
@@ -354,17 +457,31 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 						const auto& preset = hive.presets.preset_collection[index];
 						if (::SendMessage(swap_video_size, BM_GETCHECK, 0, 0) == BST_CHECKED)
 						{
-							::SetWindowTextW(controls[c_video_width], preset.video_height.c_str());
-							::SetWindowTextW(controls[c_video_height], preset.video_width.c_str());
+							set_control_text(c_video_width, preset.video_height);
+							set_control_text(c_video_height, preset.video_width);
 						}
 						else
 						{
-							::SetWindowTextW(controls[c_video_width], preset.video_width.c_str());
-							::SetWindowTextW(controls[c_video_height], preset.video_height.c_str());
+							set_control_text(c_video_width, preset.video_width);
+							set_control_text(c_video_height, preset.video_height);
 						}
 
-						::SetWindowTextW(controls[c_video_rate], preset.video_rate.c_str());
-						::SetWindowTextW(controls[c_audio_rate], preset.audio_rate.c_str());
+						set_control_text(c_video_rate, preset.video_rate);
+						set_control_text(c_audio_rate, preset.audio_rate);
+
+						if (is_scene)
+							set_control_text(c_name, preset.name);
+					}
+					else if (control == name_preset)
+					{
+						if (code != CBN_SELCHANGE) break;
+
+						auto index = (size_t)my::combobox::get_cur_sel(control);
+						if (index >= hive.presets.name_collection.size()) break;
+
+						// 名前のプリセットを適用します。
+						const auto& name = hive.presets.name_collection[index];
+						set_control_text(c_name, name.name);
 					}
 					else if (control == video_size_preset)
 					{
@@ -377,13 +494,13 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 						const auto& video_size = hive.presets.video_size_collection[index];
 						if (::SendMessage(swap_video_size, BM_GETCHECK, 0, 0) == BST_CHECKED)
 						{
-							::SetWindowTextW(controls[c_video_width], video_size.height.c_str());
-							::SetWindowTextW(controls[c_video_height], video_size.width.c_str());
+							set_control_text(c_video_width, video_size.height);
+							set_control_text(c_video_height, video_size.width);
 						}
 						else
 						{
-							::SetWindowTextW(controls[c_video_width], video_size.width.c_str());
-							::SetWindowTextW(controls[c_video_height], video_size.height.c_str());
+							set_control_text(c_video_width, video_size.width);
+							set_control_text(c_video_height, video_size.height);
 						}
 					}
 					else if (control == video_rate_preset)
@@ -395,7 +512,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 						// 映像レートのプリセットを適用します。
 						const auto& video_rate = hive.presets.video_rate_collection[index];
-						::SetWindowTextW(controls[c_video_rate], video_rate.rate.c_str());
+						set_control_text(c_video_rate, video_rate.rate);
 					}
 					else if (control == audio_rate_preset)
 					{
@@ -406,7 +523,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 						// 音声レートのプリセットを適用します。
 						const auto& audio_rate = hive.presets.audio_rate_collection[index];
-						::SetWindowTextW(controls[c_audio_rate], audio_rate.rate.c_str());
+						set_control_text(c_audio_rate, audio_rate.rate);
 					}
 
 					break;

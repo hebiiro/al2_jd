@@ -159,6 +159,23 @@ namespace apn::dark
 		} new_project;
 
 		//
+		// このクラスはシーンを作成するときの設定です。
+		//
+		struct NewScene
+		{
+			//
+			// 最近使った設定値です。
+			//
+			struct Recent {
+				std::wstring name;
+				std::wstring video_width;
+				std::wstring video_height;
+				std::wstring video_rate;
+				std::wstring audio_rate;
+			} recent;
+		} new_scene;
+
+		//
 		// このクラスはプリセットの設定です。
 		//
 		struct Presets
@@ -168,12 +185,22 @@ namespace apn::dark
 			//
 			struct Preset {
 				std::wstring display_name;
+				std::wstring name;
 				std::wstring video_width;
 				std::wstring video_height;
 				std::wstring video_rate;
 				std::wstring audio_rate;
 			};
 			std::vector<Preset> preset_collection;
+
+			//
+			// 名前のプリセットです。
+			//
+			struct Name {
+				std::wstring display_name;
+				std::wstring name;
+			};
+			std::vector<Name> name_collection;
 
 			//
 			// 映像サイズのプリセットです。
