@@ -77,7 +77,22 @@ namespace apn::dark::kuro::gdi
 
 				return std::make_shared<ListViewRenderer>();
 			}
-			if (class_name == WC_TREEVIEW) return std::make_shared<TreeViewRenderer>();
+			if (class_name == WC_TREEVIEW)
+			{
+				auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
+				auto ExplorerFrame = ::GetModuleHandleW(L"ExplorerFrame.dll");
+
+				if (instance == ExplorerFrame)
+				{
+					my::modify_style(hwnd, 0, WS_BORDER);
+//					my::modify_ex_style(hwnd, 0, WS_EX_CLIENTEDGE);
+					::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
+						SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+				}
+
+				return std::make_shared<TreeViewRenderer>();
+			}
+
 			if (class_name == TOOLBARCLASSNAME) return std::make_shared<ToolBarRenderer>();
 
 			// aviutl2のメインウィンドウです。
@@ -94,6 +109,23 @@ namespace apn::dark::kuro::gdi
 
 			// コマンドモジュールがドロップダウン表示するポップアップメニューのようなウィンドウです。
 //			if (class_name == L"ViewControlClass") return std::make_shared<Renderer>();
+
+			// ファイル選択ダイアログのリストビューです。
+			if (class_name == L"SHELLDLL_DefView")
+			{
+#if 0
+				auto parent = ::GetParent(hwnd);
+				auto parent_class_name = my::get_class_name(parent);
+
+				if (parent_class_name == L"#32770")
+#endif
+				{
+					my::modify_style(hwnd, 0, WS_BORDER);
+//					my::modify_ex_style(hwnd, 0, WS_EX_CLIENTEDGE);
+					::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
+						SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+				}
+			}
 
 			if (0) // テスト用コードです。
 			{
