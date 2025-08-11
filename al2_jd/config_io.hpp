@@ -48,29 +48,25 @@ namespace apn::dark
 		}
 
 		//
-		// ノードからその他の設定を読み込みます。
+		// ノードからダークモード化の設定を読み込みます。
 		//
-		BOOL read_etc(n_json& root)
+		BOOL read_jd(n_json& root)
 		{
 			MY_TRACE_FUNC("");
 
-			read_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
-			read_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
-			read_window_pos(root, "config_dialog", config_dialog);
+			read_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 
 			return TRUE;
 		}
 
 		//
-		// ノードにその他の設定を書き込みます。
+		// ノードにダークモード化の設定を書き込みます。
 		//
-		BOOL write_etc(n_json& root)
+		BOOL write_jd(n_json& root)
 		{
 			MY_TRACE_FUNC("");
 
-			write_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
-			write_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
-			write_window_pos(root, "config_dialog", config_dialog);
+			write_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 
 			return TRUE;
 		}
@@ -99,6 +95,34 @@ namespace apn::dark
 			write_int(root, "kuro.scrollbar.reduction", hive.scrollbar.reduction);
 			write_bool(root, "kuro.scrollbar.arrow_as_button", hive.scrollbar.arrow_as_button);
 			write_bool(root, "kuro.scrollbar.has_gripper", hive.scrollbar.has_gripper);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからその他の設定を読み込みます。
+		//
+		BOOL read_etc(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
+			read_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
+			read_window_pos(root, "config_dialog", config_dialog);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにその他の設定を書き込みます。
+		//
+		BOOL write_etc(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
+			write_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
+			write_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;
 		}
@@ -212,8 +236,9 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			read_etc(root);
+			read_jd(root);
 			read_scrollbar(root);
+			read_etc(root);
 			read_fonts(root);
 			read_new_project(root);
 			read_new_scene(root);
@@ -228,8 +253,9 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			write_etc(root);
+			write_jd(root);
 			write_scrollbar(root);
+			write_etc(root);
 			write_fonts(root);
 			write_new_project(root);
 			write_new_scene(root);

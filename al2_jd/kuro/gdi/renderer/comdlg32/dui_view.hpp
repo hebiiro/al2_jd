@@ -33,9 +33,15 @@ namespace apn::dark::kuro::gdi::comdlg32
 
 			// ※ダイアログサイズを変更した場合に呼ばれます。
 			{
+#if 0
+				// ボタンの背景を使用してダイアログの背景を描画します。
+				if (draw_button_background(dc, rc))
+					return TRUE;
+#else
 				// ダイアログの背景を描画します。
 				if (draw_dialog_background(dc, rc))
 					return TRUE;
+#endif
 			}
 
 			return hive.orig.FillRect(dc, rc, brush);

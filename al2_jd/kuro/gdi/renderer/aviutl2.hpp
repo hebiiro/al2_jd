@@ -35,10 +35,15 @@ namespace apn::dark::kuro::gdi
 					paint::get_brush_color(brush) == hive.orig.GetSysColor(COLOR_WINDOW))
 				{
 					MY_TRACE("コモンダイアログの背景を描画します\n");
-
+#if 0
+					// ボタンの背景を使用してダイアログの背景を描画します。
+					if (draw_button_background(dc, rc))
+						return TRUE;
+#else
 					// ダイアログの背景を描画します。
 					if (draw_dialog_background(dc, rc))
 						return TRUE;
+#endif
 				}
 			}
 

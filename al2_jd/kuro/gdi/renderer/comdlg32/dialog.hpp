@@ -7,13 +7,22 @@ namespace apn::dark::kuro::gdi::comdlg32
 		virtual BOOL on_attach(HWND hwnd)
 		{
 			hive.is_comdlg32_visible = TRUE;
+			if (hive.jd.exclude_comdlg32)
+				hive.renderer_locked = TRUE;
 
 			return __super::on_attach(hwnd);
 		}
 
 		virtual BOOL on_detach(HWND hwnd)
 		{
+			// 現在レンダラーがロック状態を取得します。
+			auto renderer_locked = hive.renderer_locked;
+
+			hive.renderer_locked = FALSE;
 			hive.is_comdlg32_visible = FALSE;
+
+			// レンダラーがロックされていた場合は再描画します。
+			if (renderer_locked) app->redraw();
 
 			return __super::on_detach(hwnd);
 		}

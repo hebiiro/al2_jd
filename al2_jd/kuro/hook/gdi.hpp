@@ -119,7 +119,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/}, {/}",
 					ret_addr(&dc), dc, left, top, right, bottom);
 
-				return gdi::Renderer::fire_rectangle(dc, left, top, right, bottom);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_rectangle(dc, left, top, right, bottom);
+
+				return orig_proc(dc, left, top, right, bottom);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::Rectangle;
 		} Rectangle;
@@ -140,7 +143,10 @@ namespace apn::dark::kuro::hook
 					return orig_proc(dc, rc, brush);
 				}
 
-				return gdi::Renderer::fire_fill_rect(dc, rc, brush);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_fill_rect(dc, rc, brush);
+
+				return orig_proc(dc, rc, brush);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::FillRect;
 		} FillRect;
@@ -154,7 +160,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/}, {/hex}",
 					ret_addr(&dc), dc, safe_string(rc), width, type);
 
-				return gdi::Renderer::fire_draw_frame(dc, rc, width, type);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_draw_frame(dc, rc, width, type);
+
+				return orig_proc(dc, rc, width, type);
 			}
 			inline static decltype(&hook_proc) orig_proc = nullptr;
 		} DrawFrame;
@@ -168,7 +177,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/hex}, {/hex}",
 					ret_addr(&dc), dc, safe_string(rc), type, state);
 
-				return gdi::Renderer::fire_draw_frame_control(dc, rc, type, state);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_draw_frame_control(dc, rc, type, state);
+
+				return orig_proc(dc, rc, type, state);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::DrawFrameControl;
 		} DrawFrameControl;
@@ -182,7 +194,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/hex}",
 					ret_addr(&dc), dc, safe_string(rc), brush);
 
-				return gdi::Renderer::fire_frame_rect(dc, rc, brush);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_frame_rect(dc, rc, brush);
+
+				return orig_proc(dc, rc, brush);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::FrameRect;
 		} FrameRect;
@@ -196,7 +211,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/hex}, {/hex}",
 					ret_addr(&dc), dc, safe_string(rc), edge, flags);
 
-				return gdi::Renderer::fire_draw_edge(dc, rc, edge, flags);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_draw_edge(dc, rc, edge, flags);
+
+				return orig_proc(dc, rc, edge, flags);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::DrawEdge;
 		} DrawEdge;
@@ -210,7 +228,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, ({/})",
 					ret_addr(&dc), dc, safe_string(rc));
 
-				return gdi::Renderer::fire_draw_focus_rect(dc, rc);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_draw_focus_rect(dc, rc);
+
+				return orig_proc(dc, rc);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::DrawFocusRect;
 		} DrawFocusRect;
@@ -224,7 +245,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/}, {/}, {/}, {/}, {/hex}",
 					ret_addr(&dc), dc, fore, x, y, cx, cy, flags);
 
-				return gdi::Renderer::fire_draw_state_w(dc, fore, cb, lData, wData, x, y, cx, cy, flags);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_draw_state_w(dc, fore, cb, lData, wData, x, y, cx, cy, flags);
+
+				return orig_proc(dc, fore, cb, lData, wData, x, y, cx, cy, flags);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::DrawStateW;
 		} DrawStateW;
@@ -263,32 +287,36 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, x, y, options, safe_string(rc),
 					safe_string(text, c, options), c, ::GetCurrentThreadId());
 
-//				if (0)
+				if (hive.is_valid_thread())
 				{
-					// コマンドモジュールDCがセットされている場合は
-					if (dc == paint::command_module_material.dc)
 					{
-						MY_TRACE("コマンドモジュールを描画します\n");
+						// コマンドモジュールDCがセットされている場合は
+						if (dc == paint::command_module_material.dc)
+						{
+							MY_TRACE("コマンドモジュールを描画します\n");
 
-						// コマンドモジュールのテキストを描画します。
-						if (gdi::Renderer::draw_dialog_text(dc, x, y, options, rc, text, c, dx))
-							return TRUE;
+							// コマンドモジュールのテキストを描画します。
+							if (gdi::Renderer::draw_dialog_text(dc, x, y, options, rc, text, c, dx))
+								return TRUE;
+						}
+						else
+						{
+							// コマンドモジュールDCをリセットします。
+							paint::command_module_material.dc = {};
+						}
 					}
-					else
+
+					if (theme::Renderer::is_gdi_hook_locked())
 					{
-						// コマンドモジュールDCをリセットします。
-						paint::command_module_material.dc = {};
+						MY_TRACE("GDIフックがロックされています\n");
+
+						return orig_proc(dc, x, y, options, rc, text, c, dx);
 					}
+
+					return gdi::Renderer::fire_ext_text_out_w(dc, x, y, options, rc, text, c, dx);
 				}
 
-				if (theme::Renderer::is_gdi_hook_locked())
-				{
-					MY_TRACE("GDIフックがロックされています\n");
-
-					return orig_proc(dc, x, y, options, rc, text, c, dx);
-				}
-
-				return gdi::Renderer::fire_ext_text_out_w(dc, x, y, options, rc, text, c, dx);
+				return orig_proc(dc, x, y, options, rc, text, c, dx);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::ExtTextOutW;
 		} ExtTextOutW;
@@ -302,7 +330,10 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/}, {/}, {/hex}",
 					ret_addr(&dc), dc, x, y, w, h, rop);
 
-				return gdi::Renderer::fire_pat_blt(dc, x, y, w, h, rop);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_pat_blt(dc, x, y, w, h, rop);
+
+				return orig_proc(dc, x, y, w, h, rop);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::PatBlt;
 		} PatBlt;
@@ -315,7 +346,10 @@ namespace apn::dark::kuro::hook
 			{
 				MY_TRACE_FUNC("{/hex}, {/}", ret_addr(&color_id), color_id);
 
-				return gdi::Renderer::fire_get_sys_color(color_id);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_get_sys_color(color_id);
+
+				return orig_proc(color_id);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::GetSysColor;
 		} GetSysColor;
@@ -328,7 +362,10 @@ namespace apn::dark::kuro::hook
 			{
 				MY_TRACE_FUNC("{/hex}, {/}", ret_addr(&color_id), color_id);
 
-				return gdi::Renderer::fire_get_sys_color_brush(color_id);
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_get_sys_color_brush(color_id);
+
+				return orig_proc(color_id);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::GetSysColorBrush;
 		} GetSysColorBrush;

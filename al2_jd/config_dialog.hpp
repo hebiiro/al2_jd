@@ -59,6 +59,15 @@ namespace apn::dark
 
 			Locker locker(this);
 
+			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
+
+			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
+			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
+			set_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
+
+			set_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
+			set_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
+
 			set_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			set_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
 			set_int(IDC_FONTS_FONT_HEIGHT, hive.fonts.font_height);
@@ -68,13 +77,6 @@ namespace apn::dark
 			set_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
 			set_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
 			set_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
-
-			set_check(IDC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
-			set_check(IDC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
-
-			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
-			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
-			set_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
 			return TRUE;
 		}
@@ -88,6 +90,15 @@ namespace apn::dark
 
 			if (is_locked()) return FALSE;
 
+			get_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
+
+			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
+			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
+			get_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
+
+			get_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
+			get_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
+
 			get_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			get_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
 			get_int(IDC_FONTS_FONT_HEIGHT, hive.fonts.font_height);
@@ -97,13 +108,6 @@ namespace apn::dark
 			get_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
 			get_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
 			get_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
-
-			get_check(IDC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
-			get_check(IDC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
-
-			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
-			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
-			get_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
 			if (redraw) app->redraw();
 
@@ -128,6 +132,33 @@ namespace apn::dark
 
 					switch (id)
 					{
+					case IDC_JD_EXCLUDE_COMDLG32:
+						{
+							from_ui(FALSE);
+
+							break;
+						}
+					case IDC_SCROLLBAR_REDUCTION:
+						{
+							if (code == EN_UPDATE)
+								from_ui(TRUE);
+
+							break;
+						}
+					case IDC_SCROLLBAR_ARROW_AS_BUTTON:
+					case IDC_SCROLLBAR_HAS_GRIPPER:
+						{
+							from_ui(TRUE);
+
+							break;
+						}
+					case IDC_ETC_MAXIMIZE_AVIUTL2:
+					case IDC_ETC_OPEN_RECENT_PROJECT:
+						{
+							from_ui(FALSE);
+
+							break;
+						}
 					case IDC_FONTS_WINDOW_WIDTH:
 					case IDC_FONTS_WINDOW_HEIGHT:
 					case IDC_FONTS_ITEM_HEIGHT:
@@ -143,32 +174,6 @@ namespace apn::dark
 					case IDC_FONTS_USE_ON_MENU:
 					case IDC_FONTS_USE_ON_LISTBOX:
 					case IDC_FONTS_USE_ON_LISTVIEW:
-						{
-							from_ui(FALSE);
-
-							break;
-						}
-					case IDC_SCROLLBAR_REDUCTION:
-						{
-							if (code == EN_UPDATE)
-								from_ui(TRUE);
-
-							break;
-						}
-					case IDC_SCROLLBAR_ARROW_AS_BUTTON:
-						{
-							from_ui(TRUE);
-
-							break;
-						}
-					case IDC_SCROLLBAR_HAS_GRIPPER:
-						{
-							from_ui(TRUE);
-
-							break;
-						}
-					case IDC_MAXIMIZE_AVIUTL2:
-					case IDC_OPEN_RECENT_PROJECT:
 						{
 							from_ui(FALSE);
 

@@ -44,10 +44,6 @@ namespace apn::dark::kuro::theme
 			case CMP_SPLITBUTTON:
 			case CMP_SPLITBUTTONDROPDOWN:
 				{
-					// テスト用コードです。
-					if (::GetAsyncKeyState(VK_SHIFT) < 0)
-						int n = 0;
-
 					if (draw_rect(dc, rc, palette, part_id, state_id))
 						return S_OK;
 

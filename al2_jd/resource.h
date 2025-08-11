@@ -22,16 +22,17 @@
 #define IDC_RADIO2                      1213
 #define IDC_RADIO_1                     1213
 #define IDC_CHECKBOX_2                  1214
-#define IDC_DARK_MODE_STAT              1220
-#define IDC_MAXIMIZE_AVIUTL2            1221
-#define IDC_OPEN_RECENT_PROJECT         1222
-#define IDC_ETC_STAT                    1223
-#define IDC_OPEN_RECENT_PROJECT2        1225
-#define IDC_SCROLLBAR_REDUCTION_STAT    1300
-#define IDC_SCROLLBAR_REDUCTION         1301
-#define IDC_SCROLLBAR_REDUCTION_SPIN    1302
-#define IDC_SCROLLBAR_ARROW_AS_BUTTON   1303
-#define IDC_SCROLLBAR_HAS_GRIPPER       1304
+#define IDC_JD_STAT                     1300
+#define IDC_JD_EXCLUDE_COMDLG32         1301
+#define IDC_SCROLLBAR_REDUCTION_STAT    1400
+#define IDC_SCROLLBAR_REDUCTION         1401
+#define IDC_SCROLLBAR_REDUCTION_SPIN    1402
+#define IDC_SCROLLBAR_ARROW_AS_BUTTON   1403
+#define IDC_SCROLLBAR_HAS_GRIPPER       1404
+#define IDC_SCROLLBAR_HAS_GRIPPER2      1405
+#define IDC_ETC_STAT                    1500
+#define IDC_ETC_MAXIMIZE_AVIUTL2        1501
+#define IDC_ETC_OPEN_RECENT_PROJECT     1502
 #define IDC_FONTS_STAT                  11000
 #define IDC_FONTS_WINDOW_SIZE_STAT      11001
 #define IDC_FONTS_WINDOW_WIDTH          11002
@@ -55,7 +56,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1221
+#define _APS_NEXT_CONTROL_VALUE         2000
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -68,9 +68,6 @@ namespace apn::dark::kuro::gdi
 		//
 		inline static std::shared_ptr<Renderer> from_handle(HWND hwnd)
 		{
-			// レンダラの使用が抑制されている場合はnullptrを返します。
-			if (hive.renderer_locked) return nullptr;
-
 			auto it = collection.find(hwnd);
 			if (it == collection.end()) return nullptr;
 			return it->second;
@@ -102,10 +99,74 @@ namespace apn::dark::kuro::gdi
 					hwnd, message, wParam, lParam, class_name, ::GetCurrentThreadId());
 			}
 #endif
-			// レンダラーの使用が抑制されている場合はデフォルト処理のみ行います。
+			// レンダラーの使用が抑制されている場合は
 			if (hive.renderer_locked)
-				return ::DefSubclassProc(hwnd, message, wParam, lParam);
+			{
+				// 最終メッセージの場合は
+				if (message == WM_NCDESTROY)
+				{
+					// レンダラーを取得できた場合は
+					if (auto renderer = from_handle(hwnd))
+					{
+						// デタッチします。
+						renderer->detach(hwnd);
+					}
+				}
 
+				// デフォル処理を実行します。
+				return orig_wnd_proc(hwnd, message, wParam, lParam);
+			}
+
+			// 独自のメッセージ処理を実行します。
+			{
+				BOOL skip_default = TRUE;
+				auto result = custom_wnd_proc(hwnd, message, wParam, lParam, skip_default);
+				if (skip_default) return result;
+			}
+
+			// 現在のメッセージの状態を保存します。
+			struct MessageStateSaver
+			{
+				MessageState old_message_state;
+
+				MessageStateSaver(const MessageState& message_state)
+				{
+					// 現在のメッセージの状態を更新します。
+					old_message_state = current_message_state;
+					current_message_state = message_state;
+				}
+				~MessageStateSaver()
+				{
+					// 現在のメッセージの状態を復元します。
+					current_message_state = old_message_state;
+				}
+			} message_state_saver = {
+				{ hwnd, message, wParam, lParam },
+			};
+
+			// レンダラーを取得できた場合は
+			if (auto renderer = from_handle(hwnd))
+			{
+				// レンダラーに処理させます。
+				auto result = renderer->on_subclass_proc(hwnd, message, wParam, lParam);
+
+				// 最終メッセージの場合はデタッチします。
+				if (message == WM_NCDESTROY) renderer->detach(hwnd);
+
+				// 処理結果を返します。
+				return result;
+			}
+
+			// デフォル処理を実行します。
+			return orig_wnd_proc(hwnd, message, wParam, lParam);
+		}
+
+		//
+		// 独自のメッセージ処理を実行します。
+		//
+		inline static LRESULT CALLBACK custom_wnd_proc(
+			HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam, BOOL& skip_default)
+		{
 			switch (message)
 			{
 			case WM_ACTIVATE:
@@ -166,10 +227,7 @@ namespace apn::dark::kuro::gdi
 			case WM_NOTIFY:
 				{
 					auto nm = (NMHDR*)lParam;
-/*
-					if (NormalizedClassName(my::get_class_name(nm->hwndFrom)) == WC_BUTTON)
-						return 0; // ボタンの場合は何もしません。
-*/
+
 					switch (nm->code)
 					{
 					case NM_CUSTOMDRAW:
@@ -187,35 +245,11 @@ namespace apn::dark::kuro::gdi
 #if 0 // テスト用コードです。
 			case WM_GETTEXT:
 			case WM_GETTEXTLENGTH:
-				return ::DefSubclassProc(hwnd, message, wParam, lParam);
+				return orig_wnd_proc(hwnd, message, wParam, lParam);
 #endif
 			}
 
-			// 現在のメッセージの状態を保存します。
-			struct MessageStateSaver
-			{
-				MessageState old_message_state;
-
-				MessageStateSaver(const MessageState& message_state)
-				{
-					// 現在のメッセージの状態を更新します。
-					old_message_state = current_message_state;
-					current_message_state = message_state;
-				}
-				~MessageStateSaver()
-				{
-					// 現在のメッセージの状態を復元します。
-					current_message_state = old_message_state;
-				}
-			} message_state_saver = {
-				{ hwnd, message, wParam, lParam },
-			};
-
-			// レンダラーを取得できた場合は処理を任せます。
-			if (auto renderer = from_handle(hwnd))
-				return renderer->on_subclass_proc(hwnd, message, wParam, lParam);
-
-			return orig_wnd_proc(hwnd, message, wParam, lParam);
+			return skip_default = FALSE, 0;
 		}
 
 		inline static BOOL fire_rectangle(HDC dc, int left, int top, int right, int bottom)
@@ -366,6 +400,22 @@ namespace apn::dark::kuro::gdi
 		}
 
 		//
+		// ボタンの背景を描画します。
+		//
+		inline static BOOL draw_button_background(HDC dc, LPCRECT rc)
+		{
+			const auto& palette = paint::button_material.palette;
+
+			auto part_id = BP_PUSHBUTTON;
+			auto state_id = PBS_NORMAL;
+
+			if (auto pigment = palette.get(part_id, state_id))
+				return paint::stylus.draw_rect(dc, rc, pigment);
+
+			return FALSE;
+		}
+
+		//
 		// 非クライアント領域を描画します。
 		//
 		virtual LRESULT draw_nc_paint(HWND hwnd, HDC dc, const POINT& origin, LPRECT rc)
@@ -407,18 +457,6 @@ namespace apn::dark::kuro::gdi
 
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-			// 最終メッセージの場合は
-			if (message == WM_NCDESTROY)
-			{
-				// デフォルト処理を実行してから
-				auto result = orig_wnd_proc(hwnd, message, wParam, lParam);
-
-				// デタッチします。
-				detach(hwnd);
-
-				return result;
-			}
-
 			return orig_wnd_proc(hwnd, message, wParam, lParam);
 		}
 

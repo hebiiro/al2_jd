@@ -52,22 +52,6 @@ namespace apn::dark
 		} jd;
 
 		//
-		// このクラスはその他の設定です。
-		//
-		struct Etc
-		{
-			//
-			// TRUEの場合は起動時にaviutl2を最大化します。
-			//
-			BOOL maximize_aviutl2 = FALSE;
-
-			//
-			// TRUEの場合は起動時に最近使ったプロジェクトを開きます。
-			//
-			BOOL open_recent_project = FALSE;
-		} etc;
-
-		//
 		// このクラスはスクロールバーの設定です。
 		//
 		struct ScrollBar
@@ -87,6 +71,22 @@ namespace apn::dark
 			//
 			BOOL has_gripper = FALSE;
 		} scrollbar;
+
+		//
+		// このクラスはその他の設定です。
+		//
+		struct Etc
+		{
+			//
+			// TRUEの場合は起動時にaviutl2を最大化します。
+			//
+			BOOL maximize_aviutl2 = FALSE;
+
+			//
+			// TRUEの場合は起動時に最近使ったプロジェクトを開きます。
+			//
+			BOOL open_recent_project = FALSE;
+		} etc;
 
 		//
 		// このクラスはフォントプレビューの設定です。
@@ -236,6 +236,16 @@ namespace apn::dark
 		// レンダラの使用を停止したい場合はTRUEに設定します。
 		//
 		thread_local inline static BOOL renderer_locked = FALSE;
+
+		//
+		// メインスレッドのIDです。
+		//
+		const DWORD main_thread_id = ::GetCurrentThreadId();
+
+		//
+		// 現在のスレッドが有効の場合はTRUEを返します。
+		//
+		BOOL is_valid_thread() const { return !renderer_locked && (main_thread_id == ::GetCurrentThreadId()); }
 
 		//
 		// このクラスはフックする前のオリジナルのAPIを保持します。
