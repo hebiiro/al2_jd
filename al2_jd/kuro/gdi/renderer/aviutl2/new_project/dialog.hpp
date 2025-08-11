@@ -525,6 +525,18 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 						const auto& audio_rate = hive.presets.audio_rate_collection[index];
 						set_control_text(c_audio_rate, audio_rate.rate);
 					}
+					else if (control == swap_video_size)
+					{
+						if (code != BN_CLICKED) break;
+
+						// 映像サイズの縦横を入れ替えます。
+
+						auto width = my::get_window_text(controls[c_video_width]);
+						auto height = my::get_window_text(controls[c_video_height]);
+
+						::SetWindowText(controls[c_video_width], height.c_str());
+						::SetWindowText(controls[c_video_height], width.c_str());
+					}
 
 					break;
 				}
