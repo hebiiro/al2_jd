@@ -52,6 +52,7 @@
 #include "kuro/gdi/renderer/aviutl2/listbox.hpp"
 #include "kuro/gdi/renderer/aviutl2/font_setting/listview.hpp"
 #include "kuro/gdi/renderer/aviutl2/new_project/dialog.hpp"
+#include "kuro/gdi/renderer/aviutl2/layer_name/dialog.hpp"
 #include "kuro/gdi/renderer/comdlg32/dialog.hpp"
 #include "kuro/gdi/renderer/comdlg32/direct_ui_hwnd.hpp"
 #include "kuro/gdi/renderer/comdlg32/dui_view.hpp"

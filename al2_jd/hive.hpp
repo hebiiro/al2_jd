@@ -229,6 +229,14 @@ namespace apn::dark
 				std::wstring rate;
 			};
 			std::vector<AudioRate> audio_rate_collection;
+
+			//
+			// レイヤー名のプリセットです。
+			//
+			struct LayerName {
+				std::wstring name;
+			};
+			std::vector<Name> layer_name_collection;
 		} presets;
 
 		//

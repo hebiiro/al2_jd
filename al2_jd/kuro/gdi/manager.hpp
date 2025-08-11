@@ -27,6 +27,9 @@ namespace apn::dark::kuro::gdi
 				if (text == L"シーンの設定")
 					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, TRUE);
 
+				if (text == L"レイヤー名を変更")
+					return std::make_shared<aviutl2::layer_name::DialogRenderer>();
+
 				auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 				auto comdlg32 = ::GetModuleHandleW(L"comdlg32.dll");
 //				auto style = my::get_style(hwnd);

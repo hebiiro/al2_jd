@@ -59,6 +59,7 @@ namespace apn::dark
 			hive.presets.video_size_collection.clear();
 			hive.presets.video_rate_collection.clear();
 			hive.presets.audio_rate_collection.clear();
+			hive.presets.layer_name_collection.clear();
 
 			n_json presets_node;
 			read_child_node(root, "presets", presets_node);
@@ -114,6 +115,15 @@ namespace apn::dark
 				auto& audio_rate = hive.presets.audio_rate_collection.emplace_back();
 				read_string(audio_rate_node, "rate", audio_rate.rate);
 				read_string(audio_rate_node, "display_name", audio_rate.display_name);
+
+				return TRUE;
+			});
+
+			read_child_nodes(presets_node, "layer_name",
+				[&](const n_json& layer_name_node, size_t i)
+			{
+				auto& layer_name = hive.presets.layer_name_collection.emplace_back();
+				read_string(layer_name_node, "name", layer_name.name);
 
 				return TRUE;
 			});
@@ -181,6 +191,15 @@ namespace apn::dark
 			{
 				write_string(audio_rate_node, "rate", audio_rate.rate);
 				write_string(audio_rate_node, "display_name", audio_rate.display_name);
+
+				return TRUE;
+			});
+
+			write_child_nodes(presets_node, "layer_name",
+				hive.presets.layer_name_collection,
+				[&](n_json& layer_name_node, const auto& layer_name, size_t i)
+			{
+				write_string(layer_name_node, "name", layer_name.name);
 
 				return TRUE;
 			});
