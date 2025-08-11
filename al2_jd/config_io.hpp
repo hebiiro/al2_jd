@@ -54,8 +54,8 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			read_bool(root, "etc.maximize_aviutl2", hive.maximize_aviutl2);
-			read_bool(root, "etc.open_recent_project", hive.open_recent_project);
+			read_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
+			read_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
 			read_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;
@@ -68,8 +68,8 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			write_bool(root, "etc.maximize_aviutl2", hive.maximize_aviutl2);
-			write_bool(root, "etc.open_recent_project", hive.open_recent_project);
+			write_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
+			write_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
 			write_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;

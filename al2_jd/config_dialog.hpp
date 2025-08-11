@@ -69,8 +69,8 @@ namespace apn::dark
 			set_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
 			set_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
 
-			set_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
-			set_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
+			set_check(IDC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
+			set_check(IDC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
 
 			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -98,8 +98,8 @@ namespace apn::dark
 			get_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
 			get_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
 
-			get_check(IDC_MAXIMIZE_AVIUTL2, hive.maximize_aviutl2);
-			get_check(IDC_OPEN_RECENT_PROJECT, hive.open_recent_project);
+			get_check(IDC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
+			get_check(IDC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
 
 			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);

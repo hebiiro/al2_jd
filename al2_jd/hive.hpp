@@ -36,44 +36,36 @@ namespace apn::dark
 		std::wstring config_file_name;
 
 		//
-		// スキンの角の丸みです。
-		//
-		int32_t ellipse = 5;
-
-		//
-		// スキンの縁の幅です。
-		//
-		int32_t border_width = 1;
-
-		//
-		// スキンの影の濃度です。
-		//
-		int32_t shadow_density = 80;
-
-		//
-		// TRUEの場合は起動時にaviutl2を最大化します。
-		//
-		BOOL maximize_aviutl2 = FALSE;
-
-		//
-		// TRUEの場合は起動時に最近使ったプロジェクトを開きます。
-		//
-		BOOL open_recent_project = FALSE;
-
-		//
-		// TRUEの場合はファイル選択ダイアログもダークモード化します。
-		//
-		BOOL apply_file_dialog = FALSE;
-
-		//
-		// TRUEの場合はチェックボックス(とラジオボタン)を特殊化します。
-		//
-		BOOL specialize_checkbox = FALSE;
-
-		//
 		// コモンダイアログが表示されている場合はTRUEになります。
 		//
 		BOOL is_comdlg32_visible = FALSE;
+
+		//
+		// このクラスはダークモード化の設定です。
+		//
+		struct JD
+		{
+			//
+			// TRUEの場合はコモンダイアログをダークモード化から除外します。
+			//
+			BOOL exclude_comdlg32 = FALSE;
+		} jd;
+
+		//
+		// このクラスはその他の設定です。
+		//
+		struct Etc
+		{
+			//
+			// TRUEの場合は起動時にaviutl2を最大化します。
+			//
+			BOOL maximize_aviutl2 = FALSE;
+
+			//
+			// TRUEの場合は起動時に最近使ったプロジェクトを開きます。
+			//
+			BOOL open_recent_project = FALSE;
+		} etc;
 
 		//
 		// このクラスはスクロールバーの設定です。

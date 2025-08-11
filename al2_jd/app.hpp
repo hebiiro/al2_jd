@@ -235,11 +235,11 @@ namespace apn::dark
 			::SetForegroundWindow(hive.theme_window);
 
 			// aviutl2ウィンドウを最大化します。
-			if (hive.maximize_aviutl2)
+			if (hive.etc.maximize_aviutl2)
 				::ShowWindow(hive.theme_window, SW_MAXIMIZE);
 
 			// 最近使ったプロジェクトを開きます。
-			if (hive.open_recent_project)
+			if (hive.etc.open_recent_project)
 				::PostMessage(hive.theme_window, WM_COMMAND, 0x9C42, 0);
 
 			return TRUE;
