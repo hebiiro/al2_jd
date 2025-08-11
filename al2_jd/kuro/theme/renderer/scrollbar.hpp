@@ -22,6 +22,9 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_background(HDC dc, LPCRECT arg_rc)
 		{
+#if 1
+			return draw_rect(dc, arg_rc, palette, 0, 0);
+#else
 			// 背景はダイアログのマテリアルで描画します。
 			const auto& palette = paint::dialog_material.palette;
 
@@ -29,6 +32,7 @@ namespace apn::dark::kuro::theme
 			auto state_id = ETS_NORMAL;
 
 			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+#endif
 		}
 
 		//
@@ -233,9 +237,14 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_sizebox(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			draw_background(dc, arg_rc);
+			// 背景を描画してから
+			if (draw_rect(dc, arg_rc, palette, part_id, state_id))
+			{
+				// サイズグリップ用のアイコンを描画します。
+				return draw_icon(dc, arg_rc, palette, part_id, state_id, L"Marlett", 0x006F);
+			}
 
-			return draw_icon(dc, arg_rc, palette, part_id, state_id, L"Marlett", 0x006F);
+			return FALSE;
 		}
 
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override

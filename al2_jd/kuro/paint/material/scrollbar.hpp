@@ -14,6 +14,12 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
+			auto background = Pigment {
+				{ style.get_COLORREF(Style::Color::TitleHeader), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
 			auto button_normal = Pigment {
 				{ style.get_COLORREF(Style::Color::ButtonBody), },
 				{ style.get_COLORREF(Style::Color::Border), 1, },
@@ -44,6 +50,12 @@ namespace apn::dark::kuro::paint
 				{ style.get_COLORREF(Style::Color::TextDisable), },
 			};
 
+			auto size_box = Pigment {
+				{ style.get_COLORREF(Style::Color::Background), },
+				{ CLR_NONE, },
+				{ style.get_COLORREF(Style::Color::TextDisable), },
+			};
+
 			auto thumb_normal = button_normal;
 			auto thumb_hover = button_hover;
 			auto thumb_hot = button_hot;
@@ -56,7 +68,7 @@ namespace apn::dark::kuro::paint
 			auto track_pressed = button_pressed;
 			auto track_disabled = button_disabled;
 
-			auto size_box_normal = button_normal;
+			palette.set(0, 0, background);
 
 			palette.set(SBP_ARROWBTN, ABS_LEFTNORMAL, button_normal);
 			palette.set(SBP_ARROWBTN, ABS_LEFTHOVER, button_hover);
@@ -130,7 +142,7 @@ namespace apn::dark::kuro::paint
 			palette.set(SBP_GRIPPERVERT, SCRBS_PRESSED, thumb_pressed);
 			palette.set(SBP_GRIPPERVERT, SCRBS_DISABLED, thumb_disabled);
 
-			palette.set(SBP_SIZEBOX, SZB_RIGHTALIGN, size_box_normal);
+			palette.set(SBP_SIZEBOX, SZB_RIGHTALIGN, size_box);
 		}
 
 		//
