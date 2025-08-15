@@ -127,6 +127,9 @@ namespace apn::dark::kuro::gdi
 				}
 			}
 
+			// MP4出力設定ダイアログです。
+			if (class_name == L"MP4ExporterConfig") return std::make_shared<mp4_exporter::DialogRenderer>();
+
 			if (0) // テスト用コードです。
 			{
 				return std::make_shared<Renderer>();
