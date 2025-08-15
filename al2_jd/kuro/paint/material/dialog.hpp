@@ -21,9 +21,9 @@ namespace apn::dark::kuro::paint
 			};
 
 			auto ets_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
+				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
 				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
+				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
 			auto ets_selected = Pigment {

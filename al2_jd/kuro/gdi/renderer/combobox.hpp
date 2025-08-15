@@ -17,7 +17,7 @@ namespace apn::dark::kuro::gdi
 				const auto& palette = paint::dialog_material.palette;
 
 				auto part_id = WP_DIALOG;
-				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				auto state_id = ::IsWindowEnabled(control) ? ETS_NORMAL : ETS_DISABLED;
 
 				if (auto pigment = palette.get(part_id, state_id))
 					return pigment->background.get_brush();
@@ -29,7 +29,7 @@ namespace apn::dark::kuro::gdi
 				const auto& palette = paint::editbox_material.palette;
 
 				auto part_id = EP_EDITTEXT;
-				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				auto state_id = ::IsWindowEnabled(control) ? ETS_NORMAL : ETS_DISABLED;
 
 				if (auto pigment = palette.get(part_id, state_id))
 					return pigment->background.get_brush();

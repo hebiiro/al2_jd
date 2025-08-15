@@ -13,7 +13,7 @@ namespace apn::dark::kuro::gdi
 			// リストボックスの背景色を変更します。
 			{
 				auto part_id = EP_EDITTEXT;
-				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				auto state_id = ::IsWindowEnabled(control) ? ETS_NORMAL : ETS_DISABLED;
 
 				if (auto pigment = palette.get(part_id, state_id))
 					return pigment->background.get_brush();

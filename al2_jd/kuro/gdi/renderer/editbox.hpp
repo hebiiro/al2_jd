@@ -70,8 +70,8 @@ namespace apn::dark::kuro::gdi
 				// ダイアログとして描画します。
 				const auto& palette = paint::dialog_material.palette;
 
-				auto part_id = EP_EDITTEXT;
-				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				auto part_id = WP_DIALOG;
+				auto state_id = ::IsWindowEnabled(control) ? ETS_NORMAL : ETS_DISABLED;
 
 				if (auto pigment = palette.get(part_id, state_id))
 					return pigment->background.get_brush();
@@ -82,7 +82,7 @@ namespace apn::dark::kuro::gdi
 				const auto& palette = paint::editbox_material.palette;
 
 				auto part_id = EP_EDITTEXT;
-				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+				auto state_id = ::IsWindowEnabled(control) ? ETS_NORMAL : ETS_DISABLED;
 
 				if (auto pigment = palette.get(part_id, state_id))
 					return pigment->background.get_brush();
@@ -94,6 +94,8 @@ namespace apn::dark::kuro::gdi
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
+
+			auto brush_color = paint::get_brush_color(brush);
 
 			return hive.orig.FillRect(dc, rc, brush);
 		}
@@ -155,7 +157,7 @@ namespace apn::dark::kuro::gdi
 					// ダイアログとして描画します。
 					const auto& palette = paint::dialog_material.palette;
 
-					auto part_id = EP_EDITTEXT;
+					auto part_id = WP_DIALOG;
 					auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
 
 					if (auto pigment = palette.get(part_id, state_id))

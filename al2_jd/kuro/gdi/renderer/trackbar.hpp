@@ -105,7 +105,8 @@ namespace apn::dark::kuro::gdi
 				// 背景色が選択色の場合は
 				if (::GetBkColor(dc) == hive.orig.GetSysColor(COLOR_HIGHLIGHT))
 				{
-					const auto& palette = paint::trackbar_material.palette;
+					// エディットボックスのパレットを使用します。
+					const auto& palette = paint::editbox_material.palette;
 
 					auto part_id = EP_EDITTEXT;
 					auto state_id = ETS_SELECTED;
