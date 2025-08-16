@@ -175,29 +175,15 @@ namespace apn::dark::kuro::gdi
 
 					MY_TRACE_FUNC("WM_ACTIVATE, {/}", active);
 
-					if (active)
-					{
-//						auto border_color = DWMWA_COLOR_NONE;
-//						auto border_color = style.get_COLORREF(Style::Color::ButtonBodySelect);
-//						auto caption_color = style.get_COLORREF(Style::Color::ButtonBodySelect);
-						auto border_color = style.get_COLORREF(Style::Color::WindowBorder);
-						auto caption_color = style.get_COLORREF(Style::Color::Background);
-						auto text_color = style.get_COLORREF(Style::Color::Text);
+					auto pigment = active ? &paint::window_material.active : &paint::window_material.inactive;
 
-						::DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR , &border_color, sizeof(border_color));
-						::DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR , &caption_color, sizeof(caption_color));
-						::DwmSetWindowAttribute(hwnd, DWMWA_TEXT_COLOR , &text_color, sizeof(text_color));
-					}
-					else
-					{
-						auto border_color = style.get_COLORREF(Style::Color::TitleHeader);
-						auto caption_color = style.get_COLORREF(Style::Color::TitleHeader);
-						auto text_color = style.get_COLORREF(Style::Color::TextDisable);
+					auto caption_color = pigment->background.color;
+					auto border_color = pigment->border.color;
+					auto text_color = pigment->text.color;
 
-						::DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR , &border_color, sizeof(border_color));
-						::DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR , &caption_color, sizeof(caption_color));
-						::DwmSetWindowAttribute(hwnd, DWMWA_TEXT_COLOR , &text_color, sizeof(text_color));
-					}
+					::DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR , &caption_color, sizeof(caption_color));
+					::DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR , &border_color, sizeof(border_color));
+					::DwmSetWindowAttribute(hwnd, DWMWA_TEXT_COLOR , &text_color, sizeof(text_color));
 
 					break;
 				}

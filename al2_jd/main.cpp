@@ -12,6 +12,7 @@
 #include "kuro/paint/material.hpp"
 #include "kuro/paint/stylus.hpp"
 #include "kuro/paint/material/sys_color.hpp"
+#include "kuro/paint/material/window.hpp"
 #include "kuro/paint/material/menu.hpp"
 #include "kuro/paint/material/scrollbar.hpp"
 #include "kuro/paint/material/dialog.hpp"
