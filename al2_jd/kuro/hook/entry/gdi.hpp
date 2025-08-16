@@ -5,12 +5,12 @@ namespace apn::dark::kuro::hook
 	//
 	// このクラスはGDIのフックを担当します。
 	//
-	inline struct Gdi
+	inline struct Gdi : Entry
 	{
 		//
 		// 初期化処理を実行します。
 		//
-		BOOL init()
+		virtual BOOL on_init() override
 		{
 			MY_TRACE_FUNC("");
 
@@ -75,7 +75,7 @@ namespace apn::dark::kuro::hook
 		//
 		// 後始末処理を実行します。
 		//
-		BOOL exit()
+		virtual BOOL on_exit() override
 		{
 			MY_TRACE_FUNC("");
 

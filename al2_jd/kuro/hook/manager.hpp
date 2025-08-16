@@ -14,11 +14,7 @@ namespace apn::dark::kuro::hook
 		{
 			MY_TRACE_FUNC("");
 
-			if (!gdi.init()) return FALSE;
-			if (!theme.init()) return FALSE;
-			if (!cwpr.init()) return FALSE;
-
-			return TRUE;
+			return Entry::init();
 		}
 
 		//
@@ -28,11 +24,7 @@ namespace apn::dark::kuro::hook
 		{
 			MY_TRACE_FUNC("");
 
-			cwpr.exit();
-			theme.exit();
-			gdi.exit();
-
-			return TRUE;
+			return Entry::exit();
 		}
 	} manager;
 }
