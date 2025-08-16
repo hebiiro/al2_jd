@@ -63,10 +63,40 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_radio_button(HDC dc, LPCRECT arg_rc, int part_id, int state_id, BOOL pressed, BOOL checked)
 		{
+			auto rc = *arg_rc;
+//			::OffsetRect(&rc, 0, 2);
+//			::InflateRect(&rc, 2, 2);
+
 			if (checked)
-				return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", 0xE005);
+			{
+				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⚫'); // 丸。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'●'); // 逆に上のより小さい。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'♥'); // ハート。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'🖤'); // 警告が出る。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA3); // 丸の中に丸。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA4); // 円の中に丸。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⚫️'); // 警告が出る。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'●'); // 大きな丸。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⦿'); // 円の中に丸。上にズレる。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE1D2); // 円の中に丸。
+				//return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE1F8); // 円の中にハート。
+			}
 			else
-				return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", 0xE002);
+			{
+//				rc.left += 1; rc.top += 1;
+
+				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⚪'); // 円。丸と同じ大きさ。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'○'); // 逆に上のより小さい。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'♡'); // ハート。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'🤍'); // 警告が出る。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA1); // 円。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA2); // 太い円。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'🔴'); // 警告が出る。
+				//return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'◯'); // 円の中に丸。上にズレる。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'○'); // 円の中に丸。上にズレる。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE21A); // 大きな丸。
+//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE0E8); // 円の中にスマイル。
+			}
 		}
 
 		//
@@ -74,10 +104,14 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_checkbox(HDC dc, LPCRECT arg_rc, int part_id, int state_id, BOOL pressed, BOOL checked)
 		{
+			auto rc = *arg_rc;
+//			::OffsetRect(&rc, 0, 2);
+//			::InflateRect(&rc, 2, 2);
+
 			if (checked)
-				return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", 0xE005);
+				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE005);
 			else
-				return draw_icon(dc, arg_rc, palette, part_id, state_id, L"メイリオ", 0xE002);
+				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE002);
 		}
 
 		//
