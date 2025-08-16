@@ -13,6 +13,19 @@ namespace apn::dark::kuro::theme
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/}", theme, part_id, state_id, prop_id);
 
+			// 「拡張 x264 出力(GUI) Ex」の場合はここで配色を変更する必要があります。
+
+			switch (prop_id)
+			{
+			case TMT_TEXTCOLOR:
+				{
+					if (auto pigment = palette.get(part_id, state_id))
+						return *result = pigment->text.color, S_OK;
+
+					break;
+				}
+			}
+
 			return __super::on_get_theme_color(theme, part_id, state_id, prop_id, result);
 		}
 

@@ -29,7 +29,7 @@ namespace apn::dark::kuro::gdi
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
 			// コモンダイアログが表示されている場合は
-			if (hive.is_comdlg32_visible)
+			if (hive.comdlg32_visible_count)
 			{
 				if (brush == hive.orig.GetSysColorBrush(COLOR_WINDOW) ||
 					paint::get_brush_color(brush) == hive.orig.GetSysColor(COLOR_WINDOW))
@@ -56,7 +56,7 @@ namespace apn::dark::kuro::gdi
 				dc, x, y, options, safe_string(rc), safe_string(text, c, options), c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
 
 			// コモンダイアログが表示されている場合は
-			if (hive.is_comdlg32_visible)
+			if (hive.comdlg32_visible_count)
 			{
 				// 背景色を取得します。
 				auto bk_color = ::GetBkColor(dc);

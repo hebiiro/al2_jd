@@ -186,6 +186,13 @@ copy /Y "$(SolutionDir)assets\$(TargetName).json" "$(aviutl2_dir)\data\Plugin\al
     <ClInclude Include="config_io.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2\layer_name\dialog.hpp" />
     <ClInclude Include="kuro\gdi\renderer\mp4_exporter\dialog.hpp" />
+    <ClInclude Include="kuro\gdi\renderer\rigaya\dialog.hpp" />
+    <ClInclude Include="kuro\hook\entry.hpp" />
+    <ClInclude Include="kuro\hook\entry\call_wnd_proc_ret.hpp" />
+    <ClInclude Include="kuro\hook\entry\gdi.hpp" />
+    <ClInclude Include="kuro\hook\entry\darken_window.hpp" />
+    <ClInclude Include="kuro\hook\entry\theme.hpp" />
+    <ClInclude Include="kuro\paint\material\window.hpp" />
     <ClInclude Include="lockable.hpp" />
     <ClInclude Include="hive.hpp" />
     <ClInclude Include="io_base.hpp" />
@@ -216,10 +223,7 @@ copy /Y "$(SolutionDir)assets\$(TargetName).json" "$(aviutl2_dir)\data\Plugin\al
     <ClInclude Include="kuro\gdi\manager.hpp" />
     <ClInclude Include="kuro\gdi\renderer.hpp" />
     <ClInclude Include="kuro\gdi\renderer_nc.hpp" />
-    <ClInclude Include="kuro\hook\call_wnd_proc_ret.hpp" />
-    <ClInclude Include="kuro\hook\gdi.hpp" />
     <ClInclude Include="kuro\hook\manager.hpp" />
-    <ClInclude Include="kuro\hook\theme.hpp" />
     <ClInclude Include="kuro\paint\material\address_band.hpp" />
     <ClInclude Include="kuro\paint\material\button.hpp" />
     <ClInclude Include="kuro\paint\material\combobox.hpp" />
@@ -297,6 +301,11 @@ copy /Y "$(SolutionDir)assets\$(TargetName).json" "$(aviutl2_dir)\data\Plugin\al
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="al2_jd.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DarkenWindow.aul\DarkenWindow.aul.vcxproj">
+      <Project>{d30db443-e8be-4f53-80a0-6d9851c31db5}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

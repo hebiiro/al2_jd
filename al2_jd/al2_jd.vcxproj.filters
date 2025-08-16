@@ -59,6 +59,12 @@
     <Filter Include="kuro\gdi\renderer\mp4_exporter">
       <UniqueIdentifier>{ea33b9be-754d-49aa-a387-54e3eb397c87}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kuro\hook\entry">
+      <UniqueIdentifier>{a81f6eba-5c23-434a-8d33-9611710341d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kuro\gdi\renderer\rigaya">
+      <UniqueIdentifier>{6faccb27-96ed-4fdb-a431-c7affc7a839d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -103,20 +109,11 @@
     <ClInclude Include="kuro\theme\renderer\base\menu.hpp">
       <Filter>kuro\theme\renderer\base</Filter>
     </ClInclude>
-    <ClInclude Include="kuro\hook\gdi.hpp">
-      <Filter>kuro\hook</Filter>
-    </ClInclude>
     <ClInclude Include="kuro\hook\manager.hpp">
-      <Filter>kuro\hook</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\hook\theme.hpp">
       <Filter>kuro\hook</Filter>
     </ClInclude>
     <ClInclude Include="kuro\theme\manager.hpp">
       <Filter>kuro\theme</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\hook\call_wnd_proc_ret.hpp">
-      <Filter>kuro\hook</Filter>
     </ClInclude>
     <ClInclude Include="kuro\gdi\manager.hpp">
       <Filter>kuro\gdi</Filter>
@@ -357,6 +354,27 @@
     </ClInclude>
     <ClInclude Include="kuro\gdi\renderer\mp4_exporter\dialog.hpp">
       <Filter>kuro\gdi\renderer\mp4_exporter</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\hook\entry.hpp">
+      <Filter>kuro\hook</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\hook\entry\call_wnd_proc_ret.hpp">
+      <Filter>kuro\hook\entry</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\hook\entry\gdi.hpp">
+      <Filter>kuro\hook\entry</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\hook\entry\darken_window.hpp">
+      <Filter>kuro\hook\entry</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\hook\entry\theme.hpp">
+      <Filter>kuro\hook\entry</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\material\window.hpp">
+      <Filter>kuro\paint\material</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\gdi\renderer\rigaya\dialog.hpp">
+      <Filter>kuro\gdi\renderer\rigaya</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

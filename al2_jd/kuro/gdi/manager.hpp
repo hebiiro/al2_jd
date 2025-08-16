@@ -34,6 +34,7 @@ namespace apn::dark::kuro::gdi
 				auto comdlg32 = ::GetModuleHandleW(L"comdlg32.dll");
 //				auto style = my::get_style(hwnd);
 
+				// コモンダイアログの場合は
 				if (instance == comdlg32)
 //				if (instance == comdlg32 && style & WS_THICKFRAME)
 					return std::make_shared<comdlg32::DialogRenderer>();
@@ -82,8 +83,10 @@ namespace apn::dark::kuro::gdi
 				auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 				auto ExplorerFrame = ::GetModuleHandleW(L"ExplorerFrame.dll");
 
+				// エクスプローラのツリービューの場合は
 				if (instance == ExplorerFrame)
 				{
+					// ウィンドウの縁にボーダーを追加します。
 					my::modify_style(hwnd, 0, WS_BORDER);
 //					my::modify_ex_style(hwnd, 0, WS_EX_CLIENTEDGE);
 					::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
@@ -98,37 +101,76 @@ namespace apn::dark::kuro::gdi
 			// aviutl2のメインウィンドウです。
 			if (class_name == L"aviutl2Manager") return std::make_shared<AviUtl2Renderer>();
 
-			// ファイル選択ダイアログのリストビューなどの親ウィンドウです。
-//			if (class_name == L"DirectUIHWND") return std::make_shared<comdlg32::DirectUIHWNDRenderer>();
-
-			// DirectUIHWNDの親ウィンドウです。
-			if (class_name == L"DUIViewWndClassName") return std::make_shared<comdlg32::DUIViewRenderer>();
-
-			// ファイル選択ダイアログのツリービューの親ウィンドウです。
-			if (class_name == L"NamespaceTreeControl") return std::make_shared<Renderer>();
-
-			// コマンドモジュールがドロップダウン表示するポップアップメニューのようなウィンドウです。
-//			if (class_name == L"ViewControlClass") return std::make_shared<Renderer>();
-
-			// ファイル選択ダイアログのリストビューです。
-			if (class_name == L"SHELLDLL_DefView")
+			if (hive.comdlg32_visible_count)
 			{
-#if 0
-				auto parent = ::GetParent(hwnd);
-				auto parent_class_name = my::get_class_name(parent);
+				// ファイル選択ダイアログのリストビューなどの親ウィンドウです。
+//				if (class_name == L"DirectUIHWND") return std::make_shared<comdlg32::DirectUIHWNDRenderer>();
 
-				if (parent_class_name == L"#32770")
-#endif
+				// DirectUIHWNDの親ウィンドウです。
+				if (class_name == L"DUIViewWndClassName") return std::make_shared<comdlg32::DUIViewRenderer>();
+
+				// ファイル選択ダイアログのツリービューの親ウィンドウです。
+				if (class_name == L"NamespaceTreeControl") return std::make_shared<Renderer>();
+
+				// コマンドモジュールがドロップダウン表示するポップアップメニューのようなウィンドウです。
+//				if (class_name == L"ViewControlClass") return std::make_shared<Renderer>();
+
+				// ファイル選択ダイアログのリストビューの場合は
+				if (class_name == L"SHELLDLL_DefView")
 				{
-					my::modify_style(hwnd, 0, WS_BORDER);
-//					my::modify_ex_style(hwnd, 0, WS_EX_CLIENTEDGE);
-					::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
-						SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+#if 0
+					auto parent = ::GetParent(hwnd);
+					auto parent_class_name = my::get_class_name(parent);
+
+					if (parent_class_name == L"#32770")
+#endif
+					{
+						// ウィンドウの縁にボーダーを追加します。
+						my::modify_style(hwnd, 0, WS_BORDER);
+//						my::modify_ex_style(hwnd, 0, WS_EX_CLIENTEDGE);
+						::SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
+							SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+					}
+				}
+
+				// フォルダ選択ダイアログのツリービューの親ウィンドウです。
+				if (class_name == L"SHBrowseForFolder ShellNameSpace Control") return std::make_shared<Renderer>();
+
+				// 「MP4出力」の設定ダイアログです。
+				if (class_name == L"MP4ExporterConfig") return std::make_shared<mp4_exporter::DialogRenderer>();
+
+				// 「拡張 x264 出力(GUI) Ex」の設定ダイアログです。
+				{
+					//
+					// この関数は指定文字列から始まる場合はTRUEを返します。
+					//
+					const auto starts_with = [](LPCWSTR lhs, LPCWSTR rhs) {
+						return ::StrStrIW(lhs, rhs) == lhs;
+					};
+
+					// 検索対象のクラス名のプレフィックスです。
+					const auto prefix = std::wstring(L"WindowsForms10.");
+
+					// クラス名がプレフィックスから始まる場合は
+					if (starts_with(class_name.c_str(), prefix.c_str()))
+					{
+						// クラス名のプレフィックス以降を取得します。
+						auto p = &class_name[prefix.size()];
+
+						if (starts_with(p, L"Window"))
+						{
+							if (my::get_style(hwnd) & WS_CAPTION)
+								return std::make_shared<rigaya::DialogRenderer>();
+							else
+								return std::make_shared<DialogRenderer>();
+						}
+
+						if (starts_with(p, WC_BUTTON)) return std::make_shared<ButtonRenderer>();
+						if (starts_with(p, WC_EDIT)) return std::make_shared<EditBoxRenderer>();
+						if (starts_with(p, TRACKBAR_CLASS)) return std::make_shared<TrackBarRenderer>();
+					}
 				}
 			}
-
-			// MP4出力設定ダイアログです。
-			if (class_name == L"MP4ExporterConfig") return std::make_shared<mp4_exporter::DialogRenderer>();
 
 			if (0) // テスト用コードです。
 			{
