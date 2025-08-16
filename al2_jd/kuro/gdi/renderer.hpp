@@ -100,7 +100,7 @@ namespace apn::dark::kuro::gdi
 			}
 #endif
 			// レンダラーの使用が抑制されている場合は
-			if (hive.renderer_locked)
+			if (!hive.is_valid_thread())
 			{
 				// 最終メッセージの場合は
 				if (message == WM_NCDESTROY)
@@ -228,7 +228,7 @@ namespace apn::dark::kuro::gdi
 
 					break;
 				}
-#if 0 // テスト用コードです。
+#ifdef _DEBUG // テスト用コードです。
 			case WM_GETTEXT:
 			case WM_GETTEXTLENGTH:
 				return orig_wnd_proc(hwnd, message, wParam, lParam);

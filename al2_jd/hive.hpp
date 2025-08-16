@@ -36,9 +36,9 @@ namespace apn::dark
 		std::wstring config_file_name;
 
 		//
-		// コモンダイアログが表示されている場合はTRUEになります。
+		// 現在表示されているコモンダイアログの数です。
 		//
-		BOOL is_comdlg32_visible = FALSE;
+		ULONG comdlg32_visible_count = {};
 
 		//
 		// このクラスはダークモード化の設定です。
@@ -235,7 +235,7 @@ namespace apn::dark
 		// レンダラを使用するかどうかのフラグです。
 		// レンダラの使用を停止したい場合はTRUEに設定します。
 		//
-		thread_local inline static BOOL renderer_locked = FALSE;
+		thread_local inline static BOOL is_renderer_locked = FALSE;
 
 		//
 		// メインスレッドのIDです。
@@ -245,7 +245,24 @@ namespace apn::dark
 		//
 		// 現在のスレッドが有効の場合はTRUEを返します。
 		//
-		BOOL is_valid_thread() const { return !renderer_locked && (main_thread_id == ::GetCurrentThreadId()); }
+		BOOL is_valid_thread() const
+		{
+			// レンダラーがロックされている場合は無効です。
+			if (is_renderer_locked) return FALSE;
+
+			// メインスレッドではない場合は無効です。
+			if (main_thread_id != ::GetCurrentThreadId()) return FALSE;
+
+			// コモンダイアログを除外する場合は
+			if (jd.exclude_comdlg32)
+			{
+				// コモンダイアログが表示されていない場合は有効です。
+				return comdlg32_visible_count == 0;
+			}
+
+			// このスレッドは有効です。
+			return TRUE;
+		}
 
 		//
 		// このクラスはフックする前のオリジナルのAPIを保持します。
