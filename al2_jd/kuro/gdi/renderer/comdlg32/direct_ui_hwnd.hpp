@@ -4,8 +4,7 @@ namespace apn::dark::kuro::gdi::comdlg32
 {
 	struct DirectUIHWNDRenderer : Renderer
 	{
-#if 0
-		// テスト用コードです。
+#if 0 // テスト用コードです。
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);

@@ -219,7 +219,7 @@ namespace apn::dark
 				auto hilight_color = hive.orig.GetSysColor(COLOR_HIGHLIGHT);
 				auto button_hilight_color = hive.orig.GetSysColor(COLOR_BTNHIGHLIGHT);
 
-				int n = 0; // ここでシステムカラーを確認します。
+				int break_point = 0; // ここでシステムカラーを確認します。
 			}
 
 			// アセットをファイルから読み込みます。
