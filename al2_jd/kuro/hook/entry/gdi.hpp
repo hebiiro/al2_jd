@@ -17,7 +17,7 @@ namespace apn::dark::kuro::hook
 			DetourTransactionBegin();
 			DetourUpdateThread(::GetCurrentThread());
 
-			auto user32 = (my::addr_t)::GetModuleHandleW(L"user32.dll");
+			auto user32 = ::GetModuleHandleW(L"user32.dll");
 			MY_TRACE_HEX(user32);
 #if 0 // テスト用コードです。
 			my::addr_t address1 = ::CallWindowProcW((WNDPROC)get_ret_addr, nullptr, 0, 0, 0);
@@ -26,17 +26,17 @@ namespace apn::dark::kuro::hook
 			my::addr_t address2 = address1 + ((DWORD*)address1)[-1];
 			MY_TRACE_HEX(address2);
 
-			my::addr_t address3 = user32 + 0x17E80;
+			my::addr_t address3 = (my::addr_t)user32 + 0x17E80;
 			MY_TRACE_HEX(address3);
 
-			my::addr_t address4 = user32 + 0xB0010; // address2と同じ。
+			my::addr_t address4 = (my::addr_t)user32 + 0xB0010; // address2と同じ。
 			MY_TRACE_HEX(address4);
 
 			my::hook::attach(CallWindowProcInternal, address3);
 #endif
 			my::hook::attach(Rectangle);
 			my::hook::attach(FillRect);
-//			my::hook::attach(DrawFrame, user32);
+//			my::hook::attach(DrawFrame, ::GetProcAddress(user32, "DrawFrame"));
 //			my::hook::attach(DrawFrameControl);
 //			my::hook::attach(FrameRect);
 			my::hook::attach(DrawEdge);
@@ -46,15 +46,11 @@ namespace apn::dark::kuro::hook
 //			my::hook::attach(PatBlt);
 			my::hook::attach(GetSysColor);
 			my::hook::attach(GetSysColorBrush);
-//			my::hook::attach(InsertMenuW);
 
-			if (DetourTransactionCommit() != NO_ERROR)
-			{
-				MY_TRACE("APIフックに失敗しました\n");
+			// フックをコミットします。
+			auto result = (DetourTransactionCommit() == NO_ERROR);
 
-				return FALSE;
-			}
-
+			// コミット後にオリジナルの関数を取得しておきます。
 //			hive.orig.CallWindowProcWInternal = CallWindowProcWInternal.orig_proc;
 			hive.orig.Rectangle = Rectangle.orig_proc;
 			hive.orig.FillRect = FillRect.orig_proc;
@@ -68,6 +64,13 @@ namespace apn::dark::kuro::hook
 			hive.orig.PatBlt = PatBlt.orig_proc;
 			hive.orig.GetSysColor = GetSysColor.orig_proc;
 			hive.orig.GetSysColorBrush = GetSysColorBrush.orig_proc;
+
+			if (!result)
+			{
+				MY_TRACE("APIフックに失敗しました\n");
+
+				return FALSE;
+			}
 
 			return TRUE;
 		}
@@ -369,19 +372,5 @@ namespace apn::dark::kuro::hook
 			}
 			inline static decltype(&hook_proc) orig_proc = ::GetSysColorBrush;
 		} GetSysColorBrush;
-
-		//
-		// このクラスは::InsertMenuW()をフックします。
-		//
-		struct {
-			inline static BOOL WINAPI hook_proc(HMENU menu, UINT position, UINT flags, UINT_PTR id, LPCWSTR text)
-			{
-				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}, {/hex}",
-					ret_addr(&menu), menu, position, flags, id, text);
-
-				return orig_proc(menu, position, flags, id, text);
-			}
-			inline static decltype(&hook_proc) orig_proc = ::InsertMenuW;
-		} InsertMenuW;
 	} gdi;
 }
