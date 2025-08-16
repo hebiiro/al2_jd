@@ -23,7 +23,9 @@
 #define IDC_RADIO_1                     1213
 #define IDC_CHECKBOX_2                  1214
 #define IDC_JD_STAT                     1300
-#define IDC_JD_EXCLUDE_COMDLG32         1301
+#define IDC_JD_STYLE_FILE_NAME          1301
+#define IDC_JD_STYLE_FILE_NAME_REF      1302
+#define IDC_JD_EXCLUDE_COMDLG32         1310
 #define IDC_SCROLLBAR_REDUCTION_STAT    1400
 #define IDC_SCROLLBAR_REDUCTION         1401
 #define IDC_SCROLLBAR_REDUCTION_SPIN    1402
@@ -56,7 +58,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         2000
+#define _APS_NEXT_CONTROL_VALUE         2002
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

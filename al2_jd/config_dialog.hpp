@@ -59,6 +59,8 @@ namespace apn::dark
 
 			Locker locker(this);
 
+			set_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
+
 			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 
 			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
@@ -132,6 +134,21 @@ namespace apn::dark
 
 					switch (id)
 					{
+					case IDC_JD_STYLE_FILE_NAME_REF:
+						{
+							// ユーザーが指定したスタイルファイルのパスを取得します。
+							auto file_name = get_open_file_name(
+								hwnd,
+								L"スタイルファイルを選択",
+								L"スタイルファイル (*.conf)\0*.conf\0"
+								L"すべてのファイル (*.*)\0*.*\0",
+								hive.jd.style_file_name.c_str());
+							if (file_name.empty()) break;
+
+							app->set_style_file_name(file_name);
+
+							break;
+						}
 					case IDC_JD_EXCLUDE_COMDLG32:
 						{
 							from_ui(FALSE);

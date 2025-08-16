@@ -229,9 +229,9 @@ namespace apn::dark::kuro
 		}
 
 		//
-		// スタイルファイルのカラー項目を読み込みます。
+		// スタイルファイルを読み込みます。
 		//
-		BOOL read_color_style(LPCWSTR ini_file_name)
+		BOOL read_file(LPCWSTR ini_file_name)
 		{
 			MY_TRACE_FUNC("{/}", ini_file_name);
 
@@ -287,24 +287,24 @@ namespace apn::dark::kuro
 				auto module_folder_name = my::get_module_file_name(nullptr).parent_path();
 
 				// aviutl2/dataフォルダ内のスタイルファイルのパスを取得します。
-				auto ini_file_name = module_folder_name / L"data" / L"style.conf";
+				hive.jd.style_file_name = module_folder_name / L"data" / L"style.conf";
 
 				// スタイルファイルが存在しない場合は
-				if (!std::filesystem::exists(ini_file_name))
+				if (!std::filesystem::exists(hive.jd.style_file_name))
 				{
 					// プログラムデータ内のスタイルファイルのパスを取得します。
-					ini_file_name = std::filesystem::path(LR"***(C:\ProgramData\aviutl2\style.conf)***");
+					hive.jd.style_file_name = std::filesystem::path(LR"***(C:\ProgramData\aviutl2\style.conf)***");
 				}
 
 				// スタイルファイルが存在しない場合は
-				if (!std::filesystem::exists(ini_file_name))
+				if (!std::filesystem::exists(hive.jd.style_file_name))
 				{
 					// aviutl2フォルダ内のスタイルファイルのパスを取得します。
-					ini_file_name = module_folder_name / L"style.conf";
+					hive.jd.style_file_name = module_folder_name / L"style.conf";
 				}
 
-				// カラー項目を読み込みます。
-				read_color_style(ini_file_name.c_str());
+				// スタイルファイルを読み込みます。
+				read_file(hive.jd.style_file_name.c_str());
 			}
 			// 例外が発生した場合は
 			catch (std::exception& error)

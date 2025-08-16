@@ -46,6 +46,11 @@ namespace apn::dark
 		struct JD
 		{
 			//
+			// スタイルのファイル名です。
+			//
+			std::wstring style_file_name;
+
+			//
 			// TRUEの場合はコモンダイアログをダークモード化から除外します。
 			//
 			BOOL exclude_comdlg32 = FALSE;

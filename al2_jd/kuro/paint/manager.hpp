@@ -30,5 +30,17 @@ namespace apn::dark::kuro::paint
 
 			return TRUE;
 		}
+
+		//
+		// 再読み込み処理を実行します。
+		//
+		BOOL reload()
+		{
+			MY_TRACE_FUNC("");
+
+			Material::init_materials();
+
+			return TRUE;
+		}
 	} manager;
 }

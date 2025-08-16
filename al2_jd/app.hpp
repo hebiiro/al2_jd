@@ -8,6 +8,11 @@ namespace apn::dark
 	inline struct App : AppInterface
 	{
 		//
+		// スタイルファイルを監視します。
+		//
+		std::unique_ptr<my::FileWatcherBase> style_file_watcher;
+
+		//
 		// コンストラクタです。
 		//
 		App() { app = this; }
@@ -231,6 +236,9 @@ namespace apn::dark
 			// aviutl2ウィンドウが終了するときに実行されます。
 			read_config();
 
+			// スタイルファイルの監視をリセットします。
+			reset_style_file_watcher();
+
 			// aviutl2ウィンドウを最前面にします。
 			::SetForegroundWindow(hive.theme_window);
 
@@ -364,6 +372,48 @@ namespace apn::dark
 
 				return TRUE;
 			}, 0);
+		}
+
+		//
+		// スタイルファイルを再読み込みします。
+		//
+		BOOL reload_style_file()
+		{
+			// スタイルファイルを読み込みします。
+			if (!kuro::style.read_file(hive.jd.style_file_name.c_str())) return FALSE;
+
+			// マテリアルをリロードします。
+			if (!kuro::paint::manager.reload()) return FALSE;
+
+			// すべてのウィンドウを再描画します。
+			return redraw();
+		}
+
+		//
+		// スタイルファイルの監視をリセットします。
+		//
+		void reset_style_file_watcher()
+		{
+			style_file_watcher.reset(new my::FileWatcher(
+				hive.jd.style_file_name.c_str(), config_dialog, [&]() { reload_style_file(); }));
+		}
+
+		//
+		// スタイルファイルのパスをセットします。
+		//
+		virtual BOOL set_style_file_name(const std::wstring& style_file_name) override
+		{
+			// スタイルファイルのパスをセットします。
+			hive.jd.style_file_name = style_file_name;
+
+			// ダイアログコントロールを更新します。
+			config_dialog.set_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
+
+			// スタイルファイルの監視をリセットします。
+			reset_style_file_watcher();
+
+			// スタイルファイルを再読み込みします。
+			return reload_style_file();
 		}
 	} app_impl;
 }
