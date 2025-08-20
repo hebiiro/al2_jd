@@ -26,10 +26,14 @@ namespace apn::dark::kuro::theme::immersive_start
 
 						break;
 					}
-				}
+				default:
+					{
+						if (draw_rect(dc, rc, palette, part_id, state_id))
+							return S_OK;
 
-				if (draw_rect(dc, rc, palette, part_id, state_id))
-					return S_OK;
+						break;
+					}
+				}
 			}
 
 			return __super::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);

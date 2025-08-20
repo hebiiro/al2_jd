@@ -22,24 +22,17 @@ namespace apn::dark::kuro::theme
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
 			{
-				if (part_id == MENU_POPUPCHECKBACKGROUND)
-				{
-					// この処理はクリッピングしないようにします。
-
-					if (draw_rect(dc, rc, palette, part_id, state_id))
-						return S_OK;
-				}
-
-				Clipper clipper(dc, rc_clip);
-
 				switch (part_id)
 				{
 				case MENU_BARBACKGROUND:
 					{
 						// メニューバーの背景を描画します。
 
+						// クリップ矩形を使用します。
+						Clipper clipper(dc, rc_clip);
+
 						auto rc2 = *rc;
-						rc2.bottom += 1;
+						rc2.bottom += 1; // クリップ矩形を使用すると、この1ピクセルが上書き描画できるようになります。
 
 						if (draw_rect(dc, &rc2, palette, part_id, state_id))
 							return S_OK;
@@ -48,10 +41,21 @@ namespace apn::dark::kuro::theme
 					}
 				case MENU_BARITEM:
 					{
-						// メニューバーの背景を描画します。
+						// メニューバー項目の背景を描画します。
 
-						if (draw_rect(dc, rc, palette, part_id, state_id))
+						// 項目が選択状態のときだけ
+						if (state_id == MPI_HOT || state_id == MBI_PUSHED)
+						{
+							// 背景を描画します。
+							if (draw_rect(dc, rc, palette, part_id, state_id))
+								return S_OK;
+						}
+						// それ以外の場合は
+						else
+						{
+							// 背景を描画しません。
 							return S_OK;
+						}
 
 						break;
 					}
@@ -113,16 +117,17 @@ namespace apn::dark::kuro::theme
 						// (後でon_theme_draw_text()内で使用します)
 						popup_item_rect = *rc;
 
+						auto rc2 = *rc;
+
+						// ホット状態以外の場合は
 						if (state_id != MPI_HOT)
 						{
-							auto rc2 = *rc;
-
 							// ガーターが上書きされないように描画矩形を縮小します。
 							rc2.left = gutter_right;
-
-							if (draw_rect(dc, &rc2, palette, part_id, state_id))
-								return S_OK;
 						}
+
+						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
 
 						break;
 					}
@@ -189,10 +194,12 @@ namespace apn::dark::kuro::theme
 
 						break;
 					}
+				default:
+					{
+						if (draw_rect(dc, rc, palette, part_id, state_id))
+							return S_OK;
+					}
 				}
-
-				if (draw_rect(dc, rc, palette, part_id, state_id))
-					return S_OK;
 			}
 
 			return __super::on_draw_theme_background(theme, dc, part_id, state_id, rc, rc_clip);
@@ -211,8 +218,13 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
+				// メニュー文字列を描画するとき
+				// 背景を塗りつぶさないようにします。
+				auto opaque = FALSE;
+
+				// ポップアップメニュー項目を
 				// フォントを使用して描画する場合は
-				if (hive.fonts.use_on_menu && text && rc)
+				if (part_id == MENU_POPUPITEM && hive.fonts.use_on_menu && text && rc)
 				{
 					// メニュー項目名をフォント名とみなします。
 					auto font_name = std::wstring(text, (size_t)c);
@@ -238,12 +250,12 @@ namespace apn::dark::kuro::theme
 //						rc2.left = popup_item_rect.left;
 						rc2.right = popup_item_rect.right;
 
-						if (draw_text(dc, &rc2, preview_text.c_str(), -1, text_flags, palette, part_id, state_id))
+						if (draw_text(dc, &rc2, preview_text.c_str(), -1, text_flags, palette, part_id, state_id, opaque))
 							return S_OK;
 					}
 				}
 
-				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
+				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, opaque))
 					return S_OK;
 			}
 

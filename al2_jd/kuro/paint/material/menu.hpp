@@ -20,6 +20,18 @@ namespace apn::dark::kuro::paint
 				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
+			auto active = Pigment {
+				{ style.get_COLORREF(Style::Color::Background), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto inactive = Pigment {
+				{ style.get_COLORREF(Style::Color::TitleHeader), },
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::TextDisable), },
+			};
+
 			auto border = Pigment {
 				{ style.get_COLORREF(Style::Color::WindowBorder), },
 				{ CLR_NONE },
@@ -57,29 +69,26 @@ namespace apn::dark::kuro::paint
 				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
-			auto mc_normal = Pigment {
+			auto item_focus = Pigment {
+				{ CLR_NONE },
+				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto icon_normal = Pigment {
 				{ style.get_COLORREF(Style::Color::Background), },
 				{ CLR_NONE },
 				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
-			auto mc_disabled = Pigment {
+			auto icon_disabled = Pigment {
 				{ style.get_COLORREF(Style::Color::Background), },
 				{ CLR_NONE },
 				{ style.get_COLORREF(Style::Color::TextDisable), },
 			};
 
-			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			});
-
-			palette.set(MENU_BARBACKGROUND, MB_INACTIVE, {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			});
+			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, active);
+			palette.set(MENU_BARBACKGROUND, MB_INACTIVE, inactive);
 
 			palette.set(MENU_BARITEM, MBI_NORMAL, item_normal);
 			palette.set(MENU_BARITEM, MBI_DISABLED, item_disabled);
@@ -111,34 +120,36 @@ namespace apn::dark::kuro::paint
 			palette.set(MENU_POPUPITEM, MPI_HOT, item_hot);
 			palette.set(MENU_POPUPITEM, MPI_DISABLEDHOT, item_disabled);
 
+			palette.set(MENU_POPUPITEMKBFOCUS, MPIKBFOCUS_NORMAL, item_focus);
+
 			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_NORMAL, item_normal);
 			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_DISABLED, item_disabled);
 			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_HOT, item_hot);
 			palette.set(MENU_POPUPITEMFOCUSABLE, MPI_DISABLEDHOT, item_disabled);
 
-			palette.set(MENU_POPUPCHECK, MC_CHECKMARKNORMAL, mc_normal);
-			palette.set(MENU_POPUPCHECK, MC_CHECKMARKDISABLED, mc_disabled);
-			palette.set(MENU_POPUPCHECK, MC_BULLETNORMAL, mc_normal);
-			palette.set(MENU_POPUPCHECK, MC_BULLETDISABLED, mc_disabled);
+			palette.set(MENU_POPUPCHECK, MC_CHECKMARKNORMAL, icon_normal);
+			palette.set(MENU_POPUPCHECK, MC_CHECKMARKDISABLED, icon_disabled);
+			palette.set(MENU_POPUPCHECK, MC_BULLETNORMAL, icon_normal);
+			palette.set(MENU_POPUPCHECK, MC_BULLETDISABLED, icon_disabled);
 
-			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_DISABLED, mc_disabled);
-			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_NORMAL, mc_normal);
-			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_BITMAP, mc_normal);
+			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_DISABLED, icon_disabled);
+			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_NORMAL, icon_normal);
+			palette.set(MENU_POPUPCHECKBACKGROUND, MCB_BITMAP, icon_normal);
 
-			palette.set(MENU_POPUPSUBMENU, MSM_NORMAL, mc_normal);
-			palette.set(MENU_POPUPSUBMENU, MSM_DISABLED, mc_disabled);
+			palette.set(MENU_POPUPSUBMENU, MSM_NORMAL, icon_normal);
+			palette.set(MENU_POPUPSUBMENU, MSM_DISABLED, icon_disabled);
 
-			palette.set(MENU_SYSTEMCLOSE, MSYSC_NORMAL, mc_normal);
-			palette.set(MENU_SYSTEMCLOSE, MSYSC_DISABLED, mc_disabled);
+			palette.set(MENU_SYSTEMCLOSE, MSYSC_NORMAL, icon_normal);
+			palette.set(MENU_SYSTEMCLOSE, MSYSC_DISABLED, icon_disabled);
 
-			palette.set(MENU_SYSTEMMAXIMIZE, MSYSMX_NORMAL, mc_normal);
-			palette.set(MENU_SYSTEMMAXIMIZE, MSYSMX_DISABLED, mc_disabled);
+			palette.set(MENU_SYSTEMMAXIMIZE, MSYSMX_NORMAL, icon_normal);
+			palette.set(MENU_SYSTEMMAXIMIZE, MSYSMX_DISABLED, icon_disabled);
 
-			palette.set(MENU_SYSTEMMINIMIZE, MSYSMN_NORMAL, mc_normal);
-			palette.set(MENU_SYSTEMMINIMIZE, MSYSMN_DISABLED, mc_disabled);
+			palette.set(MENU_SYSTEMMINIMIZE, MSYSMN_NORMAL, icon_normal);
+			palette.set(MENU_SYSTEMMINIMIZE, MSYSMN_DISABLED, icon_disabled);
 
-			palette.set(MENU_SYSTEMRESTORE, MSYSR_NORMAL, mc_normal);
-			palette.set(MENU_SYSTEMRESTORE, MSYSR_DISABLED, mc_disabled);
+			palette.set(MENU_SYSTEMRESTORE, MSYSR_NORMAL, icon_normal);
+			palette.set(MENU_SYSTEMRESTORE, MSYSR_DISABLED, icon_disabled);
 		}
 
 		//

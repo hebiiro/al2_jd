@@ -21,11 +21,11 @@ namespace apn::dark::kuro::theme::base
 			if (part_id == MENU_POPUPBORDERS && state_id == 0 && prop_id == TMT_FILLCOLORHINT)
 				return *result = palette.get(part_id, state_id)->background.color, S_OK;
 
-			// ポップアップメニューのアイコンの色を変更します。
+			// ポップアップメニュー項目のテキストの色を変更します。
 			if (part_id == MENU_POPUPITEM && prop_id == TMT_TEXTCOLOR)
 				return *result = palette.get(part_id, state_id)->text.color, S_OK;
 
-			// ポップアップメニューのアイコンの色を変更します。
+			// ポップアップメニュー項目のテキストの色を変更します。
 			if (part_id == MENU_POPUPITEMFOCUSABLE && prop_id == TMT_TEXTCOLOR)
 				return *result = palette.get(part_id, state_id)->text.color, S_OK;
 
