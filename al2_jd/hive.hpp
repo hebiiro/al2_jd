@@ -3,6 +3,13 @@
 namespace apn::dark
 {
 	//
+	// このクラスは::PolyPatBlt()の引数です。
+	//
+	struct PATRECT {
+		int x, y, w, h; HBRUSH brush;
+	};
+
+	//
 	// このクラスは他クラスから共通して使用される変数を保持します。
 	//
 	inline struct Hive
@@ -282,8 +289,14 @@ namespace apn::dark
 			decltype(&::DrawEdge) DrawEdge;
 			decltype(&::DrawFocusRect) DrawFocusRect;
 			decltype(&::DrawStateW) DrawStateW;
+			decltype(&::GrayStringW) GrayStringW;
+			decltype(&::DrawTextW) DrawTextW;
+			decltype(&::DrawTextExW) DrawTextExW;
+			decltype(&::DrawShadowText) DrawShadowText;
+			decltype(&::DrawMenuBar) DrawMenuBar;
 			decltype(&::ExtTextOutW) ExtTextOutW;
 			decltype(&::PatBlt) PatBlt;
+			BOOL (WINAPI *PolyPatBlt)(HDC dc, DWORD rop, const PATRECT* rects, int nb_rects, ULONG reserved);
 			decltype(&::GetSysColor) GetSysColor;
 			decltype(&::GetSysColorBrush) GetSysColorBrush;
 

@@ -17,6 +17,9 @@ namespace apn::dark::kuro::hook
 			DetourTransactionBegin();
 			DetourUpdateThread(::GetCurrentThread());
 
+			auto gdi32 = ::GetModuleHandleW(L"gdi32.dll");
+			MY_TRACE_HEX(gdi32);
+
 			auto user32 = ::GetModuleHandleW(L"user32.dll");
 			MY_TRACE_HEX(user32);
 #if 0 // テスト用コードです。
@@ -36,17 +39,28 @@ namespace apn::dark::kuro::hook
 #endif
 			my::hook::attach(Rectangle);
 			my::hook::attach(FillRect);
-//			my::hook::attach(DrawFrame, ::GetProcAddress(user32, "DrawFrame"));
-//			my::hook::attach(DrawFrameControl);
-//			my::hook::attach(FrameRect);
 			my::hook::attach(DrawEdge);
 			my::hook::attach(DrawFocusRect);
-//			my::hook::attach(DrawStateW);
 			my::hook::attach(ExtTextOutW);
-//			my::hook::attach(PatBlt);
 			my::hook::attach(GetSysColor);
 			my::hook::attach(GetSysColorBrush);
-
+#if 0 // テスト用コードです。
+			my::hook::attach(DrawFrame, ::GetProcAddress(user32, "DrawFrame"));
+			my::hook::attach(DrawFrameControl);
+			my::hook::attach(FrameRect);
+			my::hook::attach(DrawStateW);
+			my::hook::attach(GrayStringW);
+			my::hook::attach(DrawTextW);
+			my::hook::attach(DrawTextExW);
+			my::hook::attach(DrawShadowText);
+			my::hook::attach(DrawMenuBar);
+			my::hook::attach(ExtTextOutA);
+			my::hook::attach(PatBlt);
+			my::hook::attach(PolyPatBlt, ::GetProcAddress(gdi32, "PolyPatBlt"));
+			my::hook::attach(BitBlt);
+			my::hook::attach(GetWindowLongW);
+			my::hook::attach(GetWindowLongPtrW);
+#endif
 			// フックをコミットします。
 			auto result = (DetourTransactionCommit() == NO_ERROR);
 
@@ -60,8 +74,14 @@ namespace apn::dark::kuro::hook
 			hive.orig.DrawEdge = DrawEdge.orig_proc;
 			hive.orig.DrawFocusRect = DrawFocusRect.orig_proc;
 			hive.orig.DrawStateW = DrawStateW.orig_proc;
+			hive.orig.GrayStringW = GrayStringW.orig_proc;
+			hive.orig.DrawTextW = DrawTextW.orig_proc;
+			hive.orig.DrawTextExW = DrawTextExW.orig_proc;
+			hive.orig.DrawShadowText = DrawShadowText.orig_proc;
+			hive.orig.DrawMenuBar = DrawMenuBar.orig_proc;
 			hive.orig.ExtTextOutW = ExtTextOutW.orig_proc;
 			hive.orig.PatBlt = PatBlt.orig_proc;
+			hive.orig.PolyPatBlt = PolyPatBlt.orig_proc;
 			hive.orig.GetSysColor = GetSysColor.orig_proc;
 			hive.orig.GetSysColorBrush = GetSysColorBrush.orig_proc;
 
@@ -257,6 +277,91 @@ namespace apn::dark::kuro::hook
 		} DrawStateW;
 
 		//
+		// このクラスは::GrayStringW()をフックします。
+		//
+		struct {
+			inline static BOOL WINAPI hook_proc(HDC dc, HBRUSH brush,
+				GRAYSTRINGPROC output_func, LPARAM data, int c, int x, int y, int w, int h)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/}, {/}, {/}, {/}, {/}",
+					ret_addr(&dc), dc, brush, c, x, y, w, h);
+
+				return orig_proc(dc, brush, output_func, data, c, x, y, w, h);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::GrayStringW;
+		} GrayStringW;
+
+		//
+		// このクラスは::DrawTextW()をフックします。
+		//
+		struct {
+			inline static int WINAPI hook_proc(HDC dc, LPCWSTR text, int c, LPRECT rc, UINT flags)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, ({/}), {/hex}",
+					ret_addr(&dc), dc, safe_string(text, c), safe_string(rc), flags);
+
+				return orig_proc(dc, text, c, rc, flags);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::DrawTextW;
+		} DrawTextW;
+
+		//
+		// このクラスは::DrawTextExW()をフックします。
+		//
+		struct {
+			inline static int WINAPI hook_proc(HDC dc, LPWSTR text, int c, LPRECT rc, UINT flags, LPDRAWTEXTPARAMS dtp)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, ({/}), {/hex}, {/hex}",
+					ret_addr(&dc), dc, safe_string(text, c), safe_string(rc), flags, dtp);
+
+				return orig_proc(dc, text, c, rc, flags, dtp);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::DrawTextExW;
+		} DrawTextExW;
+
+		//
+		// このクラスは::DrawShadowText()をフックします。
+		//
+		struct {
+			inline static int WINAPI hook_proc(HDC dc, LPCWSTR text, UINT c,
+				LPRECT rc, DWORD flags, COLORREF text_color, COLORREF shadow_color, int ox, int oy)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, ({/}), {/hex}, {/hex}, {/hex}, {/}, {/}",
+					ret_addr(&dc), dc, safe_string(text, c), safe_string(rc), flags, text_color, shadow_color, ox, oy);
+
+				return orig_proc(dc, text, c, rc, flags, text_color, shadow_color, ox, oy);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::DrawShadowText;
+		} DrawShadowText;
+
+		//
+		// このクラスは::DrawMenuBar()をフックします。
+		//
+		struct {
+			inline static int WINAPI hook_proc(HWND hwnd)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}", ret_addr(&hwnd), hwnd);
+
+				return orig_proc(hwnd);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::DrawMenuBar;
+		} DrawMenuBar;
+
+		//
+		// このクラスは::ExtTextOutA()をフックします。
+		//
+		struct {
+			inline static BOOL WINAPI hook_proc(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCSTR text, UINT c, CONST INT* dx)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/hex}, ({/}), {/} : {/}",
+					ret_addr(&dc), dc, x, y, options, safe_string(rc), c, ::GetCurrentThreadId());
+
+				return orig_proc(dc, x, y, options, rc, text, c, dx);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::ExtTextOutA;
+		} ExtTextOutA;
+
+		//
 		// このクラスは::ExtTextOutW()をフックします。
 		//
 		struct {
@@ -342,6 +447,34 @@ namespace apn::dark::kuro::hook
 		} PatBlt;
 
 		//
+		// このクラスは::PolyPatBlt()をフックします。
+		//
+		struct {
+			inline static BOOL WINAPI hook_proc(HDC dc, DWORD rop, const PATRECT* rects, int nb_rects, ULONG reserved)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/}",
+					ret_addr(&dc), dc, rop, nb_rects);
+
+				return orig_proc(dc, rop, rects, nb_rects, reserved);
+			}
+			inline static decltype(&hook_proc) orig_proc = {};
+		} PolyPatBlt;
+
+		//
+		// このクラスは::BitBlt()をフックします。
+		//
+		struct {
+			inline static BOOL WINAPI hook_proc(HDC dc, int x, int y, int w, int h, HDC src_dc, int src_x, int src_y, DWORD rop)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/}, {/}, {/hex}, {/}, {/}, {/hex}",
+					ret_addr(&dc), dc, x, y, w, h, src_dc, src_x, src_y, rop);
+
+				return orig_proc(dc, x, y, w, h, src_dc, src_x, src_y, rop);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::BitBlt;
+		} BitBlt;
+
+		//
 		// このクラスは::GetSysColor()をフックします。
 		//
 		struct {
@@ -372,5 +505,31 @@ namespace apn::dark::kuro::hook
 			}
 			inline static decltype(&hook_proc) orig_proc = ::GetSysColorBrush;
 		} GetSysColorBrush;
+
+		//
+		// このクラスは::GetWindowLongW()をフックします。
+		//
+		struct {
+			inline static LONG WINAPI hook_proc(HWND hwnd, int index)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}", ret_addr(&hwnd), hwnd, index);
+
+				return orig_proc(hwnd, index);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::GetWindowLongW;
+		} GetWindowLongW;
+
+		//
+		// このクラスは::GetWindowLongPtrW()をフックします。
+		//
+		struct {
+			inline static LONG_PTR WINAPI hook_proc(HWND hwnd, int index)
+			{
+				MY_TRACE_FUNC("{/hex}, {/hex}, {/}", ret_addr(&hwnd), hwnd, index);
+
+				return orig_proc(hwnd, index);
+			}
+			inline static decltype(&hook_proc) orig_proc = ::GetWindowLongPtrW;
+		} GetWindowLongPtrW;
 	} gdi;
 }

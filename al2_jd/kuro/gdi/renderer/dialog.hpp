@@ -4,6 +4,14 @@ namespace apn::dark::kuro::gdi
 {
 	struct DialogRenderer : RendererNc
 	{
+#if 0 // テスト用コードです。
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
+		{
+			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
+
+			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
+		}
+#endif
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, dc, control, brush);
