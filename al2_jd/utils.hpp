@@ -153,6 +153,70 @@ namespace apn::dark
 	}
 
 	//
+	// このクラスはスコープ終了処理を実行します。
+	//
+	template <typename F>
+	struct scope_exit {
+		F func;
+		~scope_exit() { func(); }
+	};
+
+	//
+	// このクラスはGDI+を管理します。
+	//
+	struct GdiplusManager {
+		Gdiplus::GdiplusStartupInput si;
+		Gdiplus::GdiplusStartupOutput so;
+		ULONG_PTR token;
+		ULONG_PTR hook_token;
+		GdiplusManager() {
+			si.SuppressBackgroundThread = TRUE;
+			Gdiplus::GdiplusStartup(&token, &si, &so);
+			so.NotificationHook(&hook_token);
+		}
+		~GdiplusManager() {
+			so.NotificationUnhook(hook_token);
+			Gdiplus::GdiplusShutdown(token);
+		}
+	};
+
+	//
+	// アイコンをビットマップに変換して返します。
+	//
+	HBITMAP to_bitmap(HICON icon)
+	{
+		GdiplusManager manager;
+
+		auto bitmap = HBITMAP {};
+		Gdiplus::Bitmap(icon).GetHBITMAP(Gdiplus::Color(), &bitmap);
+		return bitmap;
+	}
+
+	//
+	// 指定されたファイルのアイコンを取得します。
+	//
+	HICON get_icon(const std::wstring& path, int icon_index)
+	{
+		auto icon = HICON {};
+		::ExtractIconExW(path.c_str(), icon_index, nullptr, &icon, 1);
+		return icon;
+	}
+
+	//
+	// 指定されたファイルパスのアイコンを取得します。
+	//
+	HICON get_shell_icon(const std::wstring& path)
+	{
+		// シェルからファイル情報を取得します。
+		SHFILEINFO sfi = {};
+		::SHGetFileInfoW(path.c_str(), 0,
+			&sfi, sizeof(sfi), SHGFI_ICON | SHGFI_SMALLICON);
+
+		// アイコンを返します。
+		return sfi.hIcon;
+	}
+
+	//
 	// このクラスは::ExtTextOut()のフックをロックします。
 	//
 	struct ExtTextOutLocker
