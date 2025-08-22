@@ -62,6 +62,7 @@ namespace apn::dark
 			set_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
 
 			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
+			set_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
 
 			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -69,6 +70,7 @@ namespace apn::dark
 
 			set_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
 			set_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
+			set_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
 
 			set_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			set_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
@@ -93,6 +95,7 @@ namespace apn::dark
 			if (is_locked()) return FALSE;
 
 			get_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
+			get_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
 
 			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -100,6 +103,7 @@ namespace apn::dark
 
 			get_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
 			get_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
+			get_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
 
 			get_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			get_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
@@ -155,6 +159,14 @@ namespace apn::dark
 
 							break;
 						}
+					case IDC_JD_SLIM_MENUBAR:
+						{
+							from_ui(FALSE);
+
+							app->apply_slim_menubar();
+
+							break;
+						}
 					case IDC_SCROLLBAR_REDUCTION:
 						{
 							if (code == EN_UPDATE)
@@ -171,6 +183,7 @@ namespace apn::dark
 						}
 					case IDC_ETC_MAXIMIZE_AVIUTL2:
 					case IDC_ETC_OPEN_RECENT_PROJECT:
+					case IDC_ETC_DEFAULT_MOUSE_ACTIVATE:
 						{
 							from_ui(FALSE);
 

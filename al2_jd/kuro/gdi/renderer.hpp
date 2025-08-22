@@ -113,7 +113,7 @@ namespace apn::dark::kuro::gdi
 					}
 				}
 
-				// デフォル処理を実行します。
+				// デフォルト処理を実行します。
 				return orig_wnd_proc(hwnd, message, wParam, lParam);
 			}
 
@@ -157,7 +157,7 @@ namespace apn::dark::kuro::gdi
 				return result;
 			}
 
-			// デフォル処理を実行します。
+			// デフォルト処理を実行します。
 			return orig_wnd_proc(hwnd, message, wParam, lParam);
 		}
 

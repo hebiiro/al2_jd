@@ -17,6 +17,24 @@ namespace apn::dark::kuro::theme
 		//
 		RECT popup_item_rect = {};
 
+		//
+		// メニューバーを描画します。
+		//
+		HRESULT draw_menubar(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
+		{
+			// メニューバーとタイトルバーを一体化しない場合は何もしません。
+			if (!hive.jd.slim_menubar) return S_OK;
+
+			// デバイスコンテキストからウィンドウを取得します。
+			auto hwnd = ::WindowFromDC(dc);
+
+			// メニューバーを取得できた場合は
+			if (auto menubar = MenuBar::get(hwnd))
+				return menubar->on_draw(hwnd, theme, dc, part_id, state_id, rc);
+
+			return S_OK;
+		}
+
 		virtual HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
@@ -35,7 +53,7 @@ namespace apn::dark::kuro::theme
 						rc2.bottom += 1; // クリップ矩形を使用すると、この1ピクセルが上書き描画できるようになります。
 
 						if (draw_rect(dc, &rc2, palette, part_id, state_id))
-							return S_OK;
+							return draw_menubar(theme, dc, part_id, state_id, &rc2);
 
 						break;
 					}

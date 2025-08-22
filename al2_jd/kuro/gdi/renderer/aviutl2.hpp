@@ -4,12 +4,51 @@ namespace apn::dark::kuro::gdi
 {
 	struct AviUtl2Renderer : Renderer
 	{
+		//
+		// メニューバーです。
+		//
+		std::shared_ptr<MenuBar> menubar = std::make_shared<MenuBar>();
+
+		//
+		// ウィンドウにアタッチしたときの処理です。
+		//
+		virtual BOOL on_attach(HWND hwnd)
+		{
+			menubar->attach(hwnd);
+
+			return __super::on_attach(hwnd);
+		}
+
+		//
+		// ウィンドウからデタッチしたときの処理です。
+		//
+		virtual BOOL on_detach(HWND hwnd)
+		{
+			menubar->detach(hwnd);
+
+			return __super::on_detach(hwnd);
+		}
+
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
 
 			switch (message)
 			{
+			case WM_MOUSEACTIVATE:
+				{
+					MY_TRACE_FUNC("WM_MOUSEACTIVATE, hwnd = {/hex}, ht = {/hex}, mouse_message = {/hex}", wParam, LOWORD(lParam), HIWORD(lParam));
+
+					// デフォルト処理を実行します。
+					auto result = __super::on_subclass_proc(hwnd, message, wParam, lParam);
+
+					// 通常のマウスアクティブ化処理を実行する場合は
+					if (hive.etc.default_mouse_activate)
+						return MA_ACTIVATE; // マウスメッセージを破棄しないようにします。
+
+					// デフォルトの結果を返します。(マウスメッセージを破棄します)
+					return result;
+				}
 			case WM_CLOSE:
 				{
 					MY_TRACE_FUNC("WM_CLOSE");

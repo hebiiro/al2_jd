@@ -61,6 +61,11 @@ namespace apn::dark
 			// TRUEの場合はコモンダイアログをダークモード化から除外します。
 			//
 			BOOL exclude_comdlg32 = FALSE;
+
+			//
+			// TRUEの場合はメニューバーをタイトルバーと一体化します。
+			//
+			BOOL slim_menubar = TRUE;
 		} jd;
 
 		//
@@ -98,6 +103,11 @@ namespace apn::dark
 			// TRUEの場合は起動時に最近使ったプロジェクトを開きます。
 			//
 			BOOL open_recent_project = FALSE;
+
+			//
+			// TRUEの場合は通常のマウスアクティブ化処理を実行します。
+			//
+			BOOL default_mouse_activate = TRUE;
 		} etc;
 
 		//

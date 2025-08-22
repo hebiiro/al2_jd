@@ -215,14 +215,20 @@ namespace apn::dark
 			kuro::theme::manager.init(hive.theme_window);
 			config_dialog.init();
 
-			if (0) // テスト用コードです。
+//			if (0) // テスト用コードです。
 			{
+				for (int i = 0; i < 50; i++)
+					MY_TRACE("{/} => {/hex}\n", i, hive.orig.GetSysColor(i));
+
 				auto window_color = hive.orig.GetSysColor(COLOR_WINDOW);
 				auto button_color = hive.orig.GetSysColor(COLOR_BTNFACE);
 				auto background_color = hive.orig.GetSysColor(COLOR_BACKGROUND);
 				auto menu_color = hive.orig.GetSysColor(COLOR_MENU);
+				auto menu_hilight_color = hive.orig.GetSysColor(COLOR_MENUHILIGHT);
+				auto menu_bar_color = hive.orig.GetSysColor(COLOR_MENUBAR);
 				auto hilight_color = hive.orig.GetSysColor(COLOR_HIGHLIGHT);
 				auto button_hilight_color = hive.orig.GetSysColor(COLOR_BTNHIGHLIGHT);
+				auto hot_light_color = hive.orig.GetSysColor(COLOR_HOTLIGHT);
 
 				int break_point = 0; // ここでシステムカラーを確認します。
 			}
@@ -239,16 +245,21 @@ namespace apn::dark
 			// スタイルファイルの監視をリセットします。
 			reset_style_file_watcher();
 
-			// aviutl2ウィンドウを最前面にします。
-			::SetForegroundWindow(hive.theme_window);
+			{
+				// スリムメニューバーの設定をウィンドウに適用します。
+				apply_slim_menubar();
 
-			// aviutl2ウィンドウを最大化します。
-			if (hive.etc.maximize_aviutl2)
-				::ShowWindow(hive.theme_window, SW_MAXIMIZE);
+				// aviutl2ウィンドウを最前面にします。
+				::SetForegroundWindow(hive.theme_window);
 
-			// 最近使ったプロジェクトを開きます。
-			if (hive.etc.open_recent_project)
-				::PostMessage(hive.theme_window, WM_COMMAND, 0x9C42, 0);
+				// aviutl2ウィンドウを最大化します。
+				if (hive.etc.maximize_aviutl2)
+					::ShowWindow(hive.theme_window, SW_MAXIMIZE);
+
+				// 最近使ったプロジェクトを開きます。
+				if (hive.etc.open_recent_project)
+					::PostMessage(hive.theme_window, WM_COMMAND, 0x9C42, 0);
+			}
 
 			return TRUE;
 		}
@@ -414,6 +425,28 @@ namespace apn::dark
 
 			// スタイルファイルを再読み込みします。
 			return reload_style_file();
+		}
+
+		//
+		// スリムメニューバーの設定をウィンドウに適用します。
+		//
+		virtual BOOL apply_slim_menubar() override
+		{
+			// メニューバーとタイトルバーを一体化する場合は
+			if (hive.jd.slim_menubar)
+			{
+//				my::modify_style(hive.theme_window, WS_CAPTION, 0);
+//				my::modify_style(hive.theme_window, WS_DLGFRAME, 0);
+				my::modify_style(hive.theme_window, WS_BORDER, 0);
+			}
+			// メニューバーとタイトルバーを一体化しない場合は
+			else
+			{
+				my::modify_style(hive.theme_window, 0, WS_CAPTION);
+			}
+
+			return ::SetWindowPos(hive.theme_window, nullptr, 0, 0, 0, 0,
+				SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
 		}
 	} app_impl;
 }

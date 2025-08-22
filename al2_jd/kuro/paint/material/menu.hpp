@@ -1,5 +1,13 @@
 ﻿#pragma once
 
+namespace apn::dark::kuro
+{
+	enum BARBACKGROUNDSTATES {
+		MB_HOT = 3,
+		MB_WARNING = 4,
+	};
+}
+
 namespace apn::dark::kuro::paint
 {
 	//
@@ -20,16 +28,28 @@ namespace apn::dark::kuro::paint
 				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
-			auto active = Pigment {
+			auto bar_active = Pigment {
 				{ style.get_COLORREF(Style::Color::Background), },
 				{ CLR_NONE },
 				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
-			auto inactive = Pigment {
+			auto bar_inactive = Pigment {
 				{ style.get_COLORREF(Style::Color::TitleHeader), },
 				{ CLR_NONE },
 				{ style.get_COLORREF(Style::Color::TextDisable), },
+			};
+
+			auto bar_hot = Pigment {
+				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
+				{ style.get_COLORREF(Style::Color::Border), 1, },
+				{ style.get_COLORREF(Style::Color::Text), },
+			};
+
+			auto bar_warning = Pigment {
+				{ RGB(0xCE, 0x3E, 0x2C), },
+				{ RGB(0xC4, 0x2B, 0x1C), 1, },
+				{ style.get_COLORREF(Style::Color::Text), },
 			};
 
 			auto border = Pigment {
@@ -87,8 +107,10 @@ namespace apn::dark::kuro::paint
 				{ style.get_COLORREF(Style::Color::TextDisable), },
 			};
 
-			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, active);
-			palette.set(MENU_BARBACKGROUND, MB_INACTIVE, inactive);
+			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, bar_active);
+			palette.set(MENU_BARBACKGROUND, MB_INACTIVE, bar_inactive);
+			palette.set(MENU_BARBACKGROUND, MB_HOT, bar_hot); // 独自に追加しています。
+			palette.set(MENU_BARBACKGROUND, MB_WARNING, bar_warning); // 独自に追加しています。
 
 			palette.set(MENU_BARITEM, MBI_NORMAL, item_normal);
 			palette.set(MENU_BARITEM, MBI_DISABLED, item_disabled);

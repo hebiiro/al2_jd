@@ -55,6 +55,7 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 			read_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
+			read_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 
 			return TRUE;
 		}
@@ -67,6 +68,7 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 			write_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
+			write_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 
 			return TRUE;
 		}
@@ -108,6 +110,7 @@ namespace apn::dark
 
 			read_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
 			read_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
+			read_bool(root, "etc.default_mouse_activate", hive.etc.default_mouse_activate);
 			read_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;
@@ -122,6 +125,7 @@ namespace apn::dark
 
 			write_bool(root, "etc.maximize_aviutl2", hive.etc.maximize_aviutl2);
 			write_bool(root, "etc.open_recent_project", hive.etc.open_recent_project);
+			write_bool(root, "etc.default_mouse_activate", hive.etc.default_mouse_activate);
 			write_window_pos(root, "config_dialog", config_dialog);
 
 			return TRUE;
