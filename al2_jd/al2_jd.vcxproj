@@ -182,6 +182,7 @@ copy /Y "$(SolutionDir)assets\$(TargetName).json" "$(aviutl2_dir)\data\Plugin\al
     <ClInclude Include="app.hpp" />
     <ClInclude Include="app_interface.hpp" />
     <ClInclude Include="assets_io.hpp" />
+    <ClInclude Include="aviutl2_window.hpp" />
     <ClInclude Include="config_dialog.hpp" />
     <ClInclude Include="config_io.hpp" />
     <ClInclude Include="kuro\custom_style.hpp" />

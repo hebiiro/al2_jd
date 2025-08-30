@@ -379,6 +379,7 @@
     <ClInclude Include="kuro\custom_style.hpp">
       <Filter>kuro</Filter>
     </ClInclude>
+    <ClInclude Include="aviutl2_window.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">

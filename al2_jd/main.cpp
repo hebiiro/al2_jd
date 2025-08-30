@@ -104,6 +104,7 @@
 #include "assets_io.hpp"
 #include "config_io.hpp"
 #include "test_dialog.hpp"
+#include "aviutl2_window.hpp"
 #include "app.hpp"
 
 namespace apn::dark

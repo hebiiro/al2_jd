@@ -23,29 +23,6 @@ namespace apn::dark
 		App() { app = this; }
 
 		//
-		// aviutl2ウィンドウを取得します。
-		//
-		BOOL get_aviutl2_window()
-		{
-			MY_TRACE_FUNC("");
-
-			return ::EnumThreadWindows(::GetCurrentThreadId(), [](HWND hwnd, LPARAM lParam)
-			{
-				auto class_name = my::get_class_name(hwnd);
-				MY_TRACE_STR(class_name);
-
-				if (class_name == L"aviutl2Manager")
-				{
-					hive.theme_window = hwnd;
-
-					return FALSE;
-				}
-
-				return TRUE;
-			}, 0);
-		}
-
-		//
 		// システムで使用可能なフォント(の名前)を取得します。
 		//
 		BOOL get_available_fonts()
@@ -204,13 +181,11 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			// aviutl2ウィンドウを取得します。
-			get_aviutl2_window();
-
 			// 使用可能なフォントのリストを取得します。
 			get_available_fonts();
 
 			// 各種開始処理を実行します。
+			aviutl2_window.init();
 			assets_io.init();
 			config_io.init();
 			kuro::hook::manager.init();
@@ -290,6 +265,7 @@ namespace apn::dark
 			kuro::hook::manager.exit();
 			config_io.exit();
 			assets_io.exit();
+			aviutl2_window.exit();
 
 			return TRUE;
 		}
@@ -484,21 +460,7 @@ namespace apn::dark
 		//
 		virtual BOOL apply_slim_menubar() override
 		{
-			// メニューバーとタイトルバーを一体化する場合は
-			if (hive.jd.slim_menubar)
-			{
-//				my::modify_style(hive.theme_window, WS_CAPTION, 0);
-//				my::modify_style(hive.theme_window, WS_DLGFRAME, 0);
-				my::modify_style(hive.theme_window, WS_BORDER, 0);
-			}
-			// メニューバーとタイトルバーを一体化しない場合は
-			else
-			{
-				my::modify_style(hive.theme_window, 0, WS_CAPTION);
-			}
-
-			return ::SetWindowPos(hive.theme_window, nullptr, 0, 0, 0, 0,
-				SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+			return aviutl2_window.apply_slim_menubar();
 		}
 	} app_impl;
 }
