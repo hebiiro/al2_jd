@@ -31,11 +31,26 @@ namespace apn::dark::kuro::gdi
 			if (brush_color == hive.orig.GetSysColor(COLOR_BTNFACE))
 //			if (brush_color == hive.orig.GetSysColor(COLOR_MENU))
 			{
-				my::gdi::unique_ptr<HBRUSH> brush(
-					::CreateSolidBrush(style.get_COLORREF(Style::Color::Footer)));
-				auto rc = RECT { left, top, right, bottom };
+				// ダイアログとして描画します。
+				const auto& palette = paint::dialog_material.palette;
 
-				return hive.orig.FillRect(dc, &rc, brush.get());
+				auto part_id = WP_DIALOG;
+				auto state_id = ETS_FOOTER;
+
+				if (auto pigment = palette.get(part_id, state_id))
+				{
+#if 1
+					// クライアント矩形を取得します。
+					auto rc = my::get_client_rect(current_state->hwnd);
+
+					// topの座標だけ使用して描画します。
+					rc.top = top;
+#else
+					// 引数の座標を使用して描画します。
+					auto rc = RECT { left, top, right, bottom };
+#endif
+					return paint::stylus.draw_rect(dc, &rc, pigment);
+				}
 			}
 
 			return hive.orig.Rectangle(dc, left, top, right, bottom);

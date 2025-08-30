@@ -120,107 +120,15 @@ namespace apn::dark::kuro::paint
 	}
 
 	//
-	// 軽量ボーダーを描画します。
-	//
-	inline void draw_single_border(HDC dc, LPCRECT rc)
-	{
-		frame_rect(dc, rc, style.get_COLORREF(Style::Color::Border), 1);
-	}
-
-	//
-	// 浮き上がり軽量エッジを描画します。
-	//
-	inline void draw_single_raised_edge(HDC dc, LPCRECT rc)
-	{
-		auto color1 = style.get_COLORREF(Style::Color::Border);
-		auto color2 = style.get_COLORREF(Style::Color::Border);
-//		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
-//		auto color2 = style.get_COLORREF(Style::Color::ButtonBodyHover);
-
-		draw_single_edge(dc, rc, color1, color2);
-	}
-
-	//
-	// 沈み込み軽量エッジを描画します。
-	//
-	inline void draw_single_sunken_edge(HDC dc, LPCRECT rc)
-	{
-		auto color1 = style.get_COLORREF(Style::Color::Border);
-		auto color2 = style.get_COLORREF(Style::Color::Border);
-//		auto color1 = style.get_COLORREF(Style::Color::ButtonBodyHover);
-//		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
-
-		draw_single_edge(dc, rc, color1, color2);
-	}
-
-	//
 	// エッジを描画します。
 	//
 	inline void draw_edge(HDC dc, LPCRECT rc,
-		COLORREF inner_near_color, COLORREF inner_far_color,
-		COLORREF outer_near_color, COLORREF outer_far_color)
+		COLORREF outer_near_color, COLORREF outer_far_color,
+		COLORREF inner_near_color, COLORREF inner_far_color)
 	{
 		auto rc_temp = *rc;
 		draw_single_edge(dc, &rc_temp, outer_near_color, outer_far_color);
 		::InflateRect(&rc_temp, -1, -1);
 		draw_single_edge(dc, &rc_temp, inner_near_color, inner_far_color);
-	}
-
-	//
-	// 浮き上がりエッジを描画します。
-	//
-	inline void draw_raised_edge(HDC dc, LPCRECT rc)
-	{
-#if 1
-		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
-		auto color2 = style.get_COLORREF(Style::Color::Border);
-
-		draw_edge(dc, rc, color1, color1, color2, color2);
-#else
-		auto color1 = style.get_COLORREF(Style::Color::ButtonBodyHover);
-		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
-
-		draw_edge(dc, rc, color1, color2, color1, color2);
-#endif
-	}
-
-	//
-	// 沈み込みエッジを描画します。
-	//
-	inline void draw_sunken_edge(HDC dc, LPCRECT rc)
-	{
-#if 1
-		auto color1 = style.get_COLORREF(Style::Color::Border);
-		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
-
-		draw_edge(dc, rc, color1, color1, color2, color2);
-#else
-		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
-		auto color2 = style.get_COLORREF(Style::Color::ButtonBodyHover);
-
-		draw_edge(dc, rc, color1, color2, color1, color2);
-#endif
-	}
-
-	//
-	// 凸エッジを描画します。
-	//
-	inline void draw_bump_edge(HDC dc, LPCRECT rc)
-	{
-		auto color1 = style.get_COLORREF(Style::Color::ButtonBody);
-		auto color2 = style.get_COLORREF(Style::Color::ButtonBodyHover);
-
-		draw_edge(dc, rc, color1, color2, color2, color1);
-	}
-
-	//
-	// 凹エッジを描画します。
-	//
-	inline void draw_etched_edge(HDC dc, LPCRECT rc)
-	{
-		auto color1 = style.get_COLORREF(Style::Color::ButtonBodyHover);
-		auto color2 = style.get_COLORREF(Style::Color::ButtonBody);
-
-		draw_edge(dc, rc, color1, color2, color2, color1);
 	}
 }

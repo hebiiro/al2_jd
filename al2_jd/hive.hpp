@@ -58,6 +58,11 @@ namespace apn::dark
 			std::wstring style_file_name;
 
 			//
+			// カスタムカラーのファイル名です。
+			//
+			std::wstring custom_color_file_name;
+
+			//
 			// TRUEの場合はコモンダイアログをダークモード化から除外します。
 			//
 			BOOL exclude_comdlg32 = FALSE;

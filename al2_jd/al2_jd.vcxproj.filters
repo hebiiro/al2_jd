@@ -193,9 +193,6 @@
     <ClInclude Include="kuro\paint\material\menu.hpp">
       <Filter>kuro\paint\material</Filter>
     </ClInclude>
-    <ClInclude Include="kuro\paint\material\itemsview.hpp">
-      <Filter>kuro\paint\material</Filter>
-    </ClInclude>
     <ClInclude Include="kuro\paint\material\listbox.hpp">
       <Filter>kuro\paint\material</Filter>
     </ClInclude>
@@ -377,6 +374,9 @@
       <Filter>kuro\gdi\renderer\rigaya</Filter>
     </ClInclude>
     <ClInclude Include="kuro\menubar.hpp">
+      <Filter>kuro</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\custom_style.hpp">
       <Filter>kuro</Filter>
     </ClInclude>
   </ItemGroup>

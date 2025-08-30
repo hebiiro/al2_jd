@@ -14,29 +14,25 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto ets_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto ets_normal = create_pigment(L"EditBox", L"Normal",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto ets_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto ets_disabled = create_pigment(L"EditBox", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto ets_selected = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto ets_selected = create_pigment(L"EditBox", L"Select",
+				Style::Color::ButtonBodySelect,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto ets_readonly = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto ets_readonly = create_pigment(L"EditBox", L"ReadOnly",
+				Style::Color::ButtonBody,
+				CLR_NONE,
+				Style::Color::Text);
 
 			palette.set(EP_EDITTEXT, ETS_NORMAL, ets_normal);
 			palette.set(EP_EDITTEXT, ETS_DISABLED, ets_disabled);

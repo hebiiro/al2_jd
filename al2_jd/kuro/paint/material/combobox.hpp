@@ -14,39 +14,35 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto border_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto border_normal = create_pigment(L"ComboBox", L"Normal",
+				Style::Color::ButtonBody,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto border_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto border_hot = create_pigment(L"ComboBox", L"Hot",
+				Style::Color::ButtonBodyHover,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto border_pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto border_pressed = create_pigment(L"ComboBox", L"Press",
+				Style::Color::ButtonBodyPress,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
-			auto border_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto border_disabled = create_pigment(L"ComboBox", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				Style::Color::Border,
+				Style::Color::TextDisable);
 
-			auto readonly_normal = border_normal;
-			auto readonly_disabled = border_disabled;
-			auto readonly_hot = border_hot;
-			auto readonly_pressed = border_pressed;
+			auto readonly_normal = create_pigment(L"ComboBoxReadOnly", L"Normal", border_normal);
+			auto readonly_disabled = create_pigment(L"ComboBoxReadOnly", L"Disable", border_disabled);
+			auto readonly_hot = create_pigment(L"ComboBoxReadOnly", L"Hot", border_hot);
+			auto readonly_pressed = create_pigment(L"ComboBoxReadOnly", L"Press", border_pressed);
 
-			auto drop_down_normal = border_normal;
-			auto drop_down_disabled = border_disabled;
-			auto drop_down_hot = border_hot;
-			auto drop_down_pressed = border_pressed;
+			auto drop_down_normal = create_pigment(L"ComboBoxDropDown", L"Normal", border_normal);
+			auto drop_down_disabled = create_pigment(L"ComboBoxDropDown", L"Disable", border_disabled);
+			auto drop_down_hot = create_pigment(L"ComboBoxDropDown", L"Hot", border_hot);
+			auto drop_down_pressed = create_pigment(L"ComboBoxDropDown", L"Press", border_pressed);
 
 			palette.set(CP_BORDER, CBXS_NORMAL, border_normal);
 			palette.set(CP_BORDER, CBXS_DISABLED, border_disabled);

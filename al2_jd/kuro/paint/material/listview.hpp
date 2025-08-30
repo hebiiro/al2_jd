@@ -14,16 +14,30 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto separator = Pigment {
-				{ style.get_COLORREF(Style::Color::Border), },
-				{ CLR_NONE, },
-				{ CLR_NONE, },
-			};
+			auto separator = create_pigment(L"ListView", L"Separator",
+				Style::Color::Border,
+				CLR_NONE,
+				CLR_NONE);
 
-			auto& item_normal = *editbox_material.palette.get(EP_EDITTEXT, ETS_NORMAL);
-			auto& item_disabled = *editbox_material.palette.get(EP_EDITTEXT, ETS_DISABLED);
-			auto& item_hot = *editbox_material.palette.get(EP_EDITTEXT, ETS_HOT);
-			auto& item_selected = *editbox_material.palette.get(EP_EDITTEXT, ETS_SELECTED);
+			auto item_normal = create_pigment(L"ListView", L"Normal",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
+
+			auto item_disabled = create_pigment(L"ListView", L"Disable",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::TextDisable);
+
+			auto item_hot = create_pigment(L"ListView", L"Hot",
+				Style::Color::ButtonBodyHover,
+				CLR_NONE,
+				Style::Color::Text);
+
+			auto item_selected = create_pigment(L"ListView", L"Select",
+				Style::Color::ButtonBodySelect,
+				CLR_NONE,
+				Style::Color::Text);
 
 			palette.set(LVP_LISTITEM, 0, separator);
 			palette.set(LVP_LISTITEM, LISS_NORMAL, item_normal);

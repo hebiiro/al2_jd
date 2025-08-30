@@ -14,38 +14,30 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-//			auto background_color = style.get_COLORREF(Style::Color::ButtonBody);
-			auto background_color = style.get_COLORREF(Style::Color::TitleHeader);
+			auto his_background = create_pigment(L"Header", L"Background",
+				Style::Color::TitleHeader,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto his_background = Pigment {
-				{ background_color, },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto his_normal = create_pigment(L"Header", L"Normal",
+				Style::Color::TitleHeader,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto his_normal = Pigment {
-				{ background_color, },
-				{ style.get_COLORREF(Style::Color::Border), 1 },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto his_disabled = create_pigment(L"Header", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				Style::Color::Border,
+				Style::Color::TextDisable);
 
-			auto his_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ style.get_COLORREF(Style::Color::Border), 1 },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto his_hot = create_pigment(L"Header", L"Hot",
+				Style::Color::ButtonBodyHover,
+				Style::Color::BorderFocus,
+				Style::Color::Text);
 
-			auto his_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1 },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
-
-			auto his_pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1 },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto his_pressed = create_pigment(L"Header", L"Press",
+				Style::Color::ButtonBodyPress,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
 			palette.set(0, 1, his_background);
 

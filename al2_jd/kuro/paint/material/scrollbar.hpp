@@ -14,47 +14,40 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto background = Pigment {
-				{ style.get_COLORREF(Style::Color::TitleHeader), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto background = create_pigment(L"ScrollBar", L"Background",
+				Style::Color::TitleHeader,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto button_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto size_box = create_pigment(L"ScrollBar", L"SizeBox",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::TextDisable);
 
-			auto button_hover = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto button_normal = create_pigment(L"ScrollBarButton", L"Normal",
+				Style::Color::ButtonBody,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto button_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto button_hover = create_pigment(L"ScrollBarButton", L"Hover",
+				Style::Color::ButtonBodyHover,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
-			auto button_pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto button_hot = create_pigment(L"ScrollBarButton", L"Hot",
+				Style::Color::ButtonBodySelect,
+				Style::Color::BorderFocus,
+				Style::Color::Text);
 
-			auto button_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto button_pressed = create_pigment(L"ScrollBarButton", L"Press",
+				Style::Color::ButtonBodyPress,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
-			auto size_box = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto button_disabled = create_pigment(L"ScrollBarButton", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				Style::Color::Border,
+				Style::Color::TextDisable);
 
 			auto thumb_normal = button_normal;
 			auto thumb_hover = button_hover;

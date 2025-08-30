@@ -14,47 +14,40 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto background = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ CLR_NONE, },
-			};
+			auto background = create_pigment(L"Tab", L"Background",
+				Style::Color::Background,
+				CLR_NONE,
+				CLR_NONE);
 
-			auto pane = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ CLR_NONE, },
-			};
+			auto pane = create_pigment(L"Tab", L"Pane",
+				Style::Color::Background,
+				Style::Color::Border,
+				CLR_NONE);
 
-			auto item_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto item_normal = create_pigment(L"TabItem", L"Normal",
+				Style::Color::ButtonBody,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto item_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto item_disabled = create_pigment(L"TabItem", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				Style::Color::Border,
+				Style::Color::TextDisable);
 
-			auto item_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto item_hot = create_pigment(L"TabItem", L"Hot",
+				Style::Color::ButtonBody,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
-			auto item_selected = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto item_selected = create_pigment(L"TabItem", L"Select",
+				Style::Color::ButtonBodySelect,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
-			auto item_focused = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto item_focused = create_pigment(L"TabItem", L"Focus",
+				Style::Color::ButtonBody,
+				Style::Color::BorderFocus,
+				Style::Color::Text);
 
 			palette.set(0, 0, background);
 			palette.set(TABP_PANE, 0, pane);

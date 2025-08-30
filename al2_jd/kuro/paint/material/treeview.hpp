@@ -14,16 +14,33 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto separator = Pigment {
-				{ style.get_COLORREF(Style::Color::Border), },
-				{ CLR_NONE, },
-				{ CLR_NONE, },
-			};
+			auto separator = create_pigment(L"TreeView", L"Separator",
+				Style::Color::Border,
+				CLR_NONE,
+				CLR_NONE);
 
-			auto& item_normal = *editbox_material.palette.get(EP_EDITTEXT, ETS_NORMAL);
-			auto& item_disabled = *editbox_material.palette.get(EP_EDITTEXT, ETS_DISABLED);
-			auto& item_hot = *editbox_material.palette.get(EP_EDITTEXT, ETS_HOT);
-			auto& item_selected = *editbox_material.palette.get(EP_EDITTEXT, ETS_SELECTED);
+			auto item_normal = create_pigment(L"TreeView", L"Normal",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
+
+			auto item_disabled = create_pigment(L"TreeView", L"Disable",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::TextDisable);
+
+			auto item_hot = create_pigment(L"TreeView", L"Hot",
+				Style::Color::ButtonBodyHover,
+				CLR_NONE,
+				Style::Color::Text);
+
+			auto item_selected = create_pigment(L"TreeView", L"Select",
+				Style::Color::ButtonBodySelect,
+				CLR_NONE,
+				Style::Color::Text);
+
+			auto glyph_normal = create_pigment(L"TreeViewGlyph", L"Normal", item_normal);
+			auto glyph_hot = create_pigment(L"TreeViewGlyph", L"Hot", item_hot);
 
 			palette.set(TVP_TREEITEM, 0, separator);
 			palette.set(TVP_TREEITEM, TREIS_NORMAL, item_normal);
@@ -33,10 +50,10 @@ namespace apn::dark::kuro::paint
 			palette.set(TVP_TREEITEM, TREIS_SELECTEDNOTFOCUS, item_selected);
 			palette.set(TVP_TREEITEM, TREIS_HOTSELECTED, item_selected);
 
-			palette.set(TVP_GLYPH, GLPS_CLOSED, item_normal);
-			palette.set(TVP_GLYPH, GLPS_OPENED, item_normal);
-			palette.set(TVP_HOTGLYPH, GLPS_CLOSED, item_hot);
-			palette.set(TVP_HOTGLYPH, GLPS_OPENED, item_hot);
+			palette.set(TVP_GLYPH, GLPS_CLOSED, glyph_normal);
+			palette.set(TVP_GLYPH, GLPS_OPENED, glyph_normal);
+			palette.set(TVP_HOTGLYPH, GLPS_CLOSED, glyph_hot);
+			palette.set(TVP_HOTGLYPH, GLPS_OPENED, glyph_hot);
 		}
 
 		//

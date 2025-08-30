@@ -22,90 +22,76 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto background = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto background = create_pigment(L"Menu", L"Background",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto bar_active = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto bar_active = create_pigment(L"Menu", L"Active",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto bar_inactive = Pigment {
-				{ style.get_COLORREF(Style::Color::TitleHeader), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto bar_inactive = create_pigment(L"Menu", L"Inactive",
+				Style::Color::TitleHeader,
+				CLR_NONE,
+				Style::Color::TextDisable);
 
-			auto bar_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto bar_hot = create_pigment(L"Menu", L"Hot",
+				Style::Color::ButtonBodySelect,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto bar_warning = Pigment {
-				{ RGB(0xCE, 0x3E, 0x2C), },
-				{ RGB(0xC4, 0x2B, 0x1C), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto bar_warning = create_pigment(L"Menu", L"Warning",
+				RGB(0xCE, 0x3E, 0x2C),
+				RGB(0xC4, 0x2B, 0x1C),
+				Style::Color::Text);
 
-			auto border = Pigment {
-				{ style.get_COLORREF(Style::Color::WindowBorder), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto border = create_pigment(L"Menu", L"Border",
+				Style::Color::WindowBorder,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto gutter = Pigment {
-				{ style.get_COLORREF(Style::Color::TitleHeader), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto gutter = create_pigment(L"Menu", L"Gutter",
+				Style::Color::TitleHeader,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto separator = Pigment {
-				{ style.get_COLORREF(Style::Color::TitleHeader), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto separator = create_pigment(L"Menu", L"Separator",
+				Style::Color::TitleHeader,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto item_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto item_normal = create_pigment(L"MenuItem", L"Normal",
+				 Style::Color::Background,
+				 CLR_NONE,
+				Style::Color::Text);
 
-			auto item_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto item_disabled = create_pigment(L"MenuItem", L"Disable",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::TextDisable);
 
-			auto item_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-//				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto item_hot = create_pigment(L"MenuItem", L"Hot",
+				Style::Color::ButtonBodySelect,
+//				Style::Color::BorderSelect,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto item_focus = Pigment {
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto item_focus = create_pigment(L"MenuItem", L"Focus",
+				CLR_NONE,
+				Style::Color::BorderFocus,
+				Style::Color::Text);
 
-			auto icon_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto icon_normal = create_pigment(L"MenuIcon", L"Normal",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto icon_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto icon_disabled = create_pigment(L"MenuIcon", L"Disable",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::TextDisable);
 
 			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, bar_active);
 			palette.set(MENU_BARBACKGROUND, MB_INACTIVE, bar_inactive);

@@ -54,6 +54,7 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
+//			read_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
 			read_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 			read_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 
@@ -67,6 +68,7 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
+//			write_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
 			write_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 			write_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 

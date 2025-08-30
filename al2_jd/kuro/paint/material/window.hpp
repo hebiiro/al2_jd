@@ -16,17 +16,15 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			active = {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ style.get_COLORREF(Style::Color::WindowBorder), 1 },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			active = create_pigment(L"Window", L"Active",
+				Style::Color::Background,
+				Style::Color::WindowBorder,
+				Style::Color::Text);
 
-			inactive = {
-				{ style.get_COLORREF(Style::Color::TitleHeader), },
-				{ style.get_COLORREF(Style::Color::TitleHeader), 1 },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			inactive = create_pigment(L"Window", L"Inactive",
+				Style::Color::TitleHeader,
+				Style::Color::TitleHeader,
+				Style::Color::TextDisable);
 		}
 
 		//

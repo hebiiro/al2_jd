@@ -14,75 +14,63 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto background = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto background = create_pigment(L"ToolBar", L"Background",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
 			struct {
-				Pigment normal = {
-					{ style.get_COLORREF(Style::Color::ButtonBody), },
-					{ style.get_COLORREF(Style::Color::Border), 1, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment normal = create_pigment(L"ToolBarButton", L"Normal",
+					Style::Color::ButtonBody,
+					Style::Color::Border,
+					Style::Color::Text);
 
-				Pigment disabled = {
-					{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-					{ style.get_COLORREF(Style::Color::Border), 1, },
-					{ style.get_COLORREF(Style::Color::TextDisable), },
-				};
+				Pigment disabled = create_pigment(L"ToolBarButton", L"Disable",
+					Style::Color::ButtonBodyDisable,
+					Style::Color::Border,
+					Style::Color::TextDisable);
 
-				Pigment hot = {
-					{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
-					{ style.get_COLORREF(Style::Color::Border), 1, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment hot = create_pigment(L"ToolBarButton", L"Hot",
+					Style::Color::ButtonBodyHover,
+					Style::Color::Border,
+					Style::Color::Text);
 
-				Pigment pressed = {
-					{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-					{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment pressed = create_pigment(L"ToolBarButton", L"Press",
+					Style::Color::ButtonBodyPress,
+					Style::Color::BorderSelect,
+					Style::Color::Text);
 
-				Pigment checked = {
-					{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-					{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment checked = create_pigment(L"ToolBarButton", L"Check",
+					Style::Color::ButtonBodySelect,
+					Style::Color::BorderFocus,
+					Style::Color::Text);
 			} button;
 
 			struct {
-				Pigment normal = {
-					{ style.get_COLORREF(Style::Color::Background), },
-					{ CLR_NONE, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment normal = create_pigment(L"ToolBarFlatButton", L"Normal",
+					Style::Color::Background,
+					CLR_NONE,
+					Style::Color::Text);
 
-				Pigment disabled = {
-					{ style.get_COLORREF(Style::Color::Background), },
-					{ CLR_NONE, },
-					{ style.get_COLORREF(Style::Color::TextDisable), },
-				};
+				Pigment disabled = create_pigment(L"ToolBarFlatButton", L"Disable",
+					Style::Color::Background,
+					CLR_NONE,
+					Style::Color::TextDisable);
 
-				Pigment hot = {
-					{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-	//				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-					{ style.get_COLORREF(Style::Color::Border), 1, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment hot = create_pigment(L"ToolBarFlatButton", L"Hot",
+					Style::Color::ButtonBodySelect,
+					Style::Color::Border,
+					Style::Color::Text);
 
-				Pigment pressed = {
-					{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-					{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment pressed = create_pigment(L"ToolBarFlatButton", L"Press",
+					Style::Color::ButtonBodyPress,
+					Style::Color::BorderSelect,
+					Style::Color::Text);
 
-				Pigment checked = {
-					{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-					{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-					{ style.get_COLORREF(Style::Color::Text), },
-				};
+				Pigment checked = create_pigment(L"ToolBarFlatButton", L"Check",
+					Style::Color::ButtonBodySelect,
+					Style::Color::BorderFocus,
+					Style::Color::Text);
 			} flat_button;
 
 			const auto set = [&](auto part_id, const auto& button)

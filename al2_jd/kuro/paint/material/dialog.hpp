@@ -1,5 +1,12 @@
 ﻿#pragma once
 
+namespace apn::dark::kuro
+{
+	enum EDITTEXTSTATES {
+		ETS_FOOTER = 100,
+	};
+}
+
 namespace apn::dark::kuro::paint
 {
 	//
@@ -14,38 +21,40 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto ets_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto normal = create_pigment(L"Dialog", L"Normal",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto ets_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto disabled = create_pigment(L"Dialog", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto ets_selected = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto selected = create_pigment(L"Dialog", L"Select",
+				Style::Color::ButtonBodySelect,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto ets_readonly = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ CLR_NONE },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto readonly = create_pigment(L"Dialog", L"ReadOnly",
+				Style::Color::ButtonBody,
+				CLR_NONE,
+				Style::Color::Text);
 
-			palette.set(WP_DIALOG, ETS_NORMAL, ets_normal);
-			palette.set(WP_DIALOG, ETS_DISABLED, ets_disabled);
-			palette.set(WP_DIALOG, ETS_SELECTED, ets_selected);
-			palette.set(WP_DIALOG, ETS_HOT, ets_selected);
-			palette.set(WP_DIALOG, ETS_FOCUSED, ets_selected);
-			palette.set(WP_DIALOG, ETS_READONLY, ets_readonly);
-			palette.set(WP_DIALOG, ETS_ASSIST, ets_disabled);
-			palette.set(WP_DIALOG, ETS_CUEBANNER, ets_disabled);
+			auto footer = create_pigment(L"Dialog", L"Footer",
+				Style::Color::Footer,
+				CLR_NONE,
+				CLR_NONE);
+
+			palette.set(WP_DIALOG, ETS_NORMAL, normal);
+			palette.set(WP_DIALOG, ETS_DISABLED, disabled);
+			palette.set(WP_DIALOG, ETS_SELECTED, selected);
+			palette.set(WP_DIALOG, ETS_HOT, selected);
+			palette.set(WP_DIALOG, ETS_FOCUSED, selected);
+			palette.set(WP_DIALOG, ETS_READONLY, readonly);
+			palette.set(WP_DIALOG, ETS_ASSIST, disabled);
+			palette.set(WP_DIALOG, ETS_CUEBANNER, disabled);
+			palette.set(WP_DIALOG, ETS_FOOTER, footer);
 		}
 
 		//

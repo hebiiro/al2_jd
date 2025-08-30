@@ -14,43 +14,32 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto track_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::WindowBorder), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto track_normal = create_pigment(L"TrackBar", L"Normal",
+				Style::Color::ButtonBody,
+				Style::Color::WindowBorder,
+				Style::Color::Text);
 
-			auto button_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto thumb_normal = create_pigment(L"TrackBarThumb", L"",
+				Style::Color::ButtonBody,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto button_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto thumb_disabled = create_pigment(L"TrackBarThumb", L"",
+				Style::Color::ButtonBodyDisable,
+				Style::Color::Border,
+				Style::Color::TextDisable);
 
-			auto button_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto thumb_hot = create_pigment(L"TrackBarThumb", L"",
+				Style::Color::ButtonBodySelect,
+				Style::Color::BorderFocus,
+				Style::Color::Text);
 
-			auto button_pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto thumb_pressed = create_pigment(L"TrackBarThumb", L"",
+				Style::Color::ButtonBodyPress,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
-			auto button_focused = button_pressed;
-
-			auto thumb_normal = button_normal;
-			auto thumb_disabled = button_disabled;
-			auto thumb_hot = button_hot;
-			auto thumb_pressed = button_pressed;
-			auto thumb_focused = button_focused;
+			auto thumb_focused = thumb_pressed;
 
 			palette.set(TKP_TRACK, TRS_NORMAL, track_normal);
 			palette.set(TKP_THUMB, TUS_NORMAL, thumb_normal);

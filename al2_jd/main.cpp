@@ -6,6 +6,7 @@
 #include "utils.hpp"
 #include "lockable.hpp"
 #include "kuro/style.hpp"
+#include "kuro/custom_style.hpp"
 #include "kuro/paint/utils.hpp"
 #include "kuro/paint/pigment.hpp"
 #include "kuro/paint/palette.hpp"

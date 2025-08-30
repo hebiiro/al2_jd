@@ -19,61 +19,53 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto push_button_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto push_button_normal = create_pigment(L"PushButton", L"Normal",
+				Style::Color::ButtonBody,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto push_button_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto push_button_hot = create_pigment(L"PushButton", L"Hot",
+				Style::Color::ButtonBodyHover,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto push_button_pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto push_button_pressed = create_pigment(L"PushButton", L"Press",
+				Style::Color::ButtonBodyPress,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
 
-			auto push_button_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyDisable), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto push_button_disabled = create_pigment(L"PushButton", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				Style::Color::Border,
+				Style::Color::TextDisable);
 
-			auto radio_button_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto radio_button_normal = create_pigment(L"RadioButton", L"Normal",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto radio_button_hot = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto radio_button_hot = create_pigment(L"RadioButton", L"Hot",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto radio_button_pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto radio_button_pressed = create_pigment(L"RadioButton", L"Press",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::Text);
 
-			auto radio_button_disabled = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::TextDisable), },
-			};
+			auto radio_button_disabled = create_pigment(L"RadioButton", L"Disable",
+				Style::Color::Background,
+				CLR_NONE,
+				Style::Color::TextDisable);
 
-			auto checkbox_normal = radio_button_normal;
-			auto checkbox_disabled = radio_button_disabled;
-			auto checkbox_hot = radio_button_hot;
-			auto checkbox_pressed = radio_button_pressed;
+			auto checkbox_normal = create_pigment(L"CheckBox", L"Normal", radio_button_normal);
+			auto checkbox_hot = create_pigment(L"CheckBox", L"Hot", radio_button_hot);
+			auto checkbox_pressed = create_pigment(L"CheckBox", L"Press", radio_button_pressed);
+			auto checkbox_disabled = create_pigment(L"CheckBox", L"Disable", radio_button_disabled);
 
-			auto groupbox_normal = radio_button_normal;
-			auto groupbox_disabled = radio_button_disabled;
+			auto groupbox_normal = create_pigment(L"GroupBox", L"Normal", radio_button_normal);
+			auto groupbox_disabled = create_pigment(L"GroupBox", L"Disable", radio_button_disabled);
 
 			palette.set(BP_PUSHBUTTON, PBS_NORMAL, push_button_normal);
 			palette.set(BP_PUSHBUTTON, PBS_DISABLED, push_button_disabled);

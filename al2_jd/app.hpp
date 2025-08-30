@@ -13,6 +13,11 @@ namespace apn::dark
 		std::unique_ptr<my::FileWatcherBase> style_file_watcher;
 
 		//
+		// カスタムカラーファイルを監視します。
+		//
+		std::unique_ptr<my::FileWatcherBase> custom_color_file_watcher;
+
+		//
 		// コンストラクタです。
 		//
 		App() { app = this; }
@@ -210,6 +215,7 @@ namespace apn::dark
 			config_io.init();
 			kuro::hook::manager.init();
 			kuro::style.init();
+			kuro::custom_style.init();
 			kuro::paint::manager.init();
 			kuro::gdi::manager.init(hive.theme_window);
 			kuro::theme::manager.init(hive.theme_window);
@@ -245,6 +251,9 @@ namespace apn::dark
 			// スタイルファイルの監視をリセットします。
 			reset_style_file_watcher();
 
+			// カスタムカラーファイルの監視をリセットします。
+			reset_custom_color_file_watcher();
+
 			{
 				// スリムメニューバーの設定をウィンドウに適用します。
 				apply_slim_menubar();
@@ -276,6 +285,7 @@ namespace apn::dark
 			kuro::theme::manager.exit();
 			kuro::gdi::manager.exit();
 			kuro::paint::manager.exit();
+			kuro::custom_style.exit();
 			kuro::style.exit();
 			kuro::hook::manager.exit();
 			config_io.exit();
@@ -390,7 +400,7 @@ namespace apn::dark
 		//
 		BOOL reload_style_file()
 		{
-			// スタイルファイルを読み込みします。
+			// スタイルファイルを読み込みます。
 			if (!kuro::style.read_file(hive.jd.style_file_name.c_str())) return FALSE;
 
 			// マテリアルをリロードします。
@@ -425,6 +435,48 @@ namespace apn::dark
 
 			// スタイルファイルを再読み込みします。
 			return reload_style_file();
+		}
+
+		//
+		// カスタムカラーファイルを再読み込みします。
+		//
+		BOOL reload_custom_color_file()
+		{
+			// カスタムカラーファイルを読み込みます。
+			if (!kuro::custom_style.read_custom_color_file(hive.jd.custom_color_file_name.c_str())) return FALSE;
+
+			// マテリアルをリロードします。
+			if (!kuro::paint::manager.reload()) return FALSE;
+
+			// すべてのウィンドウを再描画します。
+			return redraw();
+		}
+
+		//
+		// カスタムカラーファイルの監視をリセットします。
+		//
+		void reset_custom_color_file_watcher()
+		{
+			custom_color_file_watcher.reset(new my::FileWatcher(
+				hive.jd.custom_color_file_name.c_str(), config_dialog, [&]() { reload_custom_color_file(); }));
+		}
+
+		//
+		// カスタムカラーファイルのパスをセットします。
+		//
+		virtual BOOL set_custom_color_file_name(const std::wstring& custom_color_file_name) override
+		{
+			// カスタムカラーファイルのパスをセットします。
+			hive.jd.custom_color_file_name = custom_color_file_name;
+
+			// ダイアログコントロールを更新します。
+//			config_dialog.set_text(IDC_JD_CUSTOM_COLOR_FILE_NAME, hive.jd.custom_color_file_name);
+
+			// カスタムカラーファイルの監視をリセットします。
+			reset_custom_color_file_watcher();
+
+			// カスタムカラーファイルを再読み込みします。
+			return reload_custom_color_file();
 		}
 
 		//

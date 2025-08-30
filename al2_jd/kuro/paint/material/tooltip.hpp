@@ -14,11 +14,10 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto ttss_normal = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto ttss_normal = create_pigment(L"ToolTip", L"Normal",
+				Style::Color::Background,
+				Style::Color::Border,
+				Style::Color::Text);
 
 			palette.set(TTP_STANDARD, 0, ttss_normal);
 			palette.set(TTP_STANDARD, TTSS_NORMAL, ttss_normal);
