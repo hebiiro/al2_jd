@@ -27,14 +27,14 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		HWND audio_rate_preset = {}; // "音声レートプリセット"のコンボボックスです。
 
 		BOOL is_scene = {}; // シーンを作成する場合はTRUEになります。
-		BOOL no_recent = {}; // 設定値を復元しない場合はTRUEになります。
+		BOOL use_recent = {}; // 最後に入力した設定値を使用する場合はTRUEになります。
 
 		//
 		// コンストラクタです。
 		//
-		DialogRenderer(BOOL is_scene, BOOL no_recent)
+		DialogRenderer(BOOL is_scene, BOOL use_recent)
 			: is_scene(is_scene)
-			, no_recent(no_recent)
+			, use_recent(use_recent && hive.etc.use_recent_setting)
 		{
 		}
 
@@ -320,16 +320,17 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		}
 
 		//
-		// 最近使った設定を保存します。
+		// 最後に入力した設定値を保存します。
 		//
 		BOOL load_recent_setting(HWND hwnd)
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
 
-			if (no_recent) return FALSE;
+			// 最後に入力した設定値を使用しない場合は何もしません。
+			if (!use_recent) return FALSE;
 
 			//
-			// この関数は最近使った設定をコントロールに適用します。
+			// この関数は最後に入力した設定値をコントロールに適用します。
 			//
 			const auto load_recent = [&](const std::wstring& setting, size_t control_index) {
 				if (setting.length())
@@ -359,8 +360,8 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 				}
 				();
 
-				// カスタムシーンの場合は最近使った設定を使用しないようにします。
-				if (is_custom_scene) return no_recent = TRUE, FALSE;
+				// カスタムシーンの場合は最後に入力した設定値を使用しないようにします。
+				if (is_custom_scene) return use_recent = FALSE, FALSE;
 
 //				load_recent(hive.new_scene.recent.name, c_name);
 				load_recent(hive.new_scene.recent.video_width, c_video_width);
@@ -380,16 +381,17 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		}
 
 		//
-		// 最近使った設定を保存します。
+		// 最後に入力した設定値を保存します。
 		//
 		BOOL save_recent_setting(HWND hwnd)
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
 
-			if (no_recent) return FALSE;
+			// 最後に入力した設定値を使用しない場合は何もしません。
+			if (!use_recent) return FALSE;
 
 			//
-			// この関数は最近使った設定をコントロールから取得します。
+			// この関数は最後に入力した設定値をコントロールから取得します。
 			//
 			const auto save_recent = [&](std::wstring& setting, size_t control_index) {
 				setting = my::get_window_text(controls[control_index]);

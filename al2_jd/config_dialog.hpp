@@ -71,6 +71,7 @@ namespace apn::dark
 			set_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
 			set_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
 			set_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
+			set_check(IDC_ETC_USE_RECENT_SETTING, hive.etc.use_recent_setting);
 
 			set_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			set_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
@@ -104,6 +105,7 @@ namespace apn::dark
 			get_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
 			get_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
 			get_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
+			get_check(IDC_ETC_USE_RECENT_SETTING, hive.etc.use_recent_setting);
 
 			get_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			get_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
@@ -184,6 +186,7 @@ namespace apn::dark
 					case IDC_ETC_MAXIMIZE_AVIUTL2:
 					case IDC_ETC_OPEN_RECENT_PROJECT:
 					case IDC_ETC_DEFAULT_MOUSE_ACTIVATE:
+					case IDC_ETC_USE_RECENT_SETTING:
 						{
 							from_ui(FALSE);
 

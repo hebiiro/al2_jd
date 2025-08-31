@@ -113,6 +113,11 @@ namespace apn::dark
 			// TRUEの場合は通常のマウスアクティブ化処理を実行します。
 			//
 			BOOL default_mouse_activate = TRUE;
+
+			//
+			// TRUEの場合は最後に入力した設定を使用します。
+			//
+			BOOL use_recent_setting = TRUE;
 		} etc;
 
 		//

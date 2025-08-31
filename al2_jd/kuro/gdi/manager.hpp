@@ -22,10 +22,10 @@ namespace apn::dark::kuro::gdi
 					return std::make_shared<aviutl2::new_project::DialogRenderer>(FALSE, FALSE);
 
 				if (text == L"シーンを作成")
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, FALSE);
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, TRUE);
 
 				if (text == L"シーンの設定")
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, TRUE);
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, FALSE);
 
 				if (text == L"レイヤー名を変更")
 					return std::make_shared<aviutl2::layer_name::DialogRenderer>();
