@@ -68,8 +68,6 @@ namespace apn::dark
 			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
 			set_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
-			set_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
-			set_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
 			set_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
 			set_check(IDC_ETC_USE_RECENT_SETTING, hive.etc.use_recent_setting);
 
@@ -102,8 +100,6 @@ namespace apn::dark
 			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
 			get_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
-			get_check(IDC_ETC_MAXIMIZE_AVIUTL2, hive.etc.maximize_aviutl2);
-			get_check(IDC_ETC_OPEN_RECENT_PROJECT, hive.etc.open_recent_project);
 			get_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
 			get_check(IDC_ETC_USE_RECENT_SETTING, hive.etc.use_recent_setting);
 
@@ -183,8 +179,6 @@ namespace apn::dark
 
 							break;
 						}
-					case IDC_ETC_MAXIMIZE_AVIUTL2:
-					case IDC_ETC_OPEN_RECENT_PROJECT:
 					case IDC_ETC_DEFAULT_MOUSE_ACTIVATE:
 					case IDC_ETC_USE_RECENT_SETTING:
 						{
