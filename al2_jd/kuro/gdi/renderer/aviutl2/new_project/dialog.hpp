@@ -26,8 +26,8 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		HWND video_rate_preset = {}; // "映像レートプリセット"のコンボボックスです。
 		HWND audio_rate_preset = {}; // "音声レートプリセット"のコンボボックスです。
 
-		BOOL is_scene = {};
-		BOOL no_recent = {};
+		BOOL is_scene = {}; // シーンを作成する場合はTRUEになります。
+		BOOL no_recent = {}; // 設定値を復元しない場合はTRUEになります。
 
 		//
 		// コンストラクタです。
@@ -338,6 +338,30 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 			if (is_scene)
 			{
+				// カスタムシーンかどうかのフラグを取得します。
+				auto is_custom_scene = [&]()
+				{
+					// シーン名を取得します。
+					auto name = my::get_window_text(controls[c_name]);
+
+					// シーン名がデフォルトの場合はカスタムシーンではありません。
+					std::wregex re(LR"***(^Scene\d+$)***");
+					if (std::regex_match(name, re)) return FALSE;
+
+					// 映像レートを取得します。
+					auto video_rate = my::get_window_text(controls[c_video_rate]);
+
+					// 映像レートがデフォルトの場合はカスタムシーンではありません。
+					if (name == L"30") return FALSE;
+
+					// それ以外の場合はカスタムシーンです。
+					return TRUE;
+				}
+				();
+
+				// カスタムシーンの場合は最近使った設定を使用しないようにします。
+				if (is_custom_scene) return no_recent = TRUE, FALSE;
+
 //				load_recent(hive.new_scene.recent.name, c_name);
 				load_recent(hive.new_scene.recent.video_width, c_video_width);
 				load_recent(hive.new_scene.recent.video_height, c_video_height);
