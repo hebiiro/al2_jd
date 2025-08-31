@@ -51,6 +51,27 @@ namespace apn::dark
 		}
 
 		//
+		// コンフィグをaviutl2ウィンドウに適用します。
+		//
+		BOOL apply_config()
+		{
+			MY_TRACE_FUNC("");
+
+			// aviutl2ウィンドウを最前面にします。
+			::SetForegroundWindow(hive.theme_window);
+
+			// aviutl2ウィンドウを最大化します。
+			if (hive.etc.maximize_aviutl2)
+				::ShowWindow(hive.theme_window, SW_MAXIMIZE);
+
+			// 最近使ったプロジェクトを開きます。
+			if (hive.etc.open_recent_project)
+				::PostMessage(hive.theme_window, WM_COMMAND, 0x9C42, 0);
+
+			return TRUE;
+		}
+
+		//
 		// スリムメニューバーの設定をaviutl2ウィンドウに適用します。
 		//
 		BOOL apply_slim_menubar()

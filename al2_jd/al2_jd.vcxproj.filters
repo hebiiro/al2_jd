@@ -380,6 +380,7 @@
       <Filter>kuro</Filter>
     </ClInclude>
     <ClInclude Include="aviutl2_window.hpp" />
+    <ClInclude Include="available_fonts.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">
