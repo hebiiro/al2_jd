@@ -48,6 +48,37 @@ namespace apn::dark
 		ULONG comdlg32_visible_count = {};
 
 		//
+		// このクラスはダイアログ名(正規表現パターン)です。
+		//
+		struct DialogName
+		{
+			//
+			// 「プロジェクトを新規作成」のダイアログ名です。
+			//
+			std::wstring new_project = L"プロジェクトを新規作成|New Project";
+
+			//
+			// 「シーンを作成」のダイアログ名です。
+			//
+			std::wstring new_scene = L"シーンを作成|New Scene";
+
+			//
+			// 「シーンの設定」のダイアログ名です。
+			//
+			std::wstring set_scene = L"シーンの設定|Scene Settings";
+
+			//
+			// 「レイヤー名を変更」のダイアログ名です。
+			//
+			std::wstring set_layer_name = L"レイヤー名を変更|Rename Layer";
+
+			//
+			// 「フォントメニューの設定」のダイアログ名です。
+			//
+			std::wstring set_font_menu = L"フォントメニュー|Font Menu";
+		} dialog_name;
+
+		//
 		// このクラスはダークモード化の設定です。
 		//
 		struct JD
@@ -144,11 +175,6 @@ namespace apn::dark
 			// TRUEの場合はリストビューでフォントを使用して描画します。
 			//
 			BOOL use_on_listview = TRUE;
-
-			//
-			// 「フォントメニューの設定」ダイアログの名前です。
-			//
-			std::wstring setting_dialog_name = L"フォントメニューの設定";
 		} fonts;
 
 		//

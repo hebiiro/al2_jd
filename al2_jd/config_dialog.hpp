@@ -78,7 +78,12 @@ namespace apn::dark
 			set_check(IDC_FONTS_USE_ON_MENU, hive.fonts.use_on_menu);
 			set_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
 			set_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
-			set_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
+
+			set_text(IDC_DIALOG_NAME_NEW_PROJECT, hive.dialog_name.new_project);
+			set_text(IDC_DIALOG_NAME_NEW_SCENE, hive.dialog_name.new_scene);
+			set_text(IDC_DIALOG_NAME_SET_SCENE, hive.dialog_name.set_scene);
+			set_text(IDC_DIALOG_NAME_SET_LAYER_NAME, hive.dialog_name.set_layer_name);
+			set_text(IDC_DIALOG_NAME_SET_FONT_MENU, hive.dialog_name.set_font_menu);
 
 			return TRUE;
 		}
@@ -109,7 +114,12 @@ namespace apn::dark
 			get_check(IDC_FONTS_USE_ON_MENU, hive.fonts.use_on_menu);
 			get_check(IDC_FONTS_USE_ON_LISTBOX, hive.fonts.use_on_listbox);
 			get_check(IDC_FONTS_USE_ON_LISTVIEW, hive.fonts.use_on_listview);
-			get_text(IDC_FONTS_SETTING_DIALOG_NAME, hive.fonts.setting_dialog_name);
+
+			get_text(IDC_DIALOG_NAME_NEW_PROJECT, hive.dialog_name.new_project);
+			get_text(IDC_DIALOG_NAME_NEW_SCENE, hive.dialog_name.new_scene);
+			get_text(IDC_DIALOG_NAME_SET_SCENE, hive.dialog_name.set_scene);
+			get_text(IDC_DIALOG_NAME_SET_LAYER_NAME, hive.dialog_name.set_layer_name);
+			get_text(IDC_DIALOG_NAME_SET_FONT_MENU, hive.dialog_name.set_font_menu);
 
 			if (redraw) app->redraw();
 
@@ -188,7 +198,11 @@ namespace apn::dark
 					case IDC_FONTS_ITEM_HEIGHT:
 					case IDC_FONTS_FONT_HEIGHT:
 					case IDC_FONTS_SAMPLE_TEXT_FORMAT:
-					case IDC_FONTS_SETTING_DIALOG_NAME:
+					case IDC_DIALOG_NAME_NEW_PROJECT:
+					case IDC_DIALOG_NAME_NEW_SCENE:
+					case IDC_DIALOG_NAME_SET_SCENE:
+					case IDC_DIALOG_NAME_SET_LAYER_NAME:
+					case IDC_DIALOG_NAME_SET_FONT_MENU:
 						{
 							if (code == EN_UPDATE)
 								from_ui(FALSE);

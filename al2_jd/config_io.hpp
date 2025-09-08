@@ -144,7 +144,7 @@ namespace apn::dark
 			read_bool(root, "fonts.use_on_menu", hive.fonts.use_on_menu);
 			read_bool(root, "fonts.use_on_listbox", hive.fonts.use_on_listbox);
 			read_bool(root, "fonts.use_on_listview", hive.fonts.use_on_listview);
-			read_string(root, "fonts.setting_dialog_name", hive.fonts.setting_dialog_name);
+			read_string(root, "dialog_name.set_font_menu", hive.dialog_name.set_font_menu);
 
 			return TRUE;
 		}
@@ -164,7 +164,38 @@ namespace apn::dark
 			write_bool(root, "fonts.use_on_menu", hive.fonts.use_on_menu);
 			write_bool(root, "fonts.use_on_listbox", hive.fonts.use_on_listbox);
 			write_bool(root, "fonts.use_on_listview", hive.fonts.use_on_listview);
-			write_string(root, "fonts.setting_dialog_name", hive.fonts.setting_dialog_name);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからダイアログ名の設定を読み込みます。
+		//
+		BOOL read_dialog_name(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_string(root, "dialog_name.new_project", hive.dialog_name.new_project);
+			read_string(root, "dialog_name.new_scene", hive.dialog_name.new_scene);
+			read_string(root, "dialog_name.set_scene", hive.dialog_name.set_scene);
+			read_string(root, "dialog_name.set_layer_name", hive.dialog_name.set_layer_name);
+			read_string(root, "dialog_name.set_font_menu", hive.dialog_name.set_font_menu);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにダイアログ名の設定を書き込みます。
+		//
+		BOOL write_dialog_name(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_string(root, "dialog_name.new_project", hive.dialog_name.new_project);
+			write_string(root, "dialog_name.new_scene", hive.dialog_name.new_scene);
+			write_string(root, "dialog_name.set_scene", hive.dialog_name.set_scene);
+			write_string(root, "dialog_name.set_layer_name", hive.dialog_name.set_layer_name);
+			write_string(root, "dialog_name.set_font_menu", hive.dialog_name.set_font_menu);
 
 			return TRUE;
 		}
@@ -180,6 +211,7 @@ namespace apn::dark
 			read_scrollbar(root);
 			read_etc(root);
 			read_fonts(root);
+			read_dialog_name(root);
 
 			return TRUE;
 		}
@@ -195,6 +227,7 @@ namespace apn::dark
 			write_scrollbar(root);
 			write_etc(root);
 			write_fonts(root);
+			write_dialog_name(root);
 
 			return TRUE;
 		}

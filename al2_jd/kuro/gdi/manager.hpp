@@ -13,21 +13,31 @@ namespace apn::dark::kuro::gdi
 		std::shared_ptr<Renderer> find_renderer(
 			HWND hwnd, const Renderer::NormalizedClassName& class_name)
 		{
+			//
+			// この関数は指定された文字列が指定された正規表現パターンにマッチする場合はTRUEを返します。
+			//
+			const auto match = [](const std::wstring& text, const std::wstring& pattern) -> BOOL
+			{
+				if (pattern.empty()) return FALSE;
+
+				return std::regex_search(text, std::wregex(pattern));
+			};
+
 //			if (class_name == L"#32768") return std::make_shared<MenuRenderer>();
 			if (class_name == L"#32770")
 			{
 				auto text = my::get_window_text(hwnd);
 
-				if (text == L"プロジェクトを新規作成")
+				if (match(text, hive.dialog_name.new_project))
 					return std::make_shared<aviutl2::new_project::DialogRenderer>(FALSE);
 
-				if (text == L"シーンを作成")
+				if (match(text, hive.dialog_name.new_scene))
 					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE);
 
-				if (text == L"シーンの設定")
+				if (match(text, hive.dialog_name.set_scene))
 					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE);
 
-				if (text == L"レイヤー名を変更")
+				if (match(text, hive.dialog_name.set_layer_name))
 					return std::make_shared<aviutl2::layer_name::DialogRenderer>();
 
 				auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
@@ -72,7 +82,7 @@ namespace apn::dark::kuro::gdi
 					MY_TRACE_HWND(parent);
 
 					// 親ウィンドウが「フォントメニューの設定」ダイアログの場合は
-					if (my::get_window_text(parent) == hive.fonts.setting_dialog_name)
+					if (match(my::get_window_text(parent), hive.dialog_name.set_font_menu))
 						return std::make_shared<aviutl2::font_setting::ListViewRenderer>();
 				}
 
