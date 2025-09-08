@@ -240,36 +240,45 @@ namespace apn::dark::kuro::theme
 				// 背景を塗りつぶさないようにします。
 				auto opaque = FALSE;
 
-				// ポップアップメニュー項目を
-				// フォントを使用して描画する場合は
-				if (part_id == MENU_POPUPITEM && hive.fonts.use_on_menu && text && rc)
+				switch (part_id)
 				{
-					// メニュー項目名をフォント名とみなします。
-					auto font_name = std::wstring(text, (size_t)c);
-
-					// フォントが使用可能な場合は
-					if (hive.available_fonts.contains(font_name))
+				case MENU_POPUPITEM:
+				case MENU_POPUPITEMFOCUSABLE:
 					{
-						auto font_height = my::get_height(*rc);
+						// ポップアップメニュー項目を
+						// フォントを使用して描画する場合は
+						if (hive.fonts.use_on_menu && text && rc)
+						{
+							// メニュー項目名をフォント名とみなします。
+							auto font_name = std::wstring(text, (size_t)c);
 
-						my::gdi::unique_ptr<HFONT> font(::CreateFontW(
-							font_height, 0, 0, 0, 0, FALSE, FALSE, FALSE,
-							DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-							DEFAULT_QUALITY, DEFAULT_PITCH, font_name.c_str()));
-						my::gdi::selector font_selector(dc, font.get());
+							// フォントが使用可能な場合は
+							if (hive.available_fonts.contains(font_name))
+							{
+								auto font_height = my::get_height(*rc);
 
-						// メニューの幅は変更できないのでフォント名をそのまま描画します。
-						auto preview_text = font_name;
-//						auto preview_text = my::replace(
-//							hive.fonts.sample_text_format, L"%font%", font_name);
+								my::gdi::unique_ptr<HFONT> font(::CreateFontW(
+									font_height, 0, 0, 0, 0, FALSE, FALSE, FALSE,
+									DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+									DEFAULT_QUALITY, DEFAULT_PITCH, font_name.c_str()));
+								my::gdi::selector font_selector(dc, font.get());
 
-						// 右端まで描画できるように矩形を調整します。
-						auto rc2 = *rc;
-//						rc2.left = popup_item_rect.left;
-						rc2.right = popup_item_rect.right;
+								// メニューの幅は変更できないのでフォント名をそのまま描画します。
+								auto preview_text = font_name;
+//								auto preview_text = my::replace(
+//									hive.fonts.sample_text_format, L"%font%", font_name);
 
-						if (draw_text(dc, &rc2, preview_text.c_str(), -1, text_flags, palette, part_id, state_id, opaque))
-							return S_OK;
+								// 右端まで描画できるように矩形を調整します。
+								auto rc2 = *rc;
+//								rc2.left = popup_item_rect.left;
+								rc2.right = popup_item_rect.right;
+
+								if (draw_text(dc, &rc2, preview_text.c_str(), -1, text_flags, palette, part_id, state_id, opaque))
+									return S_OK;
+							}
+
+							break;
+						}
 					}
 				}
 
