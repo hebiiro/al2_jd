@@ -27,14 +27,12 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		HWND audio_rate_preset = {}; // "音声レートプリセット"のコンボボックスです。
 
 		BOOL is_scene = {}; // シーンを作成する場合はTRUEになります。
-		BOOL use_recent = {}; // 最後に入力した設定値を使用する場合はTRUEになります。
 
 		//
 		// コンストラクタです。
 		//
-		DialogRenderer(BOOL is_scene, BOOL use_recent)
+		DialogRenderer(BOOL is_scene)
 			: is_scene(is_scene)
-			, use_recent(use_recent && hive.etc.use_recent_setting)
 		{
 		}
 
@@ -320,103 +318,6 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		}
 
 		//
-		// 最後に入力した設定値を保存します。
-		//
-		BOOL load_recent_setting(HWND hwnd)
-		{
-			MY_TRACE_FUNC("{/hex}", hwnd);
-
-			// 最後に入力した設定値を使用しない場合は何もしません。
-			if (!use_recent) return FALSE;
-
-			//
-			// この関数は最後に入力した設定値をコントロールに適用します。
-			//
-			const auto load_recent = [&](const std::wstring& setting, size_t control_index) {
-				if (setting.length())
-					::SetWindowText(controls[control_index], setting.c_str());
-			};
-
-			if (is_scene)
-			{
-				// カスタムシーンかどうかのフラグを取得します。
-				auto is_custom_scene = [&]()
-				{
-					// シーン名を取得します。
-					auto name = my::get_window_text(controls[c_name]);
-
-					// シーン名がデフォルトの場合はカスタムシーンではありません。
-					std::wregex re(LR"***(^Scene\d+$)***");
-					if (std::regex_match(name, re)) return FALSE;
-
-					// 映像レートを取得します。
-					auto video_rate = my::get_window_text(controls[c_video_rate]);
-
-					// 映像レートがデフォルトの場合はカスタムシーンではありません。
-					if (name == L"30") return FALSE;
-
-					// それ以外の場合はカスタムシーンです。
-					return TRUE;
-				}
-				();
-
-				// カスタムシーンの場合は最後に入力した設定値を使用しないようにします。
-				if (is_custom_scene) return use_recent = FALSE, FALSE;
-
-//				load_recent(hive.new_scene.recent.name, c_name);
-				load_recent(hive.new_scene.recent.video_width, c_video_width);
-				load_recent(hive.new_scene.recent.video_height, c_video_height);
-				load_recent(hive.new_scene.recent.video_rate, c_video_rate);
-				load_recent(hive.new_scene.recent.audio_rate, c_audio_rate);
-			}
-			else
-			{
-				load_recent(hive.new_project.recent.video_width, c_video_width);
-				load_recent(hive.new_project.recent.video_height, c_video_height);
-				load_recent(hive.new_project.recent.video_rate, c_video_rate);
-				load_recent(hive.new_project.recent.audio_rate, c_audio_rate);
-			}
-
-			return TRUE;
-		}
-
-		//
-		// 最後に入力した設定値を保存します。
-		//
-		BOOL save_recent_setting(HWND hwnd)
-		{
-			MY_TRACE_FUNC("{/hex}", hwnd);
-
-			// 最後に入力した設定値を使用しない場合は何もしません。
-			if (!use_recent) return FALSE;
-
-			//
-			// この関数は最後に入力した設定値をコントロールから取得します。
-			//
-			const auto save_recent = [&](std::wstring& setting, size_t control_index) {
-				setting = my::get_window_text(controls[control_index]);
-			};
-
-			if (is_scene)
-			{
-//				save_recent(hive.new_scene.recent.name, c_name);
-				save_recent(hive.new_scene.recent.video_width, c_video_width);
-				save_recent(hive.new_scene.recent.video_height, c_video_height);
-				save_recent(hive.new_scene.recent.video_rate, c_video_rate);
-				save_recent(hive.new_scene.recent.audio_rate, c_audio_rate);
-			}
-			else
-			{
-				save_recent(hive.new_project.recent.video_width, c_video_width);
-				save_recent(hive.new_project.recent.video_height, c_video_height);
-				save_recent(hive.new_project.recent.video_rate, c_video_rate);
-				save_recent(hive.new_project.recent.audio_rate, c_audio_rate);
-			}
-
-			return TRUE;
-		}
-
-		//
 		// ウィンドウメッセージを処理します。
 		//
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
@@ -434,7 +335,6 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					Locker locker(this);
 
 					init_controls(hwnd);
-					load_recent_setting(hwnd);
 					change_layout(hwnd);
 
 					return result;
@@ -468,11 +368,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					// コントロールが無効の場合は何もしません。
 					if (!control) break;
 
-					if (control == controls[c_ok])
-					{
-						save_recent_setting(hwnd);
-					}
-					else if (control == preset)
+					if (control == preset)
 					{
 						if (code != CBN_SELCHANGE) break;
 

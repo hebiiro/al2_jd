@@ -103,11 +103,6 @@ namespace apn::dark
 			// TRUEの場合は通常のマウスアクティブ化処理を実行します。
 			//
 			BOOL default_mouse_activate = TRUE;
-
-			//
-			// TRUEの場合は最後に入力した設定を使用します。
-			//
-			BOOL use_recent_setting = TRUE;
 		} etc;
 
 		//
@@ -155,39 +150,6 @@ namespace apn::dark
 			//
 			std::wstring setting_dialog_name = L"フォントメニューの設定";
 		} fonts;
-
-		//
-		// このクラスはプロジェクトを作成するときの設定です。
-		//
-		struct NewProject
-		{
-			//
-			// 最近使った設定値です。
-			//
-			struct Recent {
-				std::wstring video_width;
-				std::wstring video_height;
-				std::wstring video_rate;
-				std::wstring audio_rate;
-			} recent;
-		} new_project;
-
-		//
-		// このクラスはシーンを作成するときの設定です。
-		//
-		struct NewScene
-		{
-			//
-			// 最近使った設定値です。
-			//
-			struct Recent {
-				std::wstring name;
-				std::wstring video_width;
-				std::wstring video_height;
-				std::wstring video_rate;
-				std::wstring audio_rate;
-			} recent;
-		} new_scene;
 
 		//
 		// このクラスはプリセットの設定です。

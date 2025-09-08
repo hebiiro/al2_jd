@@ -69,7 +69,6 @@ namespace apn::dark
 			set_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
 			set_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
-			set_check(IDC_ETC_USE_RECENT_SETTING, hive.etc.use_recent_setting);
 
 			set_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			set_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
@@ -101,7 +100,6 @@ namespace apn::dark
 			get_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
 
 			get_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
-			get_check(IDC_ETC_USE_RECENT_SETTING, hive.etc.use_recent_setting);
 
 			get_text(IDC_FONTS_SAMPLE_TEXT_FORMAT, hive.fonts.sample_text_format);
 			get_int(IDC_FONTS_ITEM_HEIGHT, hive.fonts.item_height);
@@ -180,7 +178,6 @@ namespace apn::dark
 							break;
 						}
 					case IDC_ETC_DEFAULT_MOUSE_ACTIVATE:
-					case IDC_ETC_USE_RECENT_SETTING:
 						{
 							from_ui(FALSE);
 

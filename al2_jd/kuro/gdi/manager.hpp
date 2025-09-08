@@ -19,13 +19,13 @@ namespace apn::dark::kuro::gdi
 				auto text = my::get_window_text(hwnd);
 
 				if (text == L"プロジェクトを新規作成")
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(FALSE, FALSE);
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(FALSE);
 
 				if (text == L"シーンを作成")
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, TRUE);
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE);
 
 				if (text == L"シーンの設定")
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE, FALSE);
+					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE);
 
 				if (text == L"レイヤー名を変更")
 					return std::make_shared<aviutl2::layer_name::DialogRenderer>();
