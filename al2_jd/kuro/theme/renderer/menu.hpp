@@ -214,8 +214,21 @@ namespace apn::dark::kuro::theme
 					}
 				default:
 					{
-						if (draw_rect(dc, rc, palette, part_id, state_id))
-							return S_OK;
+						// クリップ矩形が有効の場合は
+						if (rc_clip && !::IsRectEmpty(rc_clip))
+						{
+							// クリップ矩形を使用します。
+							Clipper clipper(dc, rc_clip);
+
+							if (draw_rect(dc, rc, palette, part_id, state_id))
+								return S_OK;
+						}
+						// クリップ矩形が無効の場合は
+						else
+						{
+							if (draw_rect(dc, rc, palette, part_id, state_id))
+								return S_OK;
+						}
 					}
 				}
 			}
