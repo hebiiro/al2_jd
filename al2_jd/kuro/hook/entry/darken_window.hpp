@@ -135,9 +135,8 @@ namespace apn::dark::kuro::hook
 		{
 			MY_TRACE_FUNC("");
 
-			auto root_path = my::get_module_file_name(nullptr).parent_path();
-			auto plugins_path = root_path / L"plugins";
-			auto darken_window_path = plugins_path / L"DarkenWindow";
+			auto plugin_path = my::get_module_file_name(hive.instance).parent_path();
+			auto darken_window_path = plugin_path / L"DarkenWindow";
 			auto darken_window_settings_stem = L"DarkenWindowSettings.xml";
 			auto darken_window_settings_path = darken_window_path / darken_window_settings_stem;
 			auto skin_name = L"dummy"s;
