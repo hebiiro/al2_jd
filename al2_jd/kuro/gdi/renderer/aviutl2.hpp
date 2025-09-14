@@ -59,7 +59,12 @@ namespace apn::dark::kuro::gdi
 					break;
 				}
 			}
-
+#ifdef _DEBUG
+			if (message == hive.c_test_message)
+			{
+				TestDialog dialog; dialog.do_modal();
+			}
+#endif
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 
