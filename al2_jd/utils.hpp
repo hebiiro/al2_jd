@@ -173,15 +173,6 @@ namespace apn::dark
 	}
 
 	//
-	// このクラスはスコープ終了処理を実行します。
-	//
-	template <typename F>
-	struct scope_exit {
-		F func;
-		~scope_exit() { func(); }
-	};
-
-	//
 	// このクラスはGDI+を管理します。
 	//
 	struct GdiplusManager {

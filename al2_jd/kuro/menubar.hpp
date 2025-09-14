@@ -195,7 +195,7 @@ namespace apn::dark::kuro
 		LRESULT on_nc_hittest(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			// スコープ終了時にメニューバーを再描画するようにします。
-			scope_exit scope_exit([&, prev_ht = current_ht]()
+			my::scope_exit scope_exit([&, prev_ht = current_ht]()
 			{
 				// 直前のヒットテストコードと異なる場合は
 				if (current_ht != prev_ht)
@@ -553,7 +553,7 @@ namespace apn::dark::kuro
 		//
 		virtual LRESULT on_wnd_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
+			MY_TRACE_FUNC("{/hex}, {/}, {/hex}, {/hex}", hwnd, my::message_to_string(message), wParam, lParam);
 
 			// メニューバーとタイトルバーを一体化しない場合は何もしません。
 			if (!hive.jd.slim_menubar)
