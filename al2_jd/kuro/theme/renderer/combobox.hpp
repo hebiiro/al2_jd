@@ -18,7 +18,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_combobox(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -32,7 +32,7 @@ namespace apn::dark::kuro::theme
 			rc.bottom = rc.top + width;
 			::OffsetRect(&rc, offset, 0);
 
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE015, 900);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE015, 900);
 		}
 
 		//
@@ -126,7 +126,7 @@ namespace apn::dark::kuro::theme
 				}
 
 				// 選択項目名を描画しますが、そのとき背景は塗りつぶさないようにします。
-				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, FALSE))
+				if (paint::stylus.draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, FALSE))
 					return S_OK;
 			}
 

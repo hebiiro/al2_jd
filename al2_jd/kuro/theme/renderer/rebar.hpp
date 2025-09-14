@@ -11,7 +11,7 @@ namespace apn::dark::kuro::theme
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
 			{
-				if (draw_rect(dc, rc, palette, TP_BUTTON, 0))
+				if (paint::stylus.draw_rect(dc, rc, palette, TP_BUTTON, 0))
 					return S_OK;
 			}
 

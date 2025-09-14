@@ -16,7 +16,7 @@ namespace apn::dark::kuro::theme
 			::InflateRect(&rc, 8, 8);
 			::OffsetRect(&rc, offset, 0);
 #endif
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE015, 900);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE015, 900);
 		}
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
@@ -44,7 +44,7 @@ namespace apn::dark::kuro::theme
 			case CMP_SPLITBUTTON:
 			case CMP_SPLITBUTTONDROPDOWN:
 				{
-					if (draw_rect(dc, rc, palette, part_id, state_id))
+					if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
 						return S_OK;
 
 					break;

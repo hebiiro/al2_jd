@@ -19,7 +19,7 @@ namespace apn::dark::kuro::theme
 			rc2.top = (rc2.top + rc2.bottom - width) / 2;
 			rc2.bottom = rc2.top + width;
 
-			return draw_icon(dc, &rc2, palette, part_id, state_id, L"メイリオ", 0xE015);
+			return paint::stylus.draw_icon(dc, &rc2, palette, part_id, state_id, paint::c_symbol, 0xE015);
 		}
 
 		//
@@ -33,7 +33,7 @@ namespace apn::dark::kuro::theme
 			rc2.top -= ::MulDiv(2, dpi, USER_DEFAULT_SCREEN_DPI);
 			rc2.bottom += ::MulDiv(6, dpi, USER_DEFAULT_SCREEN_DPI);
 
-			return draw_icon(dc, &rc2, palette, part_id, state_id, font_name, char_code);
+			return paint::stylus.draw_icon(dc, &rc2, palette, part_id, state_id, font_name, char_code);
 		}
 
 		//
@@ -51,8 +51,8 @@ namespace apn::dark::kuro::theme
 				{
 					switch (state_id)
 					{
-					case HSAS_SORTEDUP: return draw_sort_button(dc, rc, part_id, state_id, L"メイリオ", 0xE014);
-					case HSAS_SORTEDDOWN: return draw_sort_button(dc, rc, part_id, state_id, L"メイリオ", 0xE015);
+					case HSAS_SORTEDUP: return draw_sort_button(dc, rc, part_id, state_id, paint::c_symbol, 0xE014);
+					case HSAS_SORTEDDOWN: return draw_sort_button(dc, rc, part_id, state_id, paint::c_symbol, 0xE015);
 //					case HSAS_SORTEDUP: return draw_sort_button(dc, rc, part_id, state_id, L"Webdings", 0x0036);
 //					case HSAS_SORTEDDOWN: return draw_sort_button(dc, rc, part_id, state_id, L"Webdings", 0x0035);
 					}
@@ -61,7 +61,7 @@ namespace apn::dark::kuro::theme
 				}
 			}
 
-			return draw_rect(dc, rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, rc, palette, part_id, state_id);
 		}
 
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
@@ -116,7 +116,7 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
-				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
+				if (paint::stylus.draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
 					return S_OK;
 			}
 

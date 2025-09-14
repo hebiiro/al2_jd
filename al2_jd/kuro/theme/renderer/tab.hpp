@@ -14,7 +14,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_background(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -22,7 +22,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_pane(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -34,7 +34,7 @@ namespace apn::dark::kuro::theme
 			if (!selected) ::InflateRect(&rc, 0, 2);
 			rc.bottom -= 4;
 
-			return draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
@@ -88,7 +88,7 @@ namespace apn::dark::kuro::theme
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, ({/})", theme, dc, part_id, state_id, safe_string(text, c), text_flags, text_flags2, safe_string(rc));
 
 			// タブ項目名を描画しますが、そのとき背景は塗りつぶさないようにします。
-			if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, FALSE))
+			if (paint::stylus.draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, FALSE))
 				return S_OK;
 
 			return hive.orig.DrawThemeText(theme, dc, part_id, state_id, text, c, text_flags, text_flags2, rc);

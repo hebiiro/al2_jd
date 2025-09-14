@@ -23,7 +23,7 @@ namespace apn::dark::kuro::theme
 		BOOL draw_background(HDC dc, LPCRECT arg_rc)
 		{
 #if 1
-			return draw_rect(dc, arg_rc, palette, 0, 0);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, 0, 0);
 #else
 			// 背景はダイアログのマテリアルで描画します。
 			const auto& palette = paint::dialog_material.palette;
@@ -31,7 +31,7 @@ namespace apn::dark::kuro::theme
 			auto part_id = WP_DIALOG;
 			auto state_id = ETS_NORMAL;
 
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 #endif
 		}
 
@@ -49,12 +49,12 @@ namespace apn::dark::kuro::theme
 				auto ratio = get_ratio();
 				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
-				draw_rect(dc, &rc, palette, part_id, state_id);
+				paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 			}
 
 			::OffsetRect(&rc, 0, my::get_height(rc) / -15); // 少し上にずらします。
 
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE012 : 0xE013);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, near_arrow ? 0xE012 : 0xE013);
 		}
 
 		//
@@ -71,12 +71,12 @@ namespace apn::dark::kuro::theme
 				auto ratio = get_ratio();
 				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
-				draw_rect(dc, &rc, palette, part_id, state_id);
+				paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 			}
 
 			::OffsetRect(&rc, 0, my::get_height(rc) / -15); // 少し上にずらします。
 
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", near_arrow ? 0xE014 : 0xE015);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, near_arrow ? 0xE014 : 0xE015);
 		}
 
 		//
@@ -122,7 +122,7 @@ namespace apn::dark::kuro::theme
 			auto ratio = get_ratio();
 			::InflateRect(&rc, 0, -int(my::get_height(rc) * ratio));
 
-			return draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -136,7 +136,7 @@ namespace apn::dark::kuro::theme
 			auto ratio = get_ratio();
 			::InflateRect(&rc, -int(my::get_width(rc) * ratio), 0);
 
-			return draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -201,7 +201,7 @@ namespace apn::dark::kuro::theme
 				rc.bottom = rc.top + w;
 			}
 
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"@メイリオ", L'≡');
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo_vert, L'≡');
 		}
 
 		//
@@ -229,7 +229,7 @@ namespace apn::dark::kuro::theme
 				rc.bottom = rc.top + w;
 			}
 
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'≡');
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'≡');
 		}
 
 		//
@@ -238,10 +238,10 @@ namespace apn::dark::kuro::theme
 		BOOL draw_sizebox(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
 			// 背景を描画してから
-			if (draw_rect(dc, arg_rc, palette, part_id, state_id))
+			if (paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id))
 			{
 				// サイズグリップ用のアイコンを描画します。
-				return draw_icon(dc, arg_rc, palette, part_id, state_id, L"Marlett", 0x006F);
+				return paint::stylus.draw_icon(dc, arg_rc, palette, part_id, state_id, L"Marlett", 0x006F);
 			}
 
 			return FALSE;

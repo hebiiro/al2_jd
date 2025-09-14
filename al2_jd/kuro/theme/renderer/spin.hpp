@@ -17,13 +17,13 @@ namespace apn::dark::kuro::theme
 			auto rc = *arg_rc;
 
 			// 背景を描画します。
-			draw_rect(dc, &rc, palette, part_id, state_id);
+			paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 
 			::OffsetRect(&rc, 0, -1); // 位置を微調整します。
 //			if (pressed) ::OffsetRect(&rc, 1, 1);
 
 			// アイコンを描画します。
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", char_code, 900);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, char_code, 900);
 		}
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override

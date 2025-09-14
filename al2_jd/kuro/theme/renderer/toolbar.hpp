@@ -13,13 +13,13 @@ namespace apn::dark::kuro::theme
 		{
 			auto rc = *arg_rc;
 
-			draw_rect(dc, &rc, palette, part_id, state_id);
+			paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 
 			auto width = my::get_width(rc);
 			rc.top = (rc.top + rc.bottom - width) / 2 - 2;
 			rc.bottom = rc.top + width;
 
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE015, 900);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE015, 900);
 		}
 
 		//
@@ -32,7 +32,7 @@ namespace apn::dark::kuro::theme
 //			::InflateRect(&rc, 8, 8);
 			::OffsetRect(&rc, 2, -1);
 
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE015, 900);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE015, 900);
 		}
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
@@ -48,7 +48,7 @@ namespace apn::dark::kuro::theme
 			case TP_SEPARATOR:
 			case TP_SEPARATORVERT:
 				{
-					if (draw_rect(dc, rc, palette, part_id, state_id))
+					if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
 						return S_OK;
 
 					break;
@@ -89,7 +89,7 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
-				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
+				if (paint::stylus.draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
 					return S_OK;
 			}
 

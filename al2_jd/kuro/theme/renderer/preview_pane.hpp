@@ -22,7 +22,7 @@ namespace apn::dark::kuro::theme
 				{
 					const paint::Palette& palette = paint::dialog_material.palette;
 
-					if (draw_rect(dc, rc, palette, WP_DIALOG, ETS_NORMAL))
+					if (paint::stylus.draw_rect(dc, rc, palette, WP_DIALOG, ETS_NORMAL))
 						return S_OK;
 				}
 			}

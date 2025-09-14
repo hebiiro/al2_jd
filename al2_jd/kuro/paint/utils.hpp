@@ -3,6 +3,21 @@
 namespace apn::dark::kuro::paint
 {
 	//
+	// シンボル描画用のフォント名です。
+	//
+	inline static constexpr auto c_symbol = L"Segoe UI Symbol";
+
+	//
+	// 疑似シンボル描画用のフォント名です。
+	//
+	inline static constexpr auto c_pseudo = L"Consolas";
+
+	//
+	// 疑似シンボル描画用の縦書きフォント名です。
+	//
+	inline static constexpr auto c_pseudo_vert = L"@Consolas";
+
+	//
 	// 指定されたペンの色を返します。
 	//
 	inline COLORREF get_pen_color(HPEN pen)

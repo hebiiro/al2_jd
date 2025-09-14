@@ -14,7 +14,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_item(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -27,13 +27,13 @@ namespace apn::dark::kuro::theme
 			::OffsetRect(&rc, 0, -1); // 位置を微調整します。
 
 			// 背景を描画します。
-//			draw_rect(dc, &rc, palette, part_id, state_id);
+//			paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 
 			::InflateRect(&rc, 2, 2);
 			::OffsetRect(&rc, 0, -1); // 位置を微調整します。
 
 			// アイコンを描画します。
-			return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", char_code);
+			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, char_code);
 		}
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
@@ -96,7 +96,7 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
-				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
+				if (paint::stylus.draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
 					return S_OK;
 			}
 

@@ -21,14 +21,14 @@ namespace apn::dark::kuro::theme::immersive_start
 						auto rc2 = *rc;
 						::InflateRect(&rc2, 0, -3);
 
-						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
 							return S_OK;
 
 						break;
 					}
 				default:
 					{
-						if (draw_rect(dc, rc, palette, part_id, state_id))
+						if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
 							return S_OK;
 
 						break;

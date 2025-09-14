@@ -14,7 +14,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_horz_track(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -26,7 +26,7 @@ namespace apn::dark::kuro::theme
 			rc.right -= 1;
 			rc.bottom -= 1;
 
-			return draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -34,7 +34,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_vert_track(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -46,7 +46,7 @@ namespace apn::dark::kuro::theme
 			rc.right -= 1;
 			rc.bottom -= 1;
 
-			return draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override

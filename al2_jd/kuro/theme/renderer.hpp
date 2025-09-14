@@ -3,55 +3,6 @@
 namespace apn::dark::kuro::theme
 {
 	//
-	// パレットを使用して矩形を描画します。
-	//
-	inline BOOL draw_rect(HDC dc, LPCRECT rc,
-		const paint::Palette& palette, int part_id, int state_id)
-	{
-		if (auto pigment = palette.get(part_id, state_id))
-			return paint::stylus.draw_rect(dc, rc, pigment);
-
-		return FALSE;
-	}
-
-	//
-	// パレットを使用して文字列を描画します。
-	//
-	inline BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx,
-		const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
-	{
-		if (auto pigment = palette.get(part_id, state_id))
-			return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment, opaque);
-
-		return FALSE;
-	}
-
-	//
-	// パレットを使用して文字列を描画します。
-	//
-	inline BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags,
-		const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
-	{
-		if (auto pigment = palette.get(part_id, state_id))
-			return paint::stylus.draw_text(dc, rc, text, c, text_flags, pigment, opaque);
-
-		return FALSE;
-	}
-
-	//
-	// パレットを使用して絵文字を描画します。
-	//
-	inline BOOL draw_icon(HDC dc, LPCRECT rc,
-		const paint::Palette& palette, int part_id, int state_id,
-		LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
-	{
-		if (auto pigment = palette.get(part_id, state_id))
-			return paint::stylus.draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
-
-		return FALSE;
-	}
-
-	//
 	// このクラスはテーマをフックしてカスタム描画を実行します。
 	//
 	struct Renderer
