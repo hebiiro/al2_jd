@@ -55,7 +55,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_push_button(HDC dc, LPCRECT arg_rc, int part_id, int state_id, BOOL pressed)
 		{
-			return draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -64,39 +64,51 @@ namespace apn::dark::kuro::theme
 		BOOL draw_radio_button(HDC dc, LPCRECT arg_rc, int part_id, int state_id, BOOL pressed, BOOL checked)
 		{
 			auto rc = *arg_rc;
+#if 1
+			paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'⚪'); // 円。丸と同じ大きさ。
+
+			if (checked)
+				paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, L"Webdings", 0x61); // チェックマーク。
+
+			return TRUE;
+#else
 //			::OffsetRect(&rc, 0, 2);
 //			::InflateRect(&rc, 2, 2);
 
 			if (checked)
 			{
-				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⚫'); // 丸。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'●'); // 逆に上のより小さい。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'♥'); // ハート。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'🖤'); // 警告が出る。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA3); // 丸の中に丸。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA4); // 円の中に丸。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⚫️'); // 警告が出る。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'●'); // 大きな丸。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⦿'); // 円の中に丸。上にズレる。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE1D2); // 円の中に丸。
-				//return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE1F8); // 円の中にハート。
+				return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'⚫'); // 丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, L"Webdings", 0x6E); // 丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE005); // チェックボックスと同じ。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'⭕'); // 赤い丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'●'); // 逆に上のより小さい。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'♥'); // ハート。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'🖤'); // 警告が出る。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA3); // 丸の中に丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA4); // 円の中に丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'⚫️'); // 警告が出る。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'●'); // 大きな丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'⦿'); // 円の中に丸。上にズレる。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE1D2); // 円の中に丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE1F8); // 円の中にハート。
 			}
 			else
 			{
 //				rc.left += 1; rc.top += 1;
 
-				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'⚪'); // 円。丸と同じ大きさ。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'○'); // 逆に上のより小さい。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'♡'); // ハート。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'🤍'); // 警告が出る。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA1); // 円。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA2); // 太い円。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'🔴'); // 警告が出る。
-				//return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'◯'); // 円の中に丸。上にズレる。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", L'○'); // 円の中に丸。上にズレる。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE21A); // 大きな丸。
-//				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE0E8); // 円の中にスマイル。
+				return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'⚪'); // 円。丸と同じ大きさ。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'○'); // 逆に上のより小さい。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'♡'); // ハート。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'🤍'); // 警告が出る。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA1); // 円。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, L"Wingdings", 0xA2); // 太い円。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'🔴'); // 警告が出る。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'◯'); // 円の中に丸。上にズレる。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'○'); // 円の中に丸。上にズレる。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE21A); // 大きな丸。
+//				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE0E8); // 円の中にスマイル。
 			}
+#endif
 		}
 
 		//
@@ -109,9 +121,9 @@ namespace apn::dark::kuro::theme
 //			::InflateRect(&rc, 2, 2);
 
 			if (checked)
-				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE005);
+				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE005);
 			else
-				return draw_icon(dc, &rc, palette, part_id, state_id, L"メイリオ", 0xE002);
+				return paint::stylus.d2d_draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, 0xE002);
 		}
 
 		//
@@ -227,7 +239,7 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
-				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
+				if (paint::stylus.d2d_draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
 					return S_OK;
 			}
 

@@ -55,8 +55,10 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 //			read_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
+			read_string(root, "jd.title_format", hive.jd.title_format);
 			read_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 			read_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
+			read_bool(root, "jd.use_d2d", hive.jd.use_d2d);
 
 			return TRUE;
 		}
@@ -69,8 +71,10 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 //			write_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
+			write_string(root, "jd.title_format", hive.jd.title_format);
 			write_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 			write_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
+			write_bool(root, "jd.use_d2d", hive.jd.use_d2d);
 
 			return TRUE;
 		}

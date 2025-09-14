@@ -16,7 +16,12 @@ namespace apn::dark
 	{
 		inline static constexpr auto c_name = L"JD";
 		inline static constexpr auto c_display_name = L"ダークモード化";
-
+#ifdef _DEBUG
+		//
+		// テスト用ウィンドウメッセージです。
+		//
+		inline static const auto c_test_message = ::RegisterWindowMessageW(L"al2_jd::test");
+#endif
 		//
 		// このアドインのインスタンスハンドルです。
 		//
@@ -94,6 +99,11 @@ namespace apn::dark
 			std::wstring custom_color_file_name;
 
 			//
+			// スリムバー時のタイトルの書式です。
+			//
+			std::wstring title_format = L"AviUtl2 - %title%";
+
+			//
 			// TRUEの場合はコモンダイアログをダークモード化から除外します。
 			//
 			BOOL exclude_comdlg32 = FALSE;
@@ -102,6 +112,11 @@ namespace apn::dark
 			// TRUEの場合はメニューバーをタイトルバーと一体化します。
 			//
 			BOOL slim_menubar = TRUE;
+
+			//
+			// TRUEの場合はDirect2Dを使用して描画します。
+			//
+			BOOL use_d2d = FALSE;
 		} jd;
 
 		//

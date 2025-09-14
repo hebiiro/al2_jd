@@ -5,9 +5,11 @@
 #include "hive.hpp"
 #include "utils.hpp"
 #include "lockable.hpp"
+#include "test_dialog.hpp"
 #include "kuro/style.hpp"
 #include "kuro/custom_style.hpp"
 #include "kuro/paint/utils.hpp"
+#include "kuro/paint/d2d.hpp"
 #include "kuro/paint/pigment.hpp"
 #include "kuro/paint/palette.hpp"
 #include "kuro/paint/material.hpp"
@@ -103,7 +105,6 @@
 #include "io_base.hpp"
 #include "assets_io.hpp"
 #include "config_io.hpp"
-#include "test_dialog.hpp"
 #include "aviutl2_window.hpp"
 #include "available_fonts.hpp"
 #include "app.hpp"
@@ -140,12 +141,11 @@ namespace apn::dark
 				}
 #endif
 				app->dll_init();
-
-				if (0) // テスト用コードです。
-				{
-					TestDialog dialog; dialog.do_modal();
-				}
-
+#ifdef _DEBUG
+				// デバッグ用のコードです。
+				// テスト用ウィンドウメッセージを送信します。
+//				::PostMessage(hive.theme_window, hive.c_test_message, 0, 0);
+#endif
 				break;
 			}
 		case DLL_PROCESS_DETACH:

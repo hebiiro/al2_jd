@@ -52,7 +52,7 @@ namespace apn::dark::kuro::theme
 						auto rc2 = *rc;
 						rc2.bottom += 1; // クリップ矩形を使用すると、この1ピクセルが上書き描画できるようになります。
 
-						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
 							return draw_menubar(theme, dc, part_id, state_id, &rc2);
 
 						break;
@@ -65,7 +65,7 @@ namespace apn::dark::kuro::theme
 						if (state_id == MPI_HOT || state_id == MBI_PUSHED)
 						{
 							// 背景を描画します。
-							if (draw_rect(dc, rc, palette, part_id, state_id))
+							if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
 								return S_OK;
 						}
 						// それ以外の場合は
@@ -94,7 +94,7 @@ namespace apn::dark::kuro::theme
 
 						auto rc2 = *rc;
 
-						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
 							return S_OK;
 
 						break;
@@ -109,7 +109,7 @@ namespace apn::dark::kuro::theme
 						// 後で使うので、ガーターの位置を記憶しておきます。
 						gutter_right = rc2.right;
 
-						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
 							return S_OK;
 
 						break;
@@ -121,7 +121,7 @@ namespace apn::dark::kuro::theme
 						auto rc2 = *rc;
 						::InflateRect(&rc2, 0, -2);
 
-						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
 							return S_OK;
 
 						break;
@@ -144,7 +144,7 @@ namespace apn::dark::kuro::theme
 							rc2.left = gutter_right;
 						}
 
-						if (draw_rect(dc, &rc2, palette, part_id, state_id))
+						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
 							return S_OK;
 
 						break;
@@ -156,7 +156,9 @@ namespace apn::dark::kuro::theme
 						case MC_CHECKMARKNORMAL:
 						case MC_CHECKMARKDISABLED:
 							{
-								if (draw_icon(dc, rc, palette, part_id, state_id, L"メイリオ", L'✅'))
+//								if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, paint::c_pseudo, L'✔')) // D2Dだと紫
+//								if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, paint::c_pseudo, L'☑')) // GDIだと背景が白、D2Dだと紫
+								if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, paint::c_pseudo, L'✅')) // GDIだと背景が透明、D2Dだと緑
 									return S_OK;
 
 								break;
@@ -164,7 +166,7 @@ namespace apn::dark::kuro::theme
 						case MC_BULLETNORMAL:
 						case MC_BULLETDISABLED:
 							{
-								if (draw_icon(dc, rc, palette, part_id, state_id, L"メイリオ", L'⬤'))
+								if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, paint::c_pseudo, L'⬤'))
 									return S_OK;
 
 								break;
@@ -179,35 +181,35 @@ namespace apn::dark::kuro::theme
 						::InflateRect(&rc2, 6, 6);
 						::OffsetRect(&rc2, 0, -2);
 
-						if (draw_icon(dc, &rc2, palette, part_id, state_id, L"メイリオ", 0xE013))
+						if (paint::stylus.d2d_draw_icon(dc, &rc2, palette, part_id, state_id, paint::c_symbol, 0xE013))
 							return S_OK;
 
 						break;
 					}
 				case MENU_SYSTEMCLOSE:
 					{
-						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0072))
+						if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0072))
 							return S_OK;
 
 						break;
 					}
 				case MENU_SYSTEMMAXIMIZE:
 					{
-						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0031))
+						if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0031))
 							return S_OK;
 
 						break;
 					}
 				case MENU_SYSTEMMINIMIZE:
 					{
-						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0030))
+						if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0030))
 							return S_OK;
 
 						break;
 					}
 				case MENU_SYSTEMRESTORE:
 					{
-						if (draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0032))
+						if (paint::stylus.d2d_draw_icon(dc, rc, palette, part_id, state_id, L"Webdings", 0x0032))
 							return S_OK;
 
 						break;
@@ -220,13 +222,13 @@ namespace apn::dark::kuro::theme
 							// クリップ矩形を使用します。
 							Clipper clipper(dc, rc_clip);
 
-							if (draw_rect(dc, rc, palette, part_id, state_id))
+							if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
 								return S_OK;
 						}
 						// クリップ矩形が無効の場合は
 						else
 						{
-							if (draw_rect(dc, rc, palette, part_id, state_id))
+							if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
 								return S_OK;
 						}
 					}
@@ -286,7 +288,7 @@ namespace apn::dark::kuro::theme
 //								rc2.left = popup_item_rect.left;
 								rc2.right = popup_item_rect.right;
 
-								if (draw_text(dc, &rc2, preview_text.c_str(), -1, text_flags, palette, part_id, state_id, opaque))
+								if (paint::stylus.d2d_draw_text(dc, &rc2, preview_text.c_str(), -1, text_flags, palette, part_id, state_id, opaque))
 									return S_OK;
 							}
 
@@ -295,7 +297,7 @@ namespace apn::dark::kuro::theme
 					}
 				}
 
-				if (draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, opaque))
+				if (paint::stylus.d2d_draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, opaque))
 					return S_OK;
 			}
 

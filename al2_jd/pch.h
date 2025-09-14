@@ -53,6 +53,9 @@ using namespace Gdiplus;
 #include <psapi.h>
 #include <vfw.h>
 #pragma comment(lib, "vfw32.lib")
+#include <d2d1.h>
+#include <d2d1helper.h>
+#pragma comment(lib, "d2d1.lib")
 #include <dwrite.h>
 #pragma comment(lib, "dwrite.lib")
 #include <wrl/client.h>

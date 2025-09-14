@@ -680,14 +680,22 @@ namespace apn::dark::kuro
 
 			// メニューバーの中央にウィンドウテキストを描画します。
 			{
+				// ウィンドウテキストを取得します。
 				auto text = my::get_window_text(hwnd);
+
+				// タイトルの書式が指定されている場合は
+				if (hive.jd.title_format.length())
+				{
+					// タイトルを書式化します。
+					text = my::replace(hive.jd.title_format, L"%title%", text);
+				}
 
 				NONCLIENTMETRICS ncm = { sizeof(ncm) };
 				::SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
 				my::gdi::unique_ptr<HFONT> font(::CreateFontIndirect(&ncm.lfMenuFont));
 				my::gdi::selector font_selector(dc, font.get());
 
-				paint::stylus.draw_text(dc, &bar_rc, text.c_str(), (int)text.length(),
+				paint::stylus.d2d_draw_text(dc, &bar_rc, text.c_str(), (int)text.length(),
 					DT_CENTER | DT_VCENTER | DT_SINGLELINE, palette, part_id, state_id, FALSE);
 			}
 
@@ -710,7 +718,7 @@ namespace apn::dark::kuro
 				case HTCLOSE:
 					{
 						// 閉じるボタンを描画します。
-						paint::stylus.draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0072);
+						paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0072);
 
 						break;
 					}
@@ -720,13 +728,13 @@ namespace apn::dark::kuro
 						if (::IsZoomed(hwnd))
 						{
 							// 元に戻すボタンを描画します。
-							paint::stylus.draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0032);
+							paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0032);
 						}
 						// 最大化されていない場合は
 						else
 						{
 							// 最大化ボタンを描画します。
-							paint::stylus.draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0031);
+							paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0031);
 						}
 
 						break;
@@ -734,7 +742,7 @@ namespace apn::dark::kuro
 				case HTMINBUTTON:
 					{
 						// 最小化ボタンを描画します。
-						paint::stylus.draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0030);
+						paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0030);
 
 						break;
 					}

@@ -63,6 +63,8 @@ namespace apn::dark
 
 			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 			set_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
+			set_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
+			set_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
 
 			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -99,6 +101,8 @@ namespace apn::dark
 
 			get_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 			get_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
+			get_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
+			get_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
 
 			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -170,6 +174,22 @@ namespace apn::dark
 							from_ui(FALSE);
 
 							app->apply_slim_menubar();
+
+							break;
+						}
+					case IDC_JD_USE_D2D:
+						{
+							from_ui(TRUE);
+
+							break;
+						}
+					case IDC_JD_TITLE_FORMAT:
+						{
+							if (hive.jd.slim_menubar)
+							{
+								if (code == EN_UPDATE)
+									from_ui(TRUE);
+							}
 
 							break;
 						}

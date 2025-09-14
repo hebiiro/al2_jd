@@ -381,6 +381,9 @@
     </ClInclude>
     <ClInclude Include="aviutl2_window.hpp" />
     <ClInclude Include="available_fonts.hpp" />
+    <ClInclude Include="kuro\paint\d2d.hpp">
+      <Filter>kuro\paint</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">

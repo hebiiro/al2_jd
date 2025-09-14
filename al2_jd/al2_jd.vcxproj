@@ -196,6 +196,7 @@ copy /Y "$(SolutionDir)assets\$(TargetName).json" "$(aviutl2_dir)\data\Plugin\al
     <ClInclude Include="kuro\hook\entry\darken_window.hpp" />
     <ClInclude Include="kuro\hook\entry\theme.hpp" />
     <ClInclude Include="kuro\menubar.hpp" />
+    <ClInclude Include="kuro\paint\d2d.hpp" />
     <ClInclude Include="kuro\paint\material\window.hpp" />
     <ClInclude Include="lockable.hpp" />
     <ClInclude Include="hive.hpp" />

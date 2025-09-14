@@ -190,7 +190,7 @@ namespace apn::dark::kuro::paint
 			ExtTextOutLocker locker;
 			TextAttribute text_attribute(dc, pigment, opaque);
 
-			return !!::DrawTextW(dc, text, c, (LPRECT)rc, text_flags);
+			return !!hive.orig.DrawTextW(dc, text, c, (LPRECT)rc, text_flags);
 		}
 
 		//
@@ -209,14 +209,49 @@ namespace apn::dark::kuro::paint
 				DEFAULT_QUALITY, DEFAULT_PITCH, font_name));
 			my::gdi::selector font_selector(dc, font.get());
 
-			return !!::DrawTextW(dc, &char_code, 1,
+			return !!hive.orig.DrawTextW(dc, &char_code, 1,
+				(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+		}
+
+		//
+		// ピグメントを使用して文字列を描画します。
+		//
+		BOOL d2d_draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const Pigment* pigment, BOOL opaque = TRUE)
+		{
+			if (!hive.jd.use_d2d) return draw_text(dc, rc, text, c, text_flags, pigment, opaque);
+
+			ExtTextOutLocker locker;
+			TextAttribute text_attribute(dc, pigment, opaque);
+
+			return !!d2d.draw_text(dc, text, c, (LPRECT)rc, text_flags);
+		}
+
+		//
+		// ピグメントを使用して絵文字を描画します。
+		//
+		BOOL d2d_draw_icon(HDC dc, LPCRECT rc, const Pigment* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
+		{
+			if (!hive.jd.use_d2d) return draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
+
+			ExtTextOutLocker locker;
+			TextAttribute text_attribute(dc, pigment, FALSE); // 背景は塗りつぶしません。
+
+			auto font_height = my::get_height(*rc);
+			my::gdi::unique_ptr<HFONT> font(::CreateFontW(
+				font_height, 0, 0, 0, 0,
+				FALSE, FALSE, FALSE,
+				DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+				DEFAULT_QUALITY, DEFAULT_PITCH, font_name));
+			my::gdi::selector font_selector(dc, font.get());
+
+			return !!d2d.draw_text(dc, &char_code, 1,
 				(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		}
 
 		//
 		// パレットを使用して矩形を描画します。
 		//
-		BOOL draw_rect(HDC dc, LPCRECT rc,
+		inline BOOL draw_rect(HDC dc, LPCRECT rc,
 			const paint::Palette& palette, int part_id, int state_id)
 		{
 			if (auto pigment = palette.get(part_id, state_id))
@@ -258,6 +293,31 @@ namespace apn::dark::kuro::paint
 		{
 			if (auto pigment = palette.get(part_id, state_id))
 				return draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
+
+			return FALSE;
+		}
+
+		//
+		// パレットを使用して文字列を描画します。
+		//
+		inline BOOL d2d_draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags,
+			const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
+		{
+			if (auto pigment = palette.get(part_id, state_id))
+				return d2d_draw_text(dc, rc, text, c, text_flags, pigment, opaque);
+
+			return FALSE;
+		}
+
+		//
+		// パレットを使用して絵文字を描画します。
+		//
+		inline BOOL d2d_draw_icon(HDC dc, LPCRECT rc,
+			const paint::Palette& palette, int part_id, int state_id,
+			LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
+		{
+			if (auto pigment = palette.get(part_id, state_id))
+				return d2d_draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
 
 			return FALSE;
 		}
