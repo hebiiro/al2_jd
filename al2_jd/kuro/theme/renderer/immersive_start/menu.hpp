@@ -26,9 +26,29 @@ namespace apn::dark::kuro::theme::immersive_start
 
 						break;
 					}
+				case MENU_POPUPITEM:
+				case MENU_POPUPITEMFOCUSABLE:
+					{
+						// ポップアップメニューのアイテムを描画します。
+
+						// ホット状態以外の場合は
+						if (state_id != MPI_HOT)
+						{
+							if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
+								return S_OK;
+						}
+						// ホット状態の場合は
+						else
+						{
+							if (paint::stylus.draw_round_rect(dc, rc, palette, part_id, state_id))
+								return S_OK;
+						}
+
+						break;
+					}
 				default:
 					{
-						if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
+						if (paint::stylus.draw_round_rect(dc, rc, palette, part_id, state_id))
 							return S_OK;
 
 						break;

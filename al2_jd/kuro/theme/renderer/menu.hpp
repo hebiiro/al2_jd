@@ -65,7 +65,7 @@ namespace apn::dark::kuro::theme
 						if (state_id == MPI_HOT || state_id == MBI_PUSHED)
 						{
 							// 背景を描画します。
-							if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
+							if (paint::stylus.draw_round_rect(dc, rc, palette, part_id, state_id))
 								return S_OK;
 						}
 						// それ以外の場合は
@@ -142,10 +142,15 @@ namespace apn::dark::kuro::theme
 						{
 							// ガーターが上書きされないように描画矩形を縮小します。
 							rc2.left = gutter_right;
-						}
 
-						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
-							return S_OK;
+							if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
+								return S_OK;
+						}
+						else
+						{
+							if (paint::stylus.draw_round_rect(dc, &rc2, palette, part_id, state_id))
+								return S_OK;
+						}
 
 						break;
 					}

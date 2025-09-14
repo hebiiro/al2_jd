@@ -30,6 +30,13 @@
 #define IDC_JD_USE_D2D                  1312
 #define IDC_JD_TITLE_FORMAT_STAT        1313
 #define IDC_JD_TITLE_FORMAT             1314
+#define IDC_JD_BORDER_WIDTH_STAT        1315
+#define IDC_JD_BORDER_WIDTH             1316
+#define IDC_JD_BORDER_WIDTH_SPIN        1317
+#define IDC_JD_ROUND_STAT               1318
+#define IDC_JD_ROUND                    1319
+#define IDC_JD_ROUND_SPIN               1320
+#define IDC_JD_AS_ROUND                 1321
 #define IDC_SCROLLBAR_REDUCTION_STAT    1400
 #define IDC_SCROLLBAR_REDUCTION         1401
 #define IDC_SCROLLBAR_REDUCTION_SPIN    1402

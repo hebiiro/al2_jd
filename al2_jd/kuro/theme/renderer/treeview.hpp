@@ -14,7 +14,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_item(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
 		{
-			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_round_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//
@@ -27,7 +27,7 @@ namespace apn::dark::kuro::theme
 			::OffsetRect(&rc, 0, -1); // 位置を微調整します。
 
 			// 背景を描画します。
-//			paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
+//			paint::stylus.draw_round_rect(dc, &rc, palette, part_id, state_id);
 
 			::InflateRect(&rc, 2, 2);
 			::OffsetRect(&rc, 0, -1); // 位置を微調整します。

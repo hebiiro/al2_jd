@@ -26,7 +26,7 @@ namespace apn::dark::kuro::theme
 			rc.right -= 1;
 			rc.bottom -= 1;
 
-			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_round_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -46,7 +46,7 @@ namespace apn::dark::kuro::theme
 			rc.right -= 1;
 			rc.bottom -= 1;
 
-			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_round_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override

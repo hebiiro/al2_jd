@@ -49,10 +49,10 @@ namespace apn::dark::kuro::theme
 				auto ratio = get_ratio();
 				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
-				paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
+				paint::stylus.draw_round_rect(dc, &rc, palette, part_id, state_id);
 			}
 
-			::OffsetRect(&rc, 0, my::get_height(rc) / -15); // 少し上にずらします。
+			::OffsetRect(&rc, 0, my::get_height(rc) / -10); // 少し上にずらします。
 
 			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, near_arrow ? 0xE012 : 0xE013);
 		}
@@ -71,10 +71,10 @@ namespace apn::dark::kuro::theme
 				auto ratio = get_ratio();
 				::InflateRect(&rc, -int(my::get_width(rc) * ratio), -int(my::get_height(rc) * ratio));
 
-				paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
+				paint::stylus.draw_round_rect(dc, &rc, palette, part_id, state_id);
 			}
 
-			::OffsetRect(&rc, 0, my::get_height(rc) / -15); // 少し上にずらします。
+			::OffsetRect(&rc, 0, my::get_height(rc) / -10); // 少し上にずらします。
 
 			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_symbol, near_arrow ? 0xE014 : 0xE015);
 		}
@@ -122,7 +122,7 @@ namespace apn::dark::kuro::theme
 			auto ratio = get_ratio();
 			::InflateRect(&rc, 0, -int(my::get_height(rc) * ratio));
 
-			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_round_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -136,7 +136,7 @@ namespace apn::dark::kuro::theme
 			auto ratio = get_ratio();
 			::InflateRect(&rc, -int(my::get_width(rc) * ratio), 0);
 
-			return paint::stylus.draw_rect(dc, &rc, palette, part_id, state_id);
+			return paint::stylus.draw_round_rect(dc, &rc, palette, part_id, state_id);
 		}
 
 		//
@@ -172,11 +172,6 @@ namespace apn::dark::kuro::theme
 		}
 
 		//
-		// グリッパーの補正サイズです。
-		//
-		inline static const auto gripper_base = 4;
-
-		//
 		// 水平方向のグリッパーを描画します。
 		//
 		BOOL draw_horz_gripper(HDC dc, LPCRECT arg_rc, int part_id, int state_id)
@@ -185,21 +180,12 @@ namespace apn::dark::kuro::theme
 
 			auto rc = *arg_rc;
 			auto ratio = get_ratio();
-			::InflateRect(&rc, gripper_base, gripper_base - int(my::get_height(rc) * ratio));
+			::InflateRect(&rc, 0, 1 - int(my::get_height(rc) * ratio));
+			rc.bottom -= 2;
 
-			auto w = my::get_width(rc);
 			auto h = my::get_height(rc);
-
-			if (w > h)
-			{
-				rc.left = (rc.left + rc.right - h) / 2;
-				rc.right = rc.left + h;
-			}
-			else
-			{
-				rc.top = (rc.top + rc.bottom - w) / 2;
-				rc.bottom = rc.top + w;
-			}
+			rc.left = (rc.left + rc.right - h) / 2;
+			rc.right = rc.left + h;
 
 			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo_vert, L'≡');
 		}
@@ -213,21 +199,11 @@ namespace apn::dark::kuro::theme
 
 			auto rc = *arg_rc;
 			auto ratio = get_ratio();
-			::InflateRect(&rc, gripper_base - int(my::get_width(rc) * ratio), gripper_base);
+			::InflateRect(&rc, 4 - (int)(my::get_width(rc) * ratio), 0);
 
 			auto w = my::get_width(rc);
-			auto h = my::get_height(rc);
-
-			if (w > h)
-			{
-				rc.left = (rc.left + rc.right - h) / 2;
-				rc.right = rc.left + h;
-			}
-			else
-			{
-				rc.top = (rc.top + rc.bottom - w) / 2;
-				rc.bottom = rc.top + w;
-			}
+			rc.top = (rc.top + rc.bottom - w) / 2;
+			rc.bottom = rc.top + w;
 
 			return paint::stylus.draw_icon(dc, &rc, palette, part_id, state_id, paint::c_pseudo, L'≡');
 		}

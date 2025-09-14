@@ -65,6 +65,9 @@ namespace apn::dark
 			set_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
 			set_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
 			set_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
+			set_check(IDC_JD_AS_ROUND, hive.jd.as_round);
+			set_int(IDC_JD_ROUND, hive.jd.round);
+			set_int(IDC_JD_BORDER_WIDTH, hive.jd.border_width);
 
 			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -103,6 +106,9 @@ namespace apn::dark
 			get_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
 			get_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
 			get_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
+			get_check(IDC_JD_AS_ROUND, hive.jd.as_round);
+			get_int(IDC_JD_ROUND, hive.jd.round);
+			get_int(IDC_JD_BORDER_WIDTH, hive.jd.border_width);
 
 			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -178,6 +184,7 @@ namespace apn::dark
 							break;
 						}
 					case IDC_JD_USE_D2D:
+					case IDC_JD_AS_ROUND:
 						{
 							from_ui(TRUE);
 
@@ -190,6 +197,14 @@ namespace apn::dark
 								if (code == EN_UPDATE)
 									from_ui(TRUE);
 							}
+
+							break;
+						}
+					case IDC_JD_ROUND:
+					case IDC_JD_BORDER_WIDTH:
+						{
+							if (code == EN_UPDATE)
+								from_ui(TRUE);
 
 							break;
 						}
@@ -251,6 +266,15 @@ namespace apn::dark
 
 						switch (edit_id)
 						{
+						case IDC_JD_BORDER_WIDTH:
+							{
+								auto value = get_int(edit_id);
+								value += (nm->iDelta > 0) ? -1 : +1;
+								value = std::clamp(value, 0, +100);
+								set_int(edit_id, value);
+								break;
+							}
+						case IDC_JD_ROUND:
 						case IDC_SCROLLBAR_REDUCTION:
 							{
 								auto value = get_int(edit_id);

@@ -709,7 +709,7 @@ namespace apn::dark::kuro
 				if (is_hot)
 				{
 					// 背景を描画します。
-					paint::stylus.draw_rect(dc, &button.rc,
+					paint::stylus.draw_round_rect(dc, &button.rc,
 						palette, part_id, (button.ht == HTCLOSE) ? MB_WARNING : MB_HOT);
 				}
 

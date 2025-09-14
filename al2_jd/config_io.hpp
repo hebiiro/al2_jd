@@ -59,6 +59,9 @@ namespace apn::dark
 			read_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 			read_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 			read_bool(root, "jd.use_d2d", hive.jd.use_d2d);
+			read_bool(root, "jd.as_round", hive.jd.as_round);
+			read_int(root, "jd.round", hive.jd.round);
+			read_int(root, "jd.border_width", hive.jd.border_width);
 
 			return TRUE;
 		}
@@ -75,6 +78,9 @@ namespace apn::dark
 			write_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
 			write_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 			write_bool(root, "jd.use_d2d", hive.jd.use_d2d);
+			write_bool(root, "jd.as_round", hive.jd.as_round);
+			write_int(root, "jd.round", hive.jd.round);
+			write_int(root, "jd.border_width", hive.jd.border_width);
 
 			return TRUE;
 		}

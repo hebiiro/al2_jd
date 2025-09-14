@@ -55,7 +55,7 @@ namespace apn::dark::kuro::theme
 		//
 		BOOL draw_push_button(HDC dc, LPCRECT arg_rc, int part_id, int state_id, BOOL pressed)
 		{
-			return paint::stylus.draw_rect(dc, arg_rc, palette, part_id, state_id);
+			return paint::stylus.draw_round_rect(dc, arg_rc, palette, part_id, state_id);
 		}
 
 		//

@@ -38,7 +38,10 @@ namespace apn::dark::kuro::theme
 					// この後テキストを描画するときに参照されます。
 					paint::command_module_material.dc = dc;
 
-					// このまま以下の描画処理を続けます。
+					if (paint::stylus.draw_round_rect(dc, rc, palette, part_id, state_id))
+						return S_OK;
+
+					break;
 				}
 			case CMP_BODY:
 			case CMP_SPLITBUTTON:

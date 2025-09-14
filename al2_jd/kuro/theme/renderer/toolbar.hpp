@@ -44,6 +44,12 @@ namespace apn::dark::kuro::theme
 			case 0:
 			case TP_BUTTON:
 			case TP_DROPDOWNBUTTON:
+				{
+					if (paint::stylus.draw_round_rect(dc, rc, palette, part_id, state_id))
+						return S_OK;
+
+					break;
+				}
 			case TP_SPLITBUTTON:
 			case TP_SEPARATOR:
 			case TP_SEPARATORVERT:

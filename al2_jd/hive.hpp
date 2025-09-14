@@ -117,6 +117,21 @@ namespace apn::dark
 			// TRUEの場合はDirect2Dを使用して描画します。
 			//
 			BOOL use_d2d = FALSE;
+
+			//
+			// TRUEの場合は矩形の角を丸めます。
+			//
+			BOOL as_round = TRUE;
+
+			//
+			// 丸角のサイズです。
+			//
+			int32_t round = 20;
+
+			//
+			// 縁の幅です。
+			//
+			int32_t border_width = 1;
 		} jd;
 
 		//

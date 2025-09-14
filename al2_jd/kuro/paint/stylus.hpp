@@ -59,11 +59,11 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはペンの属性をDCにセットします。
 	//
-	using PenAttribute = GdiObjectAttribute<HPEN,
-	[](auto p, const Pigment* pigment) {
+	using PenAttribute = GdiObjectAttribute<HPEN, [](auto p, const Pigment* pigment)
+	{
 		if (pigment->border.is_valid())
 		{
-			p->handle = ::CreatePen(PS_SOLID, pigment->border.width, pigment->border.color);
+			p->handle = ::CreatePen(PS_INSIDEFRAME, hive.jd.border_width, pigment->border.color);
 			p->is_deletable = TRUE;
 		}
 		else
@@ -76,8 +76,8 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはブラシの属性をDCにセットします。
 	//
-	using BrushAttribute = GdiObjectAttribute<HBRUSH,
-	[](auto p, const Pigment* pigment) {
+	using BrushAttribute = GdiObjectAttribute<HBRUSH, [](auto p, const Pigment* pigment)
+	{
 		if (pigment->background.is_valid())
 		{
 			p->handle = ::CreateSolidBrush(pigment->background.color);
@@ -172,6 +172,24 @@ namespace apn::dark::kuro::paint
 		}
 
 		//
+		// ピグメントを使用して丸角矩形を描画します。
+		//
+		BOOL draw_round_rect(HDC dc, LPCRECT rc, const Pigment* pigment)
+		{
+			if (!hive.jd.as_round) return draw_rect(dc, rc, pigment);
+
+			PenAttribute pen_attribute(dc, pigment);
+			BrushAttribute brush_attribute(dc, pigment);
+
+			auto w = my::get_width(*rc);
+			auto h = my::get_height(*rc);
+
+			auto round = ::MulDiv(std::min(w, h), hive.jd.round, 100);
+
+			return ::RoundRect(dc, rc->left, rc->top, rc->right - 1, rc->bottom - 1, round, round);
+		}
+
+		//
 		// ピグメントを使用して文字列を描画します。
 		//
 		BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx, const Pigment* pigment, BOOL opaque = TRUE)
@@ -256,6 +274,18 @@ namespace apn::dark::kuro::paint
 		{
 			if (auto pigment = palette.get(part_id, state_id))
 				return draw_rect(dc, rc, pigment);
+
+			return FALSE;
+		}
+
+		//
+		// パレットを使用して丸角矩形を描画します。
+		//
+		inline BOOL draw_round_rect(HDC dc, LPCRECT rc,
+			const paint::Palette& palette, int part_id, int state_id)
+		{
+			if (auto pigment = palette.get(part_id, state_id))
+				return draw_round_rect(dc, rc, pigment);
 
 			return FALSE;
 		}
