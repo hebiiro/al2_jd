@@ -237,8 +237,8 @@ namespace apn::dark::kuro::gdi::aviutl2
 							DEFAULT_QUALITY, DEFAULT_PITCH, font_name.c_str()));
 						my::gdi::selector font_selector(dc, font.get());
 
-						auto preview_text = my::replace(
-							hive.fonts.sample_text_format, L"%font%", font_name);
+						auto preview_text = hive.fonts.sample_text_format.length() ?
+							my::replace(hive.fonts.sample_text_format, L"%font%", font_name) : font_name;
 
 						return paint::stylus.ext_text_out(dc, x, y, options, rc,
 							preview_text.c_str(), (UINT)preview_text.length(), dx, pigment);
