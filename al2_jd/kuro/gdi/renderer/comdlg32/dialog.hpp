@@ -4,6 +4,25 @@ namespace apn::dark::kuro::gdi::comdlg32
 {
 	struct DialogRenderer : gdi::DialogRenderer
 	{
+		inline static constexpr auto c_top_combobox_id = 0x00000471;
+		inline static constexpr auto c_top_right_toolbar_id = 0x00000440;
+		inline static constexpr auto c_left_toolbar_id = 0x000004A0;
+
+		//
+		// ダイアログ上部に配置されているコンボボックスです。
+		//
+		HWND top_combobox = {};
+
+		//
+		// ダイアログ右上に配置されているツールバーです。
+		//
+		HWND top_right_toolbar = {};
+
+		//
+		// ダイアログ左側に配置されているツールバーです。
+		//
+		HWND left_toolbar = {};
+
 		//
 		// コモンダイアログが開いたときの処理です。
 		//
@@ -35,30 +54,69 @@ namespace apn::dark::kuro::gdi::comdlg32
 
 			return __super::on_detach(hwnd);
 		}
-#ifdef _DEBUG // テスト用コードです。
+
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
+			MY_TRACE_FUNC("{/hex}, {/}, {/hex}, {/hex}", hwnd, my::message_to_string(message), wParam, lParam);
 
 			switch (message)
 			{
-			case WM_MEASUREITEM:
+			case WM_PARENTNOTIFY:
 				{
-					MY_TRACE_FUNC("{/hex}, WM_MEASUREITEM, {/hex}, {/hex}", hwnd, wParam, lParam);
+					if (LOWORD(wParam) == WM_CREATE && HIWORD(wParam) == c_top_right_toolbar_id)
+					{
+						top_combobox = ::GetDlgItem(hwnd, c_top_combobox_id);
+						MY_TRACE_HWND(top_combobox);
+
+						left_toolbar = ::GetDlgItem(hwnd, c_left_toolbar_id);
+						MY_TRACE_HWND(left_toolbar);
+
+						top_right_toolbar = (HWND)lParam;
+						MY_TRACE_HWND(top_right_toolbar);
+					}
 
 					break;
 				}
-			case WM_DRAWITEM:
+			case WM_INITDIALOG:
 				{
-					MY_TRACE_FUNC("{/hex}, WM_DRAWITEM, {/hex}, {/hex}", hwnd, wParam, lParam);
+#if 1
+					my::scope_exit scope_exit([&]()
+					{
+#if 1
+						auto toolbar_rc = my::get_window_rect(top_right_toolbar);
+						auto combobox_rc = my::get_window_rect(top_combobox);
+						auto h = my::get_height(combobox_rc) + (combobox_rc.top - toolbar_rc.top) * 2;
 
-					break;
+						// ボタンの位置が上部コンボボックスと水平になるようにします。
+						::SendMessage(top_right_toolbar, TB_SETBUTTONSIZE, 0, MAKELPARAM(h, h));
+#elif 1
+						auto c = (int)::SendMessage(top_right_toolbar, TB_BUTTONCOUNT, 0, 0);
+
+						auto rc = my::get_client_rect(top_right_toolbar);
+						auto w = my::get_width(rc) / (c + 1);
+						auto h = my::get_height(rc);
+
+						// ボタンサイズをクライアント領域いっぱいに広げます。
+						::SendMessage(top_right_toolbar, TB_SETBUTTONSIZE, 0, MAKELPARAM(w, h));
+#else
+						// DPIを取得します。
+						auto dpi = ::GetDpiFromDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+
+						// ボタンサイズをDPIで補正します。
+						auto size = my::lp_to_pt(::SendMessage(top_right_toolbar, TB_GETBUTTONSIZE, 0, 0));
+						size.x = ::MulDiv(size.x, dpi, USER_DEFAULT_SCREEN_DPI);
+						size.y = ::MulDiv(size.y, dpi, USER_DEFAULT_SCREEN_DPI);
+						::SendMessage(top_right_toolbar, TB_SETBUTTONSIZE, 0, my::pt_to_lp(size));
+#endif
+					});
+#endif
+					return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 				}
 			}
 
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
-#endif
+
 		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);

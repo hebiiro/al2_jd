@@ -29,6 +29,17 @@ namespace apn::dark::kuro::theme
 		{
 			auto rc = *arg_rc;
 
+			auto w = my::get_width(rc);
+			auto h = my::get_height(rc);
+
+			// 縦長矩形の場合は
+			if (w < h)
+			{
+				// センタリングされた正方形に変更します。
+				rc.top = (rc.top + rc.bottom - w) / 2;
+				rc.bottom = rc.top + w;
+			}
+
 //			::InflateRect(&rc, 8, 8);
 			::OffsetRect(&rc, 2, -1);
 
@@ -45,8 +56,18 @@ namespace apn::dark::kuro::theme
 			case TP_BUTTON:
 			case TP_DROPDOWNBUTTON:
 				{
-					if (paint::stylus.draw_round_rect(dc, rc, palette, part_id, state_id))
-						return S_OK;
+					if (state_id)
+					{
+						// ボタンを描画します。
+						if (paint::stylus.draw_round_rect(dc, rc, palette, part_id, state_id))
+							return S_OK;
+					}
+					else
+					{
+						// 背景を描画します。
+						if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
+							return S_OK;
+					}
 
 					break;
 				}
@@ -54,6 +75,7 @@ namespace apn::dark::kuro::theme
 			case TP_SEPARATOR:
 			case TP_SEPARATORVERT:
 				{
+					// ボタンを描画します。
 					if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
 						return S_OK;
 
