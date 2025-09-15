@@ -8,7 +8,7 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, dc, control, brush);
 
-			// スタティックコントロールの背景の色を変更します。
+			// スタティックコントロールの文字色と背景色を変更します。
 			{
 				// カラーダイアログのスタティックコントロール用の処理です。
 				if (brush == (HBRUSH)::GetStockObject(DC_BRUSH))
@@ -18,7 +18,21 @@ namespace apn::dark::kuro::gdi
 				if (my::get_style(control) & SS_SUNKEN && ::GetWindowTextLength(control) == 0)
 					return __super::on_ctl_color(hwnd, message, dc, control, brush);
 
-				return get_dialog_brush(hwnd, message, dc, control, brush);
+				// ダイアログのパレットを使用します。
+				const auto& palette = paint::dialog_material.palette;
+
+				auto part_id = WP_DIALOG;
+				auto state_id = ::IsWindowEnabled(hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				if (auto pigment = palette.get(part_id, state_id))
+				{
+					// 文字色と背景色を変更します。
+					::SetTextColor(dc, pigment->text.color);
+					::SetBkColor(dc, pigment->background.color);
+
+					// 背景色のブラシを返します。
+					return pigment->background.get_brush();
+				}
 			}
 
 			return __super::on_ctl_color(hwnd, message, dc, control, brush);
@@ -83,7 +97,7 @@ namespace apn::dark::kuro::gdi
 		{
 //			MY_TRACE_FUNC("{/hex}, {/}, {/}, options = {/hex}, {/}, {/}, {/}, {/hex}, bk_color = {/hex}, text_color = {/hex}",
 //				dc, x, y, options, safe_string(rc), safe_string(text, c, options), c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
-
+#if 0 // ここの代わりにon_ctl_color()とon_draw_text_ex_w()で処理するように変更しました。
 //			if (!(options & ETO_IGNORELANGUAGE))
 			{
 				const auto& palette = paint::dialog_material.palette;
@@ -94,8 +108,19 @@ namespace apn::dark::kuro::gdi
 				if (auto pigment = palette.get(part_id, state_id))
 					return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 			}
-
+#endif
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
+		}
+
+		virtual BOOL on_draw_text_ex_w(MessageState* current_state, HDC dc, LPWSTR text, int c, LPRECT rc, UINT flags, LPDRAWTEXTPARAMS dtp) override
+		{
+			MY_TRACE_FUNC("dc = {/hex}, flags = {/hex}, rc = ({/}), text = {/}, bk_color = {/hex}, text_color = {/hex}",
+				dc, flags, safe_string(rc), safe_string(text, c), ::GetBkColor(dc), ::GetTextColor(dc));
+
+			if (hive.jd.use_d2d && !(flags & (DT_CALCRECT | DT_MODIFYSTRING)) && !dtp)
+				return paint::d2d.draw_text(dc, text, c, rc, flags);
+
+			return hive.orig.DrawTextExW(dc, text, c, rc, flags, dtp);
 		}
 
 		virtual BOOL on_pat_blt(MessageState* current_state, HDC dc, int x, int y, int w, int h, DWORD rop) override

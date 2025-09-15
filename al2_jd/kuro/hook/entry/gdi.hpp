@@ -44,14 +44,14 @@ namespace apn::dark::kuro::hook
 			my::hook::attach(ExtTextOutW);
 			my::hook::attach(GetSysColor);
 			my::hook::attach(GetSysColorBrush);
+			my::hook::attach(DrawTextW);
+			my::hook::attach(DrawTextExW);
 #if 0 // テスト用コードです。
 			my::hook::attach(DrawFrame, ::GetProcAddress(user32, "DrawFrame"));
 			my::hook::attach(DrawFrameControl);
 			my::hook::attach(FrameRect);
 			my::hook::attach(DrawStateW);
 			my::hook::attach(GrayStringW);
-			my::hook::attach(DrawTextW);
-			my::hook::attach(DrawTextExW);
 			my::hook::attach(DrawShadowText);
 			my::hook::attach(DrawMenuBar);
 			my::hook::attach(ExtTextOutA);
@@ -300,6 +300,9 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, ({/}), {/hex}",
 					ret_addr(&dc), dc, safe_string(text, c), safe_string(rc), flags);
 
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_draw_text_ex_w(dc, (LPWSTR)text, c, rc, flags, nullptr);
+
 				return orig_proc(dc, text, c, rc, flags);
 			}
 			inline static decltype(&hook_proc) orig_proc = ::DrawTextW;
@@ -313,6 +316,9 @@ namespace apn::dark::kuro::hook
 			{
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, ({/}), {/hex}, {/hex}",
 					ret_addr(&dc), dc, safe_string(text, c), safe_string(rc), flags, dtp);
+
+				if (hive.is_valid_thread())
+					return gdi::Renderer::fire_draw_text_ex_w(dc, text, c, rc, flags, dtp);
 
 				return orig_proc(dc, text, c, rc, flags, dtp);
 			}

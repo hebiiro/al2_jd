@@ -304,6 +304,16 @@ namespace apn::dark::kuro::gdi
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 		}
 
+		inline static BOOL fire_draw_text_ex_w(HDC dc, LPWSTR text, int c, LPRECT rc, UINT flags, LPDRAWTEXTPARAMS dtp)
+		{
+			auto hwnd = current_message_state.hwnd;
+			MY_TRACE_HWND(hwnd);
+
+			auto renderer = from_handle(current_message_state.hwnd);
+			if (renderer) return renderer->on_draw_text_ex_w(&current_message_state, dc, text, c, rc, flags, dtp);
+			return hive.orig.DrawTextExW(dc, text, c, rc, flags, dtp);
+		}
+
 		inline static BOOL fire_pat_blt(HDC dc, int x, int y, int w, int h, DWORD rop)
 		{
 			auto renderer = from_handle(current_message_state.hwnd);
@@ -499,6 +509,11 @@ namespace apn::dark::kuro::gdi
 		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx)
 		{
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
+		}
+
+		virtual BOOL on_draw_text_ex_w(MessageState* current_state, HDC dc, LPWSTR text, int c, LPRECT rc, UINT flags, LPDRAWTEXTPARAMS dtp)
+		{
+			return hive.orig.DrawTextExW(dc, text, c, rc, flags, dtp);
 		}
 
 		virtual BOOL on_pat_blt(MessageState* current_state, HDC dc, int x, int y, int w, int h, DWORD rop)
