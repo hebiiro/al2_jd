@@ -16,27 +16,27 @@ namespace apn::dark::kuro::paint
 
 			auto separator = create_pigment(L"TreeView", L"Separator",
 				Style::Color::Border,
-				CLR_NONE,
-				CLR_NONE);
+				{},
+				{});
 
 			auto item_normal = create_pigment(L"TreeView", L"Normal",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto item_disabled = create_pigment(L"TreeView", L"Disable",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::TextDisable);
 
 			auto item_hot = create_pigment(L"TreeView", L"Hot",
 				Style::Color::ButtonBodyHover,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto item_selected = create_pigment(L"TreeView", L"Select",
 				Style::Color::ButtonBodySelect,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto glyph_normal = create_pigment(L"TreeViewGlyph", L"Normal", item_normal);

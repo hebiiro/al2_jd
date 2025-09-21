@@ -24,17 +24,17 @@ namespace apn::dark::kuro::paint
 
 			auto background = create_pigment(L"Menu", L"Background",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto bar_active = create_pigment(L"Menu", L"Active",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto bar_inactive = create_pigment(L"Menu", L"Inactive",
 				Style::Color::TitleHeader,
-				CLR_NONE,
+				{},
 				Style::Color::TextDisable);
 
 			auto bar_hot = create_pigment(L"Menu", L"Hot",
@@ -43,33 +43,33 @@ namespace apn::dark::kuro::paint
 				Style::Color::Text);
 
 			auto bar_warning = create_pigment(L"Menu", L"Warning",
-				RGB(0xCE, 0x3E, 0x2C),
-				RGB(0xC4, 0x2B, 0x1C),
+				{ { RGB(0xCE, 0x3E, 0x2C) } },
+				{ { RGB(0xC4, 0x2B, 0x1C) } },
 				Style::Color::Text);
 
 			auto border = create_pigment(L"Menu", L"Border",
 				Style::Color::WindowBorder,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto gutter = create_pigment(L"Menu", L"Gutter",
 				Style::Color::TitleHeader,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto separator = create_pigment(L"Menu", L"Separator",
 				Style::Color::TitleHeader,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto item_normal = create_pigment(L"MenuItem", L"Normal",
-				 Style::Color::Background,
-				 CLR_NONE,
+				Style::Color::Background,
+				{},
 				Style::Color::Text);
 
 			auto item_disabled = create_pigment(L"MenuItem", L"Disable",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::TextDisable);
 
 			auto item_hot = create_pigment(L"MenuItem", L"Hot",
@@ -79,18 +79,18 @@ namespace apn::dark::kuro::paint
 				Style::Color::Text);
 
 			auto item_focus = create_pigment(L"MenuItem", L"Focus",
-				CLR_NONE,
+				{},
 				Style::Color::BorderFocus,
 				Style::Color::Text);
 
 			auto icon_normal = create_pigment(L"MenuIcon", L"Normal",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto icon_disabled = create_pigment(L"MenuIcon", L"Disable",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::TextDisable);
 
 			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, bar_active);

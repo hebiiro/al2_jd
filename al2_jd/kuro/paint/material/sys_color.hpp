@@ -103,8 +103,8 @@ namespace apn::dark::kuro::paint
 		inline static void draw_single_edge(HDC dc, LPCRECT rc, SingleEdge& edge)
 		{
 			return paint::draw_single_edge(dc, rc,
-				edge.top_left.background.color,
-				edge.bottom_right.background.color);
+				edge.top_left.background.get_win32_color(),
+				edge.bottom_right.background.get_win32_color());
 		}
 
 		//
@@ -113,10 +113,10 @@ namespace apn::dark::kuro::paint
 		inline static void draw_edge(HDC dc, LPCRECT rc, Edge& edge)
 		{
 			return paint::draw_edge(dc, rc,
-				edge.outer.top_left.background.color,
-				edge.outer.bottom_right.background.color,
-				edge.inner.top_left.background.color,
-				edge.inner.bottom_right.background.color);
+				edge.outer.top_left.background.get_win32_color(),
+				edge.outer.bottom_right.background.get_win32_color(),
+				edge.inner.top_left.background.get_win32_color(),
+				edge.inner.bottom_right.background.get_win32_color());
 		}
 	} sys_color_material;
 
@@ -125,7 +125,7 @@ namespace apn::dark::kuro::paint
 	//
 	inline void draw_single_border(HDC dc, LPCRECT rc)
 	{
-		return frame_rect(dc, rc, sys_color_material.single_border.background.color, 1);
+		return frame_rect(dc, rc, sys_color_material.single_border.background.get_win32_color(), 1);
 	}
 
 	//

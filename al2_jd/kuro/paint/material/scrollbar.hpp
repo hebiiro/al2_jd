@@ -16,12 +16,12 @@ namespace apn::dark::kuro::paint
 
 			auto background = create_pigment(L"ScrollBar", L"Background",
 				Style::Color::TitleHeader,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto size_box = create_pigment(L"ScrollBar", L"SizeBox",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::TextDisable);
 
 			auto button_normal = create_pigment(L"ScrollBarButton", L"Normal",

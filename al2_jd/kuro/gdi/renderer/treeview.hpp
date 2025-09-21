@@ -54,10 +54,10 @@ namespace apn::dark::kuro::gdi
 					if (auto pigment = palette.get(part_id, state_id))
 					{
 						if (pigment->background.is_valid())
-							cd->clrTextBk = pigment->background.color;
+							cd->clrTextBk = pigment->background.get_win32_color();
 
 						if (pigment->text.is_valid())
-							cd->clrText = pigment->text.color;
+							cd->clrText = pigment->text.get_win32_color();
 					}
 
 					return CDRF_NEWFONT;

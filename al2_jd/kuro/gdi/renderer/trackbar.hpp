@@ -114,7 +114,7 @@ namespace apn::dark::kuro::gdi
 					if (auto pigment = palette.get(part_id, state_id))
 					{
 						if (pigment->background.is_valid())
-							::SetBkColor(dc, pigment->background.color);
+							::SetBkColor(dc, pigment->background.get_win32_color());
 					}
 				}
 			}

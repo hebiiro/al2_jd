@@ -20,7 +20,7 @@ namespace apn::dark::kuro::theme
 			case TMT_TEXTCOLOR:
 				{
 					if (auto pigment = palette.get(part_id, state_id))
-						return *result = pigment->text.color, S_OK;
+						return *result = pigment->text.get_win32_color(), S_OK;
 
 					break;
 				}

@@ -14,11 +14,10 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto background = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto background = create_pigment(L"AddressBand", L"Background",
+				Style::Color::Background,
+				Style::Color::Border,
+				Style::Color::Text);
 
 			palette.set(0, 0, background);
 		}

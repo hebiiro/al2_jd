@@ -72,7 +72,7 @@ namespace apn::dark::kuro::theme
 			{
 				switch (prop_id)
 				{
-				case TMT_TEXTCOLOR: return *result = pigment->text.color, S_OK;
+				case TMT_TEXTCOLOR: return *result = pigment->text.get_win32_color(), S_OK;
 				}
 			}
 

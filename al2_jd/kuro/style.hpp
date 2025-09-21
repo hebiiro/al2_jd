@@ -3,84 +3,13 @@
 namespace apn::dark::kuro
 {
 	//
-	// このクラスは配色を保持します。
-	//
-	struct ColorValue
-	{
-		//
-		// このクラスはRGBAを保持します。
-		//
-		struct RGBA { uint8_t r, g, b, a; };
-
-		//
-		// 配色の値です。複数の場合もあります。
-		//
-		RGBA values[2] = {};
-
-		//
-		// win32用の配色の値です。複数の場合もあります。
-		//
-		COLORREF win32_values[2] = {};
-
-		//
-		// 配色の名前です。
-		//
-		LPCWSTR name;
-
-		//
-		// コンストラクタです。
-		//
-		ColorValue(LPCWSTR name)
-			: name(name)
-		{
-			for (auto& value : values)
-				value = { 0xff, 0xff, 0xff, 0xff };
-		}
-
-		//
-		// 配色を設定します。
-		//
-		void set(size_t i, const std::wstring& str)
-		{
-			switch (str.length())
-			{
-			case 6: // rrggbb形式の場合の処理です。
-				{
-					// 文字列を16進数に変換します。
-					auto temp = wcstoul(str.data(), nullptr, 16);
-
-					values[i].r = (uint8_t)((temp & 0x00FF0000) >> 16);
-					values[i].g = (uint8_t)((temp & 0x0000FF00) >> 8);
-					values[i].b = (uint8_t)((temp & 0x000000FF) >> 0);
-					values[i].a = (uint8_t)(0xff);
-
-					win32_values[i] = RGB(values[i].r, values[i].g, values[i].b);
-
-					break;
-				}
-			case 8: // rrggbbaa形式の場合の処理です。
-				{
-					// 文字列を16進数に変換します。
-					auto temp = wcstoul(str.data(), nullptr, 16);
-
-					values[i].r = (uint8_t)((temp & 0xFF000000) >> 24);
-					values[i].g = (uint8_t)((temp & 0x00FF0000) >> 16);
-					values[i].b = (uint8_t)((temp & 0x0000FF00) >> 8);
-					values[i].a = (uint8_t)((temp & 0x000000FF) >> 0);
-
-					win32_values[i] = RGB(values[i].r, values[i].g, values[i].b);
-
-					break;
-				}
-			}
-		}
-	};
-
-	//
 	// このクラスはaviutl2のstyle.confの変数を保持します。
 	//
 	inline struct Style
 	{
+		//
+		// 配色のインデックスです。
+		//
 		enum class Color : size_t {
 			Background,
 			WindowBorder,
@@ -151,125 +80,210 @@ namespace apn::dark::kuro
 			MaxSize,
 		};
 
-		ColorValue colors[(size_t)Color::MaxSize] = {
-			L"Background",
-			L"WindowBorder",
-			L"WindowSeparator",
-			L"Footer",
-			L"FooterProgress",
-			L"Grouping",
-			L"GroupingHover",
-			L"GroupingSelect",
-			L"TitleHeader",
-			L"BorderSelect",
-			L"Border",
-			L"BorderFocus",
-			L"Text",
-			L"TextDisable",
-			L"TextSelect",
-			L"ButtonBody",
-			L"ButtonBodyHover",
-			L"ButtonBodyPress",
-			L"ButtonBodyDisable",
-			L"ButtonBodySelect",
-			L"SliderCursor",
-			L"TrackBarRange",
-			L"ZoomGauge",
-			L"ZoomGaugeHover",
-			L"ZoomGaugeOff",
-			L"ZoomGaugeOffHover",
-			L"FrameCursor",
-			L"FrameCursorWide",
-			L"PlayerCursor",
-			L"GuideLine",
-			L"Layer",
-			L"LayerHeader",
-			L"LayerHover",
-			L"LayerDisable",
-			L"LayerRange",
-			L"LayerRangeFrame",
-			L"ObjectVideo",
-			L"ObjectVideoSelect",
-			L"ObjectAudio",
-			L"ObjectAudioSelect",
-			L"ObjectControl",
-			L"ObjectControlSelect",
-			L"ObjectVideoFilter",
-			L"ObjectVideoFilterSelect",
-			L"ObjectAudioFilter",
-			L"ObjectAudioFilterSelect",
-			L"ObjectHover",
-			L"ObjectFocus",
-			L"ObjectSection",
-			L"ClippingObject",
-			L"ClippingObjectMask",
-			L"Anchor",
-			L"AnchorLine",
-			L"AnchorIn",
-			L"AnchorOut",
-			L"AnchorHover",
-			L"AnchorSelect",
-			L"AnchorEdge",
-			L"CenterGroup",
-			L"HandleX",
-			L"HandleY",
-			L"HandleZ",
-			L"HandleXHover",
-			L"HandleYHover",
-			L"HandleZHover",
-			L"OutsideDisplay",
+		//
+		// 配色インデックスのマップです。
+		// キーは配色名です。
+		//
+		const std::unordered_map<std::wstring, Color> index_map = {
+			{ L"Background", Color::Background },
+			{ L"WindowBorder", Color::WindowBorder },
+			{ L"WindowSeparator", Color::WindowSeparator },
+			{ L"Footer", Color::Footer },
+			{ L"FooterProgress", Color::FooterProgress },
+			{ L"Grouping", Color::Grouping },
+			{ L"GroupingHover", Color::GroupingHover },
+			{ L"GroupingSelect", Color::GroupingSelect },
+			{ L"TitleHeader", Color::TitleHeader },
+			{ L"BorderSelect", Color::BorderSelect },
+			{ L"Border", Color::Border },
+			{ L"BorderFocus", Color::BorderFocus },
+			{ L"Text", Color::Text },
+			{ L"TextDisable", Color::TextDisable },
+			{ L"TextSelect", Color::TextSelect },
+			{ L"ButtonBody", Color::ButtonBody },
+			{ L"ButtonBodyHover", Color::ButtonBodyHover },
+			{ L"ButtonBodyPress", Color::ButtonBodyPress },
+			{ L"ButtonBodyDisable", Color::ButtonBodyDisable },
+			{ L"ButtonBodySelect", Color::ButtonBodySelect },
+			{ L"SliderCursor", Color::SliderCursor },
+			{ L"TrackBarRange", Color::TrackBarRange },
+			{ L"ZoomGauge", Color::ZoomGauge },
+			{ L"ZoomGaugeHover", Color::ZoomGaugeHover },
+			{ L"ZoomGaugeOff", Color::ZoomGaugeOff },
+			{ L"ZoomGaugeOffHover", Color::ZoomGaugeOffHover },
+			{ L"FrameCursor", Color::FrameCursor },
+			{ L"FrameCursorWide", Color::FrameCursorWide },
+			{ L"PlayerCursor", Color::PlayerCursor },
+			{ L"GuideLine", Color::GuideLine },
+			{ L"Layer", Color::Layer },
+			{ L"LayerHeader", Color::LayerHeader },
+			{ L"LayerHover", Color::LayerHover },
+			{ L"LayerDisable", Color::LayerDisable },
+			{ L"LayerRange", Color::LayerRange },
+			{ L"LayerRangeFrame", Color::LayerRangeFrame },
+			{ L"ObjectVideo", Color::ObjectVideo },
+			{ L"ObjectVideoSelect", Color::ObjectVideoSelect },
+			{ L"ObjectAudio", Color::ObjectAudio },
+			{ L"ObjectAudioSelect", Color::ObjectAudioSelect },
+			{ L"ObjectControl", Color::ObjectControl },
+			{ L"ObjectControlSelect", Color::ObjectControlSelect },
+			{ L"ObjectVideoFilter", Color::ObjectVideoFilter },
+			{ L"ObjectVideoFilterSelect", Color::ObjectVideoFilterSelect },
+			{ L"ObjectAudioFilter", Color::ObjectAudioFilter },
+			{ L"ObjectAudioFilterSelect", Color::ObjectAudioFilterSelect },
+			{ L"ObjectHover", Color::ObjectHover },
+			{ L"ObjectFocus", Color::ObjectFocus },
+			{ L"ObjectSection", Color::ObjectSection },
+			{ L"ClippingObject", Color::ClippingObject },
+			{ L"ClippingObjectMask", Color::ClippingObjectMask },
+			{ L"Anchor", Color::Anchor },
+			{ L"AnchorLine", Color::AnchorLine },
+			{ L"AnchorIn", Color::AnchorIn },
+			{ L"AnchorOut", Color::AnchorOut },
+			{ L"AnchorHover", Color::AnchorHover },
+			{ L"AnchorSelect", Color::AnchorSelect },
+			{ L"AnchorEdge", Color::AnchorEdge },
+			{ L"CenterGroup", Color::CenterGroup },
+			{ L"HandleX", Color::HandleX },
+			{ L"HandleY", Color::HandleY },
+			{ L"HandleZ", Color::HandleZ },
+			{ L"HandleXHover", Color::HandleXHover },
+			{ L"HandleYHover", Color::HandleYHover },
+			{ L"HandleZHover", Color::HandleZHover },
+			{ L"OutsideDisplay", Color::OutsideDisplay },
 		};
 
 		//
-		// 配色をwin32のCOLORREF形式で返します。
+		// 配色項目の配列です。
 		//
-		COLORREF get_COLORREF(Color color_index, size_t value_index = 0) const
+		ColorEntry entries[(size_t)Color::MaxSize] = {};
+
+		//
+		// 配色項目を返します。
+		//
+		const ColorEntry& get_entry(Color color_index) const
 		{
-			return colors[(size_t)color_index].win32_values[value_index];
+			return entries[(size_t)color_index];
+		}
+
+		//
+		// 文字列を配色データに変換してコレクションに追加します。
+		//
+		void add(const std::wstring& section, const std::wstring& key, const std::wstring& value)
+		{
+			// キーに対応するイテレータを取得します。
+			auto it = index_map.find(key);
+			if (it == index_map.end()) return;
+
+			// 配色インデックスを取得します。
+			auto index = (size_t)it->second;
+			if (index >= std::size(entries)) return;
+
+			// 値を配列に分割します。
+			auto vec = split(value, L',');
+
+			// 最大数を取得します。
+			auto c = std::min(ColorEntry::c_max_size, vec.size());
+
+			// 配列を走査します。
+			for (size_t i = 0; i < c; i++)
+			{
+				// 文字列を取得します。
+				const auto& str = vec[i];
+
+				// 文字列が空の場合は何もしません。
+				if (str.empty()) continue;
+
+				// 取得予定のRGBAです。
+				auto rgba = RGBA {};
+
+				// 文字列の長さで分岐します。
+				switch (str.length())
+				{
+				// rrggbb形式の場合は
+				case 6:
+					{
+						// 文字列をRGBAに変換します。
+						rgba.value = wcstoul(str.data(), nullptr, 16) << 8;
+						rgba.a = 0xff;
+
+						break;
+					}
+				// rrggbbaa形式の場合は
+				case 8:
+					{
+						// 文字列をRGBAに変換します。
+						rgba.value = wcstoul(str.data(), nullptr, 16);
+
+						break;
+					}
+				// それ以外の場合は
+				default:
+					{
+						// 何もしません。
+						continue;
+					}
+				}
+
+				// 配色をセットします。
+				entries[index].colors[i] = { rgba };
+			}
 		}
 
 		//
 		// スタイルファイルを読み込みます。
 		//
-		BOOL read_file(LPCWSTR ini_file_name)
+		BOOL read_file(const std::wstring& ini_file_name)
 		{
 			MY_TRACE_FUNC("{/}", ini_file_name);
 
-			//
-			// この関数はスタイルファイル内のカラー項目を文字列として返します。
-			//
-			const auto get_color_string = [&](LPCWSTR key_name)
+			// 現在のセクションです。
+			auto section = std::wstring {};
+
+			// ファイルストリームを開きます。UTF-8です。
+			std::ifstream stream(ini_file_name);
+
+			// 一行ずつ読み込みます。
+			auto utf8_line = std::string {};
+			while (std::getline(stream, utf8_line))
 			{
-				std::wstring buffer(MAX_PATH, L'\0');
-				::GetPrivateProfileStringW(L"Color", key_name,
-					L"", buffer.data(), (DWORD)buffer.size(), ini_file_name);
-				buffer.resize(wcslen(buffer.data()));
-				return buffer;
-			};
+				// ワイド文字列に変換します。
+				auto line = my::cp_to_wide(utf8_line, CP_UTF8);
 
-			//
-			// この関数はスタイルファイル内のカラー項目を読み込みます。
-			//
-			const auto read_color = [&](ColorValue& color)
-			{
-				// カラー項目を文字列として取得します。
-				auto str = get_color_string(color.name);
+				// 前後の空白を削除します。
+				line = trim(line);
 
-				// 文字列を配列に分割します。
-				auto vec = split(str, L',');
+				// 空行は無視します。
+				if (line.empty()) continue;
 
-				// 配列が取得できなかった場合は何もしません。
-				if (vec.empty()) return;
+				// コメント行の場合は無視します。
+				if (line.starts_with(L';')) continue;
 
-				// 最大数を取得します。
-				auto c = std::min(std::size(color.values), vec.size());
+				// セクション行の場合は
+				if (line.starts_with(L'[') && line.ends_with(L']'))
+				{
+					// セクションを更新します。
+					section = line.substr(1, line.length() - 2);
 
-				// 配色をセットします。
-				for (size_t i = 0; i < c; i++) color.set(i, vec[i]);
-			};
+					// ループを続けます。
+					continue;
+				}
 
-			// スタイルファイル内のカラー項目を読み込みます。
-			for (auto& color : colors) read_color(color);
+				// セパレータの位置を取得します。
+				auto separator_pos = line.find_first_of(L'=');
+
+				// セパレータの位置が無効の場合は無視します。
+				if (separator_pos == line.npos) continue;
+
+				// キーを取得します。
+				auto key = trim(line.substr(0, separator_pos));
+
+				// 値を取得します。
+				auto value = trim(line.substr(separator_pos + 1));
+
+				// コレクションに追加します。
+				add(section, key, value);
+			}
 
 			return TRUE;
 		}
@@ -304,7 +318,7 @@ namespace apn::dark::kuro
 				}
 
 				// スタイルファイルを読み込みます。
-				read_file(hive.jd.style_file_name.c_str());
+				read_file(hive.jd.style_file_name);
 			}
 			// 例外が発生した場合は
 			catch (std::exception& error)

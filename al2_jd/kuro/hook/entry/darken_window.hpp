@@ -117,9 +117,9 @@ namespace apn::dark::kuro::hook
 
 			return my::format(LR"(<NamedColor name="{/}" fillColor="{/}" edgeColor="{/}" textForeColor="{/}" textBackColor="{/}" />)",
 				name,
-				to_string(pigment->background.color),
-				to_string(pigment->border.color),
-				to_string(pigment->text.color),
+				to_string(pigment->background.get_win32_color()),
+				to_string(pigment->border.get_win32_color()),
+				to_string(pigment->text.get_win32_color()),
 				to_string(CLR_NONE));
 		}
 
@@ -179,13 +179,13 @@ namespace apn::dark::kuro::hook
 					ofs << L"\r\n\t"s << my::format(LR"(<Attributes>)");
 					ofs << L"\r\n\t\t"s << my::format(LR"(<Dwm)");
 					ofs << L"\r\n\t\t\t"s << my::format(LR"(activeBorderColor="{/}" activeCaptionColor="{/}" activeTextColor="{/}")",
-						to_string(kuro::paint::window_material.active.border.color),
-						to_string(kuro::paint::window_material.active.background.color),
-						to_string(kuro::paint::window_material.active.text.color));
+						to_string(kuro::paint::window_material.active.border.get_win32_color()),
+						to_string(kuro::paint::window_material.active.background.get_win32_color()),
+						to_string(kuro::paint::window_material.active.text.get_win32_color()));
 					ofs << L"\r\n\t\t\t"s << my::format(LR"(inactiveBorderColor="{/}" inactiveCaptionColor="{/}" inactiveTextColor="{/}")",
-						to_string(kuro::paint::window_material.inactive.border.color),
-						to_string(kuro::paint::window_material.inactive.background.color),
-						to_string(kuro::paint::window_material.inactive.text.color));
+						to_string(kuro::paint::window_material.inactive.border.get_win32_color()),
+						to_string(kuro::paint::window_material.inactive.background.get_win32_color()),
+						to_string(kuro::paint::window_material.inactive.text.get_win32_color()));
 					ofs << L"\r\n\t\t\t"s << my::format(LR"(darkMode="{/}" cornerMode="{/}")", 0, 0);
 					ofs << L"\r\n\t\t"s << my::format(LR"(/>)");
 					ofs << L"\r\n\t\t"s << my::format(LR"(<NamedColors>)");

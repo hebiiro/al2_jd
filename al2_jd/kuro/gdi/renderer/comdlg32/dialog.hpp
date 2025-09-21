@@ -147,7 +147,7 @@ namespace apn::dark::kuro::gdi::comdlg32
 			MY_TRACE_FUNC("{/}", color_id);
 
 			if (auto pigment = paint::sys_color_material.palette.get(color_id, 0))
-				return pigment->background.color;
+				return pigment->background.get_win32_color();
 
 			return __super::on_get_sys_color(color_id);
 		}

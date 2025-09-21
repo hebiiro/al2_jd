@@ -58,10 +58,10 @@ namespace apn::dark::kuro::paint
 		// このクラスはスタイルの配色です。
 		//
 		struct StyleColor {
-			COLORREF color = CLR_NONE;
-			StyleColor(Style::Color color_index) : color(style.get_COLORREF(color_index)) {}
-			StyleColor(COLORREF color) : color(color) {}
-			operator COLORREF() const { return color; }
+			const ColorEntry& entry;
+			StyleColor(const ColorEntry& entry = {}) : entry(entry) {}
+			StyleColor(Style::Color color_index) : entry(style.get_entry(color_index)) {}
+			operator const ColorEntry&() const { return entry; }
 		};
 
 		//
@@ -72,7 +72,7 @@ namespace apn::dark::kuro::paint
 		{
 			return {
 				{ custom_style.get_background_color(section, sub_key, background_color), },
-				{ custom_style.get_border_color(section, sub_key, border_color), 1, },
+				{ custom_style.get_border_color(section, sub_key, border_color), },
 				{ custom_style.get_text_color(section, sub_key, text_color), },
 			};
 		}
@@ -84,9 +84,9 @@ namespace apn::dark::kuro::paint
 		{
 			return create_pigment(
 				section, sub_key,
-				default_pigment.background.color,
-				default_pigment.border.color,
-				default_pigment.text.color);
+				default_pigment.background.entry,
+				default_pigment.border.entry,
+				default_pigment.text.entry);
 		}
 
 		//
@@ -96,8 +96,8 @@ namespace apn::dark::kuro::paint
 		{
 			return {
 				{ custom_style.get_color(section, key, background_color), },
-				{ CLR_NONE },
-				{ CLR_NONE },
+				{},
+				{},
 			};
 		}
 	};

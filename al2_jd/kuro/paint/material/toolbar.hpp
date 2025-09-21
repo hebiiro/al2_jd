@@ -16,7 +16,7 @@ namespace apn::dark::kuro::paint
 
 			auto background = create_pigment(L"ToolBar", L"Background",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			struct {
@@ -49,12 +49,12 @@ namespace apn::dark::kuro::paint
 			struct {
 				Pigment normal = create_pigment(L"ToolBarFlatButton", L"Normal",
 					Style::Color::Background,
-					CLR_NONE,
+					{},
 					Style::Color::Text);
 
 				Pigment disabled = create_pigment(L"ToolBarFlatButton", L"Disable",
 					Style::Color::Background,
-					CLR_NONE,
+					{},
 					Style::Color::TextDisable);
 
 				Pigment hot = create_pigment(L"ToolBarFlatButton", L"Hot",

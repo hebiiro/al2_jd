@@ -10,15 +10,14 @@ namespace apn::dark::kuro::paint
 	{
 		struct Background
 		{
-			COLORREF color;
-			mutable HBRUSH brush;
+			ColorEntry entry;
+			mutable HBRUSH brush = {};
 
 			//
 			// (デフォルト)コンストラクタです。
 			//
-			Background(COLORREF color = CLR_NONE)
-				: color(color)
-				, brush(nullptr)
+			Background(const ColorEntry& entry = {})
+				: entry(entry)
 			{
 			}
 
@@ -34,8 +33,6 @@ namespace apn::dark::kuro::paint
 			// コピーコンストラクタです。
 			//
 			Background(const Background& rhs)
-				: color(CLR_NONE)
-				, brush(nullptr)
 			{
 				assign(rhs);
 			}
@@ -53,8 +50,8 @@ namespace apn::dark::kuro::paint
 			//
 			void assign(const Background& rhs)
 			{
-				if (color != rhs.color)
-					exit(), color = rhs.color;
+				if (this != &rhs)
+					exit(), entry = rhs.entry;
 			}
 
 			//
@@ -63,7 +60,13 @@ namespace apn::dark::kuro::paint
 			void exit()
 			{
 				if (brush)
-					::DeleteObject(brush), brush = nullptr;
+				{
+					// ブラシがストックオブジェクトではない場合は
+					if (brush != (HBRUSH)::GetStockObject(NULL_BRUSH))
+						::DeleteObject(brush); // ブラシを削除します。
+
+					brush = nullptr;
+				}
 			}
 
 			//
@@ -71,7 +74,15 @@ namespace apn::dark::kuro::paint
 			//
 			BOOL is_valid() const
 			{
-				return color != CLR_NONE;
+				return entry.colors[0].is_valid();
+			}
+
+			//
+			// 配色をwin32形式で返します。
+			//
+			COLORREF get_win32_color() const
+			{
+				return entry.colors[0].win32;
 			}
 
 			//
@@ -82,7 +93,7 @@ namespace apn::dark::kuro::paint
 				if (brush) return brush;
 
 				if (is_valid())
-					return brush = ::CreateSolidBrush(color);
+					return brush = ::CreateSolidBrush(get_win32_color());
 				else
 					return brush = (HBRUSH)::GetStockObject(NULL_BRUSH);
 			}
@@ -90,28 +101,43 @@ namespace apn::dark::kuro::paint
 
 		struct Border
 		{
-			COLORREF color;
-			int width;
+			ColorEntry entry;
 
 			//
 			// 縁が描画可能な場合はTRUEを返します。
 			//
 			BOOL is_valid() const
 			{
-				return color != CLR_NONE && width > 0;
+				return entry.colors[0].is_valid();
+			}
+
+			//
+			// 配色をwin32形式で返します。
+			//
+			COLORREF get_win32_color() const
+			{
+				return entry.colors[0].win32;
 			}
 		} border;
 
 		struct Text
 		{
-			COLORREF color;
+			ColorEntry entry;
 
 			//
 			// テキストが描画可能な場合はTRUEを返します。
 			//
 			BOOL is_valid() const
 			{
-				return color != CLR_NONE;
+				return entry.colors[0].is_valid();
+			}
+
+			//
+			// 配色をwin32形式で返します。
+			//
+			COLORREF get_win32_color() const
+			{
+				return entry.colors[0].win32;
 			}
 		} text;
 	};

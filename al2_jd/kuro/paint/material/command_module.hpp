@@ -39,35 +39,35 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			auto background = Pigment {
-				{ style.get_COLORREF(Style::Color::Background), },
-				{ CLR_NONE, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			auto background = create_pigment(L"ToolBar", L"Background",
+				Style::Color::Background,
+				{},
+				Style::Color::Text);
 
-			auto normal = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBody), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			Pigment normal = create_pigment(L"ToolBarButton", L"Normal",
+				Style::Color::ButtonBody,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto hot = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyHover), },
-				{ style.get_COLORREF(Style::Color::Border), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			Pigment disabled = create_pigment(L"ToolBarButton", L"Disable",
+				Style::Color::ButtonBodyDisable,
+				Style::Color::Border,
+				Style::Color::TextDisable);
 
-			auto pressed = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodyPress), },
-				{ style.get_COLORREF(Style::Color::BorderSelect), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			Pigment hot = create_pigment(L"ToolBarButton", L"Hot",
+				Style::Color::ButtonBodyHover,
+				Style::Color::Border,
+				Style::Color::Text);
 
-			auto checked = Pigment {
-				{ style.get_COLORREF(Style::Color::ButtonBodySelect), },
-				{ style.get_COLORREF(Style::Color::BorderFocus), 1, },
-				{ style.get_COLORREF(Style::Color::Text), },
-			};
+			Pigment pressed = create_pigment(L"ToolBarButton", L"Press",
+				Style::Color::ButtonBodyPress,
+				Style::Color::BorderSelect,
+				Style::Color::Text);
+
+			Pigment checked = create_pigment(L"ToolBarButton", L"Check",
+				Style::Color::ButtonBodySelect,
+				Style::Color::BorderFocus,
+				Style::Color::Text);
 
 			palette.set(CMP_BODY, CMS_BACKGROUND, background);
 

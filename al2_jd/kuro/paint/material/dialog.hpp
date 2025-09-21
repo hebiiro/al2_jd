@@ -23,28 +23,28 @@ namespace apn::dark::kuro::paint
 
 			auto normal = create_pigment(L"Dialog", L"Normal",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto disabled = create_pigment(L"Dialog", L"Disable",
 				Style::Color::ButtonBodyDisable,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto selected = create_pigment(L"Dialog", L"Select",
 				Style::Color::ButtonBodySelect,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto readonly = create_pigment(L"Dialog", L"ReadOnly",
 				Style::Color::ButtonBody,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto footer = create_pigment(L"Dialog", L"Footer",
 				Style::Color::Footer,
-				CLR_NONE,
-				CLR_NONE);
+				{},
+				{});
 
 			palette.set(WP_DIALOG, ETS_NORMAL, normal);
 			palette.set(WP_DIALOG, ETS_DISABLED, disabled);

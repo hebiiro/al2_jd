@@ -17,8 +17,8 @@ namespace apn::dark::kuro::theme
 			{
 				switch (prop_id)
 				{
-				case TMT_FILLCOLOR: return *result = pigment->background.color, S_OK;
-				case TMT_TEXTCOLOR: return *result = pigment->text.color, S_OK;
+				case TMT_FILLCOLOR: return *result = pigment->background.get_win32_color(), S_OK;
+				case TMT_TEXTCOLOR: return *result = pigment->text.get_win32_color(), S_OK;
 				}
 			}
 

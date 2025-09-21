@@ -16,27 +16,27 @@ namespace apn::dark::kuro::paint
 
 			auto separator = create_pigment(L"ListView", L"Separator",
 				Style::Color::Border,
-				CLR_NONE,
-				CLR_NONE);
+				{},
+				{});
 
 			auto item_normal = create_pigment(L"ListView", L"Normal",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto item_disabled = create_pigment(L"ListView", L"Disable",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::TextDisable);
 
 			auto item_hot = create_pigment(L"ListView", L"Hot",
 				Style::Color::ButtonBodyHover,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto item_selected = create_pigment(L"ListView", L"Select",
 				Style::Color::ButtonBodySelect,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			palette.set(LVP_LISTITEM, 0, separator);

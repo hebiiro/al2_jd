@@ -16,7 +16,7 @@ namespace apn::dark::kuro::paint
 
 			auto his_background = create_pigment(L"Header", L"Background",
 				Style::Color::TitleHeader,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto his_normal = create_pigment(L"Header", L"Normal",

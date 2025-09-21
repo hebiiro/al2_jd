@@ -120,7 +120,7 @@ namespace apn::dark::kuro::gdi
 
 					if (auto pigment = palette.get(part_id, state_id))
 					{
-						if (current_color != pigment->background.color)
+						if (current_color != pigment->background.get_win32_color())
 							state_id = LISS_HOT;
 					}
 

@@ -10,28 +10,28 @@ namespace apn::dark::kuro
 		//
 		// カスタムカラーのコレクションです。
 		//
-		std::unordered_map<std::pair<std::wstring, std::wstring>, COLORREF> colors;
+		std::unordered_map<std::pair<std::wstring, std::wstring>, ColorEntry> entries;
 
 		//
 		// 指定されたセクションとキーに対応するカスタムカラーを返します。
 		//
-		COLORREF get_custom_color(const std::wstring& section, const std::wstring& key) const
+		const ColorEntry* get_color(const std::wstring& section, const std::wstring& key) const
 		{
-			auto it = colors.find({ section, key });
-			if (it == colors.end()) return CLR_NONE;
-			return it->second;
+			auto it = entries.find({ section, key });
+			if (it == entries.end()) return {};
+			return &it->second;
 		}
 
 		//
-		// 指定された条件のカラーを返します。
+		// 指定された条件のカスタムカラーを返します。
 		//
-		inline COLORREF get_color(const std::wstring& section, const std::wstring& key, COLORREF default_color)
+		inline ColorEntry get_color(const std::wstring& section, const std::wstring& key, const ColorEntry& default_color)
 		{
 			// カスタムカラーが有効の場合は
-			if (auto color = get_custom_color(section, key); color != CLR_NONE)
+			if (auto color = get_color(section, key))
 			{
 				// カスタムカラーを返します。
-				return color;
+				return *color;
 			}
 			// カスタムカラーが無効の場合は
 			else
@@ -42,63 +42,92 @@ namespace apn::dark::kuro
 		}
 
 		//
-		// バックグランドの配色を返します。
+		// バックグランドのカスタムカラーを返します。
 		//
-		inline COLORREF get_background_color(const std::wstring& section, const std::wstring& sub_key, COLORREF default_color)
+		inline ColorEntry get_background_color(const std::wstring& section, const std::wstring& sub_key, const ColorEntry& default_color)
 		{
 			return get_color(section, sub_key + L"Fill", default_color);
 		}
 
 		//
-		// ボーダーの配色を返します。
+		// ボーダーのカスタムカラーを返します。
 		//
-		inline COLORREF get_border_color(const std::wstring& section, const std::wstring& sub_key, COLORREF default_color)
+		inline ColorEntry get_border_color(const std::wstring& section, const std::wstring& sub_key, const ColorEntry& default_color)
 		{
 			return get_color(section, sub_key + L"Edge", default_color);
 		}
 
 		//
-		// テキストの配色を返します。
+		// テキストのカスタムカラーを返します。
 		//
-		inline COLORREF get_text_color(const std::wstring& section, const std::wstring& sub_key, COLORREF default_color)
+		inline ColorEntry get_text_color(const std::wstring& section, const std::wstring& sub_key, const ColorEntry& default_color)
 		{
 			return get_color(section, sub_key + L"Text", default_color);
 		}
 
 		//
-		// 文字列をCOLORREFに変換して返します。
+		// 文字列を配色データに変換してコレクションに追加します。
 		//
-		inline static COLORREF to_COLORREF(const std::wstring& str)
+		void add(const std::wstring& section, const std::wstring& key, const std::wstring& value)
 		{
-			switch (str.length())
+			// 引数が無効の場合は何もしません。
+			if (section.empty() || key.empty() || value.empty()) return;
+
+			// 値を配列に分割します。
+			auto vec = split(value, L',');
+
+			// 最大数を取得します。
+			auto c = std::min(ColorEntry::c_max_size, vec.size());
+
+			// コレクションに追加予定のカスタムカラーです。
+			auto entry = ColorEntry {};
+
+			// 配列を走査します。
+			for (size_t i = 0; i < c; i++)
 			{
-			case 6: // rrggbb形式の場合の処理です。
+				// 文字列を取得します。
+				const auto& str = vec[i];
+
+				// 文字列が空の場合は何もしません。
+				if (str.empty()) continue;
+
+				// 取得予定のRGBAです。
+				auto rgba = RGBA {};
+
+				// 文字列の長さで分岐します。
+				switch (str.length())
 				{
-					// 文字列を16進数に変換します。
-					auto temp = wcstoul(str.data(), nullptr, 16);
+				// rrggbb形式の場合は
+				case 6:
+					{
+						// 文字列をRGBAに変換します。
+						rgba.value = wcstoul(str.data(), nullptr, 16) << 8;
+						rgba.a = 0xff;
 
-					auto r = (uint8_t)((temp & 0x00FF0000) >> 16);
-					auto g = (uint8_t)((temp & 0x0000FF00) >> 8);
-					auto b = (uint8_t)((temp & 0x000000FF) >> 0);
-					auto a = (uint8_t)(0xff);
+						break;
+					}
+				// rrggbbaa形式の場合は
+				case 8:
+					{
+						// 文字列をRGBAに変換します。
+						rgba.value = wcstoul(str.data(), nullptr, 16);
 
-					return RGB(r, g, b);
+						break;
+					}
+				// それ以外の場合は
+				default:
+					{
+						// 何もしません。
+						continue;
+					}
 				}
-			case 8: // rrggbbaa形式の場合の処理です。
-				{
-					// 文字列を16進数に変換します。
-					auto temp = wcstoul(str.data(), nullptr, 16);
 
-					auto r = (uint8_t)((temp & 0xFF000000) >> 24);
-					auto g = (uint8_t)((temp & 0x00FF0000) >> 16);
-					auto b = (uint8_t)((temp & 0x0000FF00) >> 8);
-					auto a = (uint8_t)((temp & 0x000000FF) >> 0);
-
-					return RGB(r, g, b);
-				}
+				// RGBAをカスタムカラーに追加します。
+				entry.colors[i] = { rgba };
 			}
 
-			return CLR_NONE;
+			// カスタムカラーをコレクションに追加します。
+			entries[{ section, key }] = entry;
 		}
 
 		//
@@ -108,14 +137,14 @@ namespace apn::dark::kuro
 		{
 			MY_TRACE_FUNC("{/}", custom_color_path);
 
-			// 現在のセクション名です。
-			auto section_name = std::wstring {};
+			// 現在のセクションです。
+			auto section = std::wstring {};
 
 			// ファイルストリームを開きます。UTF-8です。
 			std::ifstream stream(custom_color_path);
 
 			// 一行ずつ読み込みます。
-			std::string utf8_line;
+			auto utf8_line = std::string {};
 			while (std::getline(stream, utf8_line))
 			{
 				// ワイド文字列に変換します。
@@ -133,8 +162,8 @@ namespace apn::dark::kuro
 				// セクション行の場合は
 				if (line.starts_with(L'[') && line.ends_with(L']'))
 				{
-					// セクション名を更新します。
-					section_name = line.substr(1, line.size() - 2);
+					// セクションを更新します。
+					section = line.substr(1, line.length() - 2);
 
 					// ループを続けます。
 					continue;
@@ -153,7 +182,7 @@ namespace apn::dark::kuro
 				auto value = trim(line.substr(separator_pos + 1));
 
 				// コレクションに追加します。
-				colors[{ section_name, key }] = { to_COLORREF(value) };
+				add(section, key, value);
 			}
 
 			return TRUE;
@@ -172,13 +201,23 @@ namespace apn::dark::kuro
 				auto plugin_folder_path = my::get_module_file_name(hive.instance).parent_path();
 
 				// カスタムカラーファイルのパスを取得します。
-				hive.jd.custom_color_file_name = plugin_folder_path / L"al2/config/custom_color.conf";
+				std::filesystem::path paths[] = {
+					plugin_folder_path / L"al2/assets/custom_color.conf",
+					plugin_folder_path / L"al2/config/custom_color.conf",
+				};
 
-				// カスタムカラーファイルを読み込みます。
-				read_custom_color_file(hive.jd.custom_color_file_name);
+				// カスタムカラーファイルのパスの配列を走査します。
+				for (auto path : paths)
+				{
+					// カスタムカラーファイルを読み込みます。
+					read_custom_color_file(path);
+
+					// ハイブにセットします。
+					hive.jd.custom_color_file_name = path;
+				}
 			}
 			// 例外が発生した場合は
-			catch (std::exception& error)
+			catch (const std::exception& error)
 			{
 				// メッセージボックスでユーザーに通知します。
 				hive.message_box(my::ws(error.what()));

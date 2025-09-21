@@ -16,13 +16,13 @@ namespace apn::dark::kuro::paint
 
 			auto background = create_pigment(L"Tab", L"Background",
 				Style::Color::Background,
-				CLR_NONE,
-				CLR_NONE);
+				{},
+				{});
 
 			auto pane = create_pigment(L"Tab", L"Pane",
 				Style::Color::Background,
 				Style::Color::Border,
-				CLR_NONE);
+				{});
 
 			auto item_normal = create_pigment(L"TabItem", L"Normal",
 				Style::Color::ButtonBody,

@@ -16,22 +16,22 @@ namespace apn::dark::kuro::paint
 
 			auto ets_normal = create_pigment(L"EditBox", L"Normal",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto ets_disabled = create_pigment(L"EditBox", L"Disable",
 				Style::Color::ButtonBodyDisable,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto ets_selected = create_pigment(L"EditBox", L"Select",
 				Style::Color::ButtonBodySelect,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto ets_readonly = create_pigment(L"EditBox", L"ReadOnly",
 				Style::Color::ButtonBody,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			palette.set(EP_EDITTEXT, ETS_NORMAL, ets_normal);

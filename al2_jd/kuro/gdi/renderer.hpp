@@ -177,9 +177,9 @@ namespace apn::dark::kuro::gdi
 
 					auto pigment = active ? &paint::window_material.active : &paint::window_material.inactive;
 
-					auto caption_color = pigment->background.color;
-					auto border_color = pigment->border.color;
-					auto text_color = pigment->text.color;
+					auto caption_color = pigment->background.get_win32_color();
+					auto border_color = pigment->border.get_win32_color();
+					auto text_color = pigment->text.get_win32_color();
 
 					::DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR , &caption_color, sizeof(caption_color));
 					::DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR , &border_color, sizeof(border_color));

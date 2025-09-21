@@ -27,8 +27,8 @@ namespace apn::dark::kuro::gdi
 				if (auto pigment = palette.get(part_id, state_id))
 				{
 					// 文字色と背景色を変更します。
-					::SetTextColor(dc, pigment->text.color);
-					::SetBkColor(dc, pigment->background.color);
+					::SetTextColor(dc, pigment->text.get_win32_color());
+					::SetBkColor(dc, pigment->background.get_win32_color());
 
 					// 背景色のブラシを返します。
 					return pigment->background.get_brush();

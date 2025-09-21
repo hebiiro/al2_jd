@@ -186,6 +186,7 @@ copy /Y "$(SolutionDir)assets\$(TargetName).json" "$(aviutl2_dir)\data\Plugin\al
     <ClInclude Include="aviutl2_window.hpp" />
     <ClInclude Include="config_dialog.hpp" />
     <ClInclude Include="config_io.hpp" />
+    <ClInclude Include="kuro\color.hpp" />
     <ClInclude Include="kuro\custom_style.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2\layer_name\dialog.hpp" />
     <ClInclude Include="kuro\gdi\renderer\mp4_exporter\dialog.hpp" />

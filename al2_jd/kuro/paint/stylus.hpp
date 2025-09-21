@@ -63,7 +63,7 @@ namespace apn::dark::kuro::paint
 	{
 		if (pigment->border.is_valid())
 		{
-			p->handle = ::CreatePen(PS_INSIDEFRAME, hive.jd.border_width, pigment->border.color);
+			p->handle = ::CreatePen(PS_INSIDEFRAME, hive.jd.border_width, pigment->border.get_win32_color());
 			p->is_deletable = TRUE;
 		}
 		else
@@ -80,7 +80,7 @@ namespace apn::dark::kuro::paint
 	{
 		if (pigment->background.is_valid())
 		{
-			p->handle = ::CreateSolidBrush(pigment->background.color);
+			p->handle = ::CreateSolidBrush(pigment->background.get_win32_color());
 			p->is_deletable = TRUE;
 		}
 		else
@@ -125,12 +125,12 @@ namespace apn::dark::kuro::paint
 			, old_text_color(::GetTextColor(dc))
 		{
 			if (pigment->background.is_valid() && opaque)
-				::SetBkColor(dc, pigment->background.color);
+				::SetBkColor(dc, pigment->background.get_win32_color());
 			else
 				::SetBkMode(dc, TRANSPARENT);
 
 			if (pigment->text.is_valid())
-				::SetTextColor(dc, pigment->text.color);
+				::SetTextColor(dc, pigment->text.get_win32_color());
 		}
 
 		//
@@ -165,7 +165,7 @@ namespace apn::dark::kuro::paint
 			else
 			{
 				my::gdi::unique_ptr<HBRUSH> brush(
-					::CreateSolidBrush(pigment->background.color));
+					::CreateSolidBrush(pigment->background.get_win32_color()));
 
 				return hive.orig.FillRect(dc, rc, brush.get());
 			}

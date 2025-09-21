@@ -92,7 +92,7 @@ namespace apn::dark::kuro::theme::immersive_start
 					memcpy(buffer.get(), options, size);
 					auto options2 = (DTTOPTS*)buffer.get();
 					options2->dwFlags |= DTT_TEXTCOLOR;
-					options2->crText = pigment->text.color;
+					options2->crText = pigment->text.get_win32_color();
 
 					return __super::on_draw_theme_text_ex(theme, dc, part_id, state_id, text, c, text_flags, rc, options2);
 				}

@@ -41,22 +41,22 @@ namespace apn::dark::kuro::paint
 
 			auto radio_button_normal = create_pigment(L"RadioButton", L"Normal",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto radio_button_hot = create_pigment(L"RadioButton", L"Hot",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto radio_button_pressed = create_pigment(L"RadioButton", L"Press",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::Text);
 
 			auto radio_button_disabled = create_pigment(L"RadioButton", L"Disable",
 				Style::Color::Background,
-				CLR_NONE,
+				{},
 				Style::Color::TextDisable);
 
 			auto checkbox_normal = create_pigment(L"CheckBox", L"Normal", radio_button_normal);
