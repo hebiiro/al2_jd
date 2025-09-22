@@ -63,7 +63,7 @@ namespace apn::dark::kuro::paint
 	{
 		if (pigment->border.is_valid())
 		{
-			p->handle = ::CreatePen(PS_INSIDEFRAME, hive.jd.border_width, pigment->border.get_win32_color());
+			p->handle = ::CreatePen(PS_INSIDEFRAME, get_border_width_as_int(), pigment->border.get_win32_color());
 			p->is_deletable = TRUE;
 		}
 		else
@@ -174,19 +174,32 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して丸角矩形を描画します。
 		//
-		BOOL draw_round_rect(HDC dc, LPCRECT rc, const Pigment* pigment)
+		BOOL draw_round_rect(HDC dc, LPCRECT arg_rc, const Pigment* pigment)
 		{
-			if (!hive.jd.as_round) return draw_rect(dc, rc, pigment);
+			if (!hive.jd.as_round) return draw_rect(dc, arg_rc, pigment);
 
-			PenAttribute pen_attribute(dc, pigment);
-			BrushAttribute brush_attribute(dc, pigment);
+			auto rc = *arg_rc;
+			rc.right -= 1;
+			rc.bottom -= 1;
+			auto w = my::get_width(rc);
+			auto h = my::get_height(rc);
+			auto r = std::min(w, h);
 
-			auto w = my::get_width(*rc);
-			auto h = my::get_height(*rc);
+			if (hive.jd.use_d2d)
+			{
+				auto radius = get_round_as_float(r / 2.0f);
 
-			auto round = ::MulDiv(std::min(w, h), hive.jd.round, 100);
+				return d2d.draw_round_rect(dc, &rc, radius, pigment);
+			}
+			else
+			{
+				auto round = get_round_as_int(r);
 
-			return ::RoundRect(dc, rc->left, rc->top, rc->right - 1, rc->bottom - 1, round, round);
+				PenAttribute pen_attribute(dc, pigment);
+				BrushAttribute brush_attribute(dc, pigment);
+
+				return ::RoundRect(dc, rc.left, rc.top, rc.right, rc.bottom, round, round);
+			}
 		}
 
 		//
@@ -238,10 +251,9 @@ namespace apn::dark::kuro::paint
 		{
 			if (!hive.jd.use_d2d) return draw_text(dc, rc, text, c, text_flags, pigment, opaque);
 
-			ExtTextOutLocker locker;
 			TextAttribute text_attribute(dc, pigment, opaque);
 
-			return !!d2d.draw_text(dc, text, c, (LPRECT)rc, text_flags);
+			return !!d2d.draw_text(dc, text, c, (LPRECT)rc, text_flags, pigment);
 		}
 
 		//
@@ -250,9 +262,6 @@ namespace apn::dark::kuro::paint
 		BOOL d2d_draw_icon(HDC dc, LPCRECT rc, const Pigment* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
 			if (!hive.jd.use_d2d) return draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
-
-			ExtTextOutLocker locker;
-			TextAttribute text_attribute(dc, pigment, FALSE); // 背景は塗りつぶしません。
 
 			auto font_height = my::get_height(*rc);
 			my::gdi::unique_ptr<HFONT> font(::CreateFontW(
@@ -263,7 +272,7 @@ namespace apn::dark::kuro::paint
 			my::gdi::selector font_selector(dc, font.get());
 
 			return !!d2d.draw_text(dc, &char_code, 1,
-				(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+				(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE, pigment);
 		}
 
 		//

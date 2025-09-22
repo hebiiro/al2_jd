@@ -118,7 +118,16 @@ namespace apn::dark::kuro::gdi
 				dc, flags, safe_string(rc), safe_string(text, c), ::GetBkColor(dc), ::GetTextColor(dc));
 
 			if (hive.jd.use_d2d && !(flags & (DT_CALCRECT | DT_MODIFYSTRING)) && !dtp)
-				return paint::d2d.draw_text(dc, text, c, rc, flags);
+			{
+				// ダイアログのパレットを使用します。
+				const auto& palette = paint::dialog_material.palette;
+
+				auto part_id = WP_DIALOG;
+				auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					return paint::d2d.draw_text(dc, text, c, rc, flags, pigment);
+			}
 
 			return hive.orig.DrawTextExW(dc, text, c, rc, flags, dtp);
 		}

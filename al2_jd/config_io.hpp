@@ -60,8 +60,12 @@ namespace apn::dark
 			read_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 			read_bool(root, "jd.use_d2d", hive.jd.use_d2d);
 			read_bool(root, "jd.as_round", hive.jd.as_round);
-			read_int(root, "jd.round", hive.jd.round);
+			read_int(root, "jd.round_size", hive.jd.round_size);
 			read_int(root, "jd.border_width", hive.jd.border_width);
+			read_bool(root, "jd.as_3d_edge", hive.jd.as_3d_edge);
+			read_bool(root, "jd.as_gradient", hive.jd.as_gradient);
+			read_bool(root, "jd.use_gradient_end_alpha", hive.jd.use_gradient_end_alpha);
+			read_int(root, "jd.gradient_end_alpha", hive.jd.gradient_end_alpha);
 
 			return TRUE;
 		}
@@ -79,8 +83,12 @@ namespace apn::dark
 			write_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 			write_bool(root, "jd.use_d2d", hive.jd.use_d2d);
 			write_bool(root, "jd.as_round", hive.jd.as_round);
-			write_int(root, "jd.round", hive.jd.round);
+			write_int(root, "jd.round_size", hive.jd.round_size);
 			write_int(root, "jd.border_width", hive.jd.border_width);
+			write_bool(root, "jd.as_3d_edge", hive.jd.as_3d_edge);
+			write_bool(root, "jd.as_gradient", hive.jd.as_gradient);
+			write_bool(root, "jd.use_gradient_end_alpha", hive.jd.use_gradient_end_alpha);
+			write_int(root, "jd.gradient_end_alpha", hive.jd.gradient_end_alpha);
 
 			return TRUE;
 		}

@@ -387,6 +387,9 @@
     <ClInclude Include="kuro\color.hpp">
       <Filter>kuro</Filter>
     </ClInclude>
+    <ClInclude Include="kuro\paint\d2d_utils.hpp">
+      <Filter>kuro\paint</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">

@@ -66,8 +66,12 @@ namespace apn::dark
 			set_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
 			set_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
 			set_check(IDC_JD_AS_ROUND, hive.jd.as_round);
-			set_int(IDC_JD_ROUND, hive.jd.round);
+			set_int(IDC_JD_ROUND_SIZE, hive.jd.round_size);
 			set_int(IDC_JD_BORDER_WIDTH, hive.jd.border_width);
+			set_check(IDC_JD_AS_3D_EDGE, hive.jd.as_3d_edge);
+			set_check(IDC_JD_AS_GRADIENT, hive.jd.as_gradient);
+			set_check(IDC_JD_USE_GRADIENT_END_ALPHA, hive.jd.use_gradient_end_alpha);
+			set_int(IDC_JD_GRADIENT_END_ALPHA, hive.jd.gradient_end_alpha);
 
 			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -107,8 +111,12 @@ namespace apn::dark
 			get_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
 			get_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
 			get_check(IDC_JD_AS_ROUND, hive.jd.as_round);
-			get_int(IDC_JD_ROUND, hive.jd.round);
+			get_int(IDC_JD_ROUND_SIZE, hive.jd.round_size);
 			get_int(IDC_JD_BORDER_WIDTH, hive.jd.border_width);
+			get_check(IDC_JD_AS_3D_EDGE, hive.jd.as_3d_edge);
+			get_check(IDC_JD_AS_GRADIENT, hive.jd.as_gradient);
+			get_check(IDC_JD_USE_GRADIENT_END_ALPHA, hive.jd.use_gradient_end_alpha);
+			get_int(IDC_JD_GRADIENT_END_ALPHA, hive.jd.gradient_end_alpha);
 
 			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
@@ -185,6 +193,9 @@ namespace apn::dark
 						}
 					case IDC_JD_USE_D2D:
 					case IDC_JD_AS_ROUND:
+					case IDC_JD_AS_3D_EDGE:
+					case IDC_JD_AS_GRADIENT:
+					case IDC_JD_USE_GRADIENT_END_ALPHA:
 						{
 							from_ui(TRUE);
 
@@ -200,8 +211,9 @@ namespace apn::dark
 
 							break;
 						}
-					case IDC_JD_ROUND:
+					case IDC_JD_ROUND_SIZE:
 					case IDC_JD_BORDER_WIDTH:
+					case IDC_JD_GRADIENT_END_ALPHA:
 						{
 							if (code == EN_UPDATE)
 								from_ui(TRUE);
@@ -274,7 +286,8 @@ namespace apn::dark
 								set_int(edit_id, value);
 								break;
 							}
-						case IDC_JD_ROUND:
+						case IDC_JD_ROUND_SIZE:
+						case IDC_JD_GRADIENT_END_ALPHA:
 						case IDC_SCROLLBAR_REDUCTION:
 							{
 								auto value = get_int(edit_id);

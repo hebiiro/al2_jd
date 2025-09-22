@@ -126,12 +126,32 @@ namespace apn::dark
 			//
 			// 丸角のサイズです。
 			//
-			int32_t round = 20;
+			int32_t round_size = 20;
 
 			//
 			// 縁の幅です。
 			//
-			int32_t border_width = 1;
+			int32_t border_width = 10;
+
+			//
+			// TRUEの場合は縁を3Dのように描画します。
+			//
+			BOOL as_3d_edge = TRUE;
+
+			//
+			// TRUEの場合は背景をグラデーションで描画します。
+			//
+			BOOL as_gradient = TRUE;
+
+			//
+			// TRUEの場合はグラデーション終了色にアルファを適用します。
+			//
+			BOOL use_gradient_end_alpha = TRUE;
+
+			//
+			// グラデーション終了色のアルファです。
+			//
+			int32_t gradient_end_alpha = 60;
 		} jd;
 
 		//

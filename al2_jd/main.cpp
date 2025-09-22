@@ -13,6 +13,7 @@
 #include "kuro/paint/pigment.hpp"
 #include "kuro/paint/palette.hpp"
 #include "kuro/paint/material.hpp"
+#include "kuro/paint/d2d_utils.hpp"
 #include "kuro/paint/d2d.hpp"
 #include "kuro/paint/stylus.hpp"
 #include "kuro/paint/material/sys_color.hpp"

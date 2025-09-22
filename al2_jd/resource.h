@@ -34,9 +34,15 @@
 #define IDC_JD_BORDER_WIDTH             1316
 #define IDC_JD_BORDER_WIDTH_SPIN        1317
 #define IDC_JD_ROUND_STAT               1318
-#define IDC_JD_ROUND                    1319
+#define IDC_JD_ROUND_SIZE               1319
 #define IDC_JD_ROUND_SPIN               1320
 #define IDC_JD_AS_ROUND                 1321
+#define IDC_JD_AS_3D_EDGE               1322
+#define IDC_JD_AS_GRADIENT              1323
+#define IDC_JD_USE_GRADIENT_END_ALPHA   1324
+#define IDC_JD_GRADIENT_END_ALPHA_STAT  1325
+#define IDC_JD_GRADIENT_END_ALPHA       1326
+#define IDC_JD_GRADIENT_END_ALPHA_SPIN  1327
 #define IDC_SCROLLBAR_REDUCTION_STAT    1400
 #define IDC_SCROLLBAR_REDUCTION         1401
 #define IDC_SCROLLBAR_REDUCTION_SPIN    1402

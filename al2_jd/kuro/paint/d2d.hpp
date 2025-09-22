@@ -61,6 +61,174 @@ namespace apn::dark::kuro::paint
 		}
 
 		//
+		// グラデーションストップコレクションを作成して返します。
+		//
+		HRESULT create_gradient_stop_collection(
+			const D2D1_COLOR_F& start_color,
+			const D2D1_COLOR_F& end_color,
+			ID2D1GradientStopCollection** ppv)
+		{
+			D2D1_GRADIENT_STOP stops[2] = { { 0.0f, start_color }, { 1.0f, end_color } };
+
+			return render_target->CreateGradientStopCollection(stops, std::size(stops), ppv);
+		}
+
+		//
+		// グラデーションブラシを作成して返します。
+		//
+		HRESULT create_gradient_brush(
+			const D2D1_POINT_2F& start_point,
+			const D2D1_POINT_2F& end_point,
+			ID2D1GradientStopCollection* stop_collection,
+			ID2D1LinearGradientBrush** ppv)
+		{
+			D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES props = { start_point, end_point };
+
+			return render_target->CreateLinearGradientBrush(props, stop_collection, ppv);
+		}
+
+		//
+		// グラデーションブラシを作成して返します。
+		//
+		HRESULT create_gradient_brush(
+			const D2D1_COLOR_F& start_color,
+			const D2D1_COLOR_F& end_color,
+			const D2D1_POINT_2F& start_point,
+			const D2D1_POINT_2F& end_point,
+			ID2D1LinearGradientBrush** ppv)
+		{
+			ComPtr<ID2D1GradientStopCollection> stop_collection;
+			auto hr = create_gradient_stop_collection(start_color, end_color, &stop_collection);
+			if (!stop_collection) return hr;
+
+			return create_gradient_brush(start_point, end_point, stop_collection.Get(), ppv);
+		}
+
+		//
+		// 丸角矩形を描画します。
+		//
+		BOOL draw_round_rect(HDC dc, LPCRECT rc, float radius, const Pigment* pigment)
+		{
+			MY_TRACE_FUNC("{/hex}, ({/}), {/}", dc, safe_string(rc), radius);
+
+			// 描画の準備に失敗した場合は何もしません。
+			if (!prepare()) return FALSE;
+
+			// レンダーターゲットとデバイスコンテキストをバインドします。
+			Binder binder(dc, rc);
+
+			// 縁の幅を取得します。
+			auto border_width = get_border_width_as_float();
+			auto half_border_width = border_width / 2.0f;
+
+			// 全体の矩形を取得します。
+			auto w = (float)my::get_width(*rc);
+			auto h = (float)my::get_height(*rc);
+			auto whole_rc = D2D1::RectF(0, 0, w, h);
+
+			// 縁がはみ出さないように収縮した矩形を取得します。
+			auto draw_rc = deflate(whole_rc, half_border_width, half_border_width);
+
+			// 丸角矩形を取得します。
+			auto rrc = D2D1::RoundedRect(draw_rc, radius, radius);
+
+			// 背景の描画データが有効の場合は
+			if (pigment->background.is_valid())
+			{
+				// 背景を描画します。
+
+				// グラデーションで描画する場合は
+				if (hive.jd.as_gradient)
+				{
+					// 終了カラーを決定します。
+					auto end_color_index = pigment->background.entry.colors[1].is_valid() ? 1 : 0;
+					auto end_color = pigment->background.entry.colors[end_color_index];
+					auto end_alpha = get_background_end_alpha(end_color.alpha());
+
+					// グラデーションブラシで背景を描画します。
+					ComPtr<ID2D1LinearGradientBrush> gradient_brush;
+					create_gradient_brush(
+						to_d2d_color(pigment->background.entry.colors[0]),
+						to_d2d_color(end_color, end_alpha),
+						D2D1::Point2F(draw_rc.left, draw_rc.top),
+						D2D1::Point2F(draw_rc.right, draw_rc.bottom),
+						&gradient_brush);
+					if (!gradient_brush) return FALSE;
+					render_target->FillRoundedRectangle(rrc, gradient_brush.Get());
+				}
+				// それ以外の場合は
+				else
+				{
+					// カラーブラシで背景を描画します。
+					ComPtr<ID2D1SolidColorBrush> brush;
+					render_target->CreateSolidColorBrush(
+						to_d2d_color(pigment->background.entry.colors[0]), &brush);
+					if (!brush) return FALSE;
+					render_target->FillRoundedRectangle(rrc, brush.Get());
+				}
+			}
+#if 0
+			// 模様を描画します。
+			{
+				// 丸角矩形のジオメトリを作成します。
+				ComPtr<ID2D1RoundedRectangleGeometry> geometry;
+				d2d_factory->CreateRoundedRectangleGeometry(rrc, &geometry);
+				if (!geometry) return FALSE;
+
+				// レイヤーを作成します。
+				ComPtr<ID2D1Layer> layer;
+				render_target->CreateLayer(&layer);
+				if (!layer) return FALSE;
+
+				// ジオメトリでクリップします。
+				auto layer_params = D2D1::LayerParameters();
+				layer_params.geometricMask = geometry.Get();
+				render_target->PushLayer(layer_params, layer.Get());
+
+				// 下部に矩形を描画します。
+				ComPtr<ID2D1SolidColorBrush> brush;
+				render_target->CreateSolidColorBrush(make_color(RGB(255, 0, 0), 0.5f), &brush);
+				if (!brush) return FALSE;
+				auto under_rc = D2D1::RectF(rrc.rect.left, rrc.rect.bottom - 1.5f, rrc.rect.right, rrc.rect.bottom);
+				render_target->FillRectangle(under_rc, brush.Get());
+
+				// クリップを解除します。
+				render_target->PopLayer();
+			}
+#endif
+			// 縁の描画データが有効の場合は
+			if (pigment->border.is_valid() && border_width > 0.0f)
+			{
+				// 縁を描画します。
+
+				auto a = D2D1::Point2F(draw_rc.left, draw_rc.bottom - radius);
+				auto b = D2D1::Point2F(draw_rc.right - radius, draw_rc.top);
+				auto c = D2D1::Point2F(draw_rc.left + radius, draw_rc.bottom);
+				auto d = D2D1::Point2F(draw_rc.right, draw_rc.top + radius);
+				auto e = a;
+				auto f = perpendicular(a, b, c, d);
+
+				// 終了カラーを決定します。
+				auto end_color_index = pigment->border.entry.colors[1].is_valid() ? 1 : 0;
+
+				// ブレンド用の配色項目を取得します。
+				auto entry = get_3d_edge_entry();
+
+				// グラデーションブラシで縁を描画します。
+				ComPtr<ID2D1LinearGradientBrush> gradient_brush;
+				create_gradient_brush(
+					blend(pigment->border.entry.colors[0], entry, 0),
+					blend(pigment->border.entry.colors[end_color_index], entry, 1),
+					e, f,
+					&gradient_brush);
+				if (!gradient_brush) return FALSE;
+				render_target->DrawRoundedRectangle(rrc, gradient_brush.Get(), border_width);
+			}
+
+			return TRUE;
+		}
+
+		//
 		// プレフィックスを処理します。
 		// 内部的に使用されます。
 		//
@@ -116,9 +284,9 @@ namespace apn::dark::kuro::paint
 		}
 
 		//
-		// ::DrawTextW()形式で文字列を描画します。
+		// ::DrawTextW()方式で文字列を描画します。
 		//
-		int draw_text(HDC dc, LPCWSTR text, int c, LPRECT rc, UINT flags)
+		int draw_text(HDC dc, LPCWSTR text, int c, LPRECT rc, UINT flags, const Pigment* pigment)
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, ({/}), {/hex}",
 				dc, safe_string(text, c), safe_string(rc), flags);
@@ -126,7 +294,10 @@ namespace apn::dark::kuro::paint
 			// 引数が無効の場合は何もしません。
 			if (!text || !rc) return 0;
 
-			// 描画の準備をします。
+			// ピグメントが無効の場合は何もしません。
+			if (!pigment->text.is_valid()) return 0;
+
+			// 描画の準備に失敗した場合は何もしません。
 			if (!prepare()) return 0;
 
 			// レンダーターゲットとデバイスコンテキストをバインドします。
@@ -216,11 +387,8 @@ namespace apn::dark::kuro::paint
 			// ブラシを取得します。
 			ComPtr<ID2D1SolidColorBrush> text_brush;
 			{
-				// win32形式の文字色を取得します。
-				auto win32_text_color = ::GetTextColor(dc);
-
-				// D2D形式の文字色を取得します。
-				auto d2d_text_color = D2D1::ColorF(win32_text_color, 1.0f);
+				// 文字の色をD2D形式で取得します。
+				auto d2d_text_color = to_d2d_color(pigment->text.entry.colors[0]);
 
 				// ブラシを作成します。
 				render_target->CreateSolidColorBrush(d2d_text_color, &text_brush);

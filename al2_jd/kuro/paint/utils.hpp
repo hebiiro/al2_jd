@@ -18,6 +18,46 @@ namespace apn::dark::kuro::paint
 	inline static constexpr auto c_pseudo_vert = L"@Consolas";
 
 	//
+	// 縁の幅を整数で返します。
+	//
+	inline int get_border_width_as_int()
+	{
+		return hive.jd.border_width / 10;
+	}
+
+	//
+	// 縁の幅を実数で返します。
+	//
+	inline float get_border_width_as_float()
+	{
+		return hive.jd.border_width / 10.0f;
+	}
+
+	//
+	// 丸みを整数で返します。
+	//
+	inline int get_round_as_int(int base_round_size)
+	{
+		return ::MulDiv(base_round_size, hive.jd.round_size, 100);
+	}
+
+	//
+	// 丸みを実数で返します。
+	//
+	inline float get_round_as_float(float base_round_size)
+	{
+		return base_round_size * hive.jd.round_size / 100.0f;
+	}
+
+	//
+	// グラデーション終了色のアルファを実数で返します。
+	//
+	inline float get_gradient_end_alpha()
+	{
+		return hive.jd.gradient_end_alpha / 100.0f;
+	}
+
+	//
 	// 指定されたペンの色を返します。
 	//
 	inline COLORREF get_pen_color(HPEN pen)
