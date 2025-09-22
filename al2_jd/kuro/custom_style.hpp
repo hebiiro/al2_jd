@@ -27,18 +27,26 @@ namespace apn::dark::kuro
 		//
 		inline ColorEntry get_color(const std::wstring& section, const std::wstring& key, const ColorEntry& default_color)
 		{
-			// カスタムカラーが有効の場合は
-			if (auto color = get_color(section, key))
+			// 一旦デフォルトカラーをセットします。
+			auto out_entry = default_color;
+
+			// カスタムカラーが存在する場合は
+			if (auto entry = get_color(section, key))
 			{
-				// カスタムカラーを返します。
-				return *color;
+				// カラーパーツを走査します。
+				for (size_t i = 0; i < entry->c_max_size; i++)
+				{
+					// カラーパーツが有効の場合は
+					if (entry->colors[i].is_valid())
+					{
+						// デフォルトカラーを上書きします。
+						out_entry.colors[i] = entry->colors[i];
+					}
+				}
 			}
-			// カスタムカラーが無効の場合は
-			else
-			{
-				// デフォルトカラーを返します。
-				return default_color;
-			}
+
+			// カスタムカラーを返します。
+			return out_entry;
 		}
 
 		//
@@ -136,6 +144,9 @@ namespace apn::dark::kuro
 		BOOL read_custom_color_file(const std::wstring& custom_color_path)
 		{
 			MY_TRACE_FUNC("{/}", custom_color_path);
+
+			// 既存のエントリを消去します。
+			entries.clear();
 
 			// 現在のセクションです。
 			auto section = std::wstring {};
