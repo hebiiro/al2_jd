@@ -87,7 +87,7 @@ namespace apn::dark::kuro::gdi
 		virtual BOOL on_draw_edge(MessageState* current_state, HDC dc, LPRECT rc, UINT edge, UINT flags) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}, {/hex}", dc, safe_string(rc), edge, flags);
-/*
+#if 0
 			auto part_id = 0;
 			auto state_id = 0;
 
@@ -122,7 +122,7 @@ namespace apn::dark::kuro::gdi
 					if (result) return TRUE;
 				}
 			}
-*/
+#endif
 			return hive.orig.DrawEdge(dc, rc, edge, flags);
 		}
 

@@ -1,12 +1,16 @@
 ﻿#pragma once
 
+//
 // https://qiita.com/hamamu/items/4d081751b69aa3bb3557
+//
 template<class T> size_t HashCombine(const size_t seed,const T &v)
 {
 	return seed^(std::hash<T>()(v)+0x9e3779b9+(seed<<6)+(seed>>2));
 }
 
-/* pair用 */
+//
+// pair用
+//
 template<class T,class S> struct std::hash<std::pair<T,S>>
 {
 	size_t operator()(const std::pair<T,S> &keyval) const noexcept

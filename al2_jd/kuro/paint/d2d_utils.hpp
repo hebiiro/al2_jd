@@ -55,6 +55,16 @@ namespace apn::dark::kuro::paint
 	}
 
 	//
+	// 背景の終了色をD2D形式で返します。
+	//
+	inline auto get_background_end_color(const Color& end_color)
+	{
+		auto end_alpha = get_background_end_alpha(end_color.alpha());
+
+		return to_d2d_color(end_color, end_alpha);
+	}
+
+	//
 	// 背景の終了色のアルファを実数で返します。
 	//
 	inline const ColorEntry* get_3d_edge_entry()

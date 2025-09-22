@@ -137,19 +137,20 @@ namespace apn::dark::kuro::paint
 			{
 				// 背景を描画します。
 
+				// 背景用のカラーエントリを取得します。
+				const auto& color_entry = pigment->background.entry;
+
 				// グラデーションで描画する場合は
 				if (hive.jd.as_gradient)
 				{
-					// 終了カラーを決定します。
-					auto end_color_index = pigment->background.entry.colors[1].is_valid() ? 1 : 0;
-					auto end_color = pigment->background.entry.colors[end_color_index];
-					auto end_alpha = get_background_end_alpha(end_color.alpha());
+					// 終了色のインデックスを取得します。
+					auto end_color_index = color_entry.colors[1].is_valid() ? 1 : 0;
 
 					// グラデーションブラシで背景を描画します。
 					ComPtr<ID2D1LinearGradientBrush> gradient_brush;
 					create_gradient_brush(
-						to_d2d_color(pigment->background.entry.colors[0]),
-						to_d2d_color(end_color, end_alpha),
+						to_d2d_color(color_entry.colors[0]),
+						get_background_end_color(color_entry.colors[end_color_index]),
 						D2D1::Point2F(draw_rc.left, draw_rc.top),
 						D2D1::Point2F(draw_rc.right, draw_rc.bottom),
 						&gradient_brush);
@@ -162,7 +163,7 @@ namespace apn::dark::kuro::paint
 					// カラーブラシで背景を描画します。
 					ComPtr<ID2D1SolidColorBrush> brush;
 					render_target->CreateSolidColorBrush(
-						to_d2d_color(pigment->background.entry.colors[0]), &brush);
+						to_d2d_color(color_entry.colors[0]), &brush);
 					if (!brush) return FALSE;
 					render_target->FillRoundedRectangle(rrc, brush.Get());
 				}
@@ -201,6 +202,9 @@ namespace apn::dark::kuro::paint
 			{
 				// 縁を描画します。
 
+				// 縁用のカラーエントリを取得します。
+				const auto& color_entry = pigment->background.entry;
+
 				auto a = D2D1::Point2F(draw_rc.left, draw_rc.bottom - radius);
 				auto b = D2D1::Point2F(draw_rc.right - radius, draw_rc.top);
 				auto c = D2D1::Point2F(draw_rc.left + radius, draw_rc.bottom);
@@ -209,16 +213,16 @@ namespace apn::dark::kuro::paint
 				auto f = perpendicular(a, b, c, d);
 
 				// 終了カラーを決定します。
-				auto end_color_index = pigment->border.entry.colors[1].is_valid() ? 1 : 0;
+				auto end_color_index = color_entry.colors[1].is_valid() ? 1 : 0;
 
-				// ブレンド用の配色項目を取得します。
-				auto entry = get_3d_edge_entry();
+				// ブレンド用のカラーエントリを取得します。
+				auto color_entry_for_blend = get_3d_edge_entry();
 
 				// グラデーションブラシで縁を描画します。
 				ComPtr<ID2D1LinearGradientBrush> gradient_brush;
 				create_gradient_brush(
-					blend(pigment->border.entry.colors[0], entry, 0),
-					blend(pigment->border.entry.colors[end_color_index], entry, 1),
+					blend(color_entry.colors[0], color_entry_for_blend, 0),
+					blend(color_entry.colors[end_color_index], color_entry_for_blend, 1),
 					e, f,
 					&gradient_brush);
 				if (!gradient_brush) return FALSE;
@@ -316,6 +320,9 @@ namespace apn::dark::kuro::paint
 			auto w = (float)my::get_width(*rc);
 			auto h = (float)my::get_height(*rc);
 
+			// テキスト用のカラーエントリを取得します。
+			const auto& color_entry = pigment->text.entry;
+
 			// テキストフォーマットを取得します。
 			ComPtr<IDWriteTextFormat> text_format;
 			{
@@ -388,7 +395,7 @@ namespace apn::dark::kuro::paint
 			ComPtr<ID2D1SolidColorBrush> text_brush;
 			{
 				// 文字の色をD2D形式で取得します。
-				auto d2d_text_color = to_d2d_color(pigment->text.entry.colors[0]);
+				auto d2d_text_color = to_d2d_color(color_entry.colors[0]);
 
 				// ブラシを作成します。
 				render_target->CreateSolidColorBrush(d2d_text_color, &text_brush);

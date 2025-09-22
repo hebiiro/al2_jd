@@ -145,10 +145,7 @@ namespace apn::dark
 				TreeView_Expand(hTree, hParent2, TVE_EXPAND);
 				TreeView_Expand(hTree, hChild1, TVE_EXPAND);
 			}
-/*
-#define IDC_SLIDER_HORZ                 1208
-#define IDC_SLIDER_VERT                 1209
-*/
+
 			return __super::do_modal();
 		}
 
