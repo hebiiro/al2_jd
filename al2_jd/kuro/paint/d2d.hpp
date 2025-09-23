@@ -70,7 +70,8 @@ namespace apn::dark::kuro::paint
 		{
 			D2D1_GRADIENT_STOP stops[2] = { { 0.0f, start_color }, { 1.0f, end_color } };
 
-			return render_target->CreateGradientStopCollection(stops, std::size(stops), ppv);
+			return render_target->CreateGradientStopCollection(
+				stops, std::size(stops), D2D1_GAMMA_1_0, D2D1_EXTEND_MODE_CLAMP, ppv);
 		}
 
 		//
