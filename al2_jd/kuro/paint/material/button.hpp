@@ -74,6 +74,9 @@ namespace apn::dark::kuro::paint
 			palette.set(BP_PUSHBUTTON, PBS_HOT, push_button_hot);
 			palette.set(BP_PUSHBUTTON, PBS_PRESSED, push_button_pressed);
 
+			palette.set(BP_PUSHBUTTONDROPDOWN, PBDDS_NORMAL, push_button_normal);
+			palette.set(BP_PUSHBUTTONDROPDOWN, PBDDS_DISABLED, push_button_disabled);
+
 			palette.set(BP_RADIOBUTTON, RBS_UNCHECKEDNORMAL, radio_button_normal);
 			palette.set(BP_RADIOBUTTON, RBS_UNCHECKEDDISABLED, radio_button_disabled);
 			palette.set(BP_RADIOBUTTON, RBS_UNCHECKEDHOT, radio_button_hot);
