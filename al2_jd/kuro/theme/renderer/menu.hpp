@@ -40,14 +40,14 @@ namespace apn::dark::kuro::theme
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
 
 			{
+				// クリップ矩形を使用します。
+				Clipper clipper(dc, rc, rc_clip);
+
 				switch (part_id)
 				{
 				case MENU_BARBACKGROUND:
 					{
 						// メニューバーの背景を描画します。
-
-						// クリップ矩形を使用します。
-						Clipper clipper(dc, rc_clip);
 
 						auto rc2 = *rc;
 						rc2.bottom += 1; // クリップ矩形を使用すると、この1ピクセルが上書き描画できるようになります。
@@ -221,21 +221,8 @@ namespace apn::dark::kuro::theme
 					}
 				default:
 					{
-						// クリップ矩形が有効の場合は
-						if (rc_clip && !::IsRectEmpty(rc_clip))
-						{
-							// クリップ矩形を使用します。
-							Clipper clipper(dc, rc_clip);
-
-							if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
-								return S_OK;
-						}
-						// クリップ矩形が無効の場合は
-						else
-						{
-							if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
-								return S_OK;
-						}
+						if (paint::stylus.draw_rect(dc, rc, palette, part_id, state_id))
+							return S_OK;
 					}
 				}
 			}

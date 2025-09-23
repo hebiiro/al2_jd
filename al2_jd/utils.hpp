@@ -263,13 +263,17 @@ namespace apn::dark
 	//
 	struct Clipper
 	{
-		HDC dc;
+		HDC dc = {};
+		HRGN rgn = {};
 
-		Clipper(HDC dc, LPCRECT rc_clip)
+		Clipper(HDC dc, LPCRECT rc, LPCRECT rc_clip)
 			: dc(dc)
 		{
-			if (rc_clip && !::IsRectEmpty(rc_clip))
+			if (rc && rc_clip && !::IsRectEmpty(rc_clip) && !::EqualRect(rc, rc_clip))
 			{
+				::CreateRectRgn(0, 0, 0, 0);
+				::GetClipRgn(dc, rgn);
+
 				auto rc = *rc_clip;
 				::LPtoDP(dc, (LPPOINT)&rc, 2);
 
@@ -282,7 +286,11 @@ namespace apn::dark
 
 		~Clipper()
 		{
-//			::SelectClipRgn(dc, nullptr);
+			if (rgn)
+			{
+				::SelectClipRgn(dc, rgn);
+				::DeleteObject(rgn);
+			}
 		}
 	};
 }

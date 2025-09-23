@@ -82,7 +82,7 @@ namespace apn::dark::kuro::theme
 					register_renderer(L"ItemsView", &itemsview_renderer);
 					register_renderer(L"ItemsView::" VSCLASS_HEADER, &header_renderer);
 					register_renderer(L"ItemsView::" VSCLASS_LISTVIEW, &listview_renderer);
-//					register_renderer(L"ItemsViewAccessible::" VSCLASS_HEADER, &header_renderer);
+					register_renderer(L"ItemsViewAccessible::" VSCLASS_HEADER, &header_renderer); // ヘッダーのドロップダウンボタンをクリックしたときに使用されます。
 
 					// その他のコントロール
 					register_renderer(L"Button-OK;Button", &button_renderer);
