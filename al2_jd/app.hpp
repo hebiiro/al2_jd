@@ -62,8 +62,7 @@ namespace apn::dark
 
 			// コンフィグをaviutl2ウィンドウに適用します。
 			aviutl2_window.apply_config();
-
-//			if (0) // テスト用コードです。
+#ifdef _DEBUG // テスト用コードです。
 			{
 				for (int i = 0; i < 50; i++)
 					MY_TRACE("{/} => {/hex}\n", i, hive.orig.GetSysColor(i));
@@ -80,7 +79,7 @@ namespace apn::dark
 
 				int break_point = 0; // ここでシステムカラーを確認します。
 			}
-
+#endif
 			return TRUE;
 		}
 

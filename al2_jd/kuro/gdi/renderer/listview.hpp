@@ -5,8 +5,7 @@ namespace apn::dark::kuro::gdi
 	struct ListViewRenderer : Renderer
 	{
 		const paint::Palette& palette = paint::listview_material.palette;
-#if 0
-		// テスト用コードです。
+#if 0 // テスト用コードです。
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
 			switch (message)

@@ -77,14 +77,13 @@ namespace apn::dark::kuro::theme
 
 						break;
 					}
-#if 0
+#if 0 // テスト用コードです。
 				case MENU_POPUPBACKGROUND:
 					{
 						// ポップアップメニューの背景を描画します。
 
 						MY_TRACE("MENU_POPUPBACKGROUND\n");
 
-						// テスト用コードです。
 						auto hwnd = ::WindowFromDC(dc);
 						MY_TRACE_HWND(hwnd);
 

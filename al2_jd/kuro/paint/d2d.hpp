@@ -402,8 +402,7 @@ namespace apn::dark::kuro::paint
 				for (const auto& range : underlines)
 					text_layout->SetUnderline(TRUE, range);
 			}
-#if 0
-			// テスト用コードです。
+#if 0 // テスト用コードです。
 			// 縦グラデーションで文字列を描画します。
 
 			// グラデーションブラシを取得します。
