@@ -391,7 +391,20 @@ namespace apn::dark::kuro::paint
 				for (const auto& range : underlines)
 					text_layout->SetUnderline(TRUE, range);
 			}
+#if 0
+			// テスト用コードです。
+			// 縦グラデーションで文字列を描画します。
 
+			// グラデーションブラシを取得します。
+			ComPtr<ID2D1LinearGradientBrush> text_brush;
+			create_gradient_brush(
+				to_d2d_color(color_entry.colors[0]),
+				D2D1::ColorF(1.0f, 0.8f, 0.8f, 1.0f),
+				D2D1::Point2F(0.0f, 0.0f),
+				D2D1::Point2F(0.0f, h),
+				&text_brush);
+			if (!text_brush) return 0;
+#else
 			// ブラシを取得します。
 			ComPtr<ID2D1SolidColorBrush> text_brush;
 			{
@@ -402,7 +415,7 @@ namespace apn::dark::kuro::paint
 				render_target->CreateSolidColorBrush(d2d_text_color, &text_brush);
 				if (!text_brush) return 0;
 			}
-
+#endif
 			// 文字列を描画します。
 			render_target->DrawTextLayout(
 				D2D1::Point2F(0.0f, 0.0f),
