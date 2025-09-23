@@ -115,6 +115,12 @@ namespace apn::dark::kuro::paint
 			// 描画の準備に失敗した場合は何もしません。
 			if (!prepare()) return FALSE;
 
+			auto iw = my::get_width(*rc);
+			auto ih = my::get_height(*rc);
+
+			// 描画矩形が無効の場合は何もしません。
+			if (iw < 0 || ih < 0) return FALSE;
+
 			// レンダーターゲットとデバイスコンテキストをバインドします。
 			Binder binder(dc, rc);
 
@@ -123,8 +129,8 @@ namespace apn::dark::kuro::paint
 			auto half_border_width = border_width / 2.0f;
 
 			// 全体の矩形を取得します。
-			auto w = (float)my::get_width(*rc);
-			auto h = (float)my::get_height(*rc);
+			auto w = (float)iw;
+			auto h = (float)ih;
 			auto whole_rc = D2D1::RectF(0, 0, w, h);
 
 			// 縁がはみ出さないように収縮した矩形を取得します。
@@ -206,12 +212,17 @@ namespace apn::dark::kuro::paint
 				// 縁用のカラーエントリを取得します。
 				const auto& color_entry = pigment->background.entry;
 
-				auto a = D2D1::Point2F(draw_rc.left, draw_rc.bottom - radius);
-				auto b = D2D1::Point2F(draw_rc.right - radius, draw_rc.top);
-				auto c = D2D1::Point2F(draw_rc.left + radius, draw_rc.bottom);
-				auto d = D2D1::Point2F(draw_rc.right, draw_rc.top + radius);
-				auto e = a;
-				auto f = perpendicular(a, b, c, d);
+				// グラデーションストップ座標を取得します。
+				// radiusが0だと計算不可能なので最小値を指定しています。
+				auto stop_point = [&, radius = std::max(radius, 0.1f)]()
+				{
+					auto a = D2D1::Point2F(draw_rc.left, draw_rc.bottom - radius);
+					auto b = D2D1::Point2F(draw_rc.right - radius, draw_rc.top);
+					auto c = D2D1::Point2F(draw_rc.left + radius, draw_rc.bottom);
+					auto d = D2D1::Point2F(draw_rc.right, draw_rc.top + radius);
+
+					return std::make_pair(a, perpendicular(a, b, c, d));
+				} ();
 
 				// 終了カラーを決定します。
 				auto end_color_index = color_entry.colors[1].is_valid() ? 1 : 0;
@@ -224,7 +235,7 @@ namespace apn::dark::kuro::paint
 				create_gradient_brush(
 					blend(color_entry.colors[0], color_entry_for_blend, 0),
 					blend(color_entry.colors[end_color_index], color_entry_for_blend, 1),
-					e, f,
+					stop_point.first, stop_point.second,
 					&gradient_brush);
 				if (!gradient_brush) return FALSE;
 				render_target->DrawRoundedRectangle(rrc, gradient_brush.Get(), border_width);
