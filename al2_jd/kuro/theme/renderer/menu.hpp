@@ -84,6 +84,10 @@ namespace apn::dark::kuro::theme
 
 						MY_TRACE("MENU_POPUPBACKGROUND\n");
 
+						// テスト用コードです。
+						auto hwnd = ::WindowFromDC(dc);
+						MY_TRACE_HWND(hwnd);
+
 						break;
 					}
 				case MENU_POPUPBORDERS:
@@ -120,6 +124,20 @@ namespace apn::dark::kuro::theme
 
 						auto rc2 = *rc;
 						::InflateRect(&rc2, 0, -2);
+
+						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
+							return S_OK;
+
+						break;
+					}
+				case MENU_POPUPCHECKBACKGROUND:
+					{
+						// ポップアップメニューのアイテムを描画します。
+
+						auto rc2 = *rc;
+
+						// ガーターが上書きされないように描画矩形を縮小します。
+						rc2.left = gutter_right;
 
 						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
 							return S_OK;

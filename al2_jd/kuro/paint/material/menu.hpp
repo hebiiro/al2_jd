@@ -112,12 +112,21 @@ namespace apn::dark::kuro::paint
 			palette.set(MENU_POPUPSEPARATOR, 0, separator);
 
 			// Menu (comdlg32)
+			// (MPI_NORMAL = 1 かもしれません)
 			palette.set(MENU_POPUPBACKGROUND, 1, background);
 			palette.set(MENU_POPUPBORDERS, 1, border);
 			palette.set(MENU_POPUPGUTTER, 1, gutter);
 			palette.set(MENU_POPUPSEPARATOR, 1, separator);
 
+			// Menu (comdlg32)
+			// (MPI_HOT = 2 かもしれません)
+			palette.set(MENU_POPUPBACKGROUND, 2, background);
+			palette.set(MENU_POPUPBORDERS, 2, border);
+			palette.set(MENU_POPUPGUTTER, 2, gutter);
+			palette.set(MENU_POPUPSEPARATOR, 2, separator);
+
 			// ImmersiveStart::Menu
+			// (MPI_DISABLED = 3 かもしれません)
 			palette.set(MENU_POPUPBACKGROUND, 3, background);
 			palette.set(MENU_POPUPBORDERS, 3, border);
 			palette.set(MENU_POPUPGUTTER, 3, gutter);
