@@ -59,8 +59,8 @@ namespace apn::dark::kuro
 			if (win32 != CLR_NONE)
 			{
 				rgba.r = GetRValue(win32);
-				rgba.b = GetGValue(win32);
-				rgba.r = GetBValue(win32);
+				rgba.g = GetGValue(win32);
+				rgba.b = GetBValue(win32);
 				rgba.a = 0xff;
 			}
 		}
