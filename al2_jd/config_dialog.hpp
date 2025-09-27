@@ -60,22 +60,31 @@ namespace apn::dark
 			Locker locker(this);
 
 			set_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
-
-			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
-			set_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
 			set_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
-			set_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
-			set_check(IDC_JD_AS_ROUND, hive.jd.as_round);
-			set_int(IDC_JD_ROUND_SIZE, hive.jd.round_size);
-			set_int(IDC_JD_BORDER_WIDTH, hive.jd.border_width);
-			set_check(IDC_JD_AS_3D_EDGE, hive.jd.as_3d_edge);
-			set_check(IDC_JD_AS_GRADIENT, hive.jd.as_gradient);
-			set_check(IDC_JD_USE_GRADIENT_END_ALPHA, hive.jd.use_gradient_end_alpha);
-			set_int(IDC_JD_GRADIENT_END_ALPHA, hive.jd.gradient_end_alpha);
+			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 
-			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
+			set_check(IDC_SLIMBAR_FLAG_USE, hive.slimbar.flag_use);
+			set_text(IDC_SLIMBAR_TITLE_FORMAT, hive.slimbar.title_format);
+
+			set_check(IDC_ROUND_FLAG_USE, hive.round.flag_use);
+			set_int(IDC_ROUND_SIZE, hive.round.size);
+
+			set_check(IDC_BORDER_FLAG_3D_EDGE, hive.border.flag_3d_edge);
+			set_int(IDC_BORDER_WIDTH, hive.border.width);
+
+			set_check(IDC_GRADIENT_FLAG_USE, hive.gradient.flag_use);
+			set_check(IDC_GRADIENT_FLAG_END_ALPHA, hive.gradient.flag_end_alpha);
+			set_int(IDC_GRADIENT_END_ALPHA, hive.gradient.end_alpha);
+
+			set_check(IDC_SHADOW_FLAG_USE, hive.shadow.flag_use);
+			set_check(IDC_SHADOW_FLAG_BLUR, hive.shadow.flag_blur);
+			set_int(IDC_SHADOW_OFFSET_X, hive.shadow.offset.x);
+			set_int(IDC_SHADOW_OFFSET_Y, hive.shadow.offset.y);
+			set_int(IDC_SHADOW_SIZE, hive.shadow.size);
+
 			set_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
 			set_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
+			set_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 
 			set_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
 
@@ -106,21 +115,32 @@ namespace apn::dark
 
 			if (is_locked()) return FALSE;
 
-			get_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
-			get_check(IDC_JD_SLIM_MENUBAR, hive.jd.slim_menubar);
+//			get_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
 			get_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
-			get_text(IDC_JD_TITLE_FORMAT, hive.jd.title_format);
-			get_check(IDC_JD_AS_ROUND, hive.jd.as_round);
-			get_int(IDC_JD_ROUND_SIZE, hive.jd.round_size);
-			get_int(IDC_JD_BORDER_WIDTH, hive.jd.border_width);
-			get_check(IDC_JD_AS_3D_EDGE, hive.jd.as_3d_edge);
-			get_check(IDC_JD_AS_GRADIENT, hive.jd.as_gradient);
-			get_check(IDC_JD_USE_GRADIENT_END_ALPHA, hive.jd.use_gradient_end_alpha);
-			get_int(IDC_JD_GRADIENT_END_ALPHA, hive.jd.gradient_end_alpha);
+			get_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 
-			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
+			get_check(IDC_SLIMBAR_FLAG_USE, hive.slimbar.flag_use);
+			get_text(IDC_SLIMBAR_TITLE_FORMAT, hive.slimbar.title_format);
+
+			get_check(IDC_ROUND_FLAG_USE, hive.round.flag_use);
+			get_int(IDC_ROUND_SIZE, hive.round.size);
+
+			get_check(IDC_BORDER_FLAG_3D_EDGE, hive.border.flag_3d_edge);
+			get_int(IDC_BORDER_WIDTH, hive.border.width);
+
+			get_check(IDC_GRADIENT_FLAG_USE, hive.gradient.flag_use);
+			get_check(IDC_GRADIENT_FLAG_END_ALPHA, hive.gradient.flag_end_alpha);
+			get_int(IDC_GRADIENT_END_ALPHA, hive.gradient.end_alpha);
+
+			get_check(IDC_SHADOW_FLAG_USE, hive.shadow.flag_use);
+			get_check(IDC_SHADOW_FLAG_BLUR, hive.shadow.flag_blur);
+			get_int(IDC_SHADOW_OFFSET_X, hive.shadow.offset.x);
+			get_int(IDC_SHADOW_OFFSET_Y, hive.shadow.offset.y);
+			get_int(IDC_SHADOW_SIZE, hive.shadow.size);
+
 			get_check(IDC_SCROLLBAR_ARROW_AS_BUTTON, hive.scrollbar.arrow_as_button);
 			get_check(IDC_SCROLLBAR_HAS_GRIPPER, hive.scrollbar.has_gripper);
+			get_int(IDC_SCROLLBAR_REDUCTION, hive.scrollbar.reduction);
 
 			get_check(IDC_ETC_DEFAULT_MOUSE_ACTIVATE, hive.etc.default_mouse_activate);
 
@@ -178,12 +198,16 @@ namespace apn::dark
 							break;
 						}
 					case IDC_JD_EXCLUDE_COMDLG32:
+					case IDC_ETC_DEFAULT_MOUSE_ACTIVATE:
+					case IDC_FONTS_USE_ON_MENU:
+					case IDC_FONTS_USE_ON_LISTBOX:
+					case IDC_FONTS_USE_ON_LISTVIEW:
 						{
 							from_ui(FALSE);
 
 							break;
 						}
-					case IDC_JD_SLIM_MENUBAR:
+					case IDC_SLIMBAR_FLAG_USE:
 						{
 							from_ui(FALSE);
 
@@ -192,41 +216,12 @@ namespace apn::dark
 							break;
 						}
 					case IDC_JD_USE_D2D:
-					case IDC_JD_AS_ROUND:
-					case IDC_JD_AS_3D_EDGE:
-					case IDC_JD_AS_GRADIENT:
-					case IDC_JD_USE_GRADIENT_END_ALPHA:
-						{
-							from_ui(TRUE);
-
-							break;
-						}
-					case IDC_JD_TITLE_FORMAT:
-						{
-							if (hive.jd.slim_menubar)
-							{
-								if (code == EN_UPDATE)
-									from_ui(TRUE);
-							}
-
-							break;
-						}
-					case IDC_JD_ROUND_SIZE:
-					case IDC_JD_BORDER_WIDTH:
-					case IDC_JD_GRADIENT_END_ALPHA:
-						{
-							if (code == EN_UPDATE)
-								from_ui(TRUE);
-
-							break;
-						}
-					case IDC_SCROLLBAR_REDUCTION:
-						{
-							if (code == EN_UPDATE)
-								from_ui(TRUE);
-
-							break;
-						}
+					case IDC_ROUND_FLAG_USE:
+					case IDC_BORDER_FLAG_3D_EDGE:
+					case IDC_GRADIENT_FLAG_USE:
+					case IDC_GRADIENT_FLAG_END_ALPHA:
+					case IDC_SHADOW_FLAG_USE:
+					case IDC_SHADOW_FLAG_BLUR:
 					case IDC_SCROLLBAR_ARROW_AS_BUTTON:
 					case IDC_SCROLLBAR_HAS_GRIPPER:
 						{
@@ -234,9 +229,26 @@ namespace apn::dark
 
 							break;
 						}
-					case IDC_ETC_DEFAULT_MOUSE_ACTIVATE:
+					case IDC_SLIMBAR_TITLE_FORMAT:
 						{
-							from_ui(FALSE);
+							if (hive.slimbar.flag_use)
+							{
+								if (code == EN_UPDATE)
+									from_ui(TRUE);
+							}
+
+							break;
+						}
+					case IDC_ROUND_SIZE:
+					case IDC_BORDER_WIDTH:
+					case IDC_GRADIENT_END_ALPHA:
+					case IDC_SHADOW_OFFSET_X:
+					case IDC_SHADOW_OFFSET_Y:
+					case IDC_SHADOW_SIZE:
+					case IDC_SCROLLBAR_REDUCTION:
+						{
+							if (code == EN_UPDATE)
+								from_ui(TRUE);
 
 							break;
 						}
@@ -256,14 +268,6 @@ namespace apn::dark
 
 							break;
 						}
-					case IDC_FONTS_USE_ON_MENU:
-					case IDC_FONTS_USE_ON_LISTBOX:
-					case IDC_FONTS_USE_ON_LISTVIEW:
-						{
-							from_ui(FALSE);
-
-							break;
-						}
 					}
 
 					break;
@@ -278,7 +282,8 @@ namespace apn::dark
 
 						switch (edit_id)
 						{
-						case IDC_JD_BORDER_WIDTH:
+						case IDC_BORDER_WIDTH:
+						case IDC_SHADOW_SIZE:
 							{
 								auto value = get_int(edit_id);
 								value += (nm->iDelta > 0) ? -1 : +1;
@@ -286,8 +291,10 @@ namespace apn::dark
 								set_int(edit_id, value);
 								break;
 							}
-						case IDC_JD_ROUND_SIZE:
-						case IDC_JD_GRADIENT_END_ALPHA:
+						case IDC_ROUND_SIZE:
+						case IDC_GRADIENT_END_ALPHA:
+						case IDC_SHADOW_OFFSET_X:
+						case IDC_SHADOW_OFFSET_Y:
 						case IDC_SCROLLBAR_REDUCTION:
 							{
 								auto value = get_int(edit_id);

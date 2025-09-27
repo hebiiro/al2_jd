@@ -48,7 +48,7 @@ namespace apn::dark::kuro::paint
 	//
 	inline float get_background_end_alpha(float base_alpha)
 	{
-		if (hive.jd.use_gradient_end_alpha)
+		if (hive.gradient.flag_end_alpha)
 			return base_alpha * get_gradient_end_alpha();
 		else
 			return base_alpha;
@@ -65,11 +65,11 @@ namespace apn::dark::kuro::paint
 	}
 
 	//
-	// 背景の終了色のアルファを実数で返します。
+	// 疑似3Dエッジのカラーエントリを返します。
 	//
 	inline const ColorEntry* get_3d_edge_entry()
 	{
-		if (hive.jd.as_3d_edge)
+		if (hive.border.flag_3d_edge)
 			return custom_style.get_color(L"3DEdge", L"Raised");
 		else
 			return {};

@@ -176,7 +176,7 @@ namespace apn::dark::kuro::paint
 		//
 		BOOL draw_round_rect(HDC dc, LPCRECT arg_rc, const Pigment* pigment)
 		{
-			if (!hive.jd.as_round) return draw_rect(dc, arg_rc, pigment);
+			if (!hive.round.flag_use) return draw_rect(dc, arg_rc, pigment);
 
 			auto rc = *arg_rc;
 			rc.right -= 1;

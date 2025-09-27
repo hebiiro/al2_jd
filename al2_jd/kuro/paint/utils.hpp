@@ -22,7 +22,7 @@ namespace apn::dark::kuro::paint
 	//
 	inline int get_border_width_as_int()
 	{
-		return hive.jd.border_width / 10;
+		return hive.border.width / 10;
 	}
 
 	//
@@ -30,7 +30,7 @@ namespace apn::dark::kuro::paint
 	//
 	inline float get_border_width_as_float()
 	{
-		return hive.jd.border_width / 10.0f;
+		return hive.border.width / 10.0f;
 	}
 
 	//
@@ -38,7 +38,7 @@ namespace apn::dark::kuro::paint
 	//
 	inline int get_round_as_int(int base_round_size)
 	{
-		return ::MulDiv(base_round_size, hive.jd.round_size, 100);
+		return ::MulDiv(base_round_size, hive.round.size, 100);
 	}
 
 	//
@@ -46,7 +46,7 @@ namespace apn::dark::kuro::paint
 	//
 	inline float get_round_as_float(float base_round_size)
 	{
-		return base_round_size * hive.jd.round_size / 100.0f;
+		return base_round_size * hive.round.size / 100.0f;
 	}
 
 	//
@@ -54,7 +54,7 @@ namespace apn::dark::kuro::paint
 	//
 	inline float get_gradient_end_alpha()
 	{
-		return hive.jd.gradient_end_alpha / 100.0f;
+		return hive.gradient.end_alpha / 100.0f;
 	}
 
 	//

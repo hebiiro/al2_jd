@@ -99,59 +99,14 @@ namespace apn::dark
 			std::wstring custom_color_file_name;
 
 			//
-			// スリムバー時のタイトルの書式です。
-			//
-			std::wstring title_format = L"AviUtl2 - %title%";
-
-			//
 			// TRUEの場合はコモンダイアログをダークモード化から除外します。
 			//
 			BOOL exclude_comdlg32 = FALSE;
 
 			//
-			// TRUEの場合はメニューバーをタイトルバーと一体化します。
-			//
-			BOOL slim_menubar = TRUE;
-
-			//
 			// TRUEの場合はDirect2Dを使用して描画します。
 			//
 			BOOL use_d2d = FALSE;
-
-			//
-			// TRUEの場合は矩形の角を丸めます。
-			//
-			BOOL as_round = TRUE;
-
-			//
-			// 丸角のサイズです。
-			//
-			int32_t round_size = 20;
-
-			//
-			// 縁の幅です。
-			//
-			int32_t border_width = 10;
-
-			//
-			// TRUEの場合は縁を3Dのように描画します。
-			//
-			BOOL as_3d_edge = TRUE;
-
-			//
-			// TRUEの場合は背景をグラデーションで描画します。
-			//
-			BOOL as_gradient = TRUE;
-
-			//
-			// TRUEの場合はグラデーション終了色にアルファを適用します。
-			//
-			BOOL use_gradient_end_alpha = TRUE;
-
-			//
-			// グラデーション終了色のアルファです。
-			//
-			int32_t gradient_end_alpha = 60;
 		} jd;
 
 		//
@@ -159,11 +114,6 @@ namespace apn::dark
 		//
 		struct ScrollBar
 		{
-			//
-			// スクロールバーの縮小率です。
-			//
-			int32_t reduction = 50;
-
 			//
 			// TRUEの場合は矢印をボタンのように描画します。
 			//
@@ -173,7 +123,107 @@ namespace apn::dark
 			// TRUEの場合はつまみのグリッパーを描画します。
 			//
 			BOOL has_gripper = FALSE;
+
+			//
+			// スクロールバーの縮小率です。%単位です。
+			//
+			int32_t reduction = 50;
 		} scrollbar;
+
+		//
+		// このクラスはスリムバーの設定です。
+		//
+		struct SlimBar
+		{
+			//
+			// TRUEの場合はメニューバーをタイトルバーと一体化します。
+			//
+			BOOL flag_use = TRUE;
+
+			//
+			// スリムバー時のタイトルの書式です。
+			//
+			std::wstring title_format = L"AviUtl2 - %title%";
+		} slimbar;
+
+		//
+		// このクラスは丸みの設定です。
+		//
+		struct Round
+		{
+			//
+			// TRUEの場合は矩形の角を丸めます。
+			//
+			BOOL flag_use = TRUE;
+
+			//
+			// 丸角のサイズです。%単位です。
+			//
+			int32_t size = 20;
+		} round;
+
+		//
+		// このクラスは縁の設定です。
+		//
+		struct Border
+		{
+			//
+			// TRUEの場合は縁を3Dのように描画します。
+			//
+			BOOL flag_3d_edge = FALSE;
+
+			//
+			// 縁の幅です。1/10px単位です。
+			//
+			int32_t width = 10;
+		} border;
+
+		//
+		// このクラスはグラデーションの設定です。
+		//
+		struct Gradient
+		{
+			//
+			// TRUEの場合は背景をグラデーションで描画します。
+			//
+			BOOL flag_use = TRUE;
+
+			//
+			// TRUEの場合はグラデーション終了色にアルファを適用します。
+			//
+			BOOL flag_end_alpha = TRUE;
+
+			//
+			// グラデーション終了色のアルファです。%単位です。
+			//
+			int32_t end_alpha = 60;
+		} gradient;
+
+		//
+		// このクラスは影の設定です。
+		//
+		struct Shadow
+		{
+			//
+			// TRUEの場合はテキストの影を描画します。
+			//
+			BOOL flag_use = TRUE;
+
+			//
+			// TRUEの場合は影をぼかします。
+			//
+			BOOL flag_blur = TRUE;
+
+			//
+			// 影のオフセット(位置)です。1/10px単位です。
+			//
+			POINT offset = { 10, 10 };
+
+			//
+			// ぼかしの範囲です。1/10px単位です。
+			//
+			int32_t size = 20;
+		} shadow;
 
 		//
 		// このクラスはその他の設定です。

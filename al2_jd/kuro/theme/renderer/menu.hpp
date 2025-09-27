@@ -23,7 +23,7 @@ namespace apn::dark::kuro::theme
 		HRESULT draw_menubar(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
 		{
 			// メニューバーとタイトルバーを一体化しない場合は何もしません。
-			if (!hive.jd.slim_menubar) return S_OK;
+			if (!hive.slimbar.flag_use) return S_OK;
 
 			// デバイスコンテキストからウィンドウを取得します。
 			auto hwnd = ::WindowFromDC(dc);

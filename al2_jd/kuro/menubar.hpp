@@ -556,7 +556,7 @@ namespace apn::dark::kuro
 			MY_TRACE_FUNC("{/hex}, {/}, {/hex}, {/hex}", hwnd, my::message_to_string(message), wParam, lParam);
 
 			// メニューバーとタイトルバーを一体化しない場合は何もしません。
-			if (!hive.jd.slim_menubar)
+			if (!hive.slimbar.flag_use)
 				return __super::on_wnd_proc(hwnd, message, wParam, lParam);
 
 			//
@@ -684,10 +684,10 @@ namespace apn::dark::kuro
 				auto text = my::get_window_text(hwnd);
 
 				// タイトルの書式が指定されている場合は
-				if (hive.jd.title_format.length())
+				if (hive.slimbar.title_format.length())
 				{
 					// タイトルを書式化します。
-					text = my::replace(hive.jd.title_format, L"%title%", text);
+					text = my::replace(hive.slimbar.title_format, L"%title%", text);
 				}
 
 				NONCLIENTMETRICS ncm = { sizeof(ncm) };

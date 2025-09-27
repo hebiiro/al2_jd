@@ -55,17 +55,8 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 //			read_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
-			read_string(root, "jd.title_format", hive.jd.title_format);
 			read_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
-			read_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 			read_bool(root, "jd.use_d2d", hive.jd.use_d2d);
-			read_bool(root, "jd.as_round", hive.jd.as_round);
-			read_int(root, "jd.round_size", hive.jd.round_size);
-			read_int(root, "jd.border_width", hive.jd.border_width);
-			read_bool(root, "jd.as_3d_edge", hive.jd.as_3d_edge);
-			read_bool(root, "jd.as_gradient", hive.jd.as_gradient);
-			read_bool(root, "jd.use_gradient_end_alpha", hive.jd.use_gradient_end_alpha);
-			read_int(root, "jd.gradient_end_alpha", hive.jd.gradient_end_alpha);
 
 			return TRUE;
 		}
@@ -78,17 +69,8 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 //			write_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
-			write_string(root, "jd.title_format", hive.jd.title_format);
 			write_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
-			write_bool(root, "jd.slim_menubar", hive.jd.slim_menubar);
 			write_bool(root, "jd.use_d2d", hive.jd.use_d2d);
-			write_bool(root, "jd.as_round", hive.jd.as_round);
-			write_int(root, "jd.round_size", hive.jd.round_size);
-			write_int(root, "jd.border_width", hive.jd.border_width);
-			write_bool(root, "jd.as_3d_edge", hive.jd.as_3d_edge);
-			write_bool(root, "jd.as_gradient", hive.jd.as_gradient);
-			write_bool(root, "jd.use_gradient_end_alpha", hive.jd.use_gradient_end_alpha);
-			write_int(root, "jd.gradient_end_alpha", hive.jd.gradient_end_alpha);
 
 			return TRUE;
 		}
@@ -100,9 +82,9 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			read_int(root, "kuro.scrollbar.reduction", hive.scrollbar.reduction);
-			read_bool(root, "kuro.scrollbar.arrow_as_button", hive.scrollbar.arrow_as_button);
-			read_bool(root, "kuro.scrollbar.has_gripper", hive.scrollbar.has_gripper);
+			read_int(root, "scrollbar.reduction", hive.scrollbar.reduction);
+			read_bool(root, "scrollbar.arrow_as_button", hive.scrollbar.arrow_as_button);
+			read_bool(root, "scrollbar.has_gripper", hive.scrollbar.has_gripper);
 
 			return TRUE;
 		}
@@ -114,9 +96,145 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			write_int(root, "kuro.scrollbar.reduction", hive.scrollbar.reduction);
-			write_bool(root, "kuro.scrollbar.arrow_as_button", hive.scrollbar.arrow_as_button);
-			write_bool(root, "kuro.scrollbar.has_gripper", hive.scrollbar.has_gripper);
+			write_int(root, "scrollbar.reduction", hive.scrollbar.reduction);
+			write_bool(root, "scrollbar.arrow_as_button", hive.scrollbar.arrow_as_button);
+			write_bool(root, "scrollbar.has_gripper", hive.scrollbar.has_gripper);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからスリムバーの設定を読み込みます。
+		//
+		BOOL read_slimbar(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "slimbar.flag_use", hive.slimbar.flag_use);
+			read_string(root, "slimbar.title_format", hive.slimbar.title_format);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにスリムバーの設定を書き込みます。
+		//
+		BOOL write_slimbar(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "slimbar.flag_use", hive.slimbar.flag_use);
+			write_string(root, "slimbar.title_format", hive.slimbar.title_format);
+
+			return TRUE;
+		}
+
+		//
+		// ノードから丸みの設定を読み込みます。
+		//
+		BOOL read_round(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "round.flag_use", hive.round.flag_use);
+			read_int(root, "round.size", hive.round.size);
+
+			return TRUE;
+		}
+
+		//
+		// ノードに丸みの設定を書き込みます。
+		//
+		BOOL write_round(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "round.flag_use", hive.round.flag_use);
+			write_int(root, "round.size", hive.round.size);
+
+			return TRUE;
+		}
+
+		//
+		// ノードから縁の設定を読み込みます。
+		//
+		BOOL read_border(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "border.flag_3d_edge", hive.border.flag_3d_edge);
+			read_int(root, "border.width", hive.border.width);
+
+			return TRUE;
+		}
+
+		//
+		// ノードに縁の設定を書き込みます。
+		//
+		BOOL write_border(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "border.flag_3d_edge", hive.border.flag_3d_edge);
+			write_int(root, "border.width", hive.border.width);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからグラデーションの設定を読み込みます。
+		//
+		BOOL read_gradient(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "gradient.flag_use", hive.gradient.flag_use);
+			read_bool(root, "gradient.flag_end_alpha", hive.gradient.flag_end_alpha);
+			read_int(root, "gradient.end_alpha", hive.gradient.end_alpha);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにグラデーションの設定を書き込みます。
+		//
+		BOOL write_gradient(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "gradient.flag_use", hive.gradient.flag_use);
+			write_bool(root, "gradient.flag_end_alpha", hive.gradient.flag_end_alpha);
+			write_int(root, "gradient.end_alpha", hive.gradient.end_alpha);
+
+			return TRUE;
+		}
+
+		//
+		// ノードから影の設定を読み込みます。
+		//
+		BOOL read_shadow(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "shadow.flag_use", hive.shadow.flag_use);
+			read_bool(root, "shadow.flag_blur", hive.shadow.flag_blur);
+			read_point(root, "shadow.offset", hive.shadow.offset);
+			read_int(root, "shadow.size", hive.shadow.size);
+
+			return TRUE;
+		}
+
+		//
+		// ノードに影の設定を書き込みます。
+		//
+		BOOL write_shadow(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "shadow.flag_use", hive.shadow.flag_use);
+			write_bool(root, "shadow.flag_blur", hive.shadow.flag_blur);
+			write_point(root, "shadow.offset", hive.shadow.offset);
+			write_int(root, "shadow.size", hive.shadow.size);
 
 			return TRUE;
 		}
@@ -227,9 +345,14 @@ namespace apn::dark
 
 			read_jd(root);
 			read_scrollbar(root);
-			read_etc(root);
+			read_slimbar(root);
+			read_round(root);
+			read_border(root);
+			read_gradient(root);
+			read_shadow(root);
 			read_fonts(root);
 			read_dialog_name(root);
+			read_etc(root);
 
 			return TRUE;
 		}
@@ -243,9 +366,14 @@ namespace apn::dark
 
 			write_jd(root);
 			write_scrollbar(root);
-			write_etc(root);
+			write_slimbar(root);
+			write_round(root);
+			write_border(root);
+			write_gradient(root);
+			write_shadow(root);
 			write_fonts(root);
 			write_dialog_name(root);
+			write_etc(root);
 
 			return TRUE;
 		}
