@@ -293,13 +293,20 @@ namespace apn::dark
 							}
 						case IDC_ROUND_SIZE:
 						case IDC_GRADIENT_END_ALPHA:
-						case IDC_SHADOW_OFFSET_X:
-						case IDC_SHADOW_OFFSET_Y:
 						case IDC_SCROLLBAR_REDUCTION:
 							{
 								auto value = get_int(edit_id);
 								value += (nm->iDelta > 0) ? -10 : +10;
 								value = std::clamp(value, 0, +100);
+								set_int(edit_id, value);
+								break;
+							}
+						case IDC_SHADOW_OFFSET_X:
+						case IDC_SHADOW_OFFSET_Y:
+							{
+								auto value = get_int(edit_id);
+								value += (nm->iDelta > 0) ? -10 : +10;
+								value = std::clamp(value, -100, +100);
 								set_int(edit_id, value);
 								break;
 							}
