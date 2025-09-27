@@ -97,7 +97,7 @@ namespace apn::dark
 		//
 		virtual BOOL read_stream(std::ifstream& ifs)
 		{
-			nlohmann::json root;
+			my::json::n_json root;
 			ifs >> root;
 			return read_node(root);
 		}
@@ -107,7 +107,7 @@ namespace apn::dark
 		//
 		virtual BOOL write_stream(std::ofstream& ofs)
 		{
-			nlohmann::json root;
+			my::json::n_json root;
 			write_node(root);
 			ofs << root.dump(1, '\t');
 			return TRUE;
