@@ -189,7 +189,7 @@ namespace apn::dark::kuro::paint
 			{
 				auto radius = get_round_as_float(r / 2.0f);
 
-				return d2d.draw_round_rect(dc, &rc, radius, pigment);
+				return d2d::Recter().draw_round_rect(dc, &rc, radius, pigment);
 			}
 			else
 			{
@@ -253,7 +253,7 @@ namespace apn::dark::kuro::paint
 
 			TextAttribute text_attribute(dc, pigment, opaque);
 
-			return !!d2d.draw_text(dc, text, c, (LPRECT)rc, text_flags, pigment);
+			return !!d2d::Texter().draw_text(dc, text, c, (LPRECT)rc, text_flags, pigment);
 		}
 
 		//
@@ -271,7 +271,7 @@ namespace apn::dark::kuro::paint
 				DEFAULT_QUALITY, DEFAULT_PITCH, font_name));
 			my::gdi::selector font_selector(dc, font.get());
 
-			return !!d2d.draw_text(dc, &char_code, 1,
+			return !!d2d::Texter().draw_text(dc, &char_code, 1,
 				(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE, pigment);
 		}
 

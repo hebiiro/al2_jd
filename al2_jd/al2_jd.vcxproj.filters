@@ -65,6 +65,9 @@
     <Filter Include="kuro\gdi\renderer\rigaya">
       <UniqueIdentifier>{6faccb27-96ed-4fdb-a431-c7affc7a839d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kuro\paint\d2d">
+      <UniqueIdentifier>{281acd33-2053-4673-9842-93418e09662c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -389,6 +392,18 @@
     </ClInclude>
     <ClInclude Include="kuro\paint\d2d_utils.hpp">
       <Filter>kuro\paint</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\d2d\core.hpp">
+      <Filter>kuro\paint\d2d</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\d2d\recter.hpp">
+      <Filter>kuro\paint\d2d</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\d2d\texter.hpp">
+      <Filter>kuro\paint\d2d</Filter>
+    </ClInclude>
+    <ClInclude Include="kuro\paint\d2d\utils.hpp">
+      <Filter>kuro\paint\d2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

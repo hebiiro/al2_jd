@@ -3,7 +3,27 @@
 namespace apn::dark::kuro
 {
 	//
-	// このクラスはcustom_style.confの変数を保持します。
+	// 指定されたカラーエントリを結合します。
+	//
+	inline void operator+=(ColorEntry& lhs, const ColorEntry* rhs)
+	{
+		// 右辺のカラーエントリが無効の場合は何もしません。
+		if (!rhs) return;
+
+		// 右辺のカラーパーツを走査します。
+		for (size_t i = 0; i < rhs->c_max_size; i++)
+		{
+			// 右辺のカラーパーツが有効の場合は
+			if (rhs->colors[i].is_valid())
+			{
+				// 左辺のカラーパーツを上書きします。
+				lhs.colors[i] = rhs->colors[i];
+			}
+		}
+	}
+
+	//
+	// このクラスはcustom_color.confの変数を保持します。
 	//
 	inline struct CustomStyle
 	{
@@ -30,22 +50,10 @@ namespace apn::dark::kuro
 			// 一旦デフォルトカラーをセットします。
 			auto out_entry = default_color;
 
-			// カスタムカラーが存在する場合は
-			if (auto entry = get_color(section, key))
-			{
-				// カラーパーツを走査します。
-				for (size_t i = 0; i < entry->c_max_size; i++)
-				{
-					// カラーパーツが有効の場合は
-					if (entry->colors[i].is_valid())
-					{
-						// デフォルトカラーを上書きします。
-						out_entry.colors[i] = entry->colors[i];
-					}
-				}
-			}
+			// カスタムカラーを結合します
+			out_entry += get_color(section, key);
 
-			// カスタムカラーを返します。
+			// 出力カラーエントリを返します。
 			return out_entry;
 		}
 
@@ -71,6 +79,22 @@ namespace apn::dark::kuro
 		inline ColorEntry get_text_color(const std::wstring& section, const std::wstring& sub_key, const ColorEntry& default_color)
 		{
 			return get_color(section, sub_key + L"Text", default_color);
+		}
+
+		//
+		// テキストの影のカスタムカラーを返します。
+		//
+		inline ColorEntry get_text_shadow_color(const std::wstring& section, const std::wstring& sub_key)
+		{
+			// 出力カラーエントリです。
+			auto out_entry = ColorEntry {};
+
+			// 各カラーエントリを出力カラーエントリに結合します。
+			out_entry += get_color(L"Common", L"TextShadow");
+			out_entry += get_color(section, sub_key + L"TextShadow");
+
+			// 出力カラーエントリを返します。
+			return out_entry;
 		}
 
 		//

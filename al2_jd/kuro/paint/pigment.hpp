@@ -140,5 +140,26 @@ namespace apn::dark::kuro::paint
 				return entry.colors[0].win32;
 			}
 		} text;
+
+		struct TextShadow
+		{
+			ColorEntry entry;
+
+			//
+			// テキストの影が描画可能な場合はTRUEを返します。
+			//
+			BOOL is_valid() const
+			{
+				return entry.colors[0].is_valid();
+			}
+
+			//
+			// 配色をwin32形式で返します。
+			//
+			COLORREF get_win32_color() const
+			{
+				return entry.colors[0].win32;
+			}
+		} text_shadow;
 	};
 }

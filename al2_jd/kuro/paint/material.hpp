@@ -74,6 +74,7 @@ namespace apn::dark::kuro::paint
 				{ custom_style.get_background_color(section, sub_key, background_color), },
 				{ custom_style.get_border_color(section, sub_key, border_color), },
 				{ custom_style.get_text_color(section, sub_key, text_color), },
+				{ custom_style.get_text_shadow_color(section, sub_key), },
 			};
 		}
 
@@ -96,8 +97,6 @@ namespace apn::dark::kuro::paint
 		{
 			return {
 				{ custom_style.get_color(section, key, background_color), },
-				{},
-				{},
 			};
 		}
 	};
