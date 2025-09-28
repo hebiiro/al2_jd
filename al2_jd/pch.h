@@ -58,12 +58,6 @@ using namespace Gdiplus;
 #pragma comment(lib, "d2d1.lib")
 #include <d2d1effects.h>
 #pragma comment(lib, "dxguid.lib")
-#if 0
-#include <d3d11.h>
-#pragma comment(lib, "d3d11.lib")
-#include <dxgi1_2.h>
-#pragma comment(lib, "dxgi.lib")
-#endif
 #include <dwrite.h>
 #pragma comment(lib, "dwrite.lib")
 #include <wincodec.h>

@@ -11,9 +11,7 @@ namespace apn::dark::kuro::paint::d2d
 		ComPtr<ID2D1Factory1> d2d_factory;
 		ComPtr<IWICImagingFactory> wic_factory;
 		ComPtr<ID2D1DCRenderTarget> render_target;
-#if 0
-		ComPtr<ID2D1DeviceContext> d2d_device_context;
-#endif
+
 		//
 		// 共通して使用されるピクセルフォーマットです。
 		//
@@ -68,37 +66,7 @@ namespace apn::dark::kuro::paint::d2d
 			auto hr = d2d_factory->CreateDCRenderTarget(
 				&props, render_target.ReleaseAndGetAddressOf());
 			if (!render_target) return hr;
-#if 0
-			// D3Dデバイスを作成します。
-			ComPtr<ID3D11Device> d3d_device;
-			hr = ::D3D11CreateDevice(
-				nullptr,
-				D3D_DRIVER_TYPE_HARDWARE,
-				nullptr,
-				D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-				nullptr,
-				0,
-				D3D11_SDK_VERSION,
-				&d3d_device,
-				nullptr,
-				nullptr);
-			if (!d3d_device) return hr;
 
-			// DXGIデバイスを取得します。
-			ComPtr<IDXGIDevice> dxgi_device;
-			hr = d3d_device.As(&dxgi_device);
-			if (!dxgi_device) return hr;
-
-			// D2Dデバイスを作成します。
-			ComPtr<ID2D1Device> d2d_device;
-			hr = d2d_factory->CreateDevice(dxgi_device.Get(), &d2d_device);
-			if (!d2d_device) return hr;
-
-			// D2Dデバイスコンテキストを作成します。
-			hr = d2d_device->CreateDeviceContext(
-				D2D1_DEVICE_CONTEXT_OPTIONS_NONE, d2d_device_context.ReleaseAndGetAddressOf());
-			if (!d2d_device_context) return hr;
-#endif
 			return hr;
 		}
 
