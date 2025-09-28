@@ -8,53 +8,112 @@ namespace apn::dark::kuro::paint::d2d
 	struct Recter
 	{
 		//
+		// 点pと直線abの距離を返します。
+		//
+		inline static float get_distance(const D2D1_POINT_2F& p, const D2D1_POINT_2F& a, const D2D1_POINT_2F& b)
+		{
+			auto v = b - a;
+
+			if (auto length = get_length(v))
+				return fabsf(cross_product(v, p - a)) / length;
+
+			return {};
+		}
+
+		//
+		// グラデーションストップ座標を返します。
+		//
+		inline static auto get_stop_point(const D2D1_RECT_F& rc, float radius)
+		{
+			radius = std::max(radius, 0.1f);
+
+			// 矩形の左上座標を取得します。
+			auto n = D2D1::Point2F(rc.left, rc.top);
+
+			// 矩形の右下座標を取得します。
+			auto f = D2D1::Point2F(rc.right, rc.bottom);
+
+			// 矩形の中心座標を取得します。
+			auto p = (n + f) / 2.0f;
+
+			// 傾きの基準直線を取得します。
+			auto a = D2D1::Point2F(rc.left, rc.top + radius);
+			auto b = D2D1::Point2F(rc.right - radius, rc.bottom);
+
+			// 中心座標からの距離を取得します。
+			auto distance = get_distance(p, a, b);
+
+			// 基準直線を正規化します。
+			auto v = normalize(b - a);
+
+			// 傾きを直角に変更します。
+			std::swap(v.x, v.y);
+
+			// 中心座標から直角線方向にずらした座標の組を返します。
+			return std::make_pair(p - v * distance, p + v * distance);
+		}
+
+		//
+		// ソリッドブラシを作成して返します。
+		//
+		inline static ComPtr<ID2D1SolidColorBrush> create_solid_brush(
+			ID2D1RenderTarget* render_target, const D2D1_COLOR_F& d2d_color)
+		{
+			// ソリッドブラシを作成します。
+			ComPtr<ID2D1SolidColorBrush> solid_brush;
+			render_target->CreateSolidColorBrush(d2d_color, &solid_brush);
+			return solid_brush;
+		}
+
+		//
 		// グラデーションストップコレクションを作成して返します。
 		//
-		inline static HRESULT create_gradient_stop_collection(
-			const auto& render_target,
+		inline static ComPtr<ID2D1GradientStopCollection> create_gradient_stop_collection(
+			ID2D1RenderTarget* render_target,
 			const D2D1_COLOR_F& start_color,
-			const D2D1_COLOR_F& end_color,
-			ID2D1GradientStopCollection** ppv)
+			const D2D1_COLOR_F& end_color)
 		{
 			D2D1_GRADIENT_STOP stops[2] = { { 0.0f, start_color }, { 1.0f, end_color } };
 
-			return render_target->CreateGradientStopCollection(
-				stops, std::size(stops), D2D1_GAMMA_1_0, D2D1_EXTEND_MODE_CLAMP, ppv);
+			ComPtr<ID2D1GradientStopCollection> gradient_stop_collection;
+			render_target->CreateGradientStopCollection(stops, std::size(stops),
+				D2D1_GAMMA_1_0, D2D1_EXTEND_MODE_CLAMP, &gradient_stop_collection);
+			return gradient_stop_collection;
 		}
 
 		//
 		// グラデーションブラシを作成して返します。
 		//
-		inline static HRESULT create_gradient_brush(
-			const auto& render_target,
+		inline static ComPtr<ID2D1LinearGradientBrush> create_gradient_brush(
+			ID2D1RenderTarget* render_target,
 			const D2D1_POINT_2F& start_point,
 			const D2D1_POINT_2F& end_point,
-			ID2D1GradientStopCollection* stop_collection,
-			ID2D1LinearGradientBrush** ppv)
+			ID2D1GradientStopCollection* gradient_stop_collection)
 		{
 			D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES props = { start_point, end_point };
 
-			return render_target->CreateLinearGradientBrush(props, stop_collection, ppv);
+			ComPtr<ID2D1LinearGradientBrush> gradient_brush;
+			render_target->CreateLinearGradientBrush(
+				props, gradient_stop_collection, &gradient_brush);
+			return gradient_brush;
 		}
 
 		//
 		// グラデーションブラシを作成して返します。
 		//
-		inline static HRESULT create_gradient_brush(
-			const auto& render_target,
+		inline static ComPtr<ID2D1LinearGradientBrush> create_gradient_brush(
+			ID2D1RenderTarget* render_target,
 			const D2D1_COLOR_F& start_color,
 			const D2D1_COLOR_F& end_color,
 			const D2D1_POINT_2F& start_point,
-			const D2D1_POINT_2F& end_point,
-			ID2D1LinearGradientBrush** ppv)
+			const D2D1_POINT_2F& end_point)
 		{
-			ComPtr<ID2D1GradientStopCollection> stop_collection;
-			auto hr = create_gradient_stop_collection(
-				render_target, start_color, end_color, &stop_collection);
-			if (!stop_collection) return hr;
+			auto gradient_stop_collection = create_gradient_stop_collection(
+				render_target, start_color, end_color);
+			if (!gradient_stop_collection) return {};
 
 			return create_gradient_brush(render_target,
-				start_point, end_point, stop_collection.Get(), ppv);
+				start_point, end_point, gradient_stop_collection.Get());
 		}
 
 		//
@@ -109,26 +168,24 @@ namespace apn::dark::kuro::paint::d2d
 					auto end_color_index = color_entry.colors[1].is_valid() ? 1 : 0;
 
 					// グラデーションブラシで背景を描画します。
-					ComPtr<ID2D1LinearGradientBrush> gradient_brush;
-					create_gradient_brush(
-						render_target,
+					auto gradient_brush = create_gradient_brush(
+						render_target.Get(),
 						to_d2d_color(color_entry.colors[0]),
 						get_background_end_color(color_entry.colors[end_color_index]),
 						D2D1::Point2F(draw_rc.left, draw_rc.top),
-						D2D1::Point2F(draw_rc.right, draw_rc.bottom),
-						&gradient_brush);
+						D2D1::Point2F(draw_rc.right, draw_rc.bottom));
 					if (!gradient_brush) return FALSE;
 					render_target->FillRoundedRectangle(rrc, gradient_brush.Get());
 				}
 				// それ以外の場合は
 				else
 				{
-					// カラーブラシで背景を描画します。
-					ComPtr<ID2D1SolidColorBrush> brush;
-					render_target->CreateSolidColorBrush(
-						to_d2d_color(color_entry.colors[0]), &brush);
-					if (!brush) return FALSE;
-					render_target->FillRoundedRectangle(rrc, brush.Get());
+					// ソリッドブラシで背景を描画します。
+					auto solid_brush = create_solid_brush(
+						render_target.Get(),
+						to_d2d_color(color_entry.colors[0]));
+					if (!solid_brush) return FALSE;
+					render_target->FillRoundedRectangle(rrc, solid_brush.Get());
 				}
 			}
 
@@ -141,16 +198,7 @@ namespace apn::dark::kuro::paint::d2d
 				const auto& color_entry = pigment->background.entry;
 
 				// グラデーションストップ座標を取得します。
-				// radiusが0だと計算不可能なので最小値を指定しています。
-				auto stop_point = [&, radius = std::max(radius, 0.1f)]()
-				{
-					auto a = D2D1::Point2F(draw_rc.left, draw_rc.bottom - radius);
-					auto b = D2D1::Point2F(draw_rc.right - radius, draw_rc.top);
-					auto c = D2D1::Point2F(draw_rc.left + radius, draw_rc.bottom);
-					auto d = D2D1::Point2F(draw_rc.right, draw_rc.top + radius);
-
-					return std::make_pair(a, perpendicular(a, b, c, d));
-				} ();
+				auto stop_point = get_stop_point(whole_rc, radius);
 
 				// 終了カラーを決定します。
 				auto end_color_index = color_entry.colors[1].is_valid() ? 1 : 0;
@@ -159,13 +207,11 @@ namespace apn::dark::kuro::paint::d2d
 				auto color_entry_for_blend = get_3d_edge_entry();
 
 				// グラデーションブラシで縁を描画します。
-				ComPtr<ID2D1LinearGradientBrush> gradient_brush;
-				create_gradient_brush(
-					render_target,
+				auto gradient_brush = create_gradient_brush(
+					render_target.Get(),
 					blend(color_entry.colors[0], color_entry_for_blend, 0),
 					blend(color_entry.colors[end_color_index], color_entry_for_blend, 1),
-					stop_point.first, stop_point.second,
-					&gradient_brush);
+					stop_point.first, stop_point.second);
 				if (!gradient_brush) return FALSE;
 				render_target->DrawRoundedRectangle(rrc, gradient_brush.Get(), border_width);
 			}

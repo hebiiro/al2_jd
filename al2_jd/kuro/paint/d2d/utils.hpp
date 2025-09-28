@@ -3,28 +3,93 @@
 namespace apn::dark::kuro::paint
 {
 	//
-	// 2つの平行線abとcdに対して、aを通る垂直線と、cdの交点を返します。
+	// 指定されたD2Dポイントを加算して返します。
 	//
-	inline D2D1_POINT_2F perpendicular(
-		const D2D1_POINT_2F& a, const D2D1_POINT_2F& b,
-		const D2D1_POINT_2F& c, const D2D1_POINT_2F& d)
+	inline D2D1_POINT_2F operator+(const D2D1_POINT_2F& lhs, const D2D1_POINT_2F& rhs)
 	{
-		// 方向ベクトル v = b - a
-		auto vx = b.x - a.x;
-		auto vy = b.y - a.y;
-		auto vnorm2 = vx * vx + vy * vy;
-		if (vnorm2 == 0.0f) return {};
+		return { lhs.x + rhs.x, lhs.y + rhs.y };
+	}
 
-		// t = ((a - c) . v) / (v . v)
-		auto acx = a.x - c.x;
-		auto acy = a.y - c.y;
-		auto t = (acx * vx + acy * vy) / vnorm2;
+	//
+	// 指定されたD2Dポイントを減算して返します。
+	//
+	inline D2D1_POINT_2F operator-(const D2D1_POINT_2F& lhs, const D2D1_POINT_2F& rhs)
+	{
+		return { lhs.x - rhs.x, lhs.y - rhs.y };
+	}
 
-		// f = c + t * v
-		return {
-			c.x + t * vx,
-			c.y + t * vy,
-		};
+	//
+	// 指定されたD2Dポイントを乗算して返します。
+	//
+	inline D2D1_POINT_2F operator*(const D2D1_POINT_2F& lhs, float rhs)
+	{
+		return { lhs.x * rhs, lhs.y * rhs };
+	}
+
+	//
+	// 指定されたD2Dポイントを除算して返します。
+	//
+	inline D2D1_POINT_2F operator/(const D2D1_POINT_2F& lhs, float rhs)
+	{
+		return { lhs.x / rhs, lhs.y / rhs };
+	}
+
+	//
+	// 指定されたD2Dポイントの内積を返します。
+	//
+	inline float dot_product(const D2D1_POINT_2F& lhs, const D2D1_POINT_2F& rhs)
+	{
+		return lhs.x * rhs.x + lhs.y * rhs.y;
+	}
+
+	//
+	// 指定されたD2Dポイントの外積を返します。
+	//
+	inline float cross_product(const D2D1_POINT_2F& lhs, const D2D1_POINT_2F& rhs)
+	{
+		return lhs.x * rhs.y - lhs.y * rhs.x;
+	}
+
+	//
+	// 指定されたD2Dポイントの長さを返します。
+	//
+	inline float get_length(const D2D1_POINT_2F& lhs)
+	{
+		return std::sqrtf(lhs.x * lhs.x + lhs.y * lhs.y);
+	}
+
+	//
+	// 指定されたD2Dポイントを正規化して返します。
+	//
+	inline D2D1_POINT_2F normalize(const D2D1_POINT_2F& lhs)
+	{
+		return lhs / get_length(lhs);
+	}
+
+	//
+	// 矩形を収縮して返します。
+	//
+	inline D2D1_RECT_F deflate(const D2D1_RECT_F& rc, float x, float y)
+	{
+		D2D1_RECT_F out_rc = rc;
+		out_rc.left += x;
+		out_rc.top += y;
+		out_rc.right -= x;
+		out_rc.bottom -= y;
+		return out_rc;
+	}
+
+	//
+	// 矩形を収縮して返します。
+	//
+	inline D2D1_ROUNDED_RECT deflate(const D2D1_ROUNDED_RECT& rc, float x, float y)
+	{
+		D2D1_ROUNDED_RECT out_rc = rc;
+		out_rc.rect.left += x;
+		out_rc.rect.top += y;
+		out_rc.rect.right -= x;
+		out_rc.rect.bottom -= y;
+		return out_rc;
 	}
 
 	//
@@ -101,31 +166,5 @@ namespace apn::dark::kuro::paint
 		if (!entry) return to_d2d_color(base_color);
 
 		return blend(base_color, entry->colors[color_index]);
-	}
-
-	//
-	// 矩形を収縮して返します。
-	//
-	inline D2D1_RECT_F deflate(const D2D1_RECT_F& rc, float x, float y)
-	{
-		D2D1_RECT_F out_rc = rc;
-		out_rc.left += x;
-		out_rc.top += y;
-		out_rc.right -= x;
-		out_rc.bottom -= y;
-		return out_rc;
-	}
-
-	//
-	// 矩形を収縮して返します。
-	//
-	inline D2D1_ROUNDED_RECT deflate(const D2D1_ROUNDED_RECT& rc, float x, float y)
-	{
-		D2D1_ROUNDED_RECT out_rc = rc;
-		out_rc.rect.left += x;
-		out_rc.rect.top += y;
-		out_rc.rect.right -= x;
-		out_rc.rect.bottom -= y;
-		return out_rc;
 	}
 }
