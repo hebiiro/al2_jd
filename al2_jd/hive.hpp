@@ -16,12 +16,14 @@ namespace apn::dark
 	{
 		inline static constexpr auto c_name = L"JD";
 		inline static constexpr auto c_display_name = L"ダークモード化";
-#ifdef _DEBUG
-		//
-		// テスト用ウィンドウメッセージです。
-		//
-		inline static const auto c_test_message = ::RegisterWindowMessageW(L"al2_jd::test");
-#endif
+
+		inline static constexpr struct WindowMessage {
+			//
+			// 初期化後のウィンドウメッセージです。
+			//
+			inline static const auto c_post_init = ::RegisterWindowMessageW(L"al2_jd::post_init");
+		} c_message;
+
 		//
 		// このアドインのインスタンスハンドルです。
 		//

@@ -8,6 +8,7 @@ namespace apn::dark
 	struct AppInterface {
 		virtual BOOL dll_init() = 0;
 		virtual BOOL dll_exit() = 0;
+		virtual BOOL post_init() = 0;
 		virtual BOOL read_assets() = 0;
 		virtual BOOL write_assets() = 0;
 		virtual BOOL read_config() = 0;

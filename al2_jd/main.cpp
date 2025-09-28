@@ -145,11 +145,7 @@ namespace apn::dark
 				}
 #endif
 				app->dll_init();
-#ifdef _DEBUG
-				// デバッグ用のコードです。
-				// テスト用ウィンドウメッセージを送信します。
-//				::PostMessage(hive.theme_window, hive.c_test_message, 0, 0);
-#endif
+
 				break;
 			}
 		case DLL_PROCESS_DETACH:

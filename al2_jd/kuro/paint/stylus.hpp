@@ -189,17 +189,16 @@ namespace apn::dark::kuro::paint
 			{
 				auto radius = get_round_as_float(r / 2.0f);
 
-				return d2d::Recter().draw_round_rect(dc, &rc, radius, pigment);
+				if (auto result = d2d::Recter().draw_round_rect(dc, &rc, radius, pigment))
+					return result;
 			}
-			else
-			{
-				auto round = get_round_as_int(r);
 
-				PenAttribute pen_attribute(dc, pigment);
-				BrushAttribute brush_attribute(dc, pigment);
+			auto round = get_round_as_int(r);
 
-				return ::RoundRect(dc, rc.left, rc.top, rc.right, rc.bottom, round, round);
-			}
+			PenAttribute pen_attribute(dc, pigment);
+			BrushAttribute brush_attribute(dc, pigment);
+
+			return ::RoundRect(dc, rc.left, rc.top, rc.right, rc.bottom, round, round);
 		}
 
 		//
@@ -249,11 +248,15 @@ namespace apn::dark::kuro::paint
 		//
 		BOOL d2d_draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const Pigment* pigment, BOOL opaque = TRUE)
 		{
-			if (!hive.jd.use_d2d) return draw_text(dc, rc, text, c, text_flags, pigment, opaque);
+			if (hive.jd.use_d2d)
+			{
+				TextAttribute text_attribute(dc, pigment, opaque);
 
-			TextAttribute text_attribute(dc, pigment, opaque);
+				if (auto result = d2d::Texter().draw_text(dc, text, c, (LPRECT)rc, text_flags, pigment))
+					return !!result;
+			}
 
-			return !!d2d::Texter().draw_text(dc, text, c, (LPRECT)rc, text_flags, pigment);
+			return draw_text(dc, rc, text, c, text_flags, pigment, opaque);
 		}
 
 		//
@@ -261,18 +264,24 @@ namespace apn::dark::kuro::paint
 		//
 		BOOL d2d_draw_icon(HDC dc, LPCRECT rc, const Pigment* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
-			if (!hive.jd.use_d2d) return draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
+			if (hive.jd.use_d2d)
+			{
+				auto font_height = my::get_height(*rc);
+				my::gdi::unique_ptr<HFONT> font(::CreateFontW(
+					font_height, 0, 0, 0, 0,
+					FALSE, FALSE, FALSE,
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+					DEFAULT_QUALITY, DEFAULT_PITCH, font_name));
+				my::gdi::selector font_selector(dc, font.get());
 
-			auto font_height = my::get_height(*rc);
-			my::gdi::unique_ptr<HFONT> font(::CreateFontW(
-				font_height, 0, 0, 0, 0,
-				FALSE, FALSE, FALSE,
-				DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-				DEFAULT_QUALITY, DEFAULT_PITCH, font_name));
-			my::gdi::selector font_selector(dc, font.get());
+				if (auto result = d2d::Texter().draw_text(dc, &char_code, 1,
+					(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE, pigment))
+				{
+					return !!result;
+				}
+			}
 
-			return !!d2d::Texter().draw_text(dc, &char_code, 1,
-				(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE, pigment);
+			return draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
 		}
 
 		//

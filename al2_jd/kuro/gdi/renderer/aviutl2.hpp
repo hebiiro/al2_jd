@@ -59,12 +59,13 @@ namespace apn::dark::kuro::gdi
 					break;
 				}
 			}
-#ifdef _DEBUG
-			if (message == hive.c_test_message)
+
+			if (message == hive.c_message.c_post_init)
 			{
-				TestDialog dialog; dialog.do_modal();
+				// 初期化後処理を実行します。
+				app->post_init();
 			}
-#endif
+
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 
