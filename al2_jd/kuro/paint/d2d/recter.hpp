@@ -21,6 +21,14 @@ namespace apn::dark::kuro::paint::d2d
 		}
 
 		//
+		// 指定されたベクトルと直角のベクトルを返します。
+		//
+		inline static D2D1_POINT_2F perpendicular(const D2D1_POINT_2F& v)
+		{
+			return { -v.y, v.x };
+		}
+
+		//
 		// グラデーションストップ座標を返します。
 		//
 		inline static auto get_stop_point(const D2D1_RECT_F& rc, float radius)
@@ -37,20 +45,23 @@ namespace apn::dark::kuro::paint::d2d
 			auto p = (n + f) / 2.0f;
 
 			// 傾きの基準直線を取得します。
-			auto a = D2D1::Point2F(rc.left, rc.top + radius);
-			auto b = D2D1::Point2F(rc.right - radius, rc.bottom);
+			auto a = D2D1::Point2F(rc.left, rc.bottom - radius);
+			auto b = D2D1::Point2F(rc.right - radius, rc.top);
 
 			// 中心座標からの距離を取得します。
 			auto distance = get_distance(p, a, b);
 
-			// 基準直線を正規化します。
+			// 基準ベクトルを正規化します。
 			auto v = normalize(b - a);
 
+			// 基準ベクトルの長さを中心座標からの距離にします。
+			v = v * distance;
+
 			// 傾きを直角に変更します。
-			std::swap(v.x, v.y);
+			v = perpendicular(v);
 
 			// 中心座標から直角線方向にずらした座標の組を返します。
-			return std::make_pair(p - v * distance, p + v * distance);
+			return std::make_pair(p - v, p + v);
 		}
 
 		//
