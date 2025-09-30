@@ -7,16 +7,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "al2_jd", "al2_jd\al2_jd.vcx
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-		.gitattributes = .gitattributes
-		.gitignore = .gitignore
-		common.props = common.props
-		CREDITS.md = CREDITS.md
-		LICENSE = LICENSE
-		README.md = README.md
+		..\.editorconfig = ..\.editorconfig
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\CREDITS.md = ..\CREDITS.md
+		..\LICENSE = ..\LICENSE
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DarkenWindow.aul", "DarkenWindow.aul\DarkenWindow.aul.vcxproj", "{D30DB443-E8BE-4F53-80A0-6D9851C31DB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{3F871393-2CE4-46E2-AD53-4B5E06BFBA88}"
+	ProjectSection(SolutionItems) = preProject
+		common.props = common.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +50,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F871393-2CE4-46E2-AD53-4B5E06BFBA88} = {DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838D8236-80BE-44A9-98E7-B7FFE73AC619}
