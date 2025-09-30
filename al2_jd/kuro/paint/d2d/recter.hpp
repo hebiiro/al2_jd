@@ -170,19 +170,19 @@ namespace apn::dark::kuro::paint::d2d
 				// 背景を描画します。
 
 				// 背景用のカラーエントリを取得します。
-				const auto& color_entry = pigment->background.entry;
+				const auto& color_entry = pigment->background.color_entry;
 
 				// グラデーションで描画する場合は
 				if (hive.gradient.flag_use)
 				{
 					// 終了色のインデックスを取得します。
-					auto end_color_index = color_entry.colors[1].is_valid() ? 1 : 0;
+					auto end_color_index = color_entry.parts[1].is_valid() ? 1 : 0;
 
 					// グラデーションブラシで背景を描画します。
 					auto gradient_brush = create_gradient_brush(
 						render_target.Get(),
-						to_d2d_color(color_entry.colors[0]),
-						get_background_end_color(color_entry.colors[end_color_index]),
+						to_d2d_color(color_entry.parts[0]),
+						get_background_end_color(color_entry.parts[end_color_index]),
 						D2D1::Point2F(draw_rc.left, draw_rc.top),
 						D2D1::Point2F(draw_rc.right, draw_rc.bottom));
 					if (!gradient_brush) return FALSE;
@@ -194,7 +194,7 @@ namespace apn::dark::kuro::paint::d2d
 					// ソリッドブラシで背景を描画します。
 					auto solid_brush = create_solid_brush(
 						render_target.Get(),
-						to_d2d_color(color_entry.colors[0]));
+						to_d2d_color(color_entry.parts[0]));
 					if (!solid_brush) return FALSE;
 					render_target->FillRoundedRectangle(rrc, solid_brush.Get());
 				}
@@ -206,22 +206,22 @@ namespace apn::dark::kuro::paint::d2d
 				// 縁を描画します。
 
 				// 縁用のカラーエントリを取得します。
-				const auto& color_entry = pigment->background.entry;
+				const auto& color_entry = pigment->background.color_entry;
 
 				// グラデーションストップ座標を取得します。
 				auto stop_point = get_stop_point(whole_rc, radius);
 
 				// 終了カラーを決定します。
-				auto end_color_index = color_entry.colors[1].is_valid() ? 1 : 0;
+				auto end_color_index = color_entry.parts[1].is_valid() ? 1 : 0;
 
 				// ブレンド用のカラーエントリを取得します。
-				auto color_entry_for_blend = get_3d_edge_entry();
+				auto color_entry_for_blend = get_3d_edge_color_entry();
 
 				// グラデーションブラシで縁を描画します。
 				auto gradient_brush = create_gradient_brush(
 					render_target.Get(),
-					blend(color_entry.colors[0], color_entry_for_blend, 0),
-					blend(color_entry.colors[end_color_index], color_entry_for_blend, 1),
+					blend(color_entry.parts[0], color_entry_for_blend, 0),
+					blend(color_entry.parts[end_color_index], color_entry_for_blend, 1),
 					stop_point.first, stop_point.second);
 				if (!gradient_brush) return FALSE;
 				render_target->DrawRoundedRectangle(rrc, gradient_brush.Get(), border_width);

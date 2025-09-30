@@ -132,10 +132,10 @@ namespace apn::dark::kuro::paint
 	//
 	// 疑似3Dエッジのカラーエントリを返します。
 	//
-	inline const ColorEntry* get_3d_edge_entry()
+	inline const ColorEntry* get_3d_edge_color_entry()
 	{
 		if (hive.border.flag_3d_edge)
-			return custom_style.get_color(L"3DEdge", L"Raised");
+			return custom_style.get_color_entry(L"3DEdge", L"Raised");
 		else
 			return {};
 	}
@@ -161,10 +161,10 @@ namespace apn::dark::kuro::paint
 	//
 	// 基本色に補助色をブレンドしてD2D形式で返します。
 	//
-	inline auto blend(const Color& base_color, const ColorEntry* entry, size_t color_index)
+	inline auto blend(const Color& base_color, const ColorEntry* color_entry, size_t color_index)
 	{
-		if (!entry) return to_d2d_color(base_color);
+		if (!color_entry) return to_d2d_color(base_color);
 
-		return blend(base_color, entry->colors[color_index]);
+		return blend(base_color, color_entry->parts[color_index]);
 	}
 }

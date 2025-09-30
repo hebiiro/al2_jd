@@ -154,22 +154,22 @@ namespace apn::dark::kuro
 		};
 
 		//
-		// 配色項目の配列です。
+		// カラーエントリの配列です。
 		//
-		ColorEntry entries[(size_t)Color::MaxSize] = {};
+		ColorEntry color_entries[(size_t)Color::MaxSize] = {};
 
 		//
-		// 配色項目を返します。
+		// カラーエントリを返します。
 		//
-		const ColorEntry& get_entry(Color color_index) const
+		const ColorEntry& get_color_entry(Color color_index) const
 		{
-			return entries[(size_t)color_index];
+			return color_entries[(size_t)color_index];
 		}
 
 		//
-		// 文字列を配色データに変換してコレクションに追加します。
+		// 値をカラーパーツに変換してコレクションに追加します。
 		//
-		void add(const std::wstring& section, const std::wstring& key, const std::wstring& value)
+		void add_color_parts(const std::wstring& section, const std::wstring& key, const std::wstring& value)
 		{
 			// キーに対応するイテレータを取得します。
 			auto it = index_map.find(key);
@@ -177,7 +177,7 @@ namespace apn::dark::kuro
 
 			// 配色インデックスを取得します。
 			auto index = (size_t)it->second;
-			if (index >= std::size(entries)) return;
+			if (index >= std::size(color_entries)) return;
 
 			// 値を配列に分割します。
 			auto vec = split(value, L',');
@@ -225,8 +225,8 @@ namespace apn::dark::kuro
 					}
 				}
 
-				// 配色をセットします。
-				entries[index].colors[i] = { rgba };
+				// カラーパーツをセットします。
+				color_entries[index].parts[i] = { rgba };
 			}
 		}
 
@@ -282,7 +282,7 @@ namespace apn::dark::kuro
 				auto value = trim(line.substr(separator_pos + 1));
 
 				// コレクションに追加します。
-				add(section, key, value);
+				add_color_parts(section, key, value);
 			}
 
 			return TRUE;

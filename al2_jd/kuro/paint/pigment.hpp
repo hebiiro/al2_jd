@@ -10,14 +10,14 @@ namespace apn::dark::kuro::paint
 	{
 		struct Background
 		{
-			ColorEntry entry;
+			ColorEntry color_entry;
 			mutable HBRUSH brush = {};
 
 			//
 			// (デフォルト)コンストラクタです。
 			//
-			Background(const ColorEntry& entry = {})
-				: entry(entry)
+			Background(const ColorEntry& color_entry = {})
+				: color_entry(color_entry)
 			{
 			}
 
@@ -51,7 +51,7 @@ namespace apn::dark::kuro::paint
 			void assign(const Background& rhs)
 			{
 				if (this != &rhs)
-					exit(), entry = rhs.entry;
+					exit(), color_entry = rhs.color_entry;
 			}
 
 			//
@@ -74,7 +74,7 @@ namespace apn::dark::kuro::paint
 			//
 			BOOL is_valid() const
 			{
-				return entry.colors[0].is_valid();
+				return color_entry.parts[0].is_valid();
 			}
 
 			//
@@ -82,7 +82,7 @@ namespace apn::dark::kuro::paint
 			//
 			COLORREF get_win32_color() const
 			{
-				return entry.colors[0].win32;
+				return color_entry.parts[0].win32;
 			}
 
 			//
@@ -101,14 +101,14 @@ namespace apn::dark::kuro::paint
 
 		struct Border
 		{
-			ColorEntry entry;
+			ColorEntry color_entry;
 
 			//
 			// 縁が描画可能な場合はTRUEを返します。
 			//
 			BOOL is_valid() const
 			{
-				return entry.colors[0].is_valid();
+				return color_entry.parts[0].is_valid();
 			}
 
 			//
@@ -116,20 +116,20 @@ namespace apn::dark::kuro::paint
 			//
 			COLORREF get_win32_color() const
 			{
-				return entry.colors[0].win32;
+				return color_entry.parts[0].win32;
 			}
 		} border;
 
 		struct Text
 		{
-			ColorEntry entry;
+			ColorEntry color_entry;
 
 			//
 			// テキストが描画可能な場合はTRUEを返します。
 			//
 			BOOL is_valid() const
 			{
-				return entry.colors[0].is_valid();
+				return color_entry.parts[0].is_valid();
 			}
 
 			//
@@ -137,20 +137,20 @@ namespace apn::dark::kuro::paint
 			//
 			COLORREF get_win32_color() const
 			{
-				return entry.colors[0].win32;
+				return color_entry.parts[0].win32;
 			}
 		} text;
 
 		struct TextShadow
 		{
-			ColorEntry entry;
+			ColorEntry color_entry;
 
 			//
 			// テキストの影が描画可能な場合はTRUEを返します。
 			//
 			BOOL is_valid() const
 			{
-				return entry.colors[0].is_valid();
+				return color_entry.parts[0].is_valid();
 			}
 
 			//
@@ -158,7 +158,7 @@ namespace apn::dark::kuro::paint
 			//
 			COLORREF get_win32_color() const
 			{
-				return entry.colors[0].win32;
+				return color_entry.parts[0].win32;
 			}
 		} text_shadow;
 	};

@@ -185,10 +185,10 @@ namespace apn::dark::kuro::paint::d2d
 			ID2D1RenderTarget* render_target, const Pigment* pigment)
 		{
 			// テキスト用のカラーエントリを取得します。
-			const auto& color_entry = pigment->text.entry;
+			const auto& color_entry = pigment->text.color_entry;
 
 			// テキストの色をD2D形式で取得します。
-			auto d2d_text_color = to_d2d_color(color_entry.colors[0]);
+			auto d2d_text_color = to_d2d_color(color_entry.parts[0]);
 
 			// ブラシを作成して返します。
 			return create_brush(render_target, d2d_text_color);
@@ -201,10 +201,10 @@ namespace apn::dark::kuro::paint::d2d
 			ID2D1RenderTarget* render_target, const Pigment* pigment)
 		{
 			// 影用のカラーエントリを取得します。
-			const auto& color_entry = pigment->text_shadow.entry;
+			const auto& color_entry = pigment->text_shadow.color_entry;
 
 			// 影の色をD2D形式で取得します。
-			auto d2d_text_shadow_color = to_d2d_color(color_entry.colors[0]);
+			auto d2d_text_shadow_color = to_d2d_color(color_entry.parts[0]);
 
 			// ブラシを作成して返します。
 			return create_brush(render_target, d2d_text_shadow_color);

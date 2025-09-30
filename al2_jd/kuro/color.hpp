@@ -84,18 +84,18 @@ namespace apn::dark::kuro
 	};
 
 	//
-	// このクラスは配色項目です。
+	// このクラスはカラーエントリです。
 	//
 	struct ColorEntry
 	{
 		//
-		// 配色配列の最大数です。
+		// カラーパーツの最大数です。
 		//
 		inline static constexpr size_t c_max_size = 2;
 
 		//
-		// 配色配列です。
+		// カラーパーツです。
 		//
-		Color colors[c_max_size] = {};
+		Color parts[c_max_size] = {};
 	};
 }
