@@ -57,8 +57,15 @@ namespace apn::dark
 			// カスタムカラーファイルの監視をリセットします。
 			reset_custom_color_file_watcher();
 
+			// スリムメニューバーの設定をウィンドウに適用します。
+			aviutl2_window.apply_slim_menubar();
+
+			// コンフィグをaviutl2ウィンドウに適用します。
+			aviutl2_window.apply_config();
+
 			// 初期化後メッセージをポストします。
 			::PostMessage(hive.theme_window, hive.c_message.c_post_init, 0, 0);
+
 #ifdef _DEBUG // テスト用コードです。
 			{
 				for (int i = 0; i < 50; i++)
@@ -110,11 +117,7 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			// スリムメニューバーの設定をウィンドウに適用します。
-			aviutl2_window.apply_slim_menubar();
-
-			// コンフィグをaviutl2ウィンドウに適用します。
-			aviutl2_window.apply_config();
+			::DrawMenuBar(hive.theme_window);
 #if 0
 			// テスト用ダイアログを表示します。
 			TestDialog dialog; dialog.do_modal();
