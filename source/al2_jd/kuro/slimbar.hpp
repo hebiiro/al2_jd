@@ -3,18 +3,18 @@
 namespace apn::dark::kuro
 {
 	//
-	// このクラスはメニューバーです。
+	// このクラスはスリムバーです。
 	//
-	struct MenuBar : std::enable_shared_from_this<MenuBar>, my::Window
+	struct SlimBar : std::enable_shared_from_this<SlimBar>, my::Window
 	{
 		//
-		// メニューバーのコレクションです。
+		// スリムバーのコレクションです。
 		// ウィンドウに関連付けるために使用されます。
 		//
-		inline static thread_local std::unordered_map<HWND, std::shared_ptr<MenuBar>> menubars;
+		inline static thread_local std::unordered_map<HWND, std::shared_ptr<SlimBar>> slimbars;
 
 		//
-		// このクラスはメニューバーのボタンです。
+		// このクラスはスリムバーのボタンです。
 		//
 		struct Button { int ht; RECT rc, icon_rc; };
 
@@ -46,7 +46,7 @@ namespace apn::dark::kuro
 		//
 		// コンストラクタです。
 		//
-		MenuBar()
+		SlimBar()
 		{
 			// aviutl2のファイルパスを取得します。
 			auto path = my::get_module_file_name(nullptr);
@@ -58,17 +58,17 @@ namespace apn::dark::kuro
 		//
 		// デストラクタです。
 		//
-		virtual ~MenuBar()
+		virtual ~SlimBar()
 		{
 		}
 
 		//
-		// ウィンドウに関連付けられているメニューバーを返します。
+		// ウィンドウに関連付けられているスリムバーを返します。
 		//
-		inline static std::shared_ptr<MenuBar> get(HWND hwnd)
+		inline static std::shared_ptr<SlimBar> get(HWND hwnd)
 		{
-			auto it = menubars.find(hwnd);
-			if (it == menubars.end()) return {};
+			auto it = slimbars.find(hwnd);
+			if (it == slimbars.end()) return {};
 			return it->second;
 		}
 
@@ -77,7 +77,7 @@ namespace apn::dark::kuro
 		//
 		void attach(HWND hwnd)
 		{
-			menubars[hwnd] = shared_from_this();
+			slimbars[hwnd] = shared_from_this();
 			subclass(hwnd);
 		}
 
@@ -87,11 +87,11 @@ namespace apn::dark::kuro
 		void detach(HWND hwnd)
 		{
 			unsubclass();
-			menubars.erase(hwnd);
+			slimbars.erase(hwnd);
 		}
 
 		//
-		// メニューバー矩形を返します。
+		// スリムバー矩形を返します。
 		//
 		RECT get_bar_rc(HWND hwnd)
 		{
@@ -106,13 +106,13 @@ namespace apn::dark::kuro
 		//
 		int hittest(POINT pt)
 		{
-			// メニューバーボタンを走査します。
+			// スリムバーボタンを走査します。
 			for (const auto& button : buttons)
 			{
-				// メニューバーボタン内の場合は
+				// スリムバーボタン内の場合は
 				if (::PtInRect(&button.rc, pt))
 				{
-					// メニューバーボタンのヒットテストコードを返します。
+					// スリムバーボタンのヒットテストコードを返します。
 					return button.ht;
 				}
 			}
@@ -121,7 +121,7 @@ namespace apn::dark::kuro
 		}
 
 		//
-		// メニューバーを再描画します。
+		// スリムバーを再描画します。
 		//
 		BOOL redraw(HWND hwnd)
 		{
@@ -129,7 +129,7 @@ namespace apn::dark::kuro
 		}
 
 		//
-		// メニューバーを再描画します。
+		// スリムバーを再描画します。
 		//
 		BOOL redraw(HWND hwnd, auto... _hts)
 		{
@@ -149,17 +149,17 @@ namespace apn::dark::kuro
 			// ヒットテストコードを走査します。
 			for (auto ht : hts)
 			{
-				// メニューバーボタンを走査します。
+				// スリムバーボタンを走査します。
 				for (const auto& button : buttons)
 				{
 					// ヒットテストコードが等しい場合は
 					if (button.ht == ht)
 					{
-						// メニューバーボタンリージョンを作成します。
+						// スリムバーボタンリージョンを作成します。
 						my::gdi::unique_ptr<HRGN> button_rgn(
 							::CreateRectRgnIndirect(&button.rc));
 
-						// メニューバーボタンリージョンを結合します。
+						// スリムバーボタンリージョンを結合します。
 						::CombineRgn(rgn.get(), rgn.get(), button_rgn.get(), RGN_OR);
 
 						// 再描画フラグをセットします。
@@ -194,13 +194,13 @@ namespace apn::dark::kuro
 		//
 		LRESULT on_nc_hittest(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-			// スコープ終了時にメニューバーを再描画するようにします。
+			// スコープ終了時にスリムバーを再描画するようにします。
 			my::scope_exit scope_exit([&, prev_ht = current_ht]()
 			{
 				// 直前のヒットテストコードと異なる場合は
 				if (current_ht != prev_ht)
 				{
-					// メニューバーを再描画します。
+					// スリムバーを再描画します。
 					redraw(hwnd, current_ht, prev_ht);
 				}
 			});
@@ -306,10 +306,10 @@ namespace apn::dark::kuro
 			// ヒットテストコードからボタンのインデックスを取得します。
 			auto i = [&]()
 			{
-				// メニューバーボタンを走査します。
+				// スリムバーボタンを走査します。
 				for (size_t i = 0; i < std::size(buttons); i++)
 				{
-					// メニューバーボタンを取得します。
+					// スリムバーボタンを取得します。
 					const auto& button = buttons[i];
 
 					// ヒットテストコードが等しい場合はインデックスを返します。
@@ -324,7 +324,7 @@ namespace apn::dark::kuro
 			if (i >= std::size(buttons))
 				return __super::on_wnd_proc(hwnd, message, wParam, lParam);
 
-			// メニューバーボタンを取得します。
+			// スリムバーボタンを取得します。
 			const auto& button = buttons[i];
 
 			// ドラッグ中のメッセージループを処理します。
@@ -355,7 +355,7 @@ namespace apn::dark::kuro
 								// ホバー状態を更新します。
 								is_hovering = !is_hovering;
 
-								// メニューバーを再描画します。
+								// スリムバーを再描画します。
 								redraw(hwnd, current_ht);
 							}
 
@@ -398,7 +398,7 @@ namespace apn::dark::kuro
 				}
 			} ();
 
-			// メニューバーを再描画します。
+			// スリムバーを再描画します。
 			redraw(hwnd, ht);
 
 			// この時点で左クリックは処理済みなので、
@@ -426,14 +426,14 @@ namespace apn::dark::kuro
 		//
 		LRESULT on_nc_mouse_leave(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-			// 直前のヒットテストコードを取得しておきます。。
+			// 直前のヒットテストコードを取得しておきます。
 			auto prev_ht = current_ht;
 
 			// ホバー中フラグをリセットします。
 			current_ht = HTNOWHERE;
 			is_hovering = FALSE;
 
-			// メニューバーを再描画します。
+			// スリムバーを再描画します。
 			redraw(hwnd, current_ht, prev_ht);
 
 			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
@@ -442,7 +442,7 @@ namespace apn::dark::kuro
 		//
 		// WM_STYLECHANGEDを処理します。
 		// キャプションを外したのでキャプションが存在するかのように偽装します。
-		// これにより、キャプションなしでもメニューバーがテーマで描画されるようになります。
+		// これにより、キャプションなしでもスリムバーがテーマで描画されるようになります。
 		//
 		LRESULT on_style_changed(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
@@ -475,7 +475,7 @@ namespace apn::dark::kuro
 
 		//
 		// WM_SIZEを処理します。
-		// メニューバーボタンの矩形を更新します。
+		// スリムバーボタンの矩形を更新します。
 		//
 		LRESULT on_size(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
@@ -493,7 +493,7 @@ namespace apn::dark::kuro
 			// ウィンドウ矩形を取得します。
 			auto rc = my::get_window_rect(hwnd);
 
-			// メニューバー矩形を取得します。
+			// スリムバー矩形を取得します。
 			auto bar_rc = get_bar_rc(hwnd);
 			::OffsetRect(&bar_rc, -rc.left, -rc.top);
 
@@ -527,7 +527,7 @@ namespace apn::dark::kuro
 				::OffsetRect(&icon_rc, -button_width, 0);
 			}
 
-			// メニューを再描画します。
+			// スリムバー全体を再描画します。
 			redraw(hwnd);
 
 			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
@@ -535,17 +535,20 @@ namespace apn::dark::kuro
 
 		//
 		// WM_SETTEXTを処理します。
-		// ウィンドウテキストが変更されたのでメニューバーを再描画します。
+		// ウィンドウテキストが変更されるのでスリムバーを再描画します。
 		//
 		LRESULT on_set_text(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-			// 先にデフォルト処理を実行してウィンドウテキストを更新します。
-			auto result = __super::on_wnd_proc(hwnd, message, wParam, lParam);
+			// スコープ終了時にスリムバーを再描画するようにします。
+			my::scope_exit scope_exit([&]()
+			{
+				// ウィンドウテキストが更新されたので
+				// スリムバー全体を再描画します。
+				redraw(hwnd);
+			});
 
-			// その後メニューを再描画します。
-			redraw(hwnd);
-
-			return result;
+			// デフォルト処理を実行してウィンドウテキストを更新します。
+			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
 		}
 
 		//
@@ -555,7 +558,7 @@ namespace apn::dark::kuro
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/hex}, {/hex}", hwnd, my::message_to_string(message), wParam, lParam);
 
-			// メニューバーとタイトルバーを一体化しない場合は何もしません。
+			// スリムバーを使用しない場合は何もしません。
 			if (!hive.slimbar.flag_use)
 				return __super::on_wnd_proc(hwnd, message, wParam, lParam);
 
@@ -668,17 +671,17 @@ namespace apn::dark::kuro
 		}
 
 		//
-		// メニューバーを描画します。
+		// スリムバーを描画します。
 		//
 		HRESULT on_draw(HWND hwnd, HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
 		{
 			// メニューのパレットを使用します。
 			const paint::Palette& palette = paint::menu_material.palette;
 
-			// メニューバー矩形を取得します。
+			// スリムバー矩形を取得します。
 			auto bar_rc = *rc;
 
-			// メニューバーの中央にウィンドウテキストを描画します。
+			// スリムバーの中央にウィンドウテキストを描画します。
 			{
 				// ウィンドウテキストを取得します。
 				auto text = my::get_window_text(hwnd);
@@ -699,7 +702,7 @@ namespace apn::dark::kuro
 					DT_CENTER | DT_VCENTER | DT_SINGLELINE, palette, part_id, state_id, FALSE);
 			}
 
-			// メニューバーボタンを走査します。
+			// スリムバーボタンを走査します。
 			for (const auto& button : buttons)
 			{
 				// ホット状態を取得します。

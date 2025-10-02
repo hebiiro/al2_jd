@@ -5,16 +5,16 @@ namespace apn::dark::kuro::gdi
 	struct AviUtl2Renderer : Renderer
 	{
 		//
-		// メニューバーです。
+		// スリムバーです。
 		//
-		std::shared_ptr<MenuBar> menubar = std::make_shared<MenuBar>();
+		std::shared_ptr<SlimBar> slimbar = std::make_shared<SlimBar>();
 
 		//
 		// ウィンドウにアタッチしたときの処理です。
 		//
 		virtual BOOL on_attach(HWND hwnd)
 		{
-			menubar->attach(hwnd);
+			slimbar->attach(hwnd);
 
 			return __super::on_attach(hwnd);
 		}
@@ -24,7 +24,7 @@ namespace apn::dark::kuro::gdi
 		//
 		virtual BOOL on_detach(HWND hwnd)
 		{
-			menubar->detach(hwnd);
+			slimbar->detach(hwnd);
 
 			return __super::on_detach(hwnd);
 		}

@@ -28,9 +28,9 @@ namespace apn::dark::kuro::theme
 			// デバイスコンテキストからウィンドウを取得します。
 			auto hwnd = ::WindowFromDC(dc);
 
-			// メニューバーを取得できた場合は
-			if (auto menubar = MenuBar::get(hwnd))
-				return menubar->on_draw(hwnd, theme, dc, part_id, state_id, rc);
+			// スリムバーを取得できた場合は
+			if (auto slimbar = SlimBar::get(hwnd))
+				return slimbar->on_draw(hwnd, theme, dc, part_id, state_id, rc);
 
 			return S_OK;
 		}
