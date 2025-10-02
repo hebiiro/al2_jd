@@ -39,24 +39,7 @@ namespace apn::dark::kuro
 		};
 
 		//
-		// システムメニューボタン用のアイコンです。
-		//
-		my::gdi::unique_ptr<HICON> system_menu_icon;
-
-		//
-		// コンストラクタです。
-		//
-		SlimBar()
-		{
-			// aviutl2のファイルパスを取得します。
-			auto path = my::get_module_file_name(nullptr);
-
-			// aviutl2のアイコンを取得します。
-			system_menu_icon.reset(get_shell_icon(path));
-		}
-
-		//
-		// デストラクタです。
+		// 仮想デストラクタです。
 		//
 		virtual ~SlimBar()
 		{
@@ -753,9 +736,10 @@ namespace apn::dark::kuro
 					{
 						// システムメニューアイコンを描画します。
 
+						auto icon = (HICON)::GetClassLongPtr(hwnd, GCLP_HICON);
 						auto icon_size = my::get_height(button.icon_rc);
 						::DrawIconEx(dc, button.icon_rc.left, button.icon_rc.top,
-							system_menu_icon.get(), icon_size, icon_size, 0, nullptr, DI_NORMAL);
+							icon, icon_size, icon_size, 0, nullptr, DI_NORMAL);
 
 						break;
 					}
