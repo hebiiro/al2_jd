@@ -122,6 +122,9 @@ namespace apn::dark::kuro::gdi
 				// ファイル選択ダイアログのツリービューの親ウィンドウです。
 				if (class_name == L"NamespaceTreeControl") return std::make_shared<Renderer>();
 
+				// ファイル選択ダイアログのコンボボックスの親ウィンドウです。
+//				if (class_name == L"FloatNotifySink") return std::make_shared<Renderer>();
+
 				// コマンドモジュールがドロップダウン表示するポップアップメニューのようなウィンドウです。
 //				if (class_name == L"ViewControlClass") return std::make_shared<Renderer>();
 

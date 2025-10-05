@@ -42,6 +42,19 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
+			// コンボボックスの背景のブラシを変更します。
+			// コンボボックスがダイアログに配置されることを前提に処理しています。
+			{
+				// ダイアログのパレットを使用します。
+				const auto& palette = paint::dialog_material.palette;
+
+				auto part_id = WP_DIALOG;
+				auto state_id = ETS_NORMAL;
+
+				if (auto pigment = palette.get(part_id, state_id))
+					brush = pigment->background.get_brush();
+			}
+
 			return hive.orig.FillRect(dc, rc, brush);
 		}
 
