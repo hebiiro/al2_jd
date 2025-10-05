@@ -22,15 +22,18 @@ namespace apn::dark::kuro::theme
 		//
 		HRESULT draw_menubar(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
 		{
-			// メニューバーとタイトルバーを一体化しない場合は何もしません。
-			if (!hive.slimbar.flag_use) return S_OK;
-
 			// デバイスコンテキストからウィンドウを取得します。
-			auto hwnd = ::WindowFromDC(dc);
+			if (auto hwnd = ::WindowFromDC(dc))
+			{
+				// 描画コンテキストを作成します。
+				auto context = SlimBar::DrawContext {
+					hwnd, theme, dc, part_id, state_id, rc,
+				};
 
-			// スリムバーを取得できた場合は
-			if (auto slimbar = SlimBar::get(hwnd))
-				return slimbar->on_draw(hwnd, theme, dc, part_id, state_id, rc);
+				// スリムバーを描画します。
+				if (::SendMessage(hwnd, SlimBar::c_message.c_draw, 0, (LPARAM)&context))
+					return S_OK;
+			}
 
 			return S_OK;
 		}
@@ -53,7 +56,12 @@ namespace apn::dark::kuro::theme
 						rc2.bottom += 1; // クリップ矩形を使用すると、この1ピクセルが上書き描画できるようになります。
 
 						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
-							return draw_menubar(theme, dc, part_id, state_id, &rc2);
+						{
+							if (!rc_clip)
+								return draw_menubar(theme, dc, part_id, state_id, rc);
+
+							return S_OK;
+						}
 
 						break;
 					}

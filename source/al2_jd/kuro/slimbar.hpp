@@ -8,6 +8,25 @@ namespace apn::dark::kuro
 	struct SlimBar : std::enable_shared_from_this<SlimBar>, my::Window
 	{
 		//
+		// ウィンドウメッセージです。
+		//
+		inline static constexpr struct Message {
+			inline static const auto c_draw = ::RegisterWindowMessageW(L"apn::dark::kuro::slimbar::draw");
+		} c_message;
+
+		//
+		// 描画コンテキストです。
+		//
+		struct DrawContext {
+			HWND hwnd;
+			HTHEME theme;
+			HDC dc;
+			int part_id;
+			int state_id;
+			LPCRECT rc;
+		};
+
+		//
 		// スリムバーのコレクションです。
 		// ウィンドウに関連付けるために使用されます。
 		//
@@ -451,7 +470,7 @@ namespace apn::dark::kuro
 			auto mmi = (MINMAXINFO*)lParam;
 			auto rc = my::get_monitor_rect(hwnd);
 
-			mmi->ptMaxSize.y = my::get_height(rc) - mmi->ptMaxPosition.y * 2; // 何故か2倍にすると丁度良くなります。
+			mmi->ptMaxTrackSize.y = my::get_height(rc) - mmi->ptMaxPosition.y * 2; // 何故か2倍にすると丁度良くなります。
 
 			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
 		}
@@ -532,6 +551,104 @@ namespace apn::dark::kuro
 
 			// デフォルト処理を実行してウィンドウテキストを更新します。
 			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
+		}
+
+		//
+		// スリムバーを描画します。
+		//
+		BOOL on_draw(HWND hwnd, HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
+		{
+			// スリムバーを使用しない場合は何もしません。
+			if (!hive.slimbar.flag_use) return FALSE;
+
+			// スリムバー矩形を取得します。
+			auto bar_rc = *rc;
+
+			// スリムバーの中央にタイトルを描画します。
+			{
+				// ウィンドウ矩形を取得します。
+				auto window_rc = my::get_window_rect(hwnd);
+
+				// 一番右にあるメニュー項目の矩形を取得します。
+				auto menu = ::GetMenu(hwnd);
+				auto c = ::GetMenuItemCount(menu);
+				auto back_rc = RECT {};
+				::GetMenuItemRect(hwnd, menu, c - 1, &back_rc);
+
+				// タイトル描画位置の矩形を取得します。
+				auto text_rc = bar_rc;
+				auto inflate = back_rc.right - window_rc.left - text_rc.left;
+				::InflateRect(&text_rc, -inflate, -inflate);
+
+				// ウィンドウテキストを取得します。
+				auto text = my::get_window_text(hwnd);
+
+				// タイトルの書式が指定されている場合は
+				if (hive.slimbar.title_format.length())
+				{
+					// タイトルを書式化します。
+					text = my::replace(hive.slimbar.title_format, L"%title%", text);
+				}
+
+				// タイトル描画用フォントをセットします。
+				NONCLIENTMETRICS ncm = { sizeof(ncm) };
+				::SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
+				my::gdi::unique_ptr<HFONT> font(::CreateFontIndirect(&ncm.lfMenuFont));
+				my::gdi::selector font_selector(dc, font.get());
+
+				// タイトルを描画します。
+				::DrawThemeText(theme, dc, part_id, state_id,
+					text.c_str(), (int)text.length(),
+					DT_CENTER | DT_VCENTER | DT_SINGLELINE |
+					DT_END_ELLIPSIS | DT_NOPREFIX | DT_NOCLIP, 0, &text_rc);
+			}
+
+			// スリムバーボタンを走査します。
+			for (const auto& button : buttons)
+			{
+				// ホット状態を取得します。
+				auto is_hot = is_hovering && current_ht == button.ht;
+
+				// ホット状態の場合は
+				if (is_hot)
+				{
+					// 背景を描画します。
+					::DrawThemeBackground(theme, dc, MENU_BARITEM, MBI_HOT, &button.rc, nullptr);
+				}
+
+				// アイコン矩形を取得します。
+				auto icon_rc = button.icon_rc;
+				::InflateRect(&icon_rc, 2, 2);
+
+				// アイコンのパートIDです。
+				auto part_id = 0;
+
+				switch (button.ht)
+				{
+				case HTCLOSE: part_id = MENU_SYSTEMCLOSE; break;
+				case HTMAXBUTTON: part_id = ::IsZoomed(hwnd) ? MENU_SYSTEMRESTORE : MENU_SYSTEMMAXIMIZE; break;
+				case HTMINBUTTON: part_id = MENU_SYSTEMMINIMIZE; break;
+				case HTSYSMENU:
+					{
+						// システムメニューアイコンを描画します。
+						auto icon = (HICON)::GetClassLongPtr(hwnd, GCLP_HICON);
+						auto icon_size = my::get_height(icon_rc);
+						::DrawIconEx(dc, icon_rc.left, icon_rc.top,
+							icon, icon_size, icon_size, 0, nullptr, DI_NORMAL);
+
+						break;
+					}
+				}
+
+				// アイコンのパートIDが有効の場合は
+				if (part_id)
+				{
+					// テーマを使用してアイコンを描画します。
+					::DrawThemeBackground(theme, dc, part_id, state_id, &icon_rc, nullptr);
+				}
+			}
+
+			return TRUE;
 		}
 
 		//
@@ -650,103 +767,17 @@ namespace apn::dark::kuro
 				}
 			}
 
+			if (message == c_message.c_draw)
+			{
+				if (auto context = (DrawContext*)lParam)
+				{
+					ScopeText scope_text(L"c_message.c_draw");
+
+					return on_draw(hwnd, context->theme, context->dc, context->part_id, context->state_id, context->rc);
+				}
+			}
+
 			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
-		}
-
-		//
-		// スリムバーを描画します。
-		//
-		HRESULT on_draw(HWND hwnd, HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
-		{
-			// メニューのパレットを使用します。
-			const paint::Palette& palette = paint::menu_material.palette;
-
-			// スリムバー矩形を取得します。
-			auto bar_rc = *rc;
-
-			// スリムバーの中央にウィンドウテキストを描画します。
-			{
-				// ウィンドウテキストを取得します。
-				auto text = my::get_window_text(hwnd);
-
-				// タイトルの書式が指定されている場合は
-				if (hive.slimbar.title_format.length())
-				{
-					// タイトルを書式化します。
-					text = my::replace(hive.slimbar.title_format, L"%title%", text);
-				}
-
-				NONCLIENTMETRICS ncm = { sizeof(ncm) };
-				::SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0);
-				my::gdi::unique_ptr<HFONT> font(::CreateFontIndirect(&ncm.lfMenuFont));
-				my::gdi::selector font_selector(dc, font.get());
-
-				paint::stylus.d2d_draw_text(dc, &bar_rc, text.c_str(), (int)text.length(),
-					DT_CENTER | DT_VCENTER | DT_SINGLELINE, palette, part_id, state_id, FALSE);
-			}
-
-			// スリムバーボタンを走査します。
-			for (const auto& button : buttons)
-			{
-				// ホット状態を取得します。
-				auto is_hot = is_hovering && current_ht == button.ht;
-
-				// ホット状態の場合は
-				if (is_hot)
-				{
-					// 背景を描画します。
-					paint::stylus.draw_round_rect(dc, &button.rc,
-						palette, part_id, (button.ht == HTCLOSE) ? MB_WARNING : MB_HOT);
-				}
-
-				switch (button.ht)
-				{
-				case HTCLOSE:
-					{
-						// 閉じるボタンを描画します。
-						paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0072);
-
-						break;
-					}
-				case HTMAXBUTTON:
-					{
-						// 最大化されている場合は
-						if (::IsZoomed(hwnd))
-						{
-							// 元に戻すボタンを描画します。
-							paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0032);
-						}
-						// 最大化されていない場合は
-						else
-						{
-							// 最大化ボタンを描画します。
-							paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0031);
-						}
-
-						break;
-					}
-				case HTMINBUTTON:
-					{
-						// 最小化ボタンを描画します。
-						paint::stylus.d2d_draw_icon(dc, &button.icon_rc, palette, part_id, state_id, L"Marlett", 0x0030);
-
-						break;
-					}
-				case HTSYSMENU:
-					{
-						// システムメニューアイコンを描画します。
-
-						auto icon = (HICON)::GetClassLongPtr(hwnd, GCLP_HICON);
-						auto icon_size = my::get_height(button.icon_rc);
-						::DrawIconEx(dc, button.icon_rc.left, button.icon_rc.top,
-							icon, icon_size, icon_size, 0, nullptr, DI_NORMAL);
-
-						break;
-					}
-				}
-			}
-
-			return S_OK;
 		}
 	};
 }
