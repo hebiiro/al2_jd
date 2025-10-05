@@ -125,8 +125,7 @@ namespace apn::dark::kuro::gdi
 				auto part_id = WP_DIALOG;
 				auto state_id = ::IsWindowEnabled(current_state->hwnd) ? ETS_NORMAL : ETS_DISABLED;
 
-				if (auto pigment = palette.get(part_id, state_id))
-					return paint::d2d::Texter().draw_text(dc, text, c, rc, flags, pigment);
+				return paint::stylus.d2d_draw_text(dc, rc, text, c, flags, palette, part_id, state_id);
 			}
 
 			return hive.orig.DrawTextExW(dc, text, c, rc, flags, dtp);

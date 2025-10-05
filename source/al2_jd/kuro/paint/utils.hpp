@@ -58,6 +58,22 @@ namespace apn::dark::kuro::paint
 	}
 
 	//
+	// 影のオフセットを整数で返します。
+	//
+	inline POINT get_shadow_offset_as_int()
+	{
+		return { hive.shadow.offset.x / 10, hive.shadow.offset.y / 10 };
+	}
+
+	//
+	// 影のサイズを整数で返します。
+	//
+	inline int get_shadow_size_as_int()
+	{
+		return hive.shadow.size / 10;
+	}
+
+	//
 	// 指定されたペンの色を返します。
 	//
 	inline COLORREF get_pen_color(HPEN pen)

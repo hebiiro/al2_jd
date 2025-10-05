@@ -373,30 +373,17 @@ namespace apn::dark::kuro::hook
 		struct {
 			inline static BOOL WINAPI hook_proc(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx)
 			{
-				if (ExtTextOutLocker::locked)
+				// ::ExtTextOut()のフックがロックされている場合は
+				if (ext_text_out_lock.is_locked())
 				{
 //					MY_TRACE_FUNC("再帰呼び出し時はフックしません\n");
 
 					return orig_proc(dc, x, y, options, rc, text, c, dx);
 				}
-				ExtTextOutLocker locker;
-#if 0
-#define ETO_OPAQUE                   0x0002
-#define ETO_CLIPPED                  0x0004
-#if(WINVER >= 0x0400)
-#define ETO_GLYPH_INDEX              0x0010
-#define ETO_RTLREADING               0x0080
-#define ETO_NUMERICSLOCAL            0x0400
-#define ETO_NUMERICSLATIN            0x0800
-#define ETO_IGNORELANGUAGE           0x1000
-#endif /* WINVER >= 0x0400 */
-#if (_WIN32_WINNT >= _WIN32_WINNT_WIN2K)
-#define ETO_PDY                      0x2000
-#endif // (_WIN32_WINNT >= _WIN32_WINNT_WIN2K)
-#if (_WIN32_WINNT >= _WIN32_WINNT_LONGHORN)
-#define ETO_REVERSE_INDEX_MAP        0x10000
-#endif
-#endif
+
+				// ::ExtTextOut()のフックをロックします。
+				Locker locker(&ext_text_out_lock);
+
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/hex}, ({/}), {/}, {/} : {/}",
 					ret_addr(&dc), dc, x, y, options, safe_string(rc),
 					safe_string(text, c, options), c, ::GetCurrentThreadId());

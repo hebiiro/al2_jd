@@ -232,33 +232,6 @@ namespace apn::dark
 	}
 
 	//
-	// このクラスは::ExtTextOut()のフックをロックします。
-	//
-	struct ExtTextOutLocker
-	{
-		//
-		// ::ExtTextOutW()をフックするかどうかのフラグです。
-		//
-		thread_local inline static BOOL locked = FALSE;
-
-		//
-		// コンストラクタです。
-		//
-		ExtTextOutLocker()
-		{
-			locked = TRUE;
-		}
-
-		//
-		// デストラクタです。
-		//
-		~ExtTextOutLocker()
-		{
-			locked = FALSE;
-		}
-	};
-
-	//
 	// このクラスは与えられた矩形をクリッピングします。
 	//
 	struct Clipper
@@ -293,4 +266,9 @@ namespace apn::dark
 			}
 		}
 	};
+
+	//
+	// ::ExtTextOut()のフックをロックします。
+	//
+	thread_local inline Lockable ext_text_out_lock;
 }
