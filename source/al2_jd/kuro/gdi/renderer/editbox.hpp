@@ -95,8 +95,6 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
-			auto brush_color = paint::get_brush_color(brush);
-
 			return hive.orig.FillRect(dc, rc, brush);
 		}
 

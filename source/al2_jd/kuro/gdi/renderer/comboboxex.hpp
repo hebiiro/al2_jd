@@ -6,7 +6,7 @@ namespace apn::dark::kuro::gdi
 	{
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
-			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
+			MY_TRACE_FUNC("{/hex}, {/}, {/hex}, {/hex}", hwnd, my::message_to_string(message), wParam, lParam);
 
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
