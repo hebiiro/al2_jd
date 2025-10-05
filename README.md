@@ -192,6 +192,16 @@ HotTextShadow=ff000080
 
 ## 🔖更新履歴
 
+* 🔖r22 #2025年10月05日
+	* ⬆️使用パッケージを更新
+		* AviUtl ExEdit2 Plugin SDK beta14に更新
+	* 🩹スリムバーが重複して描画される問題に対応
+	* 🩹ウィンドウを最大化したときの位置情報を変更
+	* 🎨タイトルがメニュー項目と重ならないように変更
+	* 🎨スリムバーのアイコンの描画品質を改善
+	* ✨GDI描画でも影を付けられるように変更
+	* 🩹ファイル選択ダイアログのコンボボックスの背景がダークモード化されていない問題に対応
+
 * 🔖r21 #2025年09月30日
 	* 🩹エクスプローラが表示されない問題に対応
 
@@ -261,7 +271,7 @@ HotTextShadow=ff000080
 
 ## ⚗️動作確認
 
-* AviUtl ExEdit2 beta13 https://spring-fragrance.mints.ne.jp/aviutl/
+* AviUtl ExEdit2 beta14 https://spring-fragrance.mints.ne.jp/aviutl/
 
 ## 💳クレジット
 
