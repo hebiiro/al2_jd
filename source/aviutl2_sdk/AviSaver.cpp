@@ -7,8 +7,6 @@
 
 #include "output2.h"
 
-void func_init(void);
-void func_exit(void);
 bool func_output(OUTPUT_INFO* oip);
 bool func_config(HWND hwnd, HINSTANCE dll_hinst);
 LPCWSTR func_get_config_text();
@@ -20,11 +18,24 @@ OUTPUT_PLUGIN_TABLE output_plugin_table = {
 	OUTPUT_PLUGIN_TABLE::FLAG_VIDEO | OUTPUT_PLUGIN_TABLE::FLAG_AUDIO, //	フラグ
 	L"AVI File Saver2 (sample)",					// プラグインの名前
 	L"AviFile (*.avi)\0*.avi\0",					// 出力ファイルのフィルタ
-	L"AVI File Saver2 version 2.00 By ＫＥＮくん",	// プラグインの情報
+	L"Sample AVI File Saver2 version 2.01 By ＫＥＮくん",	// プラグインの情報
 	func_output,									// 出力時に呼ばれる関数へのポインタ
 	func_config,									// 出力設定のダイアログを要求された時に呼ばれる関数へのポインタ (nullptrなら呼ばれません)
 	func_get_config_text,							// 出力設定のテキスト情報を取得する時に呼ばれる関数へのポインタ (nullptrなら呼ばれません)
 };
+
+//---------------------------------------------------------------------
+//	プラグインDLL初期化関数 (未定義なら呼ばれません)
+//---------------------------------------------------------------------
+EXTERN_C __declspec(dllexport) bool InitializePlugin(DWORD version) { // versionは本体のバージョン番号
+	return true;
+}
+
+//---------------------------------------------------------------------
+//	プラグインDLL終了関数 (未定義なら呼ばれません)
+//---------------------------------------------------------------------
+EXTERN_C __declspec(dllexport) void UninitializePlugin() {
+}
 
 //---------------------------------------------------------------------
 //	出力プラグイン構造体のポインタを渡す関数
@@ -32,36 +43,6 @@ OUTPUT_PLUGIN_TABLE output_plugin_table = {
 EXTERN_C __declspec(dllexport) OUTPUT_PLUGIN_TABLE* GetOutputPluginTable(void)
 {
 	return &output_plugin_table;
-}
-
-//---------------------------------------------------------------------
-//	DLLエントリポイント
-//---------------------------------------------------------------------
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
-	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:
-			func_init();
-			break;
-		case DLL_PROCESS_DETACH:
-			if (lpvReserved != nullptr) break;
-			func_exit();
-			break;
-	}
-	return TRUE;
-}
-
-//---------------------------------------------------------------------
-//	初期化
-//---------------------------------------------------------------------
-void func_init( void ) {
-	AVIFileInit();
-}
-
-//---------------------------------------------------------------------
-//	終了
-//---------------------------------------------------------------------
-void func_exit( void ) {
-	AVIFileExit();
 }
 
 //---------------------------------------------------------------------

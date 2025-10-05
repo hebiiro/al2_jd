@@ -21,8 +21,8 @@ struct OUTPUT_INFO {
 	// format	: 画像フォーマット
 	//			  0(BI_RGB) = RGB24bit / 'P''A''6''4' = PA64 / 'H''F''6''4' = HF64 / 'Y''U''Y''2' = YUY2 / 'Y''C''4''8' = YC48
 	// ※PA64はDXGI_FORMAT_R16G16B16A16_UNORM(乗算済みα)です
-	// ※HF64はDXGI_FORMAT_R16G16B16A16_FLOAT(乗算済みα)です
-	// ※YC48は互換対応の旧内部フォーマットです 
+	// ※HF64はDXGI_FORMAT_R16G16B16A16_FLOAT(乗算済みα)です(内部フォーマット)
+	// ※YC48は互換対応のフォーマットです
 	// 戻り値	: データへのポインタ
 	//			  画像データポインタの内容は次に外部関数を使うかメインに処理を戻すまで有効
 	void* (*func_get_video)(int frame, DWORD format);

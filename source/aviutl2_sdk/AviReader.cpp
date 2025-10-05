@@ -7,8 +7,6 @@
 
 #include "input2.h"
 
-void func_init(void);
-void func_exit(void);
 INPUT_HANDLE func_open(LPCWSTR file);
 bool func_close(INPUT_HANDLE ih);
 bool func_info_get(INPUT_HANDLE ih, INPUT_INFO* iip);
@@ -23,7 +21,7 @@ INPUT_PLUGIN_TABLE input_plugin_table = {
 	INPUT_PLUGIN_TABLE::FLAG_VIDEO | INPUT_PLUGIN_TABLE::FLAG_AUDIO, //	フラグ
 	L"AVI File Reader2 (sample)",						// プラグインの名前
 	L"AviFile (*.avi)\0*.avi\0",						// 入力ファイルフィルタ
-	L"AVI File Reader2 version 2.00 By ＫＥＮくん",		// プラグインの情報
+	L"Sample AVI File Reader2 version 2.01 By ＫＥＮくん",		// プラグインの情報
 	func_open,											// 入力ファイルをオープンする関数へのポインタ
 	func_close,											// 入力ファイルをクローズする関数へのポインタ
 	func_info_get,										// 入力ファイルの情報を取得する関数へのポインタ
@@ -50,41 +48,23 @@ struct FILE_HANDLE {
 };
 
 //---------------------------------------------------------------------
+//	プラグインDLL初期化関数 (未定義なら呼ばれません)
+//---------------------------------------------------------------------
+EXTERN_C __declspec(dllexport) bool InitializePlugin(DWORD version) { // versionは本体のバージョン番号
+	return true;
+}
+
+//---------------------------------------------------------------------
+//	プラグインDLL終了関数 (未定義なら呼ばれません)
+//---------------------------------------------------------------------
+EXTERN_C __declspec(dllexport) void UninitializePlugin() {
+}
+
+//---------------------------------------------------------------------
 //	入力プラグイン構造体のポインタを渡す関数
 //---------------------------------------------------------------------
-EXTERN_C __declspec(dllexport) INPUT_PLUGIN_TABLE* GetInputPluginTable(void)
-{
+EXTERN_C __declspec(dllexport) INPUT_PLUGIN_TABLE* GetInputPluginTable(void) {
 	return &input_plugin_table;
-}
-
-//---------------------------------------------------------------------
-//	DLLエントリポイント
-//---------------------------------------------------------------------
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
-	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:
-			func_init();
-			break;
-		case DLL_PROCESS_DETACH:
-			if (lpvReserved != nullptr) break;
-			func_exit();
-			break;
-	}
-	return TRUE;
-}
-
-//---------------------------------------------------------------------
-//	初期化
-//---------------------------------------------------------------------
-void func_init( void ) {
-	AVIFileInit();
-}
-
-//---------------------------------------------------------------------
-//	終了
-//---------------------------------------------------------------------
-void func_exit( void ) {
-	AVIFileExit();
 }
 
 //---------------------------------------------------------------------

@@ -1,2 +1,4 @@
 ﻿EXPORTS
+	InitializePlugin
+	UninitializePlugin
 	GetInputPluginTable

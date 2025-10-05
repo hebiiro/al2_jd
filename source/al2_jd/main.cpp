@@ -118,7 +118,7 @@ namespace apn::dark
 	//
 	// エントリポイントです。
 	//
-	BOOL APIENTRY DllMain(HMODULE instance, DWORD reason, LPVOID reserved)
+	EXTERN_C BOOL APIENTRY DllMain(HMODULE instance, DWORD reason, LPVOID reserved)
 	{
 		switch (reason)
 		{
@@ -128,30 +128,11 @@ namespace apn::dark
 
 				// このdllがアンロードされないようにします。
 				::LoadLibrary(my::get_module_file_name(instance).c_str());
-#ifdef _DEBUG
-				// デバッグ用のコードです。
-				{
-//					if (0)
-					{
-						// カスタムロガーを設定します。
-						static struct Logger : my::Tracer::Logger {
-							virtual void output(LPCTSTR raw, LPCTSTR text) override {
-								// SHIFTキーが押されているときだけログを出力します。
-								if (::GetKeyState(VK_SHIFT) < 0) ::OutputDebugString(text);
-							}
-						} logger;
-						my::Tracer::logger = &logger;
-					}
-				}
-#endif
-				app->dll_init();
 
 				break;
 			}
 		case DLL_PROCESS_DETACH:
 			{
-				app->dll_exit();
-
 				break;
 			}
 		}
@@ -160,9 +141,45 @@ namespace apn::dark
 	}
 
 	//
+	// プラグインDLL初期化関数です。
+	//
+	EXTERN_C bool InitializePlugin(DWORD version)
+	{
+#ifdef _DEBUG
+		// デバッグ用のコードです。
+		{
+//			if (0)
+			{
+				// カスタムロガーを設定します。
+				static struct Logger : my::Tracer::Logger {
+					virtual void output(LPCTSTR raw, LPCTSTR text) override {
+						// SHIFTキーが押されているときだけログを出力します。
+						if (::GetKeyState(VK_SHIFT) < 0) ::OutputDebugString(text);
+					}
+				} logger;
+				my::Tracer::logger = &logger;
+			}
+		}
+#endif
+		app->dll_init();
+
+		return true;
+	}
+
+	//
+	// プラグインDLL終了関数です。
+	//
+	EXTERN_C void UninitializePlugin()
+	{
+		app->dll_exit();
+
+		return;
+	}
+
+	//
 	// 入力プラグインの構造体を返します。
 	//
-	INPUT_PLUGIN_TABLE* GetInputPluginTable()
+	EXTERN_C INPUT_PLUGIN_TABLE* GetInputPluginTable()
 	{
 		//
 		// 入力プラグインの構造体です。
@@ -187,12 +204,4 @@ namespace apn::dark
 
 		return &input_plugin_table;
 	}
-}
-
-//
-// エントリポイントです。
-//
-BOOL APIENTRY DllMain(HMODULE instance, DWORD reason, LPVOID reserved)
-{
-	return apn::dark::DllMain(instance, reason, reserved);
 }
