@@ -314,7 +314,7 @@ namespace apn::dark
 						case IDC_SLIMBAR_BUTTON_WIDTH:
 							{
 								auto value = get_int(edit_id);
-								value += (nm->iDelta > 0) ? -1 : +1;
+								value += (nm->iDelta > 0) ? -10 : +10;
 								value = std::clamp(value, 0, +1000);
 								set_int(edit_id, value);
 								break;

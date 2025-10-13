@@ -37,9 +37,9 @@ namespace my
 			std::wstring title_format = L"%title%";
 
 			//
-			// ボタンの幅です。
+			// ボタンの幅(%)です。
 			//
-			int32_t button_width = 50;
+			int32_t button_width = 200;
 		} config;
 
 		//
@@ -557,8 +557,9 @@ namespace my
 				}
 			}
 
-			// ボタンの幅を取得します。
-			auto button_width = config.button_width;
+			// ボタンのサイズを算出します。
+			auto button_height = my::get_height(title_rc);
+			auto button_width = ::MulDiv(button_height, config.button_width, 100);
 
 			// 一番右のボタンの矩形を算出します。
 			auto button_rc = title_rc;
