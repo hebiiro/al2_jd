@@ -12,6 +12,7 @@ namespace apn::dark::kuro
 		//
 		inline static constexpr struct Message {
 			inline static const auto c_draw = ::RegisterWindowMessageW(L"apn::dark::kuro::slimbar::draw");
+			inline static const auto c_update_layout = ::RegisterWindowMessageW(L"apn::dark::kuro::slimbar::update_layout");
 		} c_message;
 
 		//
@@ -58,12 +59,17 @@ namespace apn::dark::kuro
 		};
 
 		//
+		// タイトルの描画位置です。
+		//
+		RECT title_rc = {};
+
+		//
 		// 仮想デストラクタです。
 		//
 		virtual ~SlimBar()
 		{
 		}
-
+/*
 		//
 		// ウィンドウに関連付けられているスリムバーを返します。
 		//
@@ -73,7 +79,7 @@ namespace apn::dark::kuro
 			if (it == slimbars.end()) return {};
 			return it->second;
 		}
-
+*/
 		//
 		// ウィンドウにアタッチします。
 		//
@@ -500,22 +506,56 @@ namespace apn::dark::kuro
 			};
 
 			// ウィンドウ矩形を取得します。
-			auto rc = my::get_window_rect(hwnd);
+			auto window_rc = my::get_window_rect(hwnd);
 
 			// スリムバー矩形を取得します。
 			auto bar_rc = get_bar_rc(hwnd);
-			::OffsetRect(&bar_rc, -rc.left, -rc.top);
+			::OffsetRect(&bar_rc, -window_rc.left, -window_rc.top);
+
+			// タイトル矩形を初期化します。
+			title_rc = bar_rc;
+
+			// メニューを取得します。
+			auto menu = ::GetMenu(hwnd);
+
+			// メニュー項目の数を取得します。
+			auto c = ::GetMenuItemCount(menu);
+
+			// メニュー項目を走査します。
+			for (decltype(c) i = 0; i < c; i++)
+			{
+				// メニュー項目の矩形を取得します。
+				auto item_rc = RECT {};
+				::GetMenuItemRect(hwnd, menu, i, &item_rc);
+				::OffsetRect(&item_rc, -window_rc.left, -window_rc.top);
+
+				// メニュー項目のタイプを取得します。
+				MENUITEMINFO mii = { sizeof(mii) };
+				mii.fMask = MIIM_FTYPE;
+				::GetMenuItemInfo(menu, i, TRUE, &mii);
+
+				// メニュー項目がメニューバーの右側にある場合は
+				if (mii.fType & MFT_RIGHTJUSTIFY)
+				{
+					// タイトル矩形の右端を更新します。
+					title_rc.right = item_rc.left;
+
+					// ループを終了します。
+					break;
+				}
+				// メニュー項目がメニューバーの左側にある場合は
+				else
+				{
+					// タイトル矩形の左端を更新します。
+					title_rc.left = item_rc.right;
+				}
+			}
+
+			// ボタンの幅を取得します。
+			auto button_width = hive.slimbar.button_width;
 
 			// 一番右のボタンの矩形を算出します。
-			auto button_rc = bar_rc;
-			auto button_height = my::get_height(button_rc);
-//			auto button_width = ::MulDiv(button_height, 2, 1);
-//			auto button_width = ::MulDiv(button_height, 99, 70); // 高精度白銀比
-//			auto button_width = ::MulDiv(button_height, 1618, 1000); // 黄金比
-			auto button_width = ::MulDiv(button_height, 1732, 1000); // 白金比
-//			auto button_width = ::MulDiv(button_height, 3303, 1000); // 青銅比
-//			auto button_width = ::MulDiv(button_height, 1000 + 1414, 1000); // 1+白銀比
-//			auto button_width = ::MulDiv(button_height, 1000 + 1618, 1000); // 1+黄金比
+			auto button_rc = title_rc;
 			button_rc.left = button_rc.right - button_width;
 
 			// 一番右のボタンのアイコン矩形を算出します。
@@ -527,6 +567,9 @@ namespace apn::dark::kuro
 			// ボタンを走査します。
 			for (auto& button : buttons)
 			{
+				// タイトル矩形の右端を更新します。
+				title_rc.right = button_rc.left;
+
 				// ボタン位置をセットします。
 				button.rc = button_rc;
 				button.icon_rc = icon_rc;
@@ -573,20 +616,32 @@ namespace apn::dark::kuro
 
 			// スリムバーの中央にタイトルを描画します。
 			{
-				// ウィンドウ矩形を取得します。
-				auto window_rc = my::get_window_rect(hwnd);
-
-				// 一番右にあるメニュー項目の矩形を取得します。
-				auto menu = ::GetMenu(hwnd);
-				auto c = ::GetMenuItemCount(menu);
-				auto back_rc = RECT {};
-				::GetMenuItemRect(hwnd, menu, c - 1, &back_rc);
-
 				// タイトル描画位置の矩形を取得します。
 				auto text_rc = bar_rc;
-				auto inflate = back_rc.right - window_rc.left - text_rc.left;
-				::InflateRect(&text_rc, -inflate, -inflate);
 
+				// タイトルをスリムバー全体の中央に描画する場合は
+				if (hive.slimbar.flag_whole_title)
+				{
+					// 縮小量を算出します。
+					auto deflate = std::max(title_rc.left - bar_rc.left, bar_rc.right - title_rc.right);
+
+					// メニュー項目と干渉しないように描画範囲を縮小します。
+					::InflateRect(&text_rc, -deflate, 0);
+				}
+				// それ以外の場合は
+				else
+				{
+					// タイトル矩形のスペースに描画します。
+					text_rc = title_rc;
+				}
+#if 0 // テスト用コードです。
+				{
+					my::gdi::unique_ptr<HBRUSH> brush(
+						::CreateSolidBrush(RGB(255, 0, 0)));
+
+					::FillRect(dc, &text_rc, brush.get());
+				}
+#endif
 				// ウィンドウテキストを取得します。
 				auto text = my::get_window_text(hwnd);
 
@@ -782,6 +837,12 @@ namespace apn::dark::kuro
 
 					return on_draw(hwnd, context->theme, context->dc, context->part_id, context->state_id, context->rc);
 				}
+			}
+			else if (message == c_message.c_update_layout)
+			{
+				ScopeText scope_text(L"c_message.c_update_layout");
+
+				return on_size(hwnd, message, wParam, lParam);
 			}
 
 			return __super::on_wnd_proc(hwnd, message, wParam, lParam);

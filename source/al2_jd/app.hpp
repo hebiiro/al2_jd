@@ -317,5 +317,13 @@ namespace apn::dark
 		{
 			return aviutl2_window.apply_slim_menubar();
 		}
+
+		//
+		// スリムメニューバーのレイアウトを更新します。
+		//
+		virtual BOOL recalc_slim_menubar() override
+		{
+			return aviutl2_window.recalc_slim_menubar();
+		}
 	} app_impl;
 }

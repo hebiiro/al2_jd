@@ -64,7 +64,7 @@ namespace apn::dark
 		}
 
 		//
-		// スリムメニューバーの設定をaviutl2ウィンドウに適用します。
+		// スリムバーの設定をaviutl2ウィンドウに適用します。
 		//
 		BOOL apply_slim_menubar()
 		{
@@ -83,6 +83,14 @@ namespace apn::dark
 
 			return ::SetWindowPos(hive.theme_window, nullptr, 0, 0, 0, 0,
 				SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+		}
+
+		//
+		// スリムバーのレイアウトを更新します。
+		//
+		BOOL recalc_slim_menubar()
+		{
+			return !!::SendMessage(hive.theme_window, kuro::SlimBar::c_message.c_update_layout, 0, 0);
 		}
 	} aviutl2_window;
 }

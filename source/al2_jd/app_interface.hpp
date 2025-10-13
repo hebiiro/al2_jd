@@ -17,5 +17,6 @@ namespace apn::dark
 		virtual BOOL set_style_file_name(const std::wstring& style_file_name) = 0;
 		virtual BOOL set_custom_color_file_name(const std::wstring& custom_color_file_name) = 0;
 		virtual BOOL apply_slim_menubar() = 0;
+		virtual BOOL recalc_slim_menubar() = 0;
 	} *app = nullptr;
 }
