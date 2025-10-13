@@ -106,6 +106,102 @@ namespace my
 			::SetWindowPos(*this, nullptr, 0, 0, 0, 0,
 				SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
 
+			// スリムバー全体を再描画します。
+			return redraw(*this);
+		}
+
+		//
+		// スリムバーのレイアウトを更新します。
+		//
+		BOOL update_layout()
+		{
+			//
+			// この関数は指定された矩形の中央に位置する指定された幅の矩形を返します。
+			//
+			const auto centering = [](const RECT& base_rc, int width)
+			{
+				auto rc = base_rc;
+				rc.left = (base_rc.left + base_rc.right - width) / 2;
+				rc.right = rc.left + width;
+				return rc;
+			};
+
+			// ウィンドウ矩形を取得します。
+			auto window_rc = my::get_window_rect(hwnd);
+
+			// スリムバー矩形を取得します。
+			auto bar_rc = get_bar_rc(hwnd);
+			::OffsetRect(&bar_rc, -window_rc.left, -window_rc.top);
+
+			// タイトル矩形を初期化します。
+			title_rc = bar_rc;
+
+			// メニューを取得します。
+			auto menu = ::GetMenu(hwnd);
+
+			// メニュー項目の数を取得します。
+			auto c = ::GetMenuItemCount(menu);
+
+			// メニュー項目を走査します。
+			for (decltype(c) i = 0; i < c; i++)
+			{
+				// メニュー項目の矩形を取得します。
+				auto item_rc = RECT {};
+				::GetMenuItemRect(hwnd, menu, i, &item_rc);
+				::OffsetRect(&item_rc, -window_rc.left, -window_rc.top);
+
+				// メニュー項目のタイプを取得します。
+				MENUITEMINFO mii = { sizeof(mii) };
+				mii.fMask = MIIM_FTYPE;
+				::GetMenuItemInfo(menu, i, TRUE, &mii);
+
+				// メニュー項目がメニューバーの右側にある場合は
+				if (mii.fType & MFT_RIGHTJUSTIFY)
+				{
+					// タイトル矩形の右端を更新します。
+					title_rc.right = item_rc.left;
+
+					// ループを終了します。
+					break;
+				}
+				// メニュー項目がメニューバーの左側にある場合は
+				else
+				{
+					// タイトル矩形の左端を更新します。
+					title_rc.left = item_rc.right;
+				}
+			}
+
+			// ボタンのサイズを算出します。
+			auto button_height = my::get_height(title_rc);
+			auto button_width = ::MulDiv(button_height, config.button_width, 100);
+
+			// 一番右のボタンの矩形を算出します。
+			auto button_rc = title_rc;
+			button_rc.left = button_rc.right - button_width;
+
+			// 一番右のボタンのアイコン矩形を算出します。
+			auto icon_rc = button_rc;
+			::InflateRect(&icon_rc, 0, -4);
+			auto icon_size = my::get_height(icon_rc);
+			icon_rc = centering(icon_rc, icon_size);
+
+			// ボタンを走査します。
+			for (auto& button : buttons)
+			{
+				// タイトル矩形の右端を更新します。
+				title_rc.right = button_rc.left;
+
+				// ボタン位置をセットします。
+				button.rc = button_rc;
+				button.icon_rc = icon_rc;
+
+				// 次のボタン位置に移動します。
+				::OffsetRect(&button_rc, -button_width, 0);
+				::OffsetRect(&icon_rc, -button_width, 0);
+			}
+
+			// スリムバー全体を再描画します。
 			return redraw(*this);
 		}
 
@@ -500,94 +596,7 @@ namespace my
 		//
 		LRESULT on_size(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param)
 		{
-			//
-			// この関数は指定された矩形の中央に位置する指定された幅の矩形を返します。
-			//
-			const auto centering = [](const RECT& base_rc, int width)
-			{
-				auto rc = base_rc;
-				rc.left = (base_rc.left + base_rc.right - width) / 2;
-				rc.right = rc.left + width;
-				return rc;
-			};
-
-			// ウィンドウ矩形を取得します。
-			auto window_rc = my::get_window_rect(hwnd);
-
-			// スリムバー矩形を取得します。
-			auto bar_rc = get_bar_rc(hwnd);
-			::OffsetRect(&bar_rc, -window_rc.left, -window_rc.top);
-
-			// タイトル矩形を初期化します。
-			title_rc = bar_rc;
-
-			// メニューを取得します。
-			auto menu = ::GetMenu(hwnd);
-
-			// メニュー項目の数を取得します。
-			auto c = ::GetMenuItemCount(menu);
-
-			// メニュー項目を走査します。
-			for (decltype(c) i = 0; i < c; i++)
-			{
-				// メニュー項目の矩形を取得します。
-				auto item_rc = RECT {};
-				::GetMenuItemRect(hwnd, menu, i, &item_rc);
-				::OffsetRect(&item_rc, -window_rc.left, -window_rc.top);
-
-				// メニュー項目のタイプを取得します。
-				MENUITEMINFO mii = { sizeof(mii) };
-				mii.fMask = MIIM_FTYPE;
-				::GetMenuItemInfo(menu, i, TRUE, &mii);
-
-				// メニュー項目がメニューバーの右側にある場合は
-				if (mii.fType & MFT_RIGHTJUSTIFY)
-				{
-					// タイトル矩形の右端を更新します。
-					title_rc.right = item_rc.left;
-
-					// ループを終了します。
-					break;
-				}
-				// メニュー項目がメニューバーの左側にある場合は
-				else
-				{
-					// タイトル矩形の左端を更新します。
-					title_rc.left = item_rc.right;
-				}
-			}
-
-			// ボタンのサイズを算出します。
-			auto button_height = my::get_height(title_rc);
-			auto button_width = ::MulDiv(button_height, config.button_width, 100);
-
-			// 一番右のボタンの矩形を算出します。
-			auto button_rc = title_rc;
-			button_rc.left = button_rc.right - button_width;
-
-			// 一番右のボタンのアイコン矩形を算出します。
-			auto icon_rc = button_rc;
-			::InflateRect(&icon_rc, 0, -4);
-			auto icon_size = my::get_height(icon_rc);
-			icon_rc = centering(icon_rc, icon_size);
-
-			// ボタンを走査します。
-			for (auto& button : buttons)
-			{
-				// タイトル矩形の右端を更新します。
-				title_rc.right = button_rc.left;
-
-				// ボタン位置をセットします。
-				button.rc = button_rc;
-				button.icon_rc = icon_rc;
-
-				// 次のボタン位置に移動します。
-				::OffsetRect(&button_rc, -button_width, 0);
-				::OffsetRect(&icon_rc, -button_width, 0);
-			}
-
-			// スリムバー全体を再描画します。
-			redraw(hwnd);
+			update_layout();
 
 			return __super::on_wnd_proc(hwnd, message, w_param, l_param);
 		}
@@ -849,7 +858,7 @@ namespace my
 			{
 				ScopeText scope_text(L"c_message.c_update_layout");
 
-				return on_size(hwnd, message, w_param, l_param), TRUE;
+				return update_layout();
 			}
 
 			return __super::on_wnd_proc(hwnd, message, w_param, l_param);
