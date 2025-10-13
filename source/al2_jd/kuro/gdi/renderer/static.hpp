@@ -117,7 +117,7 @@ namespace apn::dark::kuro::gdi
 			MY_TRACE_FUNC("dc = {/hex}, flags = {/hex}, rc = ({/}), text = {/}, bk_color = {/hex}, text_color = {/hex}",
 				dc, flags, safe_string(rc), safe_string(text, c), ::GetBkColor(dc), ::GetTextColor(dc));
 
-			if (hive.jd.use_d2d && !(flags & (DT_CALCRECT | DT_MODIFYSTRING)) && !dtp)
+			if (!(flags & (DT_CALCRECT | DT_MODIFYSTRING)) && !dtp)
 			{
 				// ダイアログのパレットを使用します。
 				const auto& palette = paint::dialog_material.palette;
