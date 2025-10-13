@@ -448,7 +448,7 @@ namespace apn::dark::kuro
 		//
 		LRESULT on_style_changed(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-#if 0
+#if 1
 			return 0; // デフォルト処理を省略するだけでも正常に動作するようです。
 #else
 			if (wParam == GWL_STYLE)
@@ -462,15 +462,22 @@ namespace apn::dark::kuro
 		}
 
 		//
-		// WM_GETMINMAXINFOを処理します。
+		// WM_WINDOWPOSCHANGINGを処理します。
 		// キャプションを外したので最大化位置を手動で調整します。
 		//
-		LRESULT on_get_min_max_info(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+		LRESULT on_window_pos_changing(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
-			auto mmi = (MINMAXINFO*)lParam;
-			auto rc = my::get_monitor_rect(hwnd);
+			auto wp = (WINDOWPOS*)lParam;
 
-			mmi->ptMaxTrackSize.y = my::get_height(rc) - mmi->ptMaxPosition.y * 2; // 何故か2倍にすると丁度良くなります。
+			if (!(wp->flags & SWP_NOSIZE) &&::IsZoomed(hwnd))
+			{
+				auto rc = my::get_monitor_rect(hwnd);
+				::InflateRect(&rc, 12, 12);
+				wp->x = rc.left;
+				wp->y = rc.top;
+				wp->cx = my::get_width(rc);
+				wp->cy = my::get_height(rc);
+			}
 
 			return __super::on_wnd_proc(hwnd, message, wParam, lParam);
 		}
@@ -747,11 +754,11 @@ namespace apn::dark::kuro
 
 					return on_style_changed(hwnd, message, wParam, lParam);
 				}
-			case WM_GETMINMAXINFO:
+			case WM_WINDOWPOSCHANGING:
 				{
-					ScopeText scope_text(L"WM_GETMINMAXINFO");
+					ScopeText scope_text(L"WM_WINDOWPOSCHANGING");
 
-					return on_get_min_max_info(hwnd, message, wParam, lParam);
+					return on_window_pos_changing(hwnd, message, wParam, lParam);
 				}
 			case WM_SIZE:
 				{
