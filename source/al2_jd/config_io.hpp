@@ -110,10 +110,10 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			read_bool(root, "slimbar.flag_use", hive.slimbar.flag_use);
-			read_bool(root, "slimbar.flag_whole_title", hive.slimbar.flag_whole_title);
-			read_string(root, "slimbar.title_format", hive.slimbar.title_format);
-			read_int(root, "slimbar.button_width", hive.slimbar.button_width);
+			read_bool(root, "slimbar.flag_use", kuro::SlimBar::config.flag_use);
+			read_bool(root, "slimbar.flag_whole_title", kuro::SlimBar::config.flag_whole_title);
+			read_string(root, "slimbar.title_format", kuro::SlimBar::config.title_format);
+			read_int(root, "slimbar.button_width", kuro::SlimBar::config.button_width);
 
 			return TRUE;
 		}
@@ -125,10 +125,10 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
-			write_bool(root, "slimbar.flag_use", hive.slimbar.flag_use);
-			write_bool(root, "slimbar.flag_whole_title", hive.slimbar.flag_whole_title);
-			write_string(root, "slimbar.title_format", hive.slimbar.title_format);
-			write_int(root, "slimbar.button_width", hive.slimbar.button_width);
+			write_bool(root, "slimbar.flag_use", kuro::SlimBar::config.flag_use);
+			write_bool(root, "slimbar.flag_whole_title", kuro::SlimBar::config.flag_whole_title);
+			write_string(root, "slimbar.title_format", kuro::SlimBar::config.title_format);
+			write_int(root, "slimbar.button_width", kuro::SlimBar::config.button_width);
 
 			return TRUE;
 		}

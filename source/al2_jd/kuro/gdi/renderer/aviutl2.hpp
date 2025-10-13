@@ -7,14 +7,14 @@ namespace apn::dark::kuro::gdi
 		//
 		// スリムバーです。
 		//
-		std::shared_ptr<SlimBar> slimbar = std::make_shared<SlimBar>();
+		SlimBar slimbar;
 
 		//
 		// ウィンドウにアタッチしたときの処理です。
 		//
 		virtual BOOL on_attach(HWND hwnd)
 		{
-			slimbar->attach(hwnd);
+			slimbar.subclass(hwnd);
 
 			return __super::on_attach(hwnd);
 		}
@@ -24,7 +24,7 @@ namespace apn::dark::kuro::gdi
 		//
 		virtual BOOL on_detach(HWND hwnd)
 		{
-			slimbar->detach(hwnd);
+			slimbar.unsubclass();
 
 			return __super::on_detach(hwnd);
 		}

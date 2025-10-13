@@ -69,7 +69,7 @@ namespace apn::dark
 		BOOL apply_slim_menubar()
 		{
 			// メニューバーとタイトルバーを一体化する場合は
-			if (hive.slimbar.flag_use)
+			if (kuro::SlimBar::config.flag_use)
 			{
 //				my::modify_style(hive.theme_window, WS_CAPTION, 0);
 //				my::modify_style(hive.theme_window, WS_DLGFRAME, 0);

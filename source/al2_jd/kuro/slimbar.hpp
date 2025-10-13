@@ -5,7 +5,7 @@ namespace apn::dark::kuro
 	//
 	// このクラスはスリムバーです。
 	//
-	struct SlimBar : std::enable_shared_from_this<SlimBar>, my::Window
+	struct SlimBar : my::Window
 	{
 		//
 		// ウィンドウメッセージです。
@@ -14,6 +14,32 @@ namespace apn::dark::kuro
 			inline static const auto c_draw = ::RegisterWindowMessageW(L"apn::dark::kuro::slimbar::draw");
 			inline static const auto c_update_layout = ::RegisterWindowMessageW(L"apn::dark::kuro::slimbar::update_layout");
 		} c_message;
+
+		//
+		// このクラスはスリムバーの設定です。
+		//
+		inline static struct Config
+		{
+			//
+			// TRUEの場合はメニューバーをタイトルバーと一体化します。
+			//
+			BOOL flag_use = TRUE;
+
+			//
+			// TRUEの場合はタイトルをスリムバー全体の中央に描画します。
+			//
+			BOOL flag_whole_title = FALSE;
+
+			//
+			// スリムバー時のタイトルの書式です。
+			//
+			std::wstring title_format = L"AviUtl2 - %title%";
+
+			//
+			// ボタンの幅です。
+			//
+			int32_t button_width = 50;
+		} config;
 
 		//
 		// 描画コンテキストです。
@@ -26,12 +52,6 @@ namespace apn::dark::kuro
 			int state_id;
 			LPCRECT rc;
 		};
-
-		//
-		// スリムバーのコレクションです。
-		// ウィンドウに関連付けるために使用されます。
-		//
-		inline static thread_local std::unordered_map<HWND, std::shared_ptr<SlimBar>> slimbars;
 
 		//
 		// このクラスはスリムバーのボタンです。
@@ -62,41 +82,6 @@ namespace apn::dark::kuro
 		// タイトルの描画位置です。
 		//
 		RECT title_rc = {};
-
-		//
-		// 仮想デストラクタです。
-		//
-		virtual ~SlimBar()
-		{
-		}
-/*
-		//
-		// ウィンドウに関連付けられているスリムバーを返します。
-		//
-		inline static std::shared_ptr<SlimBar> get(HWND hwnd)
-		{
-			auto it = slimbars.find(hwnd);
-			if (it == slimbars.end()) return {};
-			return it->second;
-		}
-*/
-		//
-		// ウィンドウにアタッチします。
-		//
-		void attach(HWND hwnd)
-		{
-			slimbars[hwnd] = shared_from_this();
-			subclass(hwnd);
-		}
-
-		//
-		// ウィンドウからデタッチします。
-		//
-		void detach(HWND hwnd)
-		{
-			unsubclass();
-			slimbars.erase(hwnd);
-		}
 
 		//
 		// スリムバー矩形を返します。
@@ -552,7 +537,7 @@ namespace apn::dark::kuro
 			}
 
 			// ボタンの幅を取得します。
-			auto button_width = hive.slimbar.button_width;
+			auto button_width = config.button_width;
 
 			// 一番右のボタンの矩形を算出します。
 			auto button_rc = title_rc;
@@ -609,7 +594,7 @@ namespace apn::dark::kuro
 		BOOL on_draw(HWND hwnd, HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
 		{
 			// スリムバーを使用しない場合は何もしません。
-			if (!hive.slimbar.flag_use) return FALSE;
+			if (!config.flag_use) return FALSE;
 
 			// スリムバー矩形を取得します。
 			auto bar_rc = *rc;
@@ -620,7 +605,7 @@ namespace apn::dark::kuro
 				auto text_rc = bar_rc;
 
 				// タイトルをスリムバー全体の中央に描画する場合は
-				if (hive.slimbar.flag_whole_title)
+				if (config.flag_whole_title)
 				{
 					// 縮小量を算出します。
 					auto deflate = std::max(title_rc.left - bar_rc.left, bar_rc.right - title_rc.right);
@@ -646,10 +631,10 @@ namespace apn::dark::kuro
 				auto text = my::get_window_text(hwnd);
 
 				// タイトルの書式が指定されている場合は
-				if (hive.slimbar.title_format.length())
+				if (config.title_format.length())
 				{
 					// タイトルを書式化します。
-					text = my::replace(hive.slimbar.title_format, L"%title%", text);
+					text = my::replace(config.title_format, L"%title%", text);
 				}
 
 				// タイトル描画用フォントをセットします。
@@ -721,7 +706,7 @@ namespace apn::dark::kuro
 			MY_TRACE_FUNC("{/hex}, {/}, {/hex}, {/hex}", hwnd, my::message_to_string(message), wParam, lParam);
 
 			// スリムバーを使用しない場合は何もしません。
-			if (!hive.slimbar.flag_use)
+			if (!config.flag_use)
 				return __super::on_wnd_proc(hwnd, message, wParam, lParam);
 
 			//

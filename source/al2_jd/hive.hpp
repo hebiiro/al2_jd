@@ -133,32 +133,6 @@ namespace apn::dark
 		} scrollbar;
 
 		//
-		// このクラスはスリムバーの設定です。
-		//
-		struct SlimBar
-		{
-			//
-			// TRUEの場合はメニューバーをタイトルバーと一体化します。
-			//
-			BOOL flag_use = TRUE;
-
-			//
-			// TRUEの場合はタイトルをスリムバー全体の中央に描画します。
-			//
-			BOOL flag_whole_title = FALSE;
-
-			//
-			// スリムバー時のタイトルの書式です。
-			//
-			std::wstring title_format = L"AviUtl2 - %title%";
-
-			//
-			// ボタンの幅です。
-			//
-			int32_t button_width = 50;
-		} slimbar;
-
-		//
 		// このクラスは丸みの設定です。
 		//
 		struct Round

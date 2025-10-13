@@ -63,10 +63,10 @@ namespace apn::dark
 			set_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
 			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 
-			set_check(IDC_SLIMBAR_FLAG_USE, hive.slimbar.flag_use);
-			set_check(IDC_SLIMBAR_FLAG_WHOLE_TITLE, hive.slimbar.flag_whole_title);
-			set_text(IDC_SLIMBAR_TITLE_FORMAT, hive.slimbar.title_format);
-			set_int(IDC_SLIMBAR_BUTTON_WIDTH, hive.slimbar.button_width);
+			set_check(IDC_SLIMBAR_FLAG_USE, kuro::SlimBar::config.flag_use);
+			set_check(IDC_SLIMBAR_FLAG_WHOLE_TITLE, kuro::SlimBar::config.flag_whole_title);
+			set_text(IDC_SLIMBAR_TITLE_FORMAT, kuro::SlimBar::config.title_format);
+			set_int(IDC_SLIMBAR_BUTTON_WIDTH, kuro::SlimBar::config.button_width);
 
 			set_check(IDC_ROUND_FLAG_USE, hive.round.flag_use);
 			set_int(IDC_ROUND_SIZE, hive.round.size);
@@ -121,10 +121,10 @@ namespace apn::dark
 			get_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
 			get_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 
-			get_check(IDC_SLIMBAR_FLAG_USE, hive.slimbar.flag_use);
-			get_check(IDC_SLIMBAR_FLAG_WHOLE_TITLE, hive.slimbar.flag_whole_title);
-			get_text(IDC_SLIMBAR_TITLE_FORMAT, hive.slimbar.title_format);
-			get_int(IDC_SLIMBAR_BUTTON_WIDTH, hive.slimbar.button_width);
+			get_check(IDC_SLIMBAR_FLAG_USE, kuro::SlimBar::config.flag_use);
+			get_check(IDC_SLIMBAR_FLAG_WHOLE_TITLE, kuro::SlimBar::config.flag_whole_title);
+			get_text(IDC_SLIMBAR_TITLE_FORMAT, kuro::SlimBar::config.title_format);
+			get_int(IDC_SLIMBAR_BUTTON_WIDTH, kuro::SlimBar::config.button_width);
 
 			get_check(IDC_ROUND_FLAG_USE, hive.round.flag_use);
 			get_int(IDC_ROUND_SIZE, hive.round.size);
@@ -219,11 +219,22 @@ namespace apn::dark
 
 							break;
 						}
+					case IDC_SLIMBAR_FLAG_WHOLE_TITLE:
+						{
+							if (kuro::SlimBar::config.flag_use)
+							{
+								from_ui(FALSE);
+
+								app->recalc_slim_menubar();
+							}
+
+							break;
+						}
 					case IDC_SLIMBAR_BUTTON_WIDTH:
 						{
-							if (hive.slimbar.flag_use)
+							if (code == EN_UPDATE)
 							{
-								if (code == EN_UPDATE)
+								if (kuro::SlimBar::config.flag_use)
 								{
 									from_ui(FALSE);
 
@@ -234,7 +245,6 @@ namespace apn::dark
 							break;
 						}
 					case IDC_JD_USE_D2D:
-					case IDC_SLIMBAR_FLAG_WHOLE_TITLE:
 					case IDC_ROUND_FLAG_USE:
 					case IDC_BORDER_FLAG_3D_EDGE:
 					case IDC_GRADIENT_FLAG_USE:
@@ -250,7 +260,7 @@ namespace apn::dark
 						}
 					case IDC_SLIMBAR_TITLE_FORMAT:
 						{
-							if (hive.slimbar.flag_use)
+							if (kuro::SlimBar::config.flag_use)
 							{
 								if (code == EN_UPDATE)
 									from_ui(TRUE);
