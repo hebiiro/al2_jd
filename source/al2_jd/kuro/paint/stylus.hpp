@@ -216,8 +216,10 @@ namespace apn::dark::kuro::paint
 			if (!hive.round.flag_use) return draw_rect(dc, arg_rc, pigment);
 
 			auto rc = *arg_rc;
+#if 0
 			rc.right -= 1;
 			rc.bottom -= 1;
+#endif
 			auto w = my::get_width(rc);
 			auto h = my::get_height(rc);
 			auto r = std::min(w, h);
@@ -226,7 +228,7 @@ namespace apn::dark::kuro::paint
 			{
 				auto radius = get_round_as_float(r / 2.0f);
 
-				if (auto result = d2d::Recter().draw_round_rect(dc, &rc, radius, pigment))
+				if (auto result = d2d::Recter(dc, &rc, pigment).draw_round_rect(radius))
 					return result;
 			}
 
@@ -377,7 +379,7 @@ namespace apn::dark::kuro::paint
 			{
 				TextAttribute text_attribute(dc, pigment, opaque);
 
-				if (auto result = d2d::Texter().draw_text(dc, text, c, (LPRECT)rc, text_flags, pigment))
+				if (auto result = d2d::Texter(dc, text, c, rc, text_flags, pigment).draw_text())
 					return !!result;
 			}
 
@@ -393,11 +395,10 @@ namespace apn::dark::kuro::paint
 			{
 				IconAttribute icon_attribute(dc, rc, font_name, font_weight);
 
-				if (auto result = d2d::Texter().draw_text(dc, &char_code, 1,
-					(LPRECT)rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE, pigment))
-				{
+				auto text_flags = UINT { DT_CENTER | DT_VCENTER | DT_SINGLELINE };
+
+				if (auto result = d2d::Texter(dc, &char_code, 1, rc, text_flags, pigment).draw_text())
 					return !!result;
-				}
 			}
 
 			return draw_icon(dc, rc, pigment, font_name, char_code, font_weight);

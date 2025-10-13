@@ -128,20 +128,53 @@ namespace apn::dark::kuro::paint::d2d
 		}
 
 		//
+		// 描画に使用するプロパティです。
+		//
+		HDC dc = {};
+		LPCRECT rc = {};
+		const Pigment* pigment = {};
+		int iw = {}, ih = {};
+		float w = {}, h = {};
+
+		//
+		// コンストラクタです。
+		//
+		Recter(HDC dc, LPCRECT rc, const Pigment* pigment)
+			: dc(dc), rc(rc), pigment(pigment)
+		{
+			// 引数が無効の場合は失敗します。
+			if (!rc || ::IsRectEmpty(rc)) return;
+
+			// ピグメントが無効の場合は失敗します。
+			if (!pigment->text.is_valid()) return;
+
+			// 描画の準備に失敗した場合は失敗します。
+			if (!core.prepare()) return;
+
+			// 描画寸法を取得します。
+			iw = my::get_width(*rc);
+			ih = my::get_height(*rc);
+			w = (float)iw;
+			h = (float)ih;
+		}
+
+		//
+		// 初期化が正常に完了している場合はTRUEを返します。
+		//
+		BOOL is_initialized() const
+		{
+			return iw > 0 && ih > 0;
+		}
+
+		//
 		// 丸角矩形を描画します。
 		//
-		BOOL draw_round_rect(HDC dc, LPCRECT rc, float radius, const Pigment* pigment)
+		BOOL draw_round_rect(float radius)
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/}", dc, safe_string(rc), radius);
 
-			// 描画の準備に失敗した場合は何もしません。
-			if (!core.prepare()) return FALSE;
-
-			auto iw = my::get_width(*rc);
-			auto ih = my::get_height(*rc);
-
-			// 描画矩形が無効の場合は何もしません。
-			if (iw < 0 || ih < 0) return FALSE;
+			// 初期化が正常に完了していない場合は何もしません。
+			if (!is_initialized()) return 0;
 
 			// レンダーターゲットとデバイスコンテキストをバインドします。
 			Core::Binder binder(dc, rc);
@@ -154,15 +187,13 @@ namespace apn::dark::kuro::paint::d2d
 			auto half_border_width = border_width / 2.0f;
 
 			// 全体の矩形を取得します。
-			auto w = (float)iw;
-			auto h = (float)ih;
 			auto whole_rc = D2D1::RectF(0, 0, w, h);
 
 			// 縁がはみ出さないように収縮した矩形を取得します。
 			auto draw_rc = deflate(whole_rc, half_border_width, half_border_width);
 
 			// 丸角矩形を取得します。
-			auto rrc = D2D1::RoundedRect(draw_rc, radius, radius);
+			auto round_rc = D2D1::RoundedRect(draw_rc, radius, radius);
 
 			// 背景の描画データが有効の場合は
 			if (pigment->background.is_valid())
@@ -186,7 +217,7 @@ namespace apn::dark::kuro::paint::d2d
 						D2D1::Point2F(draw_rc.left, draw_rc.top),
 						D2D1::Point2F(draw_rc.right, draw_rc.bottom));
 					if (!gradient_brush) return FALSE;
-					render_target->FillRoundedRectangle(rrc, gradient_brush.Get());
+					render_target->FillRoundedRectangle(round_rc, gradient_brush.Get());
 				}
 				// それ以外の場合は
 				else
@@ -196,7 +227,7 @@ namespace apn::dark::kuro::paint::d2d
 						render_target.Get(),
 						to_d2d_color(color_entry.parts[0]));
 					if (!solid_brush) return FALSE;
-					render_target->FillRoundedRectangle(rrc, solid_brush.Get());
+					render_target->FillRoundedRectangle(round_rc, solid_brush.Get());
 				}
 			}
 
@@ -224,7 +255,7 @@ namespace apn::dark::kuro::paint::d2d
 					blend(color_entry.parts[end_color_index], color_entry_for_blend, 1),
 					stop_point.first, stop_point.second);
 				if (!gradient_brush) return FALSE;
-				render_target->DrawRoundedRectangle(rrc, gradient_brush.Get(), border_width);
+				render_target->DrawRoundedRectangle(round_rc, gradient_brush.Get(), border_width);
 			}
 
 			return TRUE;

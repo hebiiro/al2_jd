@@ -211,21 +211,56 @@ namespace apn::dark::kuro::paint::d2d
 		}
 
 		//
+		// 描画に使用するプロパティです。
+		//
+		HDC dc = {};
+		LPCRECT rc = {};
+		UINT text_flags = {};
+		const Pigment* pigment = {};
+		int iw = {}, ih = {};
+		float w = {}, h = {};
+		std::wstring s = {};
+
+		//
+		// コンストラクタです。
+		//
+		Texter(HDC dc, LPCWSTR text, int c, LPCRECT rc, UINT text_flags, const Pigment* pigment)
+			: dc(dc), rc(rc), text_flags(text_flags), pigment(pigment)
+		{
+			// 引数が無効の場合は失敗します。
+			if (!text || !rc || ::IsRectEmpty(rc)) return;
+
+			// ピグメントが無効の場合は失敗します。
+			if (!pigment->text.is_valid()) return;
+
+			// 描画の準備に失敗した場合は失敗します。
+			if (!core.prepare()) return;
+
+			// 描画寸法を取得します。
+			iw = my::get_width(*rc);
+			ih = my::get_height(*rc);
+			w = (float)iw;
+			h = (float)ih;
+
+			// 文字列を取得します。
+			s = (c < 0) ? std::wstring(text) : std::wstring(text, c);
+		}
+
+		//
+		// 初期化が正常に完了している場合はTRUEを返します。
+		//
+		BOOL is_initialized() const
+		{
+			return iw & ih;
+		}
+
+		//
 		// ぼかしありの文字列を描画します。
 		//
-		int draw_text_with_blur(std::wstring& s, HDC dc, LPCRECT rc, UINT text_flags, const Pigment* pigment)
+		int draw_text_with_blur()
 		{
 			// エラーコードです。
 			auto hr = HRESULT {};
-
-			// 描画寸法を取得します。
-			auto iw = my::get_width(*rc);
-			auto ih = my::get_height(*rc);
-			auto w = (float)iw;
-			auto h = (float)ih;
-
-			// 描画矩形が無効の場合は何もしません。
-			if (iw < 0 || ih < 0) return 0;
 
 			// WICビットマップを作成します。
 			ComPtr<IWICBitmap> wic_bitmap;
@@ -338,17 +373,8 @@ namespace apn::dark::kuro::paint::d2d
 		//
 		// ぼかしなしの文字列を描画します。
 		//
-		int draw_text_without_blur(std::wstring& s, HDC dc, LPCRECT rc, UINT text_flags, const Pigment* pigment)
+		int draw_text_without_blur()
 		{
-			// 描画寸法を取得します。
-			auto iw = my::get_width(*rc);
-			auto ih = my::get_height(*rc);
-			auto w = (float)iw;
-			auto h = (float)ih;
-
-			// 描画矩形が無効の場合は何もしません。
-			if (iw < 0 || ih < 0) return 0;
-
 			// テキストフォーマットを作成します。
 			auto text_format = create_text_format(dc, text_flags);
 			if (!text_format) return 0;
@@ -391,30 +417,20 @@ namespace apn::dark::kuro::paint::d2d
 		//
 		// ::DrawTextW()方式で文字列を描画します。
 		//
-		int draw_text(HDC dc, LPCWSTR text, int c, LPRECT rc, UINT flags, const Pigment* pigment)
+		int draw_text()
 		{
-			MY_TRACE_FUNC("{/hex}, {/}, ({/}), {/hex}",
-				dc, safe_string(text, c), safe_string(rc), flags);
+			MY_TRACE_FUNC("{/hex}, {/}, ({/}), {/hex}", dc, s, safe_string(rc), text_flags);
 
-			// 引数が無効の場合は何もしません。
-			if (!text || !rc) return 0;
-
-			// ピグメントが無効の場合は何もしません。
-			if (!pigment->text.is_valid()) return 0;
-
-			// 描画の準備に失敗した場合は何もしません。
-			if (!core.prepare()) return 0;
-
-			// 文字列を取得します。
-			auto s = (c < 0) ? std::wstring(text) : std::wstring(text, c);
+			// 初期化が正常に完了していない場合は何もしません。
+			if (!is_initialized()) return 0;
 
 			// レンダーターゲットとデバイスコンテキストをバインドします。
 			Core::Binder binder(dc, rc);
 
 			if (hive.shadow.flag_use && hive.shadow.flag_blur)
-				return draw_text_with_blur(s, dc, rc, flags, pigment);
+				return draw_text_with_blur();
 			else
-				return draw_text_without_blur(s, dc, rc, flags, pigment);
+				return draw_text_without_blur();
 		}
 	};
 }
