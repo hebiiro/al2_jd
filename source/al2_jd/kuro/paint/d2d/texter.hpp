@@ -224,6 +224,9 @@ namespace apn::dark::kuro::paint::d2d
 			auto w = (float)iw;
 			auto h = (float)ih;
 
+			// 描画矩形が無効の場合は何もしません。
+			if (iw < 0 || ih < 0) return 0;
+
 			// WICビットマップを作成します。
 			ComPtr<IWICBitmap> wic_bitmap;
 			hr = core.wic_factory->CreateBitmap(iw, ih,
@@ -342,6 +345,9 @@ namespace apn::dark::kuro::paint::d2d
 			auto ih = my::get_height(*rc);
 			auto w = (float)iw;
 			auto h = (float)ih;
+
+			// 描画矩形が無効の場合は何もしません。
+			if (iw < 0 || ih < 0) return 0;
 
 			// テキストフォーマットを作成します。
 			auto text_format = create_text_format(dc, text_flags);
