@@ -7,7 +7,7 @@ namespace apn::dark::kuro::gdi
 		//
 		// スリムバーです。
 		//
-		SlimBar slimbar;
+		my::slimbar_t slimbar;
 
 		//
 		// ウィンドウにアタッチしたときの処理です。

@@ -376,9 +376,6 @@
     <ClInclude Include="kuro\gdi\renderer\rigaya\dialog.hpp">
       <Filter>kuro\gdi\renderer\rigaya</Filter>
     </ClInclude>
-    <ClInclude Include="kuro\slimbar.hpp">
-      <Filter>kuro</Filter>
-    </ClInclude>
     <ClInclude Include="kuro\custom_style.hpp">
       <Filter>kuro</Filter>
     </ClInclude>

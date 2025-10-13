@@ -68,21 +68,7 @@ namespace apn::dark
 		//
 		BOOL apply_slim_menubar()
 		{
-			// メニューバーとタイトルバーを一体化する場合は
-			if (kuro::SlimBar::config.flag_use)
-			{
-//				my::modify_style(hive.theme_window, WS_CAPTION, 0);
-//				my::modify_style(hive.theme_window, WS_DLGFRAME, 0);
-				my::modify_style(hive.theme_window, WS_BORDER, 0);
-			}
-			// メニューバーとタイトルバーを一体化しない場合は
-			else
-			{
-				my::modify_style(hive.theme_window, 0, WS_CAPTION);
-			}
-
-			return ::SetWindowPos(hive.theme_window, nullptr, 0, 0, 0, 0,
-				SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+			return !!::SendMessage(hive.theme_window, my::slimbar_t::c_message.c_apply_config, 0, 0);
 		}
 
 		//
@@ -90,7 +76,7 @@ namespace apn::dark
 		//
 		BOOL recalc_slim_menubar()
 		{
-			return !!::SendMessage(hive.theme_window, kuro::SlimBar::c_message.c_update_layout, 0, 0);
+			return !!::SendMessage(hive.theme_window, my::slimbar_t::c_message.c_update_layout, 0, 0);
 		}
 	} aviutl2_window;
 }

@@ -38,7 +38,6 @@
 #include "kuro/paint/material/command_module.hpp"
 #include "kuro/paint/material/address_band.hpp"
 #include "kuro/paint/manager.hpp"
-#include "kuro/slimbar.hpp"
 #include "kuro/gdi/renderer.hpp"
 #include "kuro/gdi/renderer_nc.hpp"
 #include "kuro/gdi/renderer/aviutl2.hpp"
