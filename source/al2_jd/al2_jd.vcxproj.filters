@@ -384,14 +384,8 @@
     </ClInclude>
     <ClInclude Include="aviutl2_window.hpp" />
     <ClInclude Include="available_fonts.hpp" />
-    <ClInclude Include="kuro\paint\d2d.hpp">
-      <Filter>kuro\paint</Filter>
-    </ClInclude>
     <ClInclude Include="kuro\color.hpp">
       <Filter>kuro</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\paint\d2d_utils.hpp">
-      <Filter>kuro\paint</Filter>
     </ClInclude>
     <ClInclude Include="kuro\paint\d2d\core.hpp">
       <Filter>kuro\paint\d2d</Filter>

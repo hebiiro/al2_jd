@@ -197,12 +197,10 @@ copy /Y "$(SolutionDir)..\assets\$(TargetName).json" "$(aviutl2_dir)\data\Plugin
     <ClInclude Include="kuro\hook\entry\darken_window.hpp" />
     <ClInclude Include="kuro\hook\entry\theme.hpp" />
     <ClInclude Include="kuro\slimbar.hpp" />
-    <ClInclude Include="kuro\paint\d2d.hpp" />
     <ClInclude Include="kuro\paint\d2d\core.hpp" />
     <ClInclude Include="kuro\paint\d2d\recter.hpp" />
     <ClInclude Include="kuro\paint\d2d\texter.hpp" />
     <ClInclude Include="kuro\paint\d2d\utils.hpp" />
-    <ClInclude Include="kuro\paint\d2d_utils.hpp" />
     <ClInclude Include="kuro\paint\material\window.hpp" />
     <ClInclude Include="lockable.hpp" />
     <ClInclude Include="hive.hpp" />
