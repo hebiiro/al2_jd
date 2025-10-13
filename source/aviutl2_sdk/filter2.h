@@ -93,11 +93,11 @@ struct FILTER_PROC_VIDEO {
 	// オブジェクト情報
 	const OBJECT_INFO* object;
 
-	// 現在の画像のデータを取得する
+	// 現在の画像のデータを取得する (VRAMからデータを取得します) 
 	// buffer		: 画像データの格納先へのポインタ
 	void (*get_image_data)(PIXEL_RGBA* buffer);
 
-	// 現在の画像のデータを設定します
+	// 現在の画像のデータを設定します (VRAMへデータを書き込みます) 
 	// buffer		: 画像データへのポインタ
 	// width,height	: 画像サイズ
 	void (*set_image_data)(PIXEL_RGBA* buffer, int width, int height);

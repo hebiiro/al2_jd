@@ -1,0 +1,19 @@
+--information:SampleModule用サンプルスクリプト
+--label:サンプル
+--track@value1:数値1,0,1000,1,1
+--track@value2:数値2,0,1000,2,1
+--track@bright:明るさ,0.0,2.0,1.0,0.01
+--color@color:色,0xffffff
+
+-- モジュール関数取得
+local func = obj.module("ScriptModule")
+
+-- 数値の合計のテキストを作成
+local value = func.sum(value1,value2)
+obj.setfont("",400,0,color)
+obj.load("text",value)
+
+-- 明るさを変更
+local data,w,h = obj.getpixeldata("object")
+func.luminance(data,w,h,bright)
+obj.putpixeldata("object",data,w,h)
