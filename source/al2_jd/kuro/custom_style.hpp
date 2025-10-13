@@ -169,9 +169,6 @@ namespace apn::dark::kuro
 		{
 			MY_TRACE_FUNC("{/}", custom_color_path);
 
-			// 既存のカラーエントリを消去します。
-			color_entries.clear();
-
 			// 現在のセクションです。
 			auto section = std::wstring {};
 
