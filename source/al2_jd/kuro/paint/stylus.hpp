@@ -61,7 +61,7 @@ namespace apn::dark::kuro::paint
 	//
 	using PenAttribute = GdiObjectAttribute<HPEN, [](auto p, const Pigment* pigment)
 	{
-		if (pigment->border.is_valid())
+		if (pigment->border.is_valid() && pigment->border.is_opaque())
 		{
 			p->handle = ::CreatePen(PS_INSIDEFRAME, get_border_width_as_int(), pigment->border.get_win32_color());
 			p->is_deletable = TRUE;
@@ -78,7 +78,7 @@ namespace apn::dark::kuro::paint
 	//
 	using BrushAttribute = GdiObjectAttribute<HBRUSH, [](auto p, const Pigment* pigment)
 	{
-		if (pigment->background.is_valid())
+		if (pigment->background.is_valid() && pigment->background.is_opaque())
 		{
 			p->handle = ::CreateSolidBrush(pigment->background.get_win32_color());
 			p->is_deletable = TRUE;

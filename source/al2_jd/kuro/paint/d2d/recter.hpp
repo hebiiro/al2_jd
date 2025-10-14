@@ -195,8 +195,8 @@ namespace apn::dark::kuro::paint::d2d
 			// 丸角矩形を取得します。
 			auto round_rc = D2D1::RoundedRect(draw_rc, radius, radius);
 
-			// 背景の描画データが有効の場合は
-			if (pigment->background.is_valid())
+			// 背景が描画可能な場合は
+			if (pigment->background.is_valid() && pigment->background.is_opaque())
 			{
 				// 背景を描画します。
 
@@ -228,8 +228,8 @@ namespace apn::dark::kuro::paint::d2d
 				}
 			}
 
-			// 縁の描画データが有効の場合は
-			if (pigment->border.is_valid() && border_width > 0.0f)
+			// 縁が描画可能な場合は
+			if (pigment->border.is_valid() && pigment->border.is_opaque() && border_width > 0.0f)
 			{
 				// 縁を描画します。
 
