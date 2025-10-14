@@ -19,22 +19,22 @@ namespace apn::dark::kuro::paint
 				Style::Color::WindowBorder,
 				Style::Color::Text);
 
-			auto thumb_normal = create_pigment(L"TrackBarThumb", L"",
+			auto thumb_normal = create_pigment(L"TrackBarThumb", L"Normal",
 				Style::Color::ButtonBody,
 				Style::Color::Border,
 				Style::Color::Text);
 
-			auto thumb_disabled = create_pigment(L"TrackBarThumb", L"",
+			auto thumb_disabled = create_pigment(L"TrackBarThumb", L"Disable",
 				Style::Color::ButtonBodyDisable,
 				Style::Color::Border,
 				Style::Color::TextDisable);
 
-			auto thumb_hot = create_pigment(L"TrackBarThumb", L"",
+			auto thumb_hot = create_pigment(L"TrackBarThumb", L"Hot",
 				Style::Color::ButtonBodySelect,
 				Style::Color::BorderFocus,
 				Style::Color::Text);
 
-			auto thumb_pressed = create_pigment(L"TrackBarThumb", L"",
+			auto thumb_pressed = create_pigment(L"TrackBarThumb", L"Press",
 				Style::Color::ButtonBodyPress,
 				Style::Color::BorderSelect,
 				Style::Color::Text);
