@@ -252,7 +252,7 @@ namespace apn::dark::kuro::theme
 
 			if (!(text_flags & DT_CALCRECT))
 			{
-				if (paint::stylus.d2d_draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id))
+				if (paint::stylus.d2d_draw_text(dc, rc, text, c, text_flags, palette, part_id, state_id, FALSE))
 					return S_OK;
 			}
 
