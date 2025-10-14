@@ -122,11 +122,23 @@ namespace apn::dark::kuro::paint
 	//
 	// 背景の終了色をD2D形式で返します。
 	//
-	inline auto get_background_end_color(const Color& end_color)
+	inline auto get_background_end_color(const ColorEntry& color_entry)
 	{
-		auto end_alpha = get_background_end_alpha(end_color.alpha());
+		// 終了色が有効の場合は
+		if (color_entry.parts[1].is_valid())
+		{
+			// 終了色を返します。
+			return to_d2d_color(color_entry.parts[1]);
+		}
 
-		return to_d2d_color(end_color, end_alpha);
+		// 開始色を取得します。
+		const auto& start_color = color_entry.parts[0];
+
+		// 終了色アルファを取得します。
+		auto end_alpha = get_background_end_alpha(start_color.alpha());
+
+		// 終了色アルファを持つ開始色を返します。
+		return to_d2d_color(start_color, end_alpha);
 	}
 
 	//

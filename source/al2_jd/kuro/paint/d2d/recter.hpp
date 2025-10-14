@@ -206,14 +206,11 @@ namespace apn::dark::kuro::paint::d2d
 				// グラデーションで描画する場合は
 				if (hive.gradient.flag_use)
 				{
-					// 終了色のインデックスを取得します。
-					auto end_color_index = color_entry.parts[1].is_valid() ? 1 : 0;
-
 					// グラデーションブラシで背景を描画します。
 					auto gradient_brush = create_gradient_brush(
 						render_target.Get(),
 						to_d2d_color(color_entry.parts[0]),
-						get_background_end_color(color_entry.parts[end_color_index]),
+						get_background_end_color(color_entry),
 						D2D1::Point2F(draw_rc.left, draw_rc.top),
 						D2D1::Point2F(draw_rc.right, draw_rc.bottom));
 					if (!gradient_brush) return FALSE;
