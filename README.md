@@ -120,10 +120,8 @@
 
 ## 📝独自スタイルファイル
 
-1. `プラグインフォルダ/al2/assets/custom_color.conf`を`プラグインフォルダ/al2/config/`フォルダにコピーします。
 1. `プラグインフォルダ/al2/config/custom_color.conf`をテキストエディタで編集します。
----
-1. または、既存の`custom_color.conf`を`プラグインフォルダ/al2/config/`フォルダにコピーします。
+1. または、既存の`custom_color.conf`で上書きします。
 
 > [!IMPORTANT]
 > * メニューなど一部の配色だけ変更できます。aviutl2本体の配色は変更できません。
@@ -149,6 +147,24 @@
 ```ini
 [EditBox]
 SelectFill=ff0000
+```
+
+---
+
+* 透過グラデーションが適用されないようにします。(終了色を指定します)
+
+```ini
+[TrackBarThumb]
+NormalFill=,101010
+```
+
+---
+
+* 縁が描画されないようにします。(縁のアルファを0にします)
+
+```ini
+[MenuItem]
+HotEdge=00000000
 ```
 
 ---
@@ -195,6 +211,13 @@ HotTextShadow=ff000080
 ```
 
 ## 🔖更新履歴
+
+* 🔖r24 #2025年10月14日
+	* 🎨終了色が有効の場合は終了色アルファを適用しないように変更
+	* 🩹トラックバーが正常に描画されない問題に対応
+	* 🩹D2D描画時に縁の色が背景の色になっている問題に対応
+	* ♻️アルファが0の場合は描画しないように変更
+	* ♻️コンフィグフォルダのファイルだけを読み込むように変更
 
 * 🔖r23 #2025年10月13日
 	* ⬆️使用パッケージを更新
@@ -283,7 +306,7 @@ HotTextShadow=ff000080
 
 ## ⚗️動作確認
 
-* AviUtl ExEdit2 beta14 https://spring-fragrance.mints.ne.jp/aviutl/
+* AviUtl ExEdit2 beta15 https://spring-fragrance.mints.ne.jp/aviutl/
 
 ## 💳クレジット
 
