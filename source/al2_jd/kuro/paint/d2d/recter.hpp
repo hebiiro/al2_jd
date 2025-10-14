@@ -234,7 +234,7 @@ namespace apn::dark::kuro::paint::d2d
 				// 縁を描画します。
 
 				// 縁用のカラーエントリを取得します。
-				const auto& color_entry = pigment->background.color_entry;
+				const auto& color_entry = pigment->border.color_entry;
 
 				// グラデーションストップ座標を取得します。
 				auto stop_point = get_stop_point(whole_rc, radius);
