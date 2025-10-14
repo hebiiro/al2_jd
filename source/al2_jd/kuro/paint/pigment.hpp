@@ -8,16 +8,44 @@ namespace apn::dark::kuro::paint
 	//
 	struct Pigment
 	{
-		struct Background
+		struct Base
 		{
 			ColorEntry color_entry;
+
+			//
+			// 描画可能な場合はTRUEを返します。
+			//
+			BOOL is_valid() const
+			{
+				return color_entry.parts[0].is_valid();
+			}
+
+			//
+			// 不透明な場合はTRUEを返します。
+			//
+			BOOL is_opaque() const
+			{
+				return !!color_entry.parts[0].rgba.a;
+			}
+
+			//
+			// 配色をwin32形式で返します。
+			//
+			COLORREF get_win32_color() const
+			{
+				return color_entry.parts[0].win32;
+			}
+		};
+
+		struct Background : Base
+		{
 			mutable HBRUSH brush = {};
 
 			//
 			// (デフォルト)コンストラクタです。
 			//
 			Background(const ColorEntry& color_entry = {})
-				: color_entry(color_entry)
+				: Base(color_entry)
 			{
 			}
 
@@ -70,22 +98,6 @@ namespace apn::dark::kuro::paint
 			}
 
 			//
-			// 背景が描画可能な場合はTRUEを返します。
-			//
-			BOOL is_valid() const
-			{
-				return color_entry.parts[0].is_valid();
-			}
-
-			//
-			// 配色をwin32形式で返します。
-			//
-			COLORREF get_win32_color() const
-			{
-				return color_entry.parts[0].win32;
-			}
-
-			//
 			// 背景を描画するためのブラシを返します。
 			//
 			HBRUSH get_brush() const
@@ -99,67 +111,16 @@ namespace apn::dark::kuro::paint
 			}
 		} background;
 
-		struct Border
+		struct Border : Base
 		{
-			ColorEntry color_entry;
-
-			//
-			// 縁が描画可能な場合はTRUEを返します。
-			//
-			BOOL is_valid() const
-			{
-				return color_entry.parts[0].is_valid();
-			}
-
-			//
-			// 配色をwin32形式で返します。
-			//
-			COLORREF get_win32_color() const
-			{
-				return color_entry.parts[0].win32;
-			}
 		} border;
 
-		struct Text
+		struct Text : Base
 		{
-			ColorEntry color_entry;
-
-			//
-			// テキストが描画可能な場合はTRUEを返します。
-			//
-			BOOL is_valid() const
-			{
-				return color_entry.parts[0].is_valid();
-			}
-
-			//
-			// 配色をwin32形式で返します。
-			//
-			COLORREF get_win32_color() const
-			{
-				return color_entry.parts[0].win32;
-			}
 		} text;
 
-		struct TextShadow
+		struct TextShadow : Base
 		{
-			ColorEntry color_entry;
-
-			//
-			// テキストの影が描画可能な場合はTRUEを返します。
-			//
-			BOOL is_valid() const
-			{
-				return color_entry.parts[0].is_valid();
-			}
-
-			//
-			// 配色をwin32形式で返します。
-			//
-			COLORREF get_win32_color() const
-			{
-				return color_entry.parts[0].win32;
-			}
 		} text_shadow;
 	};
 }
