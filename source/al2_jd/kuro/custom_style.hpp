@@ -169,6 +169,9 @@ namespace apn::dark::kuro
 		{
 			MY_TRACE_FUNC("{/}", custom_color_path);
 
+			// 既存のカラーエントリを消去します。
+			color_entries.clear();
+
 			// 現在のセクションです。
 			auto section = std::wstring {};
 
@@ -233,20 +236,21 @@ namespace apn::dark::kuro
 				auto plugin_folder_path = my::get_module_file_name(hive.instance).parent_path();
 
 				// カスタムカラーファイルのパスを取得します。
-				std::filesystem::path paths[] = {
-					plugin_folder_path / L"al2/assets/custom_color.conf",
-					plugin_folder_path / L"al2/config/custom_color.conf",
-				};
+				auto assets_path = plugin_folder_path / L"al2/assets/custom_color.conf";
+				auto config_path = plugin_folder_path / L"al2/config/custom_color.conf";
 
-				// カスタムカラーファイルのパスの配列を走査します。
-				for (auto path : paths)
+				// コンフィグフォルダにファイルが存在しない場合は
+				if (!std::filesystem::exists(config_path))
 				{
-					// カスタムカラーファイルを読み込みます。
-					read_custom_color_file(path);
-
-					// ファイルパスをハイブにセットします。
-					hive.jd.custom_color_file_name = path;
+					// アセットフォルダからコンフィグフォルダにファイルをコピーします。
+					std::filesystem::copy(assets_path, config_path);
 				}
+
+				// カスタムカラーファイルを読み込みます。
+				read_custom_color_file(config_path);
+
+				// ファイルパスをハイブにセットします。
+				hive.jd.custom_color_file_name = config_path;
 			}
 			// 例外が発生した場合は
 			catch (const std::exception& error)
