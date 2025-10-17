@@ -313,6 +313,7 @@ HotTextShadow=ff000080
 * AviUtl ExEdit2 Plugin SDK https://spring-fragrance.mints.ne.jp/aviutl/
 * Microsoft Research Detours Package https://github.com/microsoft/Detours
 * JSON for Modern C++ https://github.com/nlohmann/json
+* win32-custom-menubar-aero-theme https://github.com/adzm/win32-custom-menubar-aero-theme
 
 ## 👽️作成者情報
  

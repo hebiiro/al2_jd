@@ -17,27 +17,6 @@ namespace apn::dark::kuro::theme
 		//
 		RECT popup_item_rect = {};
 
-		//
-		// メニューバーを描画します。
-		//
-		HRESULT draw_menubar(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc)
-		{
-			// デバイスコンテキストからウィンドウを取得します。
-			if (auto hwnd = ::WindowFromDC(dc))
-			{
-				// 描画コンテキストを作成します。
-				auto context = my::slimbar_t::draw_context_t {
-					hwnd, theme, dc, part_id, state_id, rc,
-				};
-
-				// スリムバーを描画します。
-				if (::SendMessage(hwnd, my::slimbar_t::c_message.c_draw, 0, (LPARAM)&context))
-					return S_OK;
-			}
-
-			return S_OK;
-		}
-
 		virtual HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, ({/}), ({/})", theme, dc, part_id, state_id, safe_string(rc), safe_string(rc_clip));
@@ -56,12 +35,7 @@ namespace apn::dark::kuro::theme
 						rc2.bottom += 1; // クリップ矩形を使用すると、この1ピクセルが上書き描画できるようになります。
 
 						if (paint::stylus.draw_rect(dc, &rc2, palette, part_id, state_id))
-						{
-							if (!rc_clip)
-								return draw_menubar(theme, dc, part_id, state_id, rc);
-
 							return S_OK;
-						}
 
 						break;
 					}
