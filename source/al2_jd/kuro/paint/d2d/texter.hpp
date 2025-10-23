@@ -251,7 +251,7 @@ namespace apn::dark::kuro::paint::d2d
 		//
 		BOOL is_initialized() const
 		{
-			return iw & ih;
+			return iw > 0 && ih > 0;
 		}
 
 		//
