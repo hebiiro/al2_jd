@@ -212,6 +212,9 @@ HotTextShadow=ff000080
 
 ## 🔖更新履歴
 
+* 🔖r25 #2025年10月23日
+	* 🩹表示モニタが切り替わってしまう問題に対応
+
 * 🔖r24 #2025年10月14日
 	* 🎨終了色が有効の場合は終了色アルファを適用しないように変更
 	* 🩹トラックバーが正常に描画されない問題に対応
@@ -306,7 +309,7 @@ HotTextShadow=ff000080
 
 ## ⚗️動作確認
 
-* AviUtl ExEdit2 beta15 https://spring-fragrance.mints.ne.jp/aviutl/
+* AviUtl ExEdit2 beta16 https://spring-fragrance.mints.ne.jp/aviutl/
 
 ## 💳クレジット
 
