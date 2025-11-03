@@ -230,6 +230,9 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("");
 
+			// 現存するすべてのレンダラーを削除します。
+			Renderer::clear();
+
 			return TRUE;
 		}
 	} manager;

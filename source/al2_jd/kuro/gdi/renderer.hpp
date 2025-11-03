@@ -64,6 +64,32 @@ namespace apn::dark::kuro::gdi
 		}
 
 		//
+		// すべてのレンダラーとウィンドウの関連付けを解除します。
+		//
+		inline static void clear()
+		{
+			// コレクションを走査します。
+			for (const auto& pair : collection)
+			{
+				// ウィンドウを取得します。
+				auto hwnd = pair.first;
+				MY_TRACE_HWND(hwnd);
+
+				// レンダラーを取得します。
+				const auto& renderer = pair.second;
+
+				// レンダラーにデタッチを通知します。
+				renderer->on_detach(hwnd);
+
+				// ウィンドウのサブクラス化を解除します。
+				::RemoveWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)renderer.get());
+			}
+
+			// コレクションを消去します。
+			collection.clear();
+		}
+
+		//
 		// 指定されたウィンドウに関連付けられているレンダラーを返します。
 		//
 		inline static std::shared_ptr<Renderer> from_handle(HWND hwnd)
