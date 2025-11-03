@@ -22,6 +22,8 @@ namespace apn::dark::kuro::gdi
 		//
 		virtual BOOL on_attach(HWND hwnd)
 		{
+			MY_TRACE_FUNC("{/}", my::hwnd_to_string(hwnd));
+
 			slimbar.subclass(hwnd);
 
 			return __super::on_attach(hwnd);
@@ -32,6 +34,8 @@ namespace apn::dark::kuro::gdi
 		//
 		virtual BOOL on_detach(HWND hwnd)
 		{
+			MY_TRACE_FUNC("{/}", my::hwnd_to_string(hwnd));
+
 			slimbar.unsubclass();
 
 			return __super::on_detach(hwnd);

@@ -48,6 +48,8 @@ namespace apn::dark::kuro::gdi
 		//
 		void attach(HWND hwnd)
 		{
+			MY_TRACE_FUNC("{/}", my::hwnd_to_string(hwnd));
+
 			// レンダラーをコレクションに追加します。
 			collection[hwnd] = shared_from_this();
 
@@ -62,6 +64,8 @@ namespace apn::dark::kuro::gdi
 		//
 		void detach(HWND hwnd)
 		{
+			MY_TRACE_FUNC("{/}", my::hwnd_to_string(hwnd));
+
 			on_detach(hwnd);
 
 			// ウィンドウのサブクラス化を解除します。
@@ -127,10 +131,8 @@ namespace apn::dark::kuro::gdi
 			{
 				// デバッグ用のコードです。
 
-				auto class_name = my::get_class_name(hwnd);
-
-				MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex} : {/}, {/}",
-					hwnd, message, wParam, lParam, class_name, ::GetCurrentThreadId());
+				MY_TRACE_FUNC("{/}, {/}, {/hex}, {/hex}",
+					my::hwnd_to_string(hwnd), my::message_to_string(message), wParam, lParam);
 			}
 #endif
 			// レンダラーの使用が抑制されている場合は
