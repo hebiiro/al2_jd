@@ -65,7 +65,6 @@
 #include "kuro/gdi/renderer/aviutl2/font_setting/listview.hpp"
 #include "kuro/gdi/renderer/aviutl2/new_project/dialog.hpp"
 #include "kuro/gdi/renderer/aviutl2/layer_name/dialog.hpp"
-#include "kuro/gdi/renderer/mp4_exporter/dialog.hpp"
 #include "kuro/gdi/renderer/rigaya/dialog.hpp"
 #include "kuro/gdi/manager.hpp"
 #include "kuro/theme/name.hpp"

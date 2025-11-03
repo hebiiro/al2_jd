@@ -56,9 +56,6 @@
     <Filter Include="kuro\gdi\renderer\aviutl2\layer_name">
       <UniqueIdentifier>{c5fb9cbc-e2ba-4475-8443-23e8b39607e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="kuro\gdi\renderer\mp4_exporter">
-      <UniqueIdentifier>{ea33b9be-754d-49aa-a387-54e3eb397c87}</UniqueIdentifier>
-    </Filter>
     <Filter Include="kuro\hook\entry">
       <UniqueIdentifier>{a81f6eba-5c23-434a-8d33-9611710341d2}</UniqueIdentifier>
     </Filter>
@@ -351,9 +348,6 @@
     <ClInclude Include="lockable.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2\layer_name\dialog.hpp">
       <Filter>kuro\gdi\renderer\aviutl2\layer_name</Filter>
-    </ClInclude>
-    <ClInclude Include="kuro\gdi\renderer\mp4_exporter\dialog.hpp">
-      <Filter>kuro\gdi\renderer\mp4_exporter</Filter>
     </ClInclude>
     <ClInclude Include="kuro\hook\entry.hpp">
       <Filter>kuro\hook</Filter>

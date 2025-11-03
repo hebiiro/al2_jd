@@ -8,11 +8,50 @@ namespace apn::dark::kuro::gdi
 	inline struct Manager
 	{
 		//
+		// ウィンドウのクラスブラシを変更します。
+		//
+		inline static BOOL change_class_brush(HWND hwnd)
+		{
+			// ウィンドウのクラスブラシを取得します。
+			auto brush = (HBRUSH)::GetClassLongPtrW(hwnd, GCLP_HBRBACKGROUND);
+
+			//
+			// この関数はウィンドウのクラスブラシを変更します。
+			//
+			const auto change_brush = [&](int color_id, const paint::Palette& palette, int part_id, int state_id)
+			{
+				// ブラシがカラーIDと一致する場合は
+				if (brush == (HBRUSH)((INT_PTR)color_id + 1) || brush == ::GetSysColorBrush(color_id))
+				{
+					// ピグメントを取得できた場合は
+					if (auto pigment = palette.get(part_id, state_id))
+					{
+						// ウィンドウのクラスブラシを変更します。
+						::SetClassLongPtrW(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)pigment->background.get_brush());
+
+						return TRUE;
+					}
+				}
+
+				return FALSE;
+			};
+
+			// カラーID毎にウィンドウのクラスブラシを変更します。
+			if (change_brush(COLOR_3DFACE, paint::dialog_material.palette, WP_DIALOG, ETS_NORMAL)) return TRUE;
+			if (change_brush(COLOR_WINDOW, paint::editbox_material.palette, EP_EDITTEXT, ETS_NORMAL)) return TRUE;
+
+			return FALSE;
+		}
+
+		//
 		// 指定されたウィンドウに対応するGDIレンダラーを返します。
 		//
 		std::shared_ptr<Renderer> find_renderer(
-			HWND hwnd, const Renderer::NormalizedClassName& class_name)
+			HWND hwnd, const Renderer::NormalizedClassName& class_name, BOOL force)
 		{
+			// 既にアタッチ済みの場合は除外します。
+			if (Renderer::from_handle(hwnd)) return nullptr;
+
 			//
 			// この関数は指定された文字列が指定された正規表現パターンにマッチする場合はTRUEを返します。
 			//
@@ -105,7 +144,6 @@ namespace apn::dark::kuro::gdi
 
 				return std::make_shared<TreeViewRenderer>();
 			}
-
 			if (class_name == TOOLBARCLASSNAME) return std::make_shared<ToolBarRenderer>();
 
 			// aviutl2のメインウィンドウです。
@@ -149,9 +187,6 @@ namespace apn::dark::kuro::gdi
 				// フォルダ選択ダイアログのツリービューの親ウィンドウです。
 				if (class_name == L"SHBrowseForFolder ShellNameSpace Control") return std::make_shared<Renderer>();
 
-				// 「MP4出力」の設定ダイアログです。
-				if (class_name == L"MP4ExporterConfig") return std::make_shared<mp4_exporter::DialogRenderer>();
-
 				// 「拡張 x264 出力(GUI) Ex」の設定ダイアログです。
 				{
 					//
@@ -185,25 +220,43 @@ namespace apn::dark::kuro::gdi
 				}
 			}
 
-			if (0) // テスト用コードです。
+			// クラスブラシを変更します。
+			change_class_brush(hwnd);
+
+			// 強制的に関連付ける場合は
+			if (force)
 			{
+				// 汎用レンダラーを返します。
 				return std::make_shared<Renderer>();
 			}
 
+			// レンダラーが見つからなかった場合はnullptrを返します。
 			return nullptr;
 		}
 
 		//
 		// GDIレンダラーをウィンドウに関連付けされます。
 		//
-		void attach_renderer(HWND hwnd)
+		void attach_renderer(HWND hwnd, BOOL force = FALSE)
 		{
+			// クラス名を取得します。
 			auto class_name = my::get_class_name(hwnd);
 
 			MY_TRACE_FUNC("{/hex}, {/}", hwnd, class_name);
 
-			if (auto renderer = find_renderer(hwnd, class_name))
+			// ウィンドウに対応するGDIレンダラーが見つかった場合は
+			if (auto renderer = find_renderer(hwnd, class_name, force))
+			{
+				// ウィンドウにGDIレンダラーを関連付けます。
 				renderer->attach(hwnd);
+
+				// 親ウィンドウが存在する場合は
+				if (auto parent = ::GetParent(hwnd))
+				{
+					// 強制的に親ウィンドウにGDIレンダラーを関連付けます。
+					attach_renderer(parent, TRUE);
+				}
+			}
 		}
 		//
 		// 初期化処理を実行します。
