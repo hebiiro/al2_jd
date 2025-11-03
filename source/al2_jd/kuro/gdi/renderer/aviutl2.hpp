@@ -5,6 +5,14 @@ namespace apn::dark::kuro::gdi
 	struct AviUtl2Renderer : Renderer
 	{
 		//
+		// デストラクタです。
+		//
+		virtual ~AviUtl2Renderer() override
+		{
+			MY_TRACE_FUNC("");
+		}
+
+		//
 		// スリムバーです。
 		//
 		my::slimbar_t slimbar;

@@ -36,6 +36,14 @@ namespace apn::dark::kuro::gdi
 		thread_local inline static std::unordered_map<HWND, std::shared_ptr<Renderer>> collection;
 
 		//
+		// 仮想デストラクタです。
+		//
+		virtual ~Renderer()
+		{
+//			MY_TRACE_FUNC("");
+		}
+
+		//
 		// レンダラーとウィンドウを関連付けます。
 		//
 		void attach(HWND hwnd)
