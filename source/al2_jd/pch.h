@@ -51,6 +51,7 @@ using namespace std::string_literals;
 using namespace Gdiplus;
 #include <shellapi.h>
 #include <psapi.h>
+#include <richedit.h>
 #include <vfw.h>
 #pragma comment(lib, "vfw32.lib")
 #include <d2d1_1.h>

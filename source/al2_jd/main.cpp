@@ -46,6 +46,7 @@
 #include "kuro/gdi/renderer/static.hpp"
 #include "kuro/gdi/renderer/button.hpp"
 #include "kuro/gdi/renderer/editbox.hpp"
+#include "kuro/gdi/renderer/richedit.hpp"
 #include "kuro/gdi/renderer/combobox.hpp"
 #include "kuro/gdi/renderer/comboboxex.hpp"
 #include "kuro/gdi/renderer/listbox.hpp"

@@ -55,7 +55,7 @@ namespace apn::dark::kuro::gdi
 			if (class_name == WC_STATIC) return std::make_shared<StaticRenderer>();
 			if (class_name == WC_BUTTON) return std::make_shared<ButtonRenderer>();
 			if (class_name == WC_EDIT) return std::make_shared<EditBoxRenderer>();
-//			if (class_name == RICHEDIT_CLASS) return std::make_shared<RichEditRenderer>();
+			if (class_name == RICHEDIT_CLASS) return std::make_shared<RichEditRenderer>();
 			if (class_name == WC_LISTBOX)
 			{
 				// オーナーウィンドウがaviutl2の場合は
