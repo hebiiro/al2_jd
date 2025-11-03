@@ -34,19 +34,24 @@ namespace apn::dark
 		{
 			MY_TRACE_FUNC("");
 
+			// カレントスレッドのウィンドウを列挙します。
 			return ::EnumThreadWindows(::GetCurrentThreadId(), [](HWND hwnd, LPARAM lParam)
 			{
+				// クラス名を取得します。
 				auto class_name = my::get_class_name(hwnd);
 				MY_TRACE_STR(class_name);
 
-				if (class_name == L"aviutl2Manager")
-				{
-					hive.theme_window = hwnd;
+				// クラス名が一致しない場合は除外します。
+				if (class_name != L"aviutl2Manager") return TRUE;
 
-					return FALSE;
-				}
+				// トップレベルウィンドウではない場合は除外します。
+				if (::GetWindow(hwnd, GW_OWNER)) return TRUE;
 
-				return TRUE;
+				// aviutl2ウィンドウをセットします。
+				hive.theme_window = hwnd;
+
+				// 列挙を終了します。
+				return FALSE;
 			}, 0);
 		}
 
