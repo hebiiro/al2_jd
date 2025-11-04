@@ -3,7 +3,6 @@
 namespace my::json
 {
 	using n_json = nlohmann::basic_json<nlohmann::ordered_map>;
-//	using n_json = nlohmann::json;
 }
 
 //
