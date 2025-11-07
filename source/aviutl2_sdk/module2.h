@@ -135,6 +135,18 @@ struct SCRIPT_MODULE_PARAM {
 	// 呼び出された関数をエラー終了する場合に設定します
 	// message		: エラーメッセージ(UTF-8)
 	void (*set_error)(LPCSTR message);
+
+	//--------------------------------
+
+	// 引数をブール値で取得する
+	// index		: 引数の位置(0～)
+	// 戻り値		: 引数の値 (取得出来ない場合はfalse)
+	bool (*get_param_boolean)(int index);
+
+	// ブール値の戻り値を追加する
+	// value		: 戻り値
+	void (*push_result_boolean)(bool value);
+
 };
 
 //----------------------------------------------------------------------------------
