@@ -212,6 +212,10 @@ HotTextShadow=ff000080
 
 ## 🔖更新履歴
 
+* 🔖r27 #2025年11月17日
+	* ⚡️「プロジェクトの作成」ダイアログなどの背景色に対応
+	* 🩹マルチディスプレイ環境で正常に最大化できない問題に対応
+
 * 🔖r26 #2025年11月03日
 	* 🩹終了時にクラッシュする問題に対応
 	* ⚡️リッチエディットコントロールに対応
@@ -314,7 +318,7 @@ HotTextShadow=ff000080
 
 ## ⚗️動作確認
 
-* AviUtl ExEdit2 beta18b https://spring-fragrance.mints.ne.jp/aviutl/
+* AviUtl ExEdit2 beta20 https://spring-fragrance.mints.ne.jp/aviutl/
 
 ## 💳クレジット
 
