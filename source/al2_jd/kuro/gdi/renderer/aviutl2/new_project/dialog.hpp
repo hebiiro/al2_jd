@@ -13,8 +13,11 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		inline static constexpr size_t c_video_rate = 6;
 		inline static constexpr size_t c_audio_rate_stat = 7;
 		inline static constexpr size_t c_audio_rate = 8;
-		inline static constexpr size_t c_ok = 9;
-		inline static constexpr size_t c_nb_default_controls = 10;
+		inline static constexpr size_t c_background_color_stat = 9;
+		inline static constexpr size_t c_background_color = 10;
+		inline static constexpr size_t c_background_color_preview = 11;
+		inline static constexpr size_t c_ok = 12;
+		inline static constexpr size_t c_nb_default_controls = 13;
 
 		HWND controls[c_nb_default_controls] = {};
 
@@ -50,12 +53,12 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 			// 子ウィンドウを列挙します。
 			::EnumChildWindows(hwnd,
-				[](HWND child, LPARAM lParam) -> BOOL
+				[](HWND child, LPARAM l_param) -> BOOL
 			{
 				MY_TRACE_HWND(child);
 
 				// パラメータポインタを取得します。
-				auto p = (Param*)lParam;
+				auto p = (Param*)l_param;
 
 				// 子ウィンドウを配列に追加します。
 				p->dialog->add_control(child, p->i++);
@@ -320,29 +323,27 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		//
 		// ウィンドウメッセージを処理します。
 		//
-		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
+		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM w_param, LPARAM l_param) override
 		{
-			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
+			MY_TRACE_FUNC("{/hex}, {/}, {/hex}, {/hex}", hwnd, my::message_to_string(message), w_param, l_param);
 
 			switch (message)
 			{
 			case WM_INITDIALOG:
 				{
-					MY_TRACE_FUNC("WM_INITDIALOG, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
+					// この処理はスコープ終了時(デフォルト処理の後)に実行します。
+					my::scope_exit scope_exit([&]
+					{
+						Locker locker(this);
 
-					auto result = __super::on_subclass_proc(hwnd, message, wParam, lParam);
+						init_controls(hwnd);
+						change_layout(hwnd);
+					});
 
-					Locker locker(this);
-
-					init_controls(hwnd);
-					change_layout(hwnd);
-
-					return result;
+					return __super::on_subclass_proc(hwnd, message, w_param, l_param);
 				}
 			case WM_COMMAND:
 				{
-					MY_TRACE_FUNC("WM_COMMAND, {/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
-
 					//
 					// この関数はコントロールのテキストを変更します。
 					//
@@ -361,9 +362,9 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 					Locker locker(this);
 
-//					auto control_id = LOWORD(wParam);
-					auto code = HIWORD(wParam);
-					auto control = (HWND)lParam;
+//					auto control_id = LOWORD(w_param);
+					auto code = HIWORD(w_param);
+					auto control = (HWND)l_param;
 
 					// コントロールが無効の場合は何もしません。
 					if (!control) break;
@@ -464,7 +465,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 				}
 			}
 
-			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
+			return __super::on_subclass_proc(hwnd, message, w_param, l_param);
 		}
 	};
 }
