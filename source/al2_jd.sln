@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{DDB4EF12-C
 		..\.editorconfig = ..\.editorconfig
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
+		..\.gitmodules = ..\.gitmodules
 		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
 		..\CREDITS.md = ..\CREDITS.md
 		..\LICENSE = ..\LICENSE
@@ -21,6 +22,41 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{3F871393-2CE4-46E2-AD53-4B5E06BFBA88}"
 	ProjectSection(SolutionItems) = preProject
 		common.props = common.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{75B4E8A6-C367-4E24-8087-0107AB23B96F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "my", "my", "{1290F9B4-C36A-403F-80FB-8230D16CEF21}"
+	ProjectSection(SolutionItems) = preProject
+		common\my\detours.hpp = common\my\detours.hpp
+		common\my\dialog.hpp = common\my\dialog.hpp
+		common\my\dialog2.hpp = common\my\dialog2.hpp
+		common\my\file_update_checker.hpp = common\my\file_update_checker.hpp
+		common\my\format.hpp = common\my\format.hpp
+		common\my\gdi.hpp = common\my\gdi.hpp
+		common\my\gdiplus.hpp = common\my\gdiplus.hpp
+		common\my\json.hpp = common\my\json.hpp
+		common\my\label.hpp = common\my\label.hpp
+		common\my\layout.hpp = common\my\layout.hpp
+		common\my\mfc.hpp = common\my\mfc.hpp
+		common\my\shortcut_key.hpp = common\my\shortcut_key.hpp
+		common\my\slimbar.hpp = common\my\slimbar.hpp
+		common\my\str_utils.hpp = common\my\str_utils.hpp
+		common\my\tools.hpp = common\my\tools.hpp
+		common\my\trace.hpp = common\my\trace.hpp
+		common\my\trace_to_file.hpp = common\my\trace_to_file.hpp
+		common\my\uah_menu.hpp = common\my\uah_menu.hpp
+		common\my\utils.hpp = common\my\utils.hpp
+		common\my\window.hpp = common\my\window.hpp
+		common\my\window2.hpp = common\my\window2.hpp
+		common\my\window_interceptor.hpp = common\my\window_interceptor.hpp
+		common\my\win_utils.hpp = common\my\win_utils.hpp
+		common\my\win_wrap.hpp = common\my\win_wrap.hpp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sprintfmt", "sprintfmt", "{FAD3FADE-1FC0-4047-900D-7DCB4D4BFD02}"
+	ProjectSection(SolutionItems) = preProject
+		common\sprintfmt\sprintfmt.hpp = common\sprintfmt\sprintfmt.hpp
 	EndProjectSection
 EndProject
 Global
@@ -53,6 +89,9 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3F871393-2CE4-46E2-AD53-4B5E06BFBA88} = {DDB4EF12-CC4E-5E88-E6FC-71A802F4DE97}
+		{75B4E8A6-C367-4E24-8087-0107AB23B96F} = {3F871393-2CE4-46E2-AD53-4B5E06BFBA88}
+		{1290F9B4-C36A-403F-80FB-8230D16CEF21} = {75B4E8A6-C367-4E24-8087-0107AB23B96F}
+		{FAD3FADE-1FC0-4047-900D-7DCB4D4BFD02} = {75B4E8A6-C367-4E24-8087-0107AB23B96F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {838D8236-80BE-44A9-98E7-B7FFE73AC619}
