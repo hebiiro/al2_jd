@@ -3,6 +3,22 @@
 //	By ＫＥＮくん
 //----------------------------------------------------------------------------------
 
+//	出力プラグインは下記の関数を外部公開すると呼び出されます
+//
+//	出力プラグイン構造体のポインタを渡す関数 (必須)
+//		OUTPUT_PLUGIN_TABLE* GetOutputPluginTable(void)
+//
+//	プラグインDLL初期化関数 (任意)
+//		bool InitializePlugin(DWORD version) ※versionは本体のバージョン番号
+// 
+//	プラグインDLL終了関数 (任意)
+//		void UninitializePlugin()
+// 
+//	ログ出力機能初期化関数 (任意) ※logger2.h
+//		void InitializeLogger(LOG_HANDLE* logger)
+
+//----------------------------------------------------------------------------------
+
 // 出力情報構造体
 struct OUTPUT_INFO {
 	int flag;			//	フラグ

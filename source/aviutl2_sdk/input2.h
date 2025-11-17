@@ -3,6 +3,22 @@
 //	By ＫＥＮくん
 //----------------------------------------------------------------------------------
 
+//	入力プラグインは下記の関数を外部公開すると呼び出されます
+//
+//	入力プラグイン構造体のポインタを渡す関数 (必須)
+//		INPUT_PLUGIN_TABLE* GetInputPluginTable(void)
+// 
+//	プラグインDLL初期化関数 (任意)
+//		bool InitializePlugin(DWORD version) ※versionは本体のバージョン番号
+// 
+//	プラグインDLL終了関数 (任意)
+//		void UninitializePlugin()
+// 
+//	ログ出力機能初期化関数 (任意) ※logger2.h
+//		void InitializeLogger(LOG_HANDLE* logger)
+
+//----------------------------------------------------------------------------------
+
 // 入力ファイル情報構造体
 // 画像フォーマットはRGB24bit,RGBA32bit,PA64,HF64,YUY2,YC48が対応しています
 // 音声フォーマットはPCM16bit,PCM(float)32bitが対応しています

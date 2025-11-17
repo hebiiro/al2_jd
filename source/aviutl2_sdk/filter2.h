@@ -3,7 +3,24 @@
 //	By ＫＥＮくん
 //----------------------------------------------------------------------------------
 
+//	フィルタプラグインは下記の関数を外部公開すると呼び出されます
+//
+//	フィルタ構造体のポインタを渡す関数 (必須)
+//		FILTER_PLUGIN_TABLE* GetFilterPluginTable(void)
+//
+//	プラグインDLL初期化関数 (任意)
+//		bool InitializePlugin(DWORD version) ※versionは本体のバージョン番号
+// 
+//	プラグインDLL終了関数 (任意)
+//		void UninitializePlugin()
+// 
+//	ログ出力機能初期化関数 (任意) ※logger2.h
+//		void InitializeLogger(LOG_HANDLE* logger)
+
+//----------------------------------------------------------------------------------
+
 // トラックバー項目構造体
+// 例：FILTER_ITEM_TRACK track = { L"数値", 100.0, 0.0, 1000.0, 0.01 };
 struct FILTER_ITEM_TRACK {
 	FILTER_ITEM_TRACK(LPCWSTR name, double value, double s, double e, double step = 1.0) : name(name), value(value), s(s), e(e), step(step) {}
 	LPCWSTR type = L"track";	// 設定の種別
@@ -14,6 +31,7 @@ struct FILTER_ITEM_TRACK {
 };
 
 // チェックボックス項目構造体
+// 例：FILTER_ITEM_CHECK check = { L"チェック", false };
 struct FILTER_ITEM_CHECK {
 	FILTER_ITEM_CHECK(LPCWSTR name, bool value) : name(name), value(value) {}
 	LPCWSTR type = L"check";	// 設定の種別
@@ -22,6 +40,7 @@ struct FILTER_ITEM_CHECK {
 };
 
 // 色選択項目構造体
+// 例：FILTER_ITEM_COLOR color = { L"色", 0xffffff };
 struct FILTER_ITEM_COLOR {
 	union VALUE { // 設定値の色
 		int code;
@@ -34,6 +53,8 @@ struct FILTER_ITEM_COLOR {
 };
 
 // 選択リスト項目構造体
+// 例：FILTER_ITEM_SELECT::ITEM list[] = { { L"項目1", 1 }, { L"項目2", 2 }, { L"項目3", 3 }, { nullptr } };
+//     FILTER_ITEM_SELECT selectItem = { L"選択", 1, list };
 struct FILTER_ITEM_SELECT {
 	struct ITEM {		// 選択肢項目
 		LPCWSTR name;	// 選択肢の名前
@@ -47,12 +68,30 @@ struct FILTER_ITEM_SELECT {
 };
 
 // ファイル選択項目構造体
+// 例：FILTER_ITEM_FILE file = { L"ファイル", L"", L"AviFile (*.avi)\0*.avi\0" };
 struct FILTER_ITEM_FILE {
 	FILTER_ITEM_FILE(LPCWSTR name, LPCWSTR value, LPCWSTR filefilter) : name(name), value(value), filefilter(filefilter) {}
 	LPCWSTR type = L"file";		// 設定の種別
 	LPCWSTR name;				// 設定名
-	LPCWSTR value;				// 設定値 (フィルタ処理の呼び出し時に現在の値に更新されます)
+	LPCWSTR value;				// 設定値 (フィルタ処理の呼び出し時に現在の値のポインタに更新されます)
 	LPCWSTR filefilter;			// ファイルフィルタ
+};
+
+// 汎用データ項目構造体 (設定が表示されない項目になります)
+// フィルタ処理関数内でvalueの参照先データを更新することが出来ます
+// 例：struct Data {
+//       int   item1 = 1;
+//       float item2 = 2.0f;
+//     };
+//     FILTER_ITEM_DATA<Data> data = { L"データ" };
+template<typename T>
+struct FILTER_ITEM_DATA {
+	FILTER_ITEM_DATA(LPCWSTR name) : name(name), size(sizeof(T)), value(&default_value) {}
+	LPCWSTR type = L"data";		// 設定の種別
+	LPCWSTR name;				// 設定名
+	T* value;					// 設定値 (フィルタ処理の呼び出し時に現在の値のポインタに更新されます)
+	const int size;				// 汎用データのサイズ(1024バイト以下)
+	T default_value;			// デフォルト値 (Tの定義でデフォルト値を指定しておく)
 };
 
 //----------------------------------------------------------------------------------

@@ -2,6 +2,23 @@
 //	汎用プラグイン ヘッダーファイル for AviUtl ExEdit2
 //	By ＫＥＮくん
 //----------------------------------------------------------------------------------
+
+//	汎用プラグインは下記の関数を外部公開すると呼び出されます
+//
+//	プラグイン登録関数 (必須)
+//		void RegisterPlugin(HOST_APP_TABLE* host)
+// 
+//	プラグインDLL初期化関数 (任意)
+//		bool InitializePlugin(DWORD version) ※versionは本体のバージョン番号
+// 
+//	プラグインDLL終了関数 (任意)
+//		void UninitializePlugin()
+// 
+//	ログ出力機能初期化関数 (任意) ※logger2.h
+//		void InitializeLogger(LOG_HANDLE* logger)
+
+//----------------------------------------------------------------------------------
+
 struct INPUT_PLUGIN_TABLE;
 struct OUTPUT_PLUGIN_TABLE;
 struct FILTER_PLUGIN_TABLE;
@@ -33,7 +50,7 @@ struct EDIT_INFO {
 	int rate, scale;	// シーンのフレームレート
 	int sample_rate;	// シーンのサンプリングレート
 	int frame;			// 現在のカーソルのフレーム番号
-	int layer;			// 現在のレイヤーの表示開始番号
+	int layer;			// 現在の選択レイヤー番号
 	int frame_max;		// オブジェクトが存在する最大のフレーム番号
 	int layer_max;		// オブジェクトが存在する最大のレイヤー番号
 };
@@ -111,15 +128,23 @@ struct EDIT_SECTION {
 
 	// オブジェクト設定ウィンドウで選択されているオブジェクトのハンドルを取得します
 	// 戻り値	: オブジェクトのハンドル (未選択の場合はnullptrを返却)　
-	OBJECT_HANDLE(*get_focus_object)();
+	OBJECT_HANDLE (*get_focus_object)();
 
 	// オブジェクト設定ウィンドウで選択するオブジェクトを設定します (コールバック処理の終了時に設定されます)
 	// object	: オブジェクトのハンドル
 	void (*set_focus_object)(OBJECT_HANDLE object);
 
-	// アプリケーションのログを出力します
-	// message	: ログメッセージ
-	void (*output_log)(LPCWSTR message);
+	// 冗長なので後で廃止します
+	void (*deprecated_output_log)(LPCWSTR message);
+
+	// 選択中オブジェクトのハンドルを取得します
+	// index	: 選択中オブジェクトのインデックス(0～)
+	// 戻り値	: 指定インデックスのオブジェクトのハンドル (インデックスが範囲外の場合はnullptrを返却)
+	OBJECT_HANDLE (*get_selected_object)(int index);
+
+	// 選択中オブジェクトの数を取得します
+	// 戻り値	: 選択中オブジェクトの数
+	int (*get_selected_object_num)();
 
 };
 
@@ -194,12 +219,12 @@ struct HOST_APP_TABLE {
 	// script_module_table	: スクリプトモジュール構造体
 	void (*register_script_module)(SCRIPT_MODULE_TABLE* script_module_table);
 
-	// インポートメニューを登録する
+	// インポートメニューを登録する (ウィンドウメニューのファイルに追加されます)　
 	// name				: インポートメニューの名称
 	// func_proc_import	: インポートメニュー選択時のコールバック関数
 	void (*register_import_menu)(LPCWSTR name, void (*func_proc_import)(EDIT_SECTION* edit));
 
-	// エクスポートメニューを登録する
+	// エクスポートメニューを登録する (ウィンドウメニューのファイルに追加されます)　
 	// name				: エクスポートメニューの名称
 	// func_proc_export	: エクスポートメニュー選択時のコールバック関数
 	void (*register_export_menu)(LPCWSTR name, void (*func_proc_export)(EDIT_SECTION* edit));
@@ -221,5 +246,15 @@ struct HOST_APP_TABLE {
 	// プロジェクトファイルをセーブする直前に呼ばれる関数を登録する
 	// func_project_save	: プロジェクトファイルのセーブ時のコールバック関数
 	void (*register_project_save_handler)(void (*func_project_save)(PROJECT_FILE* project));
+
+	// レイヤーメニューを登録する (レイヤー編集でオブジェクト未選択時の右クリックメニューに追加されます)
+	// name					: レイヤーメニューの名称
+	// func_proc_layer_menu	: レイヤーメニュー選択時のコールバック関数
+	void (*register_layer_menu)(LPCWSTR name, void (*func_proc_layer_menu)(EDIT_SECTION* edit));
+
+	// オブジェクトメニューを登録する (レイヤー編集でオブジェクト選択時の右クリックメニューに追加されます)
+	// name						: オブジェクトメニューの名称
+	// func_proc_object_menu	: オブジェクトメニュー選択時のコールバック関数
+	void (*register_object_menu)(LPCWSTR name, void (*func_proc_object_menu)(EDIT_SECTION* edit));
 
 };

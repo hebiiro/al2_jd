@@ -3,6 +3,22 @@
 //	By ＫＥＮくん
 //----------------------------------------------------------------------------------
 
+//	スクリプトモジュールは下記の関数を外部公開すると呼び出されます
+//
+//	スクリプトモジュール構造体のポインタを渡す関数 (必須)
+//		SCRIPT_MODULE_TABLE* GetScriptModuleTable(void)
+// 
+//	プラグインDLL初期化関数 (任意)
+//		bool InitializePlugin(DWORD version) ※versionは本体のバージョン番号
+// 
+//	プラグインDLL終了関数 (任意)
+//		void UninitializePlugin()
+// 
+//	ログ出力機能初期化関数 (任意) ※logger2.h
+//		void InitializeLogger(LOG_HANDLE* logger)
+
+//----------------------------------------------------------------------------------
+
 // スクリプトモジュール引数構造体
 struct SCRIPT_MODULE_PARAM {
 	// 引数の数を取得する
@@ -146,6 +162,12 @@ struct SCRIPT_MODULE_PARAM {
 	// ブール値の戻り値を追加する
 	// value		: 戻り値
 	void (*push_result_boolean)(bool value);
+
+	// 引数の連想配列要素をブール値で取得する
+	// index		: 引数の位置(0～)
+	// key			: キー名(UTF-8)
+	// 戻り値		: 引数の値 (取得出来ない場合はfalse)
+	bool (*get_param_table_boolean)(int index, LPCSTR key);
 
 };
 

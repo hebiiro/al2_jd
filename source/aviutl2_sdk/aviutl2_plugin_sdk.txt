@@ -99,4 +99,12 @@
     [aux2] EDIT_SECTIONにoutput_log()を追加
     [auf2] OBJECT_INFOにeffect_idを追加
 
-		
+    [2025/11/8]
+    [aui2][auo2][auf2][mod2][aux2] ログ出力機能の関数定義(InitializeLogger)を追加
+    [auf2] FILTER_ITEM_DATAを追加
+    [aux2] HOST_APP_TABLEにregister_layer_menu(),register_object_menu()を追加
+    [aux2] EDIT_SECTIONにget_selected_object(),get_selected_object_num()を追加
+
+    [2025/11/9]
+    [mod2] get_param_table_boolean()を追加
+
