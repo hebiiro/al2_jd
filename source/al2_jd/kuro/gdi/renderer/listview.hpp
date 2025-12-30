@@ -5,6 +5,12 @@ namespace apn::dark::kuro::gdi
 	struct listview_renderer_t : renderer_t
 	{
 		const paint::palette_t& palette = paint::listview_material.palette;
+
+		//
+		// カスタムドローを使用している場合はTRUEになります。
+		//
+		BOOL flag_custom_draw = FALSE;
+
 #if 0 // テスト用コードです。
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{
@@ -22,12 +28,28 @@ namespace apn::dark::kuro::gdi
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 #endif
+
+		virtual LRESULT on_custom_draw(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
+		{
+//			MY_TRACE_FUNC("{/hex}, {/hex}, {/hex}, {/hex}", hwnd, message, wParam, lParam);
+
+			auto cd = (NMTVCUSTOMDRAW*)lParam;
+			auto result = __super::on_custom_draw(hwnd, message, wParam, lParam);
+
+			if (cd->nmcd.dwDrawStage == CDDS_PREPAINT)
+				flag_custom_draw = (result == CDRF_NOTIFYITEMDRAW);
+
+			return result;
+		}
+
 		virtual BOOL on_fill_rect(message_state_t* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
-			// 背景色を描画します。
+			if (!flag_custom_draw)
 			{
+				// 背景色を描画します。
+
 				auto color = paint::get_brush_color(brush);
 				auto part_id = LVP_LISTITEM;
 				auto state_id = LISS_NORMAL;
@@ -98,6 +120,7 @@ namespace apn::dark::kuro::gdi
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
 #if 1
 //			if (!(options & ETO_IGNORELANGUAGE))
+			if (!flag_custom_draw)
 			{
 				if (options == ETO_OPAQUE && rc)
 				{
