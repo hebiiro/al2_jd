@@ -5,7 +5,7 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはテーマレンダラーを管理します。
 	//
-	inline struct Manager
+	inline struct manager_t
 	{
 		//
 		// 初期化処理を実行します。
@@ -24,7 +24,7 @@ namespace apn::dark::kuro::theme
 				//
 				// この関数はテーマレンダラーを登録します。
 				//
-				const auto register_renderer = [&](LPCWSTR class_list, Renderer* renderer)
+				const auto register_renderer = [&](LPCWSTR class_list, renderer_t* renderer)
 				{
 					// レンダラーをマップに追加します。
 					from_vsclass.set(class_list, renderer);

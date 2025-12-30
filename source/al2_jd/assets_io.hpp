@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはアセットの入出力を担当します。
 	//
-	inline struct AssetsIO : IOBase
+	inline struct assets_io_t : io_base_t
 	{
 		//
 		// 初期化処理を実行します。

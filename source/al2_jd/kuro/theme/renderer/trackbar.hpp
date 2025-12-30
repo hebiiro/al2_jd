@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはトラックバーのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct TrackBarRenderer : Renderer
+	inline struct trackbar_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::trackbar_material.palette;
+		const paint::palette_t& palette = paint::trackbar_material.palette;
 
 		//
 		// 水平方向のトラックを描画します。

@@ -2,7 +2,7 @@
 
 namespace apn::dark
 {
-	struct Lockable
+	struct lockable_t
 	{
 		//
 		// ロックカウントです。
@@ -28,9 +28,9 @@ namespace apn::dark
 	//
 	// このクラスはロック可能なオブジェクトをロックします。
 	//
-	struct Locker {
-		Lockable* p;
-		Locker(Lockable* p) : p(p) { p->lock(); }
-		~Locker() { p->unlock(); }
+	struct locker_t {
+		lockable_t* p;
+		locker_t(lockable_t* p) : p(p) { p->lock(); }
+		~locker_t() { p->unlock(); }
 	};
 }

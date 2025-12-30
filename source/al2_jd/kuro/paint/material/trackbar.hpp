@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはトラックバーのマテリアルです。
 	//
-	inline struct TrackBarMaterial : Material
+	inline struct trackbar_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,29 +15,29 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto track_normal = create_pigment(L"TrackBar", L"Normal",
-				Style::Color::ButtonBody,
-				Style::Color::WindowBorder,
-				Style::Color::Text);
+				style_t::color_e::ButtonBody,
+				style_t::color_e::WindowBorder,
+				style_t::color_e::Text);
 
 			auto thumb_normal = create_pigment(L"TrackBarThumb", L"Normal",
-				Style::Color::ButtonBody,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBody,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto thumb_disabled = create_pigment(L"TrackBarThumb", L"Disable",
-				Style::Color::ButtonBodyDisable,
-				Style::Color::Border,
-				Style::Color::TextDisable);
+				style_t::color_e::ButtonBodyDisable,
+				style_t::color_e::Border,
+				style_t::color_e::TextDisable);
 
 			auto thumb_hot = create_pigment(L"TrackBarThumb", L"Hot",
-				Style::Color::ButtonBodySelect,
-				Style::Color::BorderFocus,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodySelect,
+				style_t::color_e::BorderFocus,
+				style_t::color_e::Text);
 
 			auto thumb_pressed = create_pigment(L"TrackBarThumb", L"Press",
-				Style::Color::ButtonBodyPress,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyPress,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
 			auto thumb_focused = thumb_pressed;
 

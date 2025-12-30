@@ -7,7 +7,7 @@ namespace apn::dark::kuro
 	//
 	// このクラスはRGBAを保持します。
 	//
-	union RGBA {
+	union rgba_t {
 		uint32_t value; // 0xrrggbbaa;
 		uint8_t vec[4];
 		struct { uint8_t a, b, g, r; };
@@ -17,15 +17,15 @@ namespace apn::dark::kuro
 	//
 	// このクラスは配色データを保持します。
 	//
-	struct Color
+	struct color_t
 	{
-		RGBA rgba;
+		rgba_t rgba;
 		COLORREF win32;
 
 		//
 		// デフォルトコンストラクタです。
 		//
-		Color()
+		color_t()
 			: rgba(0)
 			, win32(CLR_NONE)
 		{
@@ -34,7 +34,7 @@ namespace apn::dark::kuro
 		//
 		// コンストラクタです。
 		//
-		Color(const RGBA& rgba)
+		color_t(const rgba_t& rgba)
 			: rgba(rgba)
 			, win32(RGB(rgba.r, rgba.g, rgba.b))
 		{
@@ -43,7 +43,7 @@ namespace apn::dark::kuro
 		//
 		// コンストラクタです。
 		//
-		Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+		color_t(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 			: rgba { .a = a, .b = b, .g = g, .r = r }
 			, win32(RGB(r, g, b))
 		{
@@ -52,7 +52,7 @@ namespace apn::dark::kuro
 		//
 		// コンストラクタです。
 		//
-		Color(COLORREF win32_color)
+		color_t(COLORREF win32_color)
 			: rgba(0)
 			, win32(win32_color)
 		{
@@ -86,7 +86,7 @@ namespace apn::dark::kuro
 	//
 	// このクラスはカラーエントリです。
 	//
-	struct ColorEntry
+	struct color_entry_t
 	{
 		//
 		// カラーパーツの最大数です。
@@ -96,6 +96,6 @@ namespace apn::dark::kuro
 		//
 		// カラーパーツです。
 		//
-		Color parts[c_max_size] = {};
+		color_t parts[c_max_size] = {};
 	};
 }

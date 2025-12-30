@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはアドレスバンドのマテリアルです。
 	//
-	inline struct AddressBandMaterial : Material
+	inline struct address_band_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,9 +15,9 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto background = create_pigment(L"AddressBand", L"Background",
-				Style::Color::Background,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::Background,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			palette.set(0, 0, background);
 		}

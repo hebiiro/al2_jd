@@ -5,7 +5,7 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはメニューのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct MenuRenderer : base::MenuRenderer
+	inline struct menu_renderer_t : base::menu_renderer_t
 	{
 		//
 		// ポップアップメニューのガーターの右側の座標です。
@@ -23,7 +23,7 @@ namespace apn::dark::kuro::theme
 
 			{
 				// クリップ矩形を使用します。
-				Clipper clipper(dc, rc, rc_clip);
+				clipper_t clipper(dc, rc, rc_clip);
 
 				switch (part_id)
 				{

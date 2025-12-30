@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはエディットボックスのマテリアルです。
 	//
-	inline struct EditBoxMaterial : Material
+	inline struct editbox_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,24 +15,24 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto ets_normal = create_pigment(L"EditBox", L"Normal",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto ets_disabled = create_pigment(L"EditBox", L"Disable",
-				Style::Color::ButtonBodyDisable,
+				style_t::color_e::ButtonBodyDisable,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto ets_selected = create_pigment(L"EditBox", L"Select",
-				Style::Color::ButtonBodySelect,
+				style_t::color_e::ButtonBodySelect,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto ets_readonly = create_pigment(L"EditBox", L"ReadOnly",
-				Style::Color::ButtonBody,
+				style_t::color_e::ButtonBody,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			palette.set(EP_EDITTEXT, ETS_NORMAL, ets_normal);
 			palette.set(EP_EDITTEXT, ETS_DISABLED, ets_disabled);

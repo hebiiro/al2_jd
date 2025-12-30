@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはコンフィグの入出力を担当します。
 	//
-	inline struct ConfigIO : IOBase
+	inline struct config_io_t : io_base_t
 	{
 		//
 		// 初期化処理を実行します。

@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi
 {
-	struct ButtonRenderer : RendererNc
+	struct button_renderer_t : renderer_nc_t
 	{
 		virtual HBRUSH on_ctl_color(HWND hwnd, UINT message, HDC dc, HWND control, HBRUSH brush) override
 		{

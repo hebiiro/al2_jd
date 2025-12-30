@@ -5,7 +5,7 @@ namespace apn::dark::kuro::gdi::aviutl2
 	//
 	// オーナーウィンドウがaviutl2の場合のリストボックスの処理です。
 	//
-	struct ListBoxRenderer : gdi::ListBoxRenderer
+	struct listbox_renderer_t : gdi::listbox_renderer_t
 	{
 		//
 		// このリストボックスがフォント一覧の場合はTRUEになります。
@@ -208,7 +208,7 @@ namespace apn::dark::kuro::gdi::aviutl2
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 #endif
-		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
+		virtual BOOL on_ext_text_out_w(message_state_t* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, options = {/hex}, {/}, {/}, {/}, {/hex}, bk_color = {/hex}, text_color = {/hex}",
 				dc, x, y, options, safe_string(rc), safe_string(text, c, options), c, dx, ::GetBkColor(dc), ::GetTextColor(dc));

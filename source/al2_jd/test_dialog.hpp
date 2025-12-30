@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはテスト用ダイアログです。
 	//
-	struct TestDialog : my::Dialog
+	struct test_dialog_t : my::Dialog
 	{
 		//
 		// ダイアログを表示します。

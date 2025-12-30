@@ -5,12 +5,12 @@ namespace apn::dark::kuro
 	//
 	// このクラスはaviutl2のstyle.confの変数を保持します。
 	//
-	inline struct Style
+	inline struct style_t
 	{
 		//
 		// 配色のインデックスです。
 		//
-		enum class Color : size_t {
+		enum class color_e : size_t {
 			Background,
 			WindowBorder,
 			WindowSeparator,
@@ -84,84 +84,84 @@ namespace apn::dark::kuro
 		// 配色インデックスのマップです。
 		// キーは配色名です。
 		//
-		const std::unordered_map<std::wstring, Color> index_map = {
-			{ L"Background", Color::Background },
-			{ L"WindowBorder", Color::WindowBorder },
-			{ L"WindowSeparator", Color::WindowSeparator },
-			{ L"Footer", Color::Footer },
-			{ L"FooterProgress", Color::FooterProgress },
-			{ L"Grouping", Color::Grouping },
-			{ L"GroupingHover", Color::GroupingHover },
-			{ L"GroupingSelect", Color::GroupingSelect },
-			{ L"TitleHeader", Color::TitleHeader },
-			{ L"BorderSelect", Color::BorderSelect },
-			{ L"Border", Color::Border },
-			{ L"BorderFocus", Color::BorderFocus },
-			{ L"Text", Color::Text },
-			{ L"TextDisable", Color::TextDisable },
-			{ L"TextSelect", Color::TextSelect },
-			{ L"ButtonBody", Color::ButtonBody },
-			{ L"ButtonBodyHover", Color::ButtonBodyHover },
-			{ L"ButtonBodyPress", Color::ButtonBodyPress },
-			{ L"ButtonBodyDisable", Color::ButtonBodyDisable },
-			{ L"ButtonBodySelect", Color::ButtonBodySelect },
-			{ L"SliderCursor", Color::SliderCursor },
-			{ L"TrackBarRange", Color::TrackBarRange },
-			{ L"ZoomGauge", Color::ZoomGauge },
-			{ L"ZoomGaugeHover", Color::ZoomGaugeHover },
-			{ L"ZoomGaugeOff", Color::ZoomGaugeOff },
-			{ L"ZoomGaugeOffHover", Color::ZoomGaugeOffHover },
-			{ L"FrameCursor", Color::FrameCursor },
-			{ L"FrameCursorWide", Color::FrameCursorWide },
-			{ L"PlayerCursor", Color::PlayerCursor },
-			{ L"GuideLine", Color::GuideLine },
-			{ L"Layer", Color::Layer },
-			{ L"LayerHeader", Color::LayerHeader },
-			{ L"LayerHover", Color::LayerHover },
-			{ L"LayerDisable", Color::LayerDisable },
-			{ L"LayerRange", Color::LayerRange },
-			{ L"LayerRangeFrame", Color::LayerRangeFrame },
-			{ L"ObjectVideo", Color::ObjectVideo },
-			{ L"ObjectVideoSelect", Color::ObjectVideoSelect },
-			{ L"ObjectAudio", Color::ObjectAudio },
-			{ L"ObjectAudioSelect", Color::ObjectAudioSelect },
-			{ L"ObjectControl", Color::ObjectControl },
-			{ L"ObjectControlSelect", Color::ObjectControlSelect },
-			{ L"ObjectVideoFilter", Color::ObjectVideoFilter },
-			{ L"ObjectVideoFilterSelect", Color::ObjectVideoFilterSelect },
-			{ L"ObjectAudioFilter", Color::ObjectAudioFilter },
-			{ L"ObjectAudioFilterSelect", Color::ObjectAudioFilterSelect },
-			{ L"ObjectHover", Color::ObjectHover },
-			{ L"ObjectFocus", Color::ObjectFocus },
-			{ L"ObjectSection", Color::ObjectSection },
-			{ L"ClippingObject", Color::ClippingObject },
-			{ L"ClippingObjectMask", Color::ClippingObjectMask },
-			{ L"Anchor", Color::Anchor },
-			{ L"AnchorLine", Color::AnchorLine },
-			{ L"AnchorIn", Color::AnchorIn },
-			{ L"AnchorOut", Color::AnchorOut },
-			{ L"AnchorHover", Color::AnchorHover },
-			{ L"AnchorSelect", Color::AnchorSelect },
-			{ L"AnchorEdge", Color::AnchorEdge },
-			{ L"CenterGroup", Color::CenterGroup },
-			{ L"HandleX", Color::HandleX },
-			{ L"HandleY", Color::HandleY },
-			{ L"HandleZ", Color::HandleZ },
-			{ L"HandleXHover", Color::HandleXHover },
-			{ L"HandleYHover", Color::HandleYHover },
-			{ L"HandleZHover", Color::HandleZHover },
-			{ L"OutsideDisplay", Color::OutsideDisplay },
+		const std::unordered_map<std::wstring, color_e> index_map = {
+			{ L"Background", color_e::Background },
+			{ L"WindowBorder", color_e::WindowBorder },
+			{ L"WindowSeparator", color_e::WindowSeparator },
+			{ L"Footer", color_e::Footer },
+			{ L"FooterProgress", color_e::FooterProgress },
+			{ L"Grouping", color_e::Grouping },
+			{ L"GroupingHover", color_e::GroupingHover },
+			{ L"GroupingSelect", color_e::GroupingSelect },
+			{ L"TitleHeader", color_e::TitleHeader },
+			{ L"BorderSelect", color_e::BorderSelect },
+			{ L"Border", color_e::Border },
+			{ L"BorderFocus", color_e::BorderFocus },
+			{ L"Text", color_e::Text },
+			{ L"TextDisable", color_e::TextDisable },
+			{ L"TextSelect", color_e::TextSelect },
+			{ L"ButtonBody", color_e::ButtonBody },
+			{ L"ButtonBodyHover", color_e::ButtonBodyHover },
+			{ L"ButtonBodyPress", color_e::ButtonBodyPress },
+			{ L"ButtonBodyDisable", color_e::ButtonBodyDisable },
+			{ L"ButtonBodySelect", color_e::ButtonBodySelect },
+			{ L"SliderCursor", color_e::SliderCursor },
+			{ L"TrackBarRange", color_e::TrackBarRange },
+			{ L"ZoomGauge", color_e::ZoomGauge },
+			{ L"ZoomGaugeHover", color_e::ZoomGaugeHover },
+			{ L"ZoomGaugeOff", color_e::ZoomGaugeOff },
+			{ L"ZoomGaugeOffHover", color_e::ZoomGaugeOffHover },
+			{ L"FrameCursor", color_e::FrameCursor },
+			{ L"FrameCursorWide", color_e::FrameCursorWide },
+			{ L"PlayerCursor", color_e::PlayerCursor },
+			{ L"GuideLine", color_e::GuideLine },
+			{ L"Layer", color_e::Layer },
+			{ L"LayerHeader", color_e::LayerHeader },
+			{ L"LayerHover", color_e::LayerHover },
+			{ L"LayerDisable", color_e::LayerDisable },
+			{ L"LayerRange", color_e::LayerRange },
+			{ L"LayerRangeFrame", color_e::LayerRangeFrame },
+			{ L"ObjectVideo", color_e::ObjectVideo },
+			{ L"ObjectVideoSelect", color_e::ObjectVideoSelect },
+			{ L"ObjectAudio", color_e::ObjectAudio },
+			{ L"ObjectAudioSelect", color_e::ObjectAudioSelect },
+			{ L"ObjectControl", color_e::ObjectControl },
+			{ L"ObjectControlSelect", color_e::ObjectControlSelect },
+			{ L"ObjectVideoFilter", color_e::ObjectVideoFilter },
+			{ L"ObjectVideoFilterSelect", color_e::ObjectVideoFilterSelect },
+			{ L"ObjectAudioFilter", color_e::ObjectAudioFilter },
+			{ L"ObjectAudioFilterSelect", color_e::ObjectAudioFilterSelect },
+			{ L"ObjectHover", color_e::ObjectHover },
+			{ L"ObjectFocus", color_e::ObjectFocus },
+			{ L"ObjectSection", color_e::ObjectSection },
+			{ L"ClippingObject", color_e::ClippingObject },
+			{ L"ClippingObjectMask", color_e::ClippingObjectMask },
+			{ L"Anchor", color_e::Anchor },
+			{ L"AnchorLine", color_e::AnchorLine },
+			{ L"AnchorIn", color_e::AnchorIn },
+			{ L"AnchorOut", color_e::AnchorOut },
+			{ L"AnchorHover", color_e::AnchorHover },
+			{ L"AnchorSelect", color_e::AnchorSelect },
+			{ L"AnchorEdge", color_e::AnchorEdge },
+			{ L"CenterGroup", color_e::CenterGroup },
+			{ L"HandleX", color_e::HandleX },
+			{ L"HandleY", color_e::HandleY },
+			{ L"HandleZ", color_e::HandleZ },
+			{ L"HandleXHover", color_e::HandleXHover },
+			{ L"HandleYHover", color_e::HandleYHover },
+			{ L"HandleZHover", color_e::HandleZHover },
+			{ L"OutsideDisplay", color_e::OutsideDisplay },
 		};
 
 		//
 		// カラーエントリの配列です。
 		//
-		ColorEntry color_entries[(size_t)Color::MaxSize] = {};
+		color_entry_t color_entries[(size_t)color_e::MaxSize] = {};
 
 		//
 		// カラーエントリを返します。
 		//
-		const ColorEntry& get_color_entry(Color color_index) const
+		const color_entry_t& get_color_entry(color_e color_index) const
 		{
 			return color_entries[(size_t)color_index];
 		}
@@ -183,7 +183,7 @@ namespace apn::dark::kuro
 			auto vec = split(value, L',');
 
 			// 最大数を取得します。
-			auto c = std::min(ColorEntry::c_max_size, vec.size());
+			auto c = std::min(color_entry_t::c_max_size, vec.size());
 
 			// 配列を走査します。
 			for (size_t i = 0; i < c; i++)
@@ -195,7 +195,7 @@ namespace apn::dark::kuro
 				if (str.empty()) continue;
 
 				// 取得予定のRGBAです。
-				auto rgba = RGBA {};
+				auto rgba = rgba_t {};
 
 				// 文字列の長さで分岐します。
 				switch (str.length())

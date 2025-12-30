@@ -2,9 +2,12 @@
 
 namespace apn::dark::kuro
 {
-	enum EDITTEXTSTATES {
-		ETS_FOOTER = 100,
-	};
+	namespace
+	{
+		enum EDITTEXTSTATES {
+			ETS_FOOTER = 100,
+		};
+	}
 }
 
 namespace apn::dark::kuro::paint
@@ -12,7 +15,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはダイアログのマテリアルです。
 	//
-	inline struct DialogMaterial : Material
+	inline struct dialog_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -22,27 +25,27 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto normal = create_pigment(L"Dialog", L"Normal",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto disabled = create_pigment(L"Dialog", L"Disable",
-				Style::Color::ButtonBodyDisable,
+				style_t::color_e::ButtonBodyDisable,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto selected = create_pigment(L"Dialog", L"Select",
-				Style::Color::ButtonBodySelect,
+				style_t::color_e::ButtonBodySelect,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto readonly = create_pigment(L"Dialog", L"ReadOnly",
-				Style::Color::ButtonBody,
+				style_t::color_e::ButtonBody,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto footer = create_pigment(L"Dialog", L"Footer",
-				Style::Color::Footer,
+				style_t::color_e::Footer,
 				{},
 				{});
 

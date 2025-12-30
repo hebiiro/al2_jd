@@ -5,22 +5,22 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはマテリアルです。
 	//
-	struct Material
+	struct material_t
 	{
 		//
 		// パレットです。
 		//
-		Palette palette;
+		palette_t palette;
 
 		//
 		// マテリアルのコレクションです。
 		//
-		inline static std::vector<Material*> materials;
+		inline static std::vector<material_t*> materials;
 
 		//
 		// コンストラクタです。
 		//
-		Material()
+		material_t()
 		{
 			// このマテリアルをコレクションに追加します。
 			materials.emplace_back(this);
@@ -58,16 +58,16 @@ namespace apn::dark::kuro::paint
 		// このクラスはスタイルの配色です。
 		//
 		struct StyleColor {
-			const ColorEntry& color_entry;
-			StyleColor(const ColorEntry& color_entry = {}) : color_entry(color_entry) {}
-			StyleColor(Style::Color color_index) : color_entry(style.get_color_entry(color_index)) {}
-			operator const ColorEntry&() const { return color_entry; }
+			const color_entry_t& color_entry;
+			StyleColor(const color_entry_t& color_entry = {}) : color_entry(color_entry) {}
+			StyleColor(style_t::color_e color_index) : color_entry(style.get_color_entry(color_index)) {}
+			operator const color_entry_t&() const { return color_entry; }
 		};
 
 		//
 		// ピグメントを作成して返します。
 		//
-		inline static Pigment create_pigment(const std::wstring& section, const std::wstring& sub_key,
+		inline static pigment_t create_pigment(const std::wstring& section, const std::wstring& sub_key,
 			const StyleColor& background_color, const StyleColor& border_color, const StyleColor& text_color)
 		{
 			return {
@@ -81,7 +81,7 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを作成して返します。
 		//
-		inline static Pigment create_pigment(const std::wstring& section, const std::wstring& sub_key, const Pigment& default_pigment)
+		inline static pigment_t create_pigment(const std::wstring& section, const std::wstring& sub_key, const pigment_t& default_pigment)
 		{
 			return create_pigment(
 				section, sub_key,
@@ -93,7 +93,7 @@ namespace apn::dark::kuro::paint
 		//
 		// 背景色のみのピグメントを作成して返します。
 		//
-		inline static Pigment create_background_pigment(const std::wstring& section, const std::wstring& key, const StyleColor& background_color)
+		inline static pigment_t create_background_pigment(const std::wstring& section, const std::wstring& key, const StyleColor& background_color)
 		{
 			return {
 				{ custom_style.get_color_entry(section, key, background_color), },

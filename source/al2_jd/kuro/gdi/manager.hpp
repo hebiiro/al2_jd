@@ -5,7 +5,7 @@ namespace apn::dark::kuro::gdi
 	//
 	// このクラスはGDIレンダラーを管理します。
 	//
-	inline struct Manager
+	inline struct manager_t
 	{
 		//
 		// ウィンドウのクラスブラシを変更します。
@@ -18,7 +18,7 @@ namespace apn::dark::kuro::gdi
 			//
 			// この関数はウィンドウのクラスブラシを変更します。
 			//
-			const auto change_brush = [&](int color_id, const paint::Palette& palette, int part_id, int state_id)
+			const auto change_brush = [&](int color_id, const paint::palette_t& palette, int part_id, int state_id)
 			{
 				// ブラシがカラーIDと一致する場合は
 				if (brush == (HBRUSH)((INT_PTR)color_id + 1) || brush == ::GetSysColorBrush(color_id))
@@ -46,11 +46,11 @@ namespace apn::dark::kuro::gdi
 		//
 		// 指定されたウィンドウに対応するGDIレンダラーを返します。
 		//
-		std::shared_ptr<Renderer> find_renderer(
-			HWND hwnd, const Renderer::NormalizedClassName& class_name, BOOL force)
+		std::shared_ptr<renderer_t> find_renderer(
+			HWND hwnd, const renderer_t::normalized_class_name_t& class_name, BOOL force)
 		{
 			// 既にアタッチ済みの場合は除外します。
-			if (Renderer::from_handle(hwnd)) return nullptr;
+			if (renderer_t::from_handle(hwnd)) return nullptr;
 
 			//
 			// この関数は指定された文字列が指定された正規表現パターンにマッチする場合はTRUEを返します。
@@ -62,22 +62,22 @@ namespace apn::dark::kuro::gdi
 				return std::regex_search(text, std::wregex(pattern));
 			};
 
-//			if (class_name == L"#32768") return std::make_shared<MenuRenderer>();
+//			if (class_name == L"#32768") return std::make_shared<menu_renderer_t>();
 			if (class_name == L"#32770")
 			{
 				auto text = my::get_window_text(hwnd);
 
 				if (match(text, hive.dialog_name.new_project))
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(FALSE);
+					return std::make_shared<aviutl2::new_project::dialog_renderer_t>(FALSE);
 
 				if (match(text, hive.dialog_name.new_scene))
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE);
+					return std::make_shared<aviutl2::new_project::dialog_renderer_t>(TRUE);
 
 				if (match(text, hive.dialog_name.set_scene))
-					return std::make_shared<aviutl2::new_project::DialogRenderer>(TRUE);
+					return std::make_shared<aviutl2::new_project::dialog_renderer_t>(TRUE);
 
 				if (match(text, hive.dialog_name.set_layer_name))
-					return std::make_shared<aviutl2::layer_name::DialogRenderer>();
+					return std::make_shared<aviutl2::layer_name::dialog_renderer_t>();
 
 				auto instance = (HINSTANCE)::GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 				auto comdlg32 = ::GetModuleHandleW(L"comdlg32.dll");
@@ -86,32 +86,32 @@ namespace apn::dark::kuro::gdi
 				// コモンダイアログの場合は
 				if (instance == comdlg32)
 //				if (instance == comdlg32 && style & WS_THICKFRAME)
-					return std::make_shared<comdlg32::DialogRenderer>();
+					return std::make_shared<comdlg32::dialog_renderer_t>();
 
-				return std::make_shared<DialogRenderer>();
+				return std::make_shared<dialog_renderer_t>();
 			}
 
-			if (class_name == WC_STATIC) return std::make_shared<StaticRenderer>();
-			if (class_name == WC_BUTTON) return std::make_shared<ButtonRenderer>();
-			if (class_name == WC_EDIT) return std::make_shared<EditBoxRenderer>();
-			if (class_name == RICHEDIT_CLASS) return std::make_shared<RichEditRenderer>();
+			if (class_name == WC_STATIC) return std::make_shared<static_renderer_t>();
+			if (class_name == WC_BUTTON) return std::make_shared<button_renderer_t>();
+			if (class_name == WC_EDIT) return std::make_shared<editbox_renderer_t>();
+			if (class_name == RICHEDIT_CLASS) return std::make_shared<richedit_renderer_t>();
 			if (class_name == WC_LISTBOX)
 			{
 				// オーナーウィンドウがaviutl2の場合は
 				if (::GetWindow(hwnd, GW_OWNER) == hive.theme_window)
-					return std::make_shared<aviutl2::ListBoxRenderer>();
+					return std::make_shared<aviutl2::listbox_renderer_t>();
 				else
-					return std::make_shared<ListBoxRenderer>();
+					return std::make_shared<listbox_renderer_t>();
 			}
-			if (class_name == L"ListviewPopup") return std::make_shared<ListBoxRenderer>();
-			if (class_name == L"ComboLBox") return std::make_shared<ListBoxRenderer>();
-			if (class_name == WC_COMBOBOX) return std::make_shared<ComboBoxRenderer>();
-			if (class_name == WC_COMBOBOXEX) return std::make_shared<ComboBoxExRenderer>();
-			if (class_name == TOOLTIPS_CLASS) return std::make_shared<ToolTipRenderer>();
-			if (class_name == TRACKBAR_CLASS) return std::make_shared<TrackBarRenderer>();
-			if (class_name == UPDOWN_CLASS) return std::make_shared<SpinRenderer>();
-			if (class_name == WC_TABCONTROL) return std::make_shared<TabRenderer>();
-			if (class_name == WC_HEADER) return std::make_shared<HeaderRenderer>();
+			if (class_name == L"ListviewPopup") return std::make_shared<listbox_renderer_t>();
+			if (class_name == L"ComboLBox") return std::make_shared<listbox_renderer_t>();
+			if (class_name == WC_COMBOBOX) return std::make_shared<combobox_renderer_t>();
+			if (class_name == WC_COMBOBOXEX) return std::make_shared<combobox_ex_renderer_t>();
+			if (class_name == TOOLTIPS_CLASS) return std::make_shared<tooltip_renderer_t>();
+			if (class_name == TRACKBAR_CLASS) return std::make_shared<trackbar_renderer_t>();
+			if (class_name == UPDOWN_CLASS) return std::make_shared<spin_renderer_t>();
+			if (class_name == WC_TABCONTROL) return std::make_shared<tab_renderer_t>();
+			if (class_name == WC_HEADER) return std::make_shared<header_renderer_t>();
 			if (class_name == WC_LISTVIEW)
 			{
 				// フォントを使用してリストビューを描画する場合は
@@ -122,10 +122,10 @@ namespace apn::dark::kuro::gdi
 
 					// 親ウィンドウが「フォントメニューの設定」ダイアログの場合は
 					if (match(my::get_window_text(parent), hive.dialog_name.set_font_menu))
-						return std::make_shared<aviutl2::font_setting::ListViewRenderer>();
+						return std::make_shared<aviutl2::font_setting::listview_renderer_t>();
 				}
 
-				return std::make_shared<ListViewRenderer>();
+				return std::make_shared<listview_renderer_t>();
 			}
 			if (class_name == WC_TREEVIEW)
 			{
@@ -142,29 +142,29 @@ namespace apn::dark::kuro::gdi
 						SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
 				}
 
-				return std::make_shared<TreeViewRenderer>();
+				return std::make_shared<treeview_renderer_t>();
 			}
-			if (class_name == TOOLBARCLASSNAME) return std::make_shared<ToolBarRenderer>();
+			if (class_name == TOOLBARCLASSNAME) return std::make_shared<toolbar_renderer_t>();
 
 			// aviutl2のメインウィンドウです。
-			if (class_name == L"aviutl2Manager") return std::make_shared<AviUtl2Renderer>();
+			if (class_name == L"aviutl2Manager") return std::make_shared<aviutl2_renderer_t>();
 
 			if (hive.comdlg32_visible_count)
 			{
 				// ファイル選択ダイアログのリストビューなどの親ウィンドウです。
-//				if (class_name == L"DirectUIHWND") return std::make_shared<comdlg32::DirectUIHWNDRenderer>();
+//				if (class_name == L"DirectUIHWND") return std::make_shared<comdlg32::direct_ui_hwnd_renderer_t>();
 
 				// DirectUIHWNDの親ウィンドウです。
-				if (class_name == L"DUIViewWndClassName") return std::make_shared<comdlg32::DUIViewRenderer>();
+				if (class_name == L"DUIViewWndClassName") return std::make_shared<comdlg32::dui_view_renderer_t>();
 
 				// ファイル選択ダイアログのツリービューの親ウィンドウです。
-				if (class_name == L"NamespaceTreeControl") return std::make_shared<Renderer>();
+				if (class_name == L"NamespaceTreeControl") return std::make_shared<renderer_t>();
 
 				// ファイル選択ダイアログのコンボボックスの親ウィンドウです。
-//				if (class_name == L"FloatNotifySink") return std::make_shared<Renderer>();
+//				if (class_name == L"FloatNotifySink") return std::make_shared<renderer_t>();
 
 				// コマンドモジュールがドロップダウン表示するポップアップメニューのようなウィンドウです。
-//				if (class_name == L"ViewControlClass") return std::make_shared<Renderer>();
+//				if (class_name == L"ViewControlClass") return std::make_shared<renderer_t>();
 
 				// ファイル選択ダイアログのリストビューの場合は
 				if (class_name == L"SHELLDLL_DefView")
@@ -185,7 +185,7 @@ namespace apn::dark::kuro::gdi
 				}
 
 				// フォルダ選択ダイアログのツリービューの親ウィンドウです。
-				if (class_name == L"SHBrowseForFolder ShellNameSpace Control") return std::make_shared<Renderer>();
+				if (class_name == L"SHBrowseForFolder ShellNameSpace Control") return std::make_shared<renderer_t>();
 
 				// 「拡張 x264 出力(GUI) Ex」の設定ダイアログです。
 				{
@@ -208,14 +208,14 @@ namespace apn::dark::kuro::gdi
 						if (starts_with(p, L"Window"))
 						{
 							if (my::get_style(hwnd) & WS_CAPTION)
-								return std::make_shared<rigaya::DialogRenderer>();
+								return std::make_shared<rigaya::dialog_renderer_t>();
 							else
-								return std::make_shared<DialogRenderer>();
+								return std::make_shared<dialog_renderer_t>();
 						}
 
-						if (starts_with(p, WC_BUTTON)) return std::make_shared<ButtonRenderer>();
-						if (starts_with(p, WC_EDIT)) return std::make_shared<EditBoxRenderer>();
-						if (starts_with(p, TRACKBAR_CLASS)) return std::make_shared<TrackBarRenderer>();
+						if (starts_with(p, WC_BUTTON)) return std::make_shared<button_renderer_t>();
+						if (starts_with(p, WC_EDIT)) return std::make_shared<editbox_renderer_t>();
+						if (starts_with(p, TRACKBAR_CLASS)) return std::make_shared<trackbar_renderer_t>();
 					}
 				}
 			}
@@ -227,7 +227,7 @@ namespace apn::dark::kuro::gdi
 			if (force)
 			{
 				// 汎用レンダラーを返します。
-				return std::make_shared<Renderer>();
+				return std::make_shared<renderer_t>();
 			}
 
 			// レンダラーが見つからなかった場合はnullptrを返します。
@@ -284,7 +284,7 @@ namespace apn::dark::kuro::gdi
 			MY_TRACE_FUNC("");
 
 			// 現存するすべてのレンダラーを削除します。
-			Renderer::clear();
+			renderer_t::clear();
 
 			return TRUE;
 		}

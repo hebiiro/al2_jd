@@ -5,17 +5,17 @@ namespace apn::dark::kuro::hook
 	//
 	// このクラスはフックにエントリします。
 	//
-	struct Entry
+	struct entry_t
 	{
 		//
 		// エントリのコレクションです。
 		//
-		inline static std::vector<Entry*> entries;
+		inline static std::vector<entry_t*> entries;
 
 		//
 		// コンストラクタです。
 		//
-		Entry() { entries.emplace_back(this); }
+		entry_t() { entries.emplace_back(this); }
 
 		//
 		// 初期化処理を実行します。

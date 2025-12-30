@@ -2,12 +2,12 @@
 
 namespace apn::dark::kuro::gdi
 {
-	struct AviUtl2Renderer : Renderer
+	struct aviutl2_renderer_t : renderer_t
 	{
 		//
 		// デストラクタです。
 		//
-		virtual ~AviUtl2Renderer() override
+		virtual ~aviutl2_renderer_t() override
 		{
 			MY_TRACE_FUNC("");
 		}
@@ -81,7 +81,7 @@ namespace apn::dark::kuro::gdi
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 
-		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
+		virtual BOOL on_fill_rect(message_state_t* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
@@ -107,7 +107,7 @@ namespace apn::dark::kuro::gdi
 			return hive.orig.FillRect(dc, rc, brush);
 		}
 
-		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
+		virtual BOOL on_ext_text_out_w(message_state_t* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, options = {/hex}, {/}, {/}, {/}, {/hex}, bk_color = {/hex}, text_color = {/hex}",
 				dc, x, y, options, safe_string(rc), safe_string(text, c, options), c, dx, ::GetBkColor(dc), ::GetTextColor(dc));

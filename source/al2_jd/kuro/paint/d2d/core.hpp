@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint::d2d
 	//
 	// このクラスはD2Dのコアです。
 	//
-	inline struct Core
+	inline struct core_t
 	{
 		ComPtr<IDWriteFactory> dw_factory;
 		ComPtr<ID2D1Factory1> d2d_factory;
@@ -90,12 +90,12 @@ namespace apn::dark::kuro::paint::d2d
 		// このクラスはレンダーターゲットとデバイスコンテキストをバインドします。
 		// 内部的に使用されます。
 		//
-		struct Binder
+		struct binder_t
 		{
 			//
 			// コンストラクタです。
 			//
-			Binder(HDC dc, LPCRECT rc)
+			binder_t(HDC dc, LPCRECT rc)
 			{
 				// デバイスコンテキストにバインドします。
 				core.render_target->BindDC(dc, rc);
@@ -107,7 +107,7 @@ namespace apn::dark::kuro::paint::d2d
 			//
 			// デストラクタです。
 			//
-			~Binder()
+			~binder_t()
 			{
 				// 描画を終了します。
 				if (core.render_target->EndDraw() == D2DERR_RECREATE_TARGET)

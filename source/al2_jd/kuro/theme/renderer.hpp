@@ -5,7 +5,7 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはテーマをフックしてカスタム描画を実行します。
 	//
-	struct Renderer
+	struct renderer_t
 	{
 		//
 		// GDIフックのロックカウントです。

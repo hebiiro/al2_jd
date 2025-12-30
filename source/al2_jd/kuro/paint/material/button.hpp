@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはボタンのマテリアルです。
 	//
-	inline struct ButtonMaterial : Material
+	inline struct button_material_t : material_t
 	{
 		//
 		// TRUEの場合は矢印をボタンのように描画します。
@@ -20,44 +20,44 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto push_button_normal = create_pigment(L"PushButton", L"Normal",
-				Style::Color::ButtonBody,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBody,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto push_button_hot = create_pigment(L"PushButton", L"Hot",
-				Style::Color::ButtonBodyHover,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyHover,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto push_button_pressed = create_pigment(L"PushButton", L"Press",
-				Style::Color::ButtonBodyPress,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyPress,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
 			auto push_button_disabled = create_pigment(L"PushButton", L"Disable",
-				Style::Color::ButtonBodyDisable,
-				Style::Color::Border,
-				Style::Color::TextDisable);
+				style_t::color_e::ButtonBodyDisable,
+				style_t::color_e::Border,
+				style_t::color_e::TextDisable);
 
 			auto radio_button_normal = create_pigment(L"RadioButton", L"Normal",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto radio_button_hot = create_pigment(L"RadioButton", L"Hot",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto radio_button_pressed = create_pigment(L"RadioButton", L"Press",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto radio_button_disabled = create_pigment(L"RadioButton", L"Disable",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::TextDisable);
+				style_t::color_e::TextDisable);
 
 			auto checkbox_normal = create_pigment(L"CheckBox", L"Normal", radio_button_normal);
 			auto checkbox_hot = create_pigment(L"CheckBox", L"Hot", radio_button_hot);

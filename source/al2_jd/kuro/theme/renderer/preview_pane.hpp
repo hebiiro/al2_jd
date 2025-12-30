@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::theme
 {
-	inline struct PreviewPaneRenderer : Renderer
+	inline struct preview_pane_renderer_t : renderer_t
 	{
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
@@ -20,7 +20,7 @@ namespace apn::dark::kuro::theme
 			case 3: // 左側の縁(?)
 			case 4: // 右側の縁(?)
 				{
-					const paint::Palette& palette = paint::dialog_material.palette;
+					const paint::palette_t& palette = paint::dialog_material.palette;
 
 					if (paint::stylus.draw_rect(dc, rc, palette, WP_DIALOG, ETS_NORMAL))
 						return S_OK;

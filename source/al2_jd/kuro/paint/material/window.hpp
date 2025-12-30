@@ -5,9 +5,9 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはウィンドウのマテリアルです。
 	//
-	inline struct WindowMaterial : Material
+	inline struct window_material_t : material_t
 	{
-		kuro::paint::Pigment active, inactive;
+		kuro::paint::pigment_t active, inactive;
 
 		//
 		// マテリアルの初期化処理を実行します。
@@ -17,14 +17,14 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			active = create_pigment(L"Window", L"Active",
-				Style::Color::Background,
-				Style::Color::WindowBorder,
-				Style::Color::Text);
+				style_t::color_e::Background,
+				style_t::color_e::WindowBorder,
+				style_t::color_e::Text);
 
 			inactive = create_pigment(L"Window", L"Inactive",
-				Style::Color::TitleHeader,
-				Style::Color::TitleHeader,
-				Style::Color::TextDisable);
+				style_t::color_e::TitleHeader,
+				style_t::color_e::TitleHeader,
+				style_t::color_e::TextDisable);
 		}
 
 		//

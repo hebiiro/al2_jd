@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはaviutl2ウィンドウを管理します。
 	//
-	inline struct AviUtl2Window
+	inline struct aviutl2_window_t
 	{
 		//
 		// 初期化処理を実行します。

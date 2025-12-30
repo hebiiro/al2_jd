@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi::comdlg32
 {
-	struct DialogRenderer : gdi::DialogRenderer
+	struct dialog_renderer_t : gdi::dialog_renderer_t
 	{
 		inline static constexpr auto c_top_combobox_id = 0x00000471;
 		inline static constexpr auto c_top_right_toolbar_id = 0x00000440;
@@ -117,7 +117,7 @@ namespace apn::dark::kuro::gdi::comdlg32
 			return __super::on_subclass_proc(hwnd, message, wParam, lParam);
 		}
 
-		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
+		virtual BOOL on_fill_rect(message_state_t* current_state, HDC dc, LPCRECT rc, HBRUSH brush) override
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
@@ -135,7 +135,7 @@ namespace apn::dark::kuro::gdi::comdlg32
 			return __super::on_fill_rect(current_state, dc, rc, brush);
 		}
 #ifdef _DEBUG // テスト用コードです。
-		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
+		virtual BOOL on_ext_text_out_w(message_state_t* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx) override
 		{
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, bk_color = {/hex}, text_color = {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
 

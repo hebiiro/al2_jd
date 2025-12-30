@@ -5,7 +5,7 @@ namespace apn::dark::kuro::hook
 	//
 	// このクラスはGDIのフックを担当します。
 	//
-	inline struct Gdi : Entry
+	inline struct gdi_t : entry_t
 	{
 		//
 		// 初期化処理を実行します。
@@ -143,7 +143,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, left, top, right, bottom);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_rectangle(dc, left, top, right, bottom);
+					return gdi::renderer_t::fire_rectangle(dc, left, top, right, bottom);
 
 				return orig_proc(dc, left, top, right, bottom);
 			}
@@ -159,7 +159,7 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/hex}, ({/}), {/hex} : {/}",
 					ret_addr(&dc), dc, safe_string(rc), brush, ::GetCurrentThreadId());
 
-				if (theme::Renderer::is_gdi_hook_locked())
+				if (theme::renderer_t::is_gdi_hook_locked())
 				{
 					MY_TRACE("GDIフックがロックされています\n");
 
@@ -167,7 +167,7 @@ namespace apn::dark::kuro::hook
 				}
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_fill_rect(dc, rc, brush);
+					return gdi::renderer_t::fire_fill_rect(dc, rc, brush);
 
 				return orig_proc(dc, rc, brush);
 			}
@@ -184,7 +184,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, safe_string(rc), width, type);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_draw_frame(dc, rc, width, type);
+					return gdi::renderer_t::fire_draw_frame(dc, rc, width, type);
 
 				return orig_proc(dc, rc, width, type);
 			}
@@ -201,7 +201,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, safe_string(rc), type, state);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_draw_frame_control(dc, rc, type, state);
+					return gdi::renderer_t::fire_draw_frame_control(dc, rc, type, state);
 
 				return orig_proc(dc, rc, type, state);
 			}
@@ -218,7 +218,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, safe_string(rc), brush);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_frame_rect(dc, rc, brush);
+					return gdi::renderer_t::fire_frame_rect(dc, rc, brush);
 
 				return orig_proc(dc, rc, brush);
 			}
@@ -235,7 +235,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, safe_string(rc), edge, flags);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_draw_edge(dc, rc, edge, flags);
+					return gdi::renderer_t::fire_draw_edge(dc, rc, edge, flags);
 
 				return orig_proc(dc, rc, edge, flags);
 			}
@@ -252,7 +252,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, safe_string(rc));
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_draw_focus_rect(dc, rc);
+					return gdi::renderer_t::fire_draw_focus_rect(dc, rc);
 
 				return orig_proc(dc, rc);
 			}
@@ -269,7 +269,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, fore, x, y, cx, cy, flags);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_draw_state_w(dc, fore, cb, lData, wData, x, y, cx, cy, flags);
+					return gdi::renderer_t::fire_draw_state_w(dc, fore, cb, lData, wData, x, y, cx, cy, flags);
 
 				return orig_proc(dc, fore, cb, lData, wData, x, y, cx, cy, flags);
 			}
@@ -301,7 +301,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, safe_string(text, c), safe_string(rc), flags);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_draw_text_ex_w(dc, (LPWSTR)text, c, rc, flags, nullptr);
+					return gdi::renderer_t::fire_draw_text_ex_w(dc, (LPWSTR)text, c, rc, flags, nullptr);
 
 				return orig_proc(dc, text, c, rc, flags);
 			}
@@ -318,7 +318,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, safe_string(text, c), safe_string(rc), flags, dtp);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_draw_text_ex_w(dc, text, c, rc, flags, dtp);
+					return gdi::renderer_t::fire_draw_text_ex_w(dc, text, c, rc, flags, dtp);
 
 				return orig_proc(dc, text, c, rc, flags, dtp);
 			}
@@ -382,7 +382,7 @@ namespace apn::dark::kuro::hook
 				}
 
 				// ::ExtTextOut()のフックをロックします。
-				Locker locker(&ext_text_out_lock);
+				locker_t locker(&ext_text_out_lock);
 
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/hex}, ({/}), {/}, {/} : {/}",
 					ret_addr(&dc), dc, x, y, options, safe_string(rc),
@@ -397,7 +397,7 @@ namespace apn::dark::kuro::hook
 							MY_TRACE("コマンドモジュールを描画します\n");
 
 							// コマンドモジュールのテキストを描画します。
-							if (gdi::Renderer::draw_dialog_text(dc, x, y, options, rc, text, c, dx))
+							if (gdi::renderer_t::draw_dialog_text(dc, x, y, options, rc, text, c, dx))
 								return TRUE;
 						}
 						else
@@ -407,14 +407,14 @@ namespace apn::dark::kuro::hook
 						}
 					}
 
-					if (theme::Renderer::is_gdi_hook_locked())
+					if (theme::renderer_t::is_gdi_hook_locked())
 					{
 						MY_TRACE("GDIフックがロックされています\n");
 
 						return orig_proc(dc, x, y, options, rc, text, c, dx);
 					}
 
-					return gdi::Renderer::fire_ext_text_out_w(dc, x, y, options, rc, text, c, dx);
+					return gdi::renderer_t::fire_ext_text_out_w(dc, x, y, options, rc, text, c, dx);
 				}
 
 				return orig_proc(dc, x, y, options, rc, text, c, dx);
@@ -432,7 +432,7 @@ namespace apn::dark::kuro::hook
 					ret_addr(&dc), dc, x, y, w, h, rop);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_pat_blt(dc, x, y, w, h, rop);
+					return gdi::renderer_t::fire_pat_blt(dc, x, y, w, h, rop);
 
 				return orig_proc(dc, x, y, w, h, rop);
 			}
@@ -476,7 +476,7 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/}", ret_addr(&color_id), color_id);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_get_sys_color(color_id);
+					return gdi::renderer_t::fire_get_sys_color(color_id);
 
 				return orig_proc(color_id);
 			}
@@ -492,7 +492,7 @@ namespace apn::dark::kuro::hook
 				MY_TRACE_FUNC("{/hex}, {/}", ret_addr(&color_id), color_id);
 
 				if (hive.is_valid_thread())
-					return gdi::Renderer::fire_get_sys_color_brush(color_id);
+					return gdi::renderer_t::fire_get_sys_color_brush(color_id);
 
 				return orig_proc(color_id);
 			}

@@ -2,22 +2,25 @@
 
 namespace apn::dark
 {
-	//
-	// このクラスは::PolyPatBlt()の引数です。
-	//
-	struct PATRECT {
-		int x, y, w, h; HBRUSH brush;
-	};
+	namespace
+	{
+		//
+		// このクラスは::PolyPatBlt()の引数です。
+		//
+		struct PATRECT {
+			int x, y, w, h; HBRUSH brush;
+		};
+	}
 
 	//
 	// このクラスは他クラスから共通して使用される変数を保持します。
 	//
-	inline struct Hive
+	inline struct hive_t
 	{
 		inline static constexpr auto c_name = L"JD";
 		inline static constexpr auto c_display_name = L"ダークモード化";
 
-		inline static constexpr struct WindowMessage {
+		inline static constexpr struct message_t {
 			//
 			// 初期化後のウィンドウメッセージです。
 			//
@@ -57,7 +60,7 @@ namespace apn::dark
 		//
 		// このクラスはダイアログ名(正規表現パターン)です。
 		//
-		struct DialogName
+		struct dialog_name_t
 		{
 			//
 			// 「プロジェクトを新規作成」のダイアログ名です。
@@ -88,7 +91,7 @@ namespace apn::dark
 		//
 		// このクラスはダークモード化の設定です。
 		//
-		struct JD
+		struct jd_t
 		{
 			//
 			// スタイルのファイル名です。
@@ -114,7 +117,7 @@ namespace apn::dark
 		//
 		// このクラスはスクロールバーの設定です。
 		//
-		struct ScrollBar
+		struct scrollbar_t
 		{
 			//
 			// TRUEの場合は矢印をボタンのように描画します。
@@ -135,7 +138,7 @@ namespace apn::dark
 		//
 		// このクラスは丸みの設定です。
 		//
-		struct Round
+		struct round_t
 		{
 			//
 			// TRUEの場合は矩形の角を丸めます。
@@ -151,7 +154,7 @@ namespace apn::dark
 		//
 		// このクラスは縁の設定です。
 		//
-		struct Border
+		struct border_t
 		{
 			//
 			// TRUEの場合は縁を3Dのように描画します。
@@ -167,7 +170,7 @@ namespace apn::dark
 		//
 		// このクラスはグラデーションの設定です。
 		//
-		struct Gradient
+		struct gradient_t
 		{
 			//
 			// TRUEの場合は背景をグラデーションで描画します。
@@ -188,7 +191,7 @@ namespace apn::dark
 		//
 		// このクラスは影の設定です。
 		//
-		struct Shadow
+		struct shadow_t
 		{
 			//
 			// TRUEの場合はテキストの影を描画します。
@@ -214,7 +217,7 @@ namespace apn::dark
 		//
 		// このクラスはその他の設定です。
 		//
-		struct Etc
+		struct etc_t
 		{
 			//
 			// TRUEの場合は通常のマウスアクティブ化処理を実行します。
@@ -225,7 +228,7 @@ namespace apn::dark
 		//
 		// このクラスはフォントプレビューの設定です。
 		//
-		struct Fonts
+		struct fonts_t
 		{
 			//
 			// リストボックスのサイズです。
@@ -266,12 +269,12 @@ namespace apn::dark
 		//
 		// このクラスはプリセットの設定です。
 		//
-		struct Presets
+		struct presets_t
 		{
 			//
 			// (全体の)プリセットです。
 			//
-			struct Preset {
+			struct preset_t {
 				std::wstring display_name;
 				std::wstring name;
 				std::wstring video_width;
@@ -279,52 +282,52 @@ namespace apn::dark
 				std::wstring video_rate;
 				std::wstring audio_rate;
 			};
-			std::vector<Preset> preset_collection;
+			std::vector<preset_t> preset_collection;
 
 			//
 			// 名前のプリセットです。
 			//
-			struct Name {
+			struct name_t {
 				std::wstring display_name;
 				std::wstring name;
 			};
-			std::vector<Name> name_collection;
+			std::vector<name_t> name_collection;
 
 			//
 			// 映像サイズのプリセットです。
 			//
-			struct VideoSize {
+			struct video_size_t {
 				std::wstring display_name;
 				std::wstring width;
 				std::wstring height;
 			};
-			std::vector<VideoSize> video_size_collection;
+			std::vector<video_size_t> video_size_collection;
 
 			//
 			// 映像レートのプリセットです。
 			//
-			struct VideoRate {
+			struct video_rate_t {
 				std::wstring display_name;
 				std::wstring rate;
 			};
-			std::vector<VideoRate> video_rate_collection;
+			std::vector<video_rate_t> video_rate_collection;
 
 			//
 			// 音声レートのプリセットです。
 			//
-			struct AudioRate {
+			struct audio_rate_t {
 				std::wstring display_name;
 				std::wstring rate;
 			};
-			std::vector<AudioRate> audio_rate_collection;
+			std::vector<audio_rate_t> audio_rate_collection;
 
 			//
 			// レイヤー名のプリセットです。
 			//
-			struct LayerName {
+			struct layer_name_t {
 				std::wstring name;
 			};
-			std::vector<Name> layer_name_collection;
+			std::vector<layer_name_t> layer_name_collection;
 		} presets;
 
 		//
@@ -363,7 +366,8 @@ namespace apn::dark
 		//
 		// このクラスはフックする前のオリジナルのAPIを保持します。
 		//
-		struct {
+		struct orig_t
+		{
 			LRESULT (WINAPI *CallWindowProcWInternal)(void* u1, WNDPROC wnd_proc, HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 			decltype(&::Rectangle) Rectangle;
 			decltype(&::FillRect) FillRect;

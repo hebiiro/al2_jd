@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはaviutl2ウィンドウを管理します。
 	//
-	inline struct AvailableFonts
+	inline struct available_fonts_t
 	{
 		//
 		// 初期化処理を実行します。

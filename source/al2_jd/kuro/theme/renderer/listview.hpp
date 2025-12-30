@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはリストビューのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct ListViewRenderer : Renderer
+	inline struct listview_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::listview_material.palette;
+		const paint::palette_t& palette = paint::listview_material.palette;
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{

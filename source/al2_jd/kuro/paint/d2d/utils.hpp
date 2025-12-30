@@ -95,7 +95,7 @@ namespace apn::dark::kuro::paint
 	//
 	// 配色をD2D形式に変換して返します。
 	//
-	inline auto to_d2d_color(const Color& color)
+	inline auto to_d2d_color(const color_t& color)
 	{
 		return D2D1::ColorF(color.rgba.value >> 8, color.alpha());
 	}
@@ -103,7 +103,7 @@ namespace apn::dark::kuro::paint
 	//
 	// 配色をD2D形式に変換して返します。
 	//
-	inline auto to_d2d_color(const Color& color, float alpha)
+	inline auto to_d2d_color(const color_t& color, float alpha)
 	{
 		return D2D1::ColorF(color.rgba.value >> 8, alpha);
 	}
@@ -122,7 +122,7 @@ namespace apn::dark::kuro::paint
 	//
 	// 背景の終了色をD2D形式で返します。
 	//
-	inline auto get_background_end_color(const ColorEntry& color_entry)
+	inline auto get_background_end_color(const color_entry_t& color_entry)
 	{
 		// 終了色が有効の場合は
 		if (color_entry.parts[1].is_valid())
@@ -144,7 +144,7 @@ namespace apn::dark::kuro::paint
 	//
 	// 疑似3Dエッジのカラーエントリを返します。
 	//
-	inline const ColorEntry* get_3d_edge_color_entry()
+	inline const color_entry_t* get_3d_edge_color_entry()
 	{
 		if (hive.border.flag_3d_edge)
 			return custom_style.get_color_entry(L"3DEdge", L"Raised");
@@ -155,7 +155,7 @@ namespace apn::dark::kuro::paint
 	//
 	// 基本色に補助色をブレンドしてD2D形式で返します。
 	//
-	inline auto blend(const Color& base_color, const Color& sub_color)
+	inline auto blend(const color_t& base_color, const color_t& sub_color)
 	{
 		if (!sub_color.is_valid()) return to_d2d_color(base_color);
 
@@ -173,7 +173,7 @@ namespace apn::dark::kuro::paint
 	//
 	// 基本色に補助色をブレンドしてD2D形式で返します。
 	//
-	inline auto blend(const Color& base_color, const ColorEntry* color_entry, size_t color_index)
+	inline auto blend(const color_t& base_color, const color_entry_t* color_entry, size_t color_index)
 	{
 		if (!color_entry) return to_d2d_color(base_color);
 

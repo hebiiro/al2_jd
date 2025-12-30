@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはリストビューのマテリアルです。
 	//
-	inline struct ListViewMaterial : Material
+	inline struct listview_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,29 +15,29 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto separator = create_pigment(L"ListView", L"Separator",
-				Style::Color::Border,
+				style_t::color_e::Border,
 				{},
 				{});
 
 			auto item_normal = create_pigment(L"ListView", L"Normal",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto item_disabled = create_pigment(L"ListView", L"Disable",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::TextDisable);
+				style_t::color_e::TextDisable);
 
 			auto item_hot = create_pigment(L"ListView", L"Hot",
-				Style::Color::ButtonBodyHover,
+				style_t::color_e::ButtonBodyHover,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto item_selected = create_pigment(L"ListView", L"Select",
-				Style::Color::ButtonBodySelect,
+				style_t::color_e::ButtonBodySelect,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			palette.set(LVP_LISTITEM, 0, separator);
 			palette.set(LVP_LISTITEM, LISS_NORMAL, item_normal);

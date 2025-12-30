@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはヘッダーコントロールのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct HeaderRenderer : Renderer
+	inline struct header_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::header_material.palette;
+		const paint::palette_t& palette = paint::header_material.palette;
 
 		//
 		// ドロップダウンボタンを描画します。

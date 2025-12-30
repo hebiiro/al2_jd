@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはエクスプローラナビゲーションペインのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct ExplorerNavPaneRenderer : Renderer
+	inline struct explorer_nav_pane_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::dialog_material.palette;
+		const paint::palette_t& palette = paint::dialog_material.palette;
 
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
 		{

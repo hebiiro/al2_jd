@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはスクロールバーのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct ScrollBarRenderer : Renderer
+	inline struct scrollbar_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::scrollbar_material.palette;
+		const paint::palette_t& palette = paint::scrollbar_material.palette;
 
 		//
 		// スクロールバーの太さの倍率を返します。

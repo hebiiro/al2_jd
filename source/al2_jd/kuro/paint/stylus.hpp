@@ -6,7 +6,7 @@ namespace apn::dark::kuro::paint
 	// このクラスはGDIオブジェクトの属性をDCにセットします。
 	//
 	template <typename T, auto init>
-	struct GdiObjectAttribute
+	struct gdi_object_attribute_t
 	{
 		//
 		// DCのハンドルです。
@@ -31,7 +31,7 @@ namespace apn::dark::kuro::paint
 		//
 		// コンストラクタです。
 		//
-		GdiObjectAttribute(HDC dc, const Pigment* pigment)
+		gdi_object_attribute_t(HDC dc, const pigment_t* pigment)
 			: dc(dc)
 		{
 			init(this, pigment);
@@ -42,7 +42,7 @@ namespace apn::dark::kuro::paint
 		//
 		// デストラクタです。
 		//
-		~GdiObjectAttribute()
+		~gdi_object_attribute_t()
 		{
 			::SelectObject(dc, old_handle);
 
@@ -59,7 +59,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはペンの属性をDCにセットします。
 	//
-	using PenAttribute = GdiObjectAttribute<HPEN, [](auto p, const Pigment* pigment)
+	using pen_attribute_t = gdi_object_attribute_t<HPEN, [](auto p, const pigment_t* pigment)
 	{
 		if (pigment->border.is_valid() && pigment->border.is_opaque())
 		{
@@ -76,7 +76,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはブラシの属性をDCにセットします。
 	//
-	using BrushAttribute = GdiObjectAttribute<HBRUSH, [](auto p, const Pigment* pigment)
+	using brush_attribute_t = gdi_object_attribute_t<HBRUSH, [](auto p, const pigment_t* pigment)
 	{
 		if (pigment->background.is_valid() && pigment->background.is_opaque())
 		{
@@ -93,7 +93,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはテキスト属性のベースクラスです。
 	//
-	struct TextAttributeBase
+	struct text_attribute_base_t
 	{
 		//
 		// DCのハンドルです。
@@ -118,7 +118,7 @@ namespace apn::dark::kuro::paint
 		//
 		// コンストラクタです。
 		//
-		TextAttributeBase(HDC dc, COLORREF background_color, COLORREF text_color, BOOL opaque)
+		text_attribute_base_t(HDC dc, COLORREF background_color, COLORREF text_color, BOOL opaque)
 			: dc(dc)
 			, old_bk_mode(::GetBkMode(dc))
 			, old_bk_color(::GetBkColor(dc))
@@ -136,7 +136,7 @@ namespace apn::dark::kuro::paint
 		//
 		// デストラクタです。
 		//
-		~TextAttributeBase()
+		~text_attribute_base_t()
 		{
 			::SetTextColor(dc, old_text_color);
 			::SetBkColor(dc, old_bk_color);
@@ -147,30 +147,30 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはテキストの属性をDCにセットします。
 	//
-	struct TextAttribute : TextAttributeBase
+	struct text_attribute_t : text_attribute_base_t
 	{
-		TextAttribute(HDC dc, const Pigment* pigment, BOOL opaque = TRUE) : TextAttributeBase
+		text_attribute_t(HDC dc, const pigment_t* pigment, BOOL opaque = TRUE) : text_attribute_base_t
 			(dc, pigment->background.get_win32_color(), pigment->text.get_win32_color(), opaque) {}
 	};
 
 	//
 	// このクラスは影の属性をDCにセットします。
 	//
-	struct TextShadowAttribute : TextAttributeBase
+	struct text_shadow_attribute_t : text_attribute_base_t
 	{
-		TextShadowAttribute(HDC dc, const Pigment* pigment, BOOL opaque = TRUE) : TextAttributeBase
+		text_shadow_attribute_t(HDC dc, const pigment_t* pigment, BOOL opaque = TRUE) : text_attribute_base_t
 			(dc, pigment->background.get_win32_color(), pigment->text_shadow.get_win32_color(), opaque) {}
 	};
 
 	//
 	// このクラスはアイコンの属性をDCにセットします。
 	//
-	struct IconAttribute
+	struct icon_attribute_t
 	{
 		my::gdi::unique_ptr<HFONT> font;
 		my::gdi::selector font_selector;
 
-		IconAttribute(HDC dc, LPCRECT rc, LPCWSTR font_name, int font_weight)
+		icon_attribute_t(HDC dc, LPCRECT rc, LPCWSTR font_name, int font_weight)
 			: font(::CreateFontW(
 				my::get_height(*rc), 0, 0, 0, font_weight,
 				FALSE, FALSE, FALSE,
@@ -185,17 +185,17 @@ namespace apn::dark::kuro::paint
 	// このクラスはスタイラスです。
 	// 主にピグメントを使用して各種図形などを描画します。
 	//
-	inline struct Stylus
+	inline struct stylus_t
 	{
 		//
 		// ピグメントを使用して矩形を描画します。
 		//
-		BOOL draw_rect(HDC dc, LPCRECT rc, const Pigment* pigment)
+		BOOL draw_rect(HDC dc, LPCRECT rc, const pigment_t* pigment)
 		{
 			if (pigment->border.is_valid())
 			{
-				PenAttribute pen_attribute(dc, pigment);
-				BrushAttribute brush_attribute(dc, pigment);
+				pen_attribute_t pen_attribute(dc, pigment);
+				brush_attribute_t brush_attribute(dc, pigment);
 
 				return hive.orig.Rectangle(dc, rc->left, rc->top, rc->right, rc->bottom);
 			}
@@ -211,7 +211,7 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して丸角矩形を描画します。
 		//
-		BOOL draw_round_rect(HDC dc, LPCRECT arg_rc, const Pigment* pigment)
+		BOOL draw_round_rect(HDC dc, LPCRECT arg_rc, const pigment_t* pigment)
 		{
 			if (!hive.round.flag_use) return draw_rect(dc, arg_rc, pigment);
 
@@ -228,14 +228,14 @@ namespace apn::dark::kuro::paint
 			{
 				auto radius = get_round_as_float(r / 2.0f);
 
-				if (auto result = d2d::Recter(dc, &rc, pigment).draw_round_rect(radius))
+				if (auto result = d2d::recter_t(dc, &rc, pigment).draw_round_rect(radius))
 					return result;
 			}
 
 			auto round = get_round_as_int(r);
 
-			PenAttribute pen_attribute(dc, pigment);
-			BrushAttribute brush_attribute(dc, pigment);
+			pen_attribute_t pen_attribute(dc, pigment);
+			brush_attribute_t brush_attribute(dc, pigment);
 
 			return ::RoundRect(dc, rc.left, rc.top, rc.right, rc.bottom, round, round);
 		}
@@ -243,10 +243,10 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して文字列を描画します。
 		//
-		BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx, const Pigment* pigment, BOOL opaque = TRUE)
+		BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx, const pigment_t* pigment, BOOL opaque = TRUE)
 		{
 			// このスコープ内では::ExtTextOutW()をフックしないようにします。
-			Locker locker(&ext_text_out_lock);
+			locker_t locker(&ext_text_out_lock);
 
 			// 影を描画する場合は
 			if (hive.shadow.flag_use && pigment->text_shadow.is_valid())
@@ -306,7 +306,7 @@ namespace apn::dark::kuro::paint
 			{
 				// テキストを描画します。
 				{
-					TextAttribute text_attribute(dc, pigment, opaque);
+					text_attribute_t text_attribute(dc, pigment, opaque);
 
 					return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 				}
@@ -316,10 +316,10 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して文字列を描画します。
 		//
-		BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const Pigment* pigment, BOOL opaque = TRUE)
+		BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const pigment_t* pigment, BOOL opaque = TRUE)
 		{
 			// このスコープ内では::ExtTextOutW()をフックしないようにします。
-			Locker locker(&ext_text_out_lock);
+			locker_t locker(&ext_text_out_lock);
 #if 0 // テスト用コードです。
 			my::theme::unique_ptr<> theme(::OpenThemeData(nullptr, L"Window"));
 
@@ -339,7 +339,7 @@ namespace apn::dark::kuro::paint
 			if (hive.shadow.flag_use && pigment->text_shadow.is_valid())
 			{
 				// テキストの影を描画します。
-				TextShadowAttribute text_attribute(dc, pigment, opaque);
+				text_shadow_attribute_t text_attribute(dc, pigment, opaque);
 
 				auto offset = get_shadow_offset_as_int();
 
@@ -351,7 +351,7 @@ namespace apn::dark::kuro::paint
 
 			// テキストを描画します。
 
-			TextAttribute text_attribute(dc, pigment, FALSE);
+			text_attribute_t text_attribute(dc, pigment, FALSE);
 
 			return !!hive.orig.DrawTextW(dc, text, c, (LPRECT)rc, text_flags);
 #endif
@@ -360,10 +360,10 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して絵文字を描画します。
 		//
-		BOOL draw_icon(HDC dc, LPCRECT rc, const Pigment* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
+		BOOL draw_icon(HDC dc, LPCRECT rc, const pigment_t* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
 			// アイコンの属性をセットします。
-			IconAttribute icon_attribute(dc, rc, font_name, font_weight);
+			icon_attribute_t icon_attribute(dc, rc, font_name, font_weight);
 
 			// アイコンを描画します。
 			return draw_text(dc, rc, &char_code, 1,
@@ -373,13 +373,13 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して文字列を描画します。
 		//
-		BOOL d2d_draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const Pigment* pigment, BOOL opaque = TRUE)
+		BOOL d2d_draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const pigment_t* pigment, BOOL opaque = TRUE)
 		{
 			if (hive.jd.use_d2d)
 			{
-				TextAttribute text_attribute(dc, pigment, opaque);
+				text_attribute_t text_attribute(dc, pigment, opaque);
 
-				if (auto result = d2d::Texter(dc, text, c, rc, text_flags, pigment).draw_text())
+				if (auto result = d2d::texter_t(dc, text, c, rc, text_flags, pigment).draw_text())
 					return !!result;
 			}
 
@@ -389,15 +389,15 @@ namespace apn::dark::kuro::paint
 		//
 		// ピグメントを使用して絵文字を描画します。
 		//
-		BOOL d2d_draw_icon(HDC dc, LPCRECT rc, const Pigment* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
+		BOOL d2d_draw_icon(HDC dc, LPCRECT rc, const pigment_t* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
 			if (hive.jd.use_d2d)
 			{
-				IconAttribute icon_attribute(dc, rc, font_name, font_weight);
+				icon_attribute_t icon_attribute(dc, rc, font_name, font_weight);
 
 				auto text_flags = UINT { DT_CENTER | DT_VCENTER | DT_SINGLELINE };
 
-				if (auto result = d2d::Texter(dc, &char_code, 1, rc, text_flags, pigment).draw_text())
+				if (auto result = d2d::texter_t(dc, &char_code, 1, rc, text_flags, pigment).draw_text())
 					return !!result;
 			}
 
@@ -408,7 +408,7 @@ namespace apn::dark::kuro::paint
 		// パレットを使用して矩形を描画します。
 		//
 		inline BOOL draw_rect(HDC dc, LPCRECT rc,
-			const paint::Palette& palette, int part_id, int state_id)
+			const paint::palette_t& palette, int part_id, int state_id)
 		{
 			if (auto pigment = palette.get(part_id, state_id))
 				return draw_rect(dc, rc, pigment);
@@ -420,7 +420,7 @@ namespace apn::dark::kuro::paint
 		// パレットを使用して丸角矩形を描画します。
 		//
 		inline BOOL draw_round_rect(HDC dc, LPCRECT rc,
-			const paint::Palette& palette, int part_id, int state_id)
+			const paint::palette_t& palette, int part_id, int state_id)
 		{
 			if (auto pigment = palette.get(part_id, state_id))
 				return draw_round_rect(dc, rc, pigment);
@@ -432,7 +432,7 @@ namespace apn::dark::kuro::paint
 		// パレットを使用して文字列を描画します。
 		//
 		inline BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx,
-			const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
+			const paint::palette_t& palette, int part_id, int state_id, BOOL opaque = TRUE)
 		{
 			if (auto pigment = palette.get(part_id, state_id))
 				return ext_text_out(dc, x, y, options, rc, text, c, dx, pigment, opaque);
@@ -444,7 +444,7 @@ namespace apn::dark::kuro::paint
 		// パレットを使用して文字列を描画します。
 		//
 		inline BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags,
-			const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
+			const paint::palette_t& palette, int part_id, int state_id, BOOL opaque = TRUE)
 		{
 			if (auto pigment = palette.get(part_id, state_id))
 				return draw_text(dc, rc, text, c, text_flags, pigment, opaque);
@@ -456,7 +456,7 @@ namespace apn::dark::kuro::paint
 		// パレットを使用して絵文字を描画します。
 		//
 		inline BOOL draw_icon(HDC dc, LPCRECT rc,
-			const paint::Palette& palette, int part_id, int state_id,
+			const paint::palette_t& palette, int part_id, int state_id,
 			LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
 			if (auto pigment = palette.get(part_id, state_id))
@@ -469,7 +469,7 @@ namespace apn::dark::kuro::paint
 		// パレットを使用して文字列を描画します。
 		//
 		inline BOOL d2d_draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags,
-			const paint::Palette& palette, int part_id, int state_id, BOOL opaque = TRUE)
+			const paint::palette_t& palette, int part_id, int state_id, BOOL opaque = TRUE)
 		{
 			if (auto pigment = palette.get(part_id, state_id))
 				return d2d_draw_text(dc, rc, text, c, text_flags, pigment, opaque);
@@ -481,7 +481,7 @@ namespace apn::dark::kuro::paint
 		// パレットを使用して絵文字を描画します。
 		//
 		inline BOOL d2d_draw_icon(HDC dc, LPCRECT rc,
-			const paint::Palette& palette, int part_id, int state_id,
+			const paint::palette_t& palette, int part_id, int state_id,
 			LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
 			if (auto pigment = palette.get(part_id, state_id))

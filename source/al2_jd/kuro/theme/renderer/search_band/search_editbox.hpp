@@ -2,9 +2,9 @@
 
 namespace apn::dark::kuro::theme
 {
-	inline struct SearchEditBoxRenderer : Renderer
+	inline struct search_editbox_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::editbox_material.palette;
+		const paint::palette_t& palette = paint::editbox_material.palette;
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{

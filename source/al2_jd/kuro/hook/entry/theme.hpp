@@ -5,7 +5,7 @@ namespace apn::dark::kuro::hook
 	//
 	// このクラスはテーマのフックを担当します。
 	//
-	inline struct Theme : Entry
+	inline struct theme_t : entry_t
 	{
 		//
 		// 初期化処理を実行します。

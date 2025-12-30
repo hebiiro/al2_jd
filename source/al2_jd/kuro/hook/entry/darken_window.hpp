@@ -13,7 +13,7 @@ namespace apn::dark::kuro::hook
 	//
 	// このクラスは黒窓関係のフックを担当します。
 	//
-	inline struct DarkenWindow : Entry
+	inline struct darken_window_t : entry_t
 	{
 		//
 		// 黒窓のダミーのインスタンスハンドルです。
@@ -111,7 +111,7 @@ namespace apn::dark::kuro::hook
 				GetRValue(color), GetGValue(color), GetBValue(color));
 		}
 
-		inline static std::wstring to_string(LPCWSTR name, const kuro::paint::Pigment* pigment)
+		inline static std::wstring to_string(LPCWSTR name, const kuro::paint::pigment_t* pigment)
 		{
 			if (!pigment) return {};
 
@@ -123,7 +123,7 @@ namespace apn::dark::kuro::hook
 				to_string(CLR_NONE));
 		}
 
-		inline static std::wstring to_string(LPCWSTR name, const kuro::paint::Palette& palette, int part_id, int state_id)
+		inline static std::wstring to_string(LPCWSTR name, const kuro::paint::palette_t& palette, int part_id, int state_id)
 		{
 			return to_string(name, palette.get(part_id, state_id));
 		}

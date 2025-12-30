@@ -5,7 +5,7 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはテーマ名を管理します。
 	//
-	inline struct Name
+	inline struct name_t
 	{
 		//
 		// テーマ名のマップです。

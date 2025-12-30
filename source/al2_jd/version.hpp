@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはこのプログラムのバージョンを管理します。
 	//
-	inline struct Version {
+	inline struct version_t {
 		//
 		// プラグイン名とプラグイン情報です。
 		//

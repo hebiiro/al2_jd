@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはアプリケーションです。
 	//
-	inline struct App : AppInterface
+	inline struct app_t : app_interface_t
 	{
 		//
 		// スタイルファイルを監視します。
@@ -20,7 +20,7 @@ namespace apn::dark
 		//
 		// コンストラクタです。
 		//
-		App() { app = this; }
+		app_t() { app = this; }
 
 		//
 		// dllの初期化処理を実行します。
@@ -120,7 +120,7 @@ namespace apn::dark
 			::DrawMenuBar(hive.theme_window);
 #if 0
 			// テスト用ダイアログを表示します。
-			TestDialog dialog; dialog.do_modal();
+			test_dialog_t dialog; dialog.do_modal();
 #endif
 			return TRUE;
 		}

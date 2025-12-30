@@ -5,35 +5,35 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはシステムカラーのマテリアルです。
 	//
-	inline struct SysColorMaterial : Material
+	inline struct sys_color_material_t : material_t
 	{
-		Pigment window;
-		Pigment window_text;
-		Pigment highlight;
-		Pigment highlight_text;
-		Pigment btn_face;
-		Pigment btn_text;
-		Pigment btn_highlight;
-		Pigment gray_text;
+		pigment_t window;
+		pigment_t window_text;
+		pigment_t highlight;
+		pigment_t highlight_text;
+		pigment_t btn_face;
+		pigment_t btn_text;
+		pigment_t btn_highlight;
+		pigment_t gray_text;
 
-		Pigment single_border;
+		pigment_t single_border;
 
-		struct SingleEdge {
-			Pigment top_left;
-			Pigment bottom_right;
+		struct single_edge_t {
+			pigment_t top_left;
+			pigment_t bottom_right;
 		};
 
-		struct Edge {
-			SingleEdge outer;
-			SingleEdge inner;
+		struct edge_t {
+			single_edge_t outer;
+			single_edge_t inner;
 		};
 
-		SingleEdge single_raised_edge;
-		SingleEdge single_sunken_edge;
-		Edge raised_edge;
-		Edge sunken_edge;
-		Edge bump_edge;
-		Edge etched_edge;
+		single_edge_t single_raised_edge;
+		single_edge_t single_sunken_edge;
+		edge_t raised_edge;
+		edge_t sunken_edge;
+		edge_t bump_edge;
+		edge_t etched_edge;
 
 		//
 		// マテリアルの初期化処理を実行します。
@@ -42,42 +42,42 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			window = create_background_pigment(L"SysColor", L"Window", Style::Color::Background);
-			window_text = create_background_pigment(L"SysColor", L"WindowText", Style::Color::Text);
-			highlight = create_background_pigment(L"SysColor", L"Highlight", Style::Color::ButtonBodySelect);
-			highlight_text = create_background_pigment(L"SysColor", L"HighlightText", Style::Color::Text);
-			btn_face = create_background_pigment(L"SysColor", L"BtnFace", Style::Color::ButtonBody);
-			btn_text = create_background_pigment(L"SysColor", L"BtnText", Style::Color::Text);
-			btn_highlight = create_background_pigment(L"SysColor", L"BtnHighlight", Style::Color::ButtonBody);
-			gray_text = create_background_pigment(L"SysColor", L"GrayText", Style::Color::TextDisable);
+			window = create_background_pigment(L"SysColor", L"Window", style_t::color_e::Background);
+			window_text = create_background_pigment(L"SysColor", L"WindowText", style_t::color_e::Text);
+			highlight = create_background_pigment(L"SysColor", L"Highlight", style_t::color_e::ButtonBodySelect);
+			highlight_text = create_background_pigment(L"SysColor", L"HighlightText", style_t::color_e::Text);
+			btn_face = create_background_pigment(L"SysColor", L"BtnFace", style_t::color_e::ButtonBody);
+			btn_text = create_background_pigment(L"SysColor", L"BtnText", style_t::color_e::Text);
+			btn_highlight = create_background_pigment(L"SysColor", L"BtnHighlight", style_t::color_e::ButtonBody);
+			gray_text = create_background_pigment(L"SysColor", L"GrayText", style_t::color_e::TextDisable);
 
-			single_border = create_background_pigment(L"SysColor", L"SingleBorder", Style::Color::Border);
+			single_border = create_background_pigment(L"SysColor", L"SingleBorder", style_t::color_e::Border);
 
-			single_raised_edge.top_left = create_background_pigment(L"SysColor", L"SingleRaisedEdgeTopLeft", Style::Color::Border);
-			single_raised_edge.bottom_right = create_background_pigment(L"SysColor", L"SingleRaisedEdgeBottomRight", Style::Color::Border);
+			single_raised_edge.top_left = create_background_pigment(L"SysColor", L"SingleRaisedEdgeTopLeft", style_t::color_e::Border);
+			single_raised_edge.bottom_right = create_background_pigment(L"SysColor", L"SingleRaisedEdgeBottomRight", style_t::color_e::Border);
 
-			single_sunken_edge.top_left = create_background_pigment(L"SysColor", L"SingleSunkenEdgeTopLeft", Style::Color::Border);
-			single_sunken_edge.bottom_right = create_background_pigment(L"SysColor", L"SingleSunkenEdgeBottomRight", Style::Color::Border);
+			single_sunken_edge.top_left = create_background_pigment(L"SysColor", L"SingleSunkenEdgeTopLeft", style_t::color_e::Border);
+			single_sunken_edge.bottom_right = create_background_pigment(L"SysColor", L"SingleSunkenEdgeBottomRight", style_t::color_e::Border);
 
-			raised_edge.outer.top_left = create_background_pigment(L"SysColor", L"RaisedEdgeOuterTopLeft", Style::Color::Border);
-			raised_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"RaisedEdgeOuterBottomRight", Style::Color::Border);
-			raised_edge.inner.top_left = create_background_pigment(L"SysColor", L"RaisedEdgeInnerTopLeft", Style::Color::ButtonBody);
-			raised_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"RaisedEdgeInnerBottomRight", Style::Color::ButtonBody);
+			raised_edge.outer.top_left = create_background_pigment(L"SysColor", L"RaisedEdgeOuterTopLeft", style_t::color_e::Border);
+			raised_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"RaisedEdgeOuterBottomRight", style_t::color_e::Border);
+			raised_edge.inner.top_left = create_background_pigment(L"SysColor", L"RaisedEdgeInnerTopLeft", style_t::color_e::ButtonBody);
+			raised_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"RaisedEdgeInnerBottomRight", style_t::color_e::ButtonBody);
 
-			sunken_edge.outer.top_left = create_background_pigment(L"SysColor", L"SunkenEdgeOuterTopLeft", Style::Color::ButtonBody);
-			sunken_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"SunkenEdgeOuterBottomRight", Style::Color::ButtonBody);
-			sunken_edge.inner.top_left = create_background_pigment(L"SysColor", L"SunkenEdgeInnerTopLeft", Style::Color::Border);
-			sunken_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"SunkenEdgeInnerBottomRight", Style::Color::Border);
+			sunken_edge.outer.top_left = create_background_pigment(L"SysColor", L"SunkenEdgeOuterTopLeft", style_t::color_e::ButtonBody);
+			sunken_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"SunkenEdgeOuterBottomRight", style_t::color_e::ButtonBody);
+			sunken_edge.inner.top_left = create_background_pigment(L"SysColor", L"SunkenEdgeInnerTopLeft", style_t::color_e::Border);
+			sunken_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"SunkenEdgeInnerBottomRight", style_t::color_e::Border);
 
-			bump_edge.outer.top_left = create_background_pigment(L"SysColor", L"BumpEdgeOuterTopLeft", Style::Color::ButtonBodyHover);
-			bump_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"BumpEdgeOuterBottomRight", Style::Color::ButtonBody);
-			bump_edge.inner.top_left = create_background_pigment(L"SysColor", L"BumpEdgeInnerTopLeft", Style::Color::ButtonBody);
-			bump_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"BumpEdgeInnerBottomRight", Style::Color::ButtonBodyHover);
+			bump_edge.outer.top_left = create_background_pigment(L"SysColor", L"BumpEdgeOuterTopLeft", style_t::color_e::ButtonBodyHover);
+			bump_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"BumpEdgeOuterBottomRight", style_t::color_e::ButtonBody);
+			bump_edge.inner.top_left = create_background_pigment(L"SysColor", L"BumpEdgeInnerTopLeft", style_t::color_e::ButtonBody);
+			bump_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"BumpEdgeInnerBottomRight", style_t::color_e::ButtonBodyHover);
 
-			etched_edge.outer.top_left = create_background_pigment(L"SysColor", L"EtchedEdgeOuterTopLeft", Style::Color::ButtonBody);
-			etched_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"EtchedEdgeOuterBottomRight", Style::Color::ButtonBodyHover);
-			etched_edge.inner.top_left = create_background_pigment(L"SysColor", L"EtchedEdgeInnerTopLeft", Style::Color::ButtonBodyHover);
-			etched_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"EtchedEdgeInnerBottomRight", Style::Color::ButtonBody);
+			etched_edge.outer.top_left = create_background_pigment(L"SysColor", L"EtchedEdgeOuterTopLeft", style_t::color_e::ButtonBody);
+			etched_edge.outer.bottom_right = create_background_pigment(L"SysColor", L"EtchedEdgeOuterBottomRight", style_t::color_e::ButtonBodyHover);
+			etched_edge.inner.top_left = create_background_pigment(L"SysColor", L"EtchedEdgeInnerTopLeft", style_t::color_e::ButtonBodyHover);
+			etched_edge.inner.bottom_right = create_background_pigment(L"SysColor", L"EtchedEdgeInnerBottomRight", style_t::color_e::ButtonBody);
 
 			palette.set(COLOR_WINDOW, 0, window);
 			palette.set(COLOR_WINDOWTEXT, 0, window_text);
@@ -100,7 +100,7 @@ namespace apn::dark::kuro::paint
 		//
 		// 軽量エッジを描画します。
 		//
-		inline static void draw_single_edge(HDC dc, LPCRECT rc, SingleEdge& edge)
+		inline static void draw_single_edge(HDC dc, LPCRECT rc, single_edge_t& edge)
 		{
 			return paint::draw_single_edge(dc, rc,
 				edge.top_left.background.get_win32_color(),
@@ -110,7 +110,7 @@ namespace apn::dark::kuro::paint
 		//
 		// エッジを描画します。
 		//
-		inline static void draw_edge(HDC dc, LPCRECT rc, Edge& edge)
+		inline static void draw_edge(HDC dc, LPCRECT rc, edge_t& edge)
 		{
 			return paint::draw_edge(dc, rc,
 				edge.outer.top_left.background.get_win32_color(),

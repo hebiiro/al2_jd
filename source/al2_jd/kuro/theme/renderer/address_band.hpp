@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはアドレスバンドのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct AddressBandRenderer : Renderer
+	inline struct address_band_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::address_band_material.palette;
+		const paint::palette_t& palette = paint::address_band_material.palette;
 
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{

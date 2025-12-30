@@ -5,7 +5,7 @@ namespace apn::dark::kuro
 	//
 	// 指定されたカラーエントリを結合します。
 	//
-	inline void operator+=(ColorEntry& lhs, const ColorEntry* rhs)
+	inline void operator+=(color_entry_t& lhs, const color_entry_t* rhs)
 	{
 		// 右辺のカラーエントリが無効の場合は何もしません。
 		if (!rhs) return;
@@ -25,17 +25,17 @@ namespace apn::dark::kuro
 	//
 	// このクラスはcustom_color.confの変数を保持します。
 	//
-	inline struct CustomStyle
+	inline struct custom_style_t
 	{
 		//
 		// カラーエントリのコレクションです。
 		//
-		std::unordered_map<std::pair<std::wstring, std::wstring>, ColorEntry> color_entries;
+		std::unordered_map<std::pair<std::wstring, std::wstring>, color_entry_t> color_entries;
 
 		//
 		// 指定されたセクションとキーに対応するカラーエントリを返します。
 		//
-		const ColorEntry* get_color_entry(const std::wstring& section, const std::wstring& key) const
+		const color_entry_t* get_color_entry(const std::wstring& section, const std::wstring& key) const
 		{
 			auto it = color_entries.find({ section, key });
 			if (it == color_entries.end()) return {};
@@ -45,7 +45,7 @@ namespace apn::dark::kuro
 		//
 		// 指定された条件のカラーエントリを返します。
 		//
-		inline ColorEntry get_color_entry(const std::wstring& section, const std::wstring& key, const ColorEntry& default_color_entry)
+		inline color_entry_t get_color_entry(const std::wstring& section, const std::wstring& key, const color_entry_t& default_color_entry)
 		{
 			// 一旦デフォルト値をセットします。
 			auto out_color_entry = default_color_entry;
@@ -60,7 +60,7 @@ namespace apn::dark::kuro
 		//
 		// バックグランドのカラーエントリを返します。
 		//
-		inline ColorEntry get_background_color_entry(const std::wstring& section, const std::wstring& sub_key, const ColorEntry& default_color_entry)
+		inline color_entry_t get_background_color_entry(const std::wstring& section, const std::wstring& sub_key, const color_entry_t& default_color_entry)
 		{
 			return get_color_entry(section, sub_key + L"Fill", default_color_entry);
 		}
@@ -68,7 +68,7 @@ namespace apn::dark::kuro
 		//
 		// ボーダーのカラーエントリを返します。
 		//
-		inline ColorEntry get_border_color_entry(const std::wstring& section, const std::wstring& sub_key, const ColorEntry& default_color_entry)
+		inline color_entry_t get_border_color_entry(const std::wstring& section, const std::wstring& sub_key, const color_entry_t& default_color_entry)
 		{
 			return get_color_entry(section, sub_key + L"Edge", default_color_entry);
 		}
@@ -76,7 +76,7 @@ namespace apn::dark::kuro
 		//
 		// テキストのカラーエントリを返します。
 		//
-		inline ColorEntry get_text_color_entry(const std::wstring& section, const std::wstring& sub_key, const ColorEntry& default_color_entry)
+		inline color_entry_t get_text_color_entry(const std::wstring& section, const std::wstring& sub_key, const color_entry_t& default_color_entry)
 		{
 			return get_color_entry(section, sub_key + L"Text", default_color_entry);
 		}
@@ -84,10 +84,10 @@ namespace apn::dark::kuro
 		//
 		// テキストの影のカラーエントリを返します。
 		//
-		inline ColorEntry get_text_shadow_color_entry(const std::wstring& section, const std::wstring& sub_key)
+		inline color_entry_t get_text_shadow_color_entry(const std::wstring& section, const std::wstring& sub_key)
 		{
 			// 出力カラーエントリです。
-			auto out_color_entry = ColorEntry {};
+			auto out_color_entry = color_entry_t {};
 
 			// 各カラーエントリを出力カラーエントリに結合します。
 			out_color_entry += get_color_entry(L"Common", L"TextShadow");
@@ -109,10 +109,10 @@ namespace apn::dark::kuro
 			auto vec = split(value, L',');
 
 			// 最大数を取得します。
-			auto c = std::min(ColorEntry::c_max_size, vec.size());
+			auto c = std::min(color_entry_t::c_max_size, vec.size());
 
 			// コレクションに追加予定のカラーエントリです。
-			auto color_entry = ColorEntry {};
+			auto color_entry = color_entry_t {};
 
 			// 配列を走査します。
 			for (size_t i = 0; i < c; i++)
@@ -124,7 +124,7 @@ namespace apn::dark::kuro
 				if (str.empty()) continue;
 
 				// 取得予定のRGBAです。
-				auto rgba = RGBA {};
+				auto rgba = rgba_t {};
 
 				// 文字列の長さで分岐します。
 				switch (str.length())

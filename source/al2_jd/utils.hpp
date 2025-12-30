@@ -179,17 +179,17 @@ namespace apn::dark
 	//
 	// このクラスはGDI+を管理します。
 	//
-	struct GdiplusManager {
+	struct gdiplus_manager_t {
 		Gdiplus::GdiplusStartupInput si;
 		Gdiplus::GdiplusStartupOutput so;
 		ULONG_PTR token;
 		ULONG_PTR hook_token;
-		GdiplusManager() {
+		gdiplus_manager_t() {
 			si.SuppressBackgroundThread = TRUE;
 			Gdiplus::GdiplusStartup(&token, &si, &so);
 			so.NotificationHook(&hook_token);
 		}
-		~GdiplusManager() {
+		~gdiplus_manager_t() {
 			so.NotificationUnhook(hook_token);
 			Gdiplus::GdiplusShutdown(token);
 		}
@@ -200,7 +200,7 @@ namespace apn::dark
 	//
 	HBITMAP to_bitmap(HICON icon)
 	{
-		GdiplusManager manager;
+		gdiplus_manager_t manager;
 
 		auto bitmap = HBITMAP {};
 		Gdiplus::Bitmap(icon).GetHBITMAP(Gdiplus::Color(), &bitmap);
@@ -234,12 +234,12 @@ namespace apn::dark
 	//
 	// このクラスは与えられた矩形をクリッピングします。
 	//
-	struct Clipper
+	struct clipper_t
 	{
 		HDC dc = {};
 		HRGN rgn = {};
 
-		Clipper(HDC dc, LPCRECT rc, LPCRECT rc_clip)
+		clipper_t(HDC dc, LPCRECT rc, LPCRECT rc_clip)
 			: dc(dc)
 		{
 			if (rc && rc_clip && !::IsRectEmpty(rc_clip) && !::EqualRect(rc, rc_clip))
@@ -257,7 +257,7 @@ namespace apn::dark
 			}
 		}
 
-		~Clipper()
+		~clipper_t()
 		{
 			if (rgn)
 			{
@@ -270,5 +270,5 @@ namespace apn::dark
 	//
 	// ::ExtTextOut()のフックをロックします。
 	//
-	thread_local inline Lockable ext_text_out_lock;
+	thread_local inline lockable_t ext_text_out_lock;
 }

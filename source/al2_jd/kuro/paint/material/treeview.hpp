@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはツリービューのマテリアルです。
 	//
-	inline struct TreeViewMaterial : Material
+	inline struct treeview_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,29 +15,29 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto separator = create_pigment(L"TreeView", L"Separator",
-				Style::Color::Border,
+				style_t::color_e::Border,
 				{},
 				{});
 
 			auto item_normal = create_pigment(L"TreeView", L"Normal",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto item_disabled = create_pigment(L"TreeView", L"Disable",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::TextDisable);
+				style_t::color_e::TextDisable);
 
 			auto item_hot = create_pigment(L"TreeView", L"Hot",
-				Style::Color::ButtonBodyHover,
+				style_t::color_e::ButtonBodyHover,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto item_selected = create_pigment(L"TreeView", L"Select",
-				Style::Color::ButtonBodySelect,
+				style_t::color_e::ButtonBodySelect,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto glyph_normal = create_pigment(L"TreeViewGlyph", L"Normal", item_normal);
 			auto glyph_hot = create_pigment(L"TreeViewGlyph", L"Hot", item_hot);

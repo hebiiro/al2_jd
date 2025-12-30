@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはアプリケーションのインターフェイスです。
 	//
-	struct AppInterface {
+	struct app_interface_t {
 		virtual BOOL dll_init() = 0;
 		virtual BOOL dll_exit() = 0;
 		virtual BOOL post_init() = 0;

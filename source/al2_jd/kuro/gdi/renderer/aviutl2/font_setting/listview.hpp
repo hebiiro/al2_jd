@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi::aviutl2::font_setting
 {
-	struct ListViewRenderer : gdi::ListViewRenderer
+	struct listview_renderer_t : gdi::listview_renderer_t
 	{
 		//
 		// CDDS_ITEMPREPAINTでセットするフォントです。

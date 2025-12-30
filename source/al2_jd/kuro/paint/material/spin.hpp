@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはスピンボタンのマテリアルです。
 	//
-	inline struct SpinMaterial : Material
+	inline struct spin_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,24 +15,24 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto button_normal = create_pigment(L"Spin", L"Normal",
-				Style::Color::ButtonBody,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBody,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto button_disabled = create_pigment(L"Spin", L"Disable",
-				Style::Color::ButtonBodyDisable,
-				Style::Color::Border,
-				Style::Color::TextDisable);
+				style_t::color_e::ButtonBodyDisable,
+				style_t::color_e::Border,
+				style_t::color_e::TextDisable);
 
 			auto button_hot = create_pigment(L"Spin", L"Hot",
-				Style::Color::ButtonBodySelect,
-				Style::Color::BorderFocus,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodySelect,
+				style_t::color_e::BorderFocus,
+				style_t::color_e::Text);
 
 			auto button_pressed = create_pigment(L"Spin", L"Press",
-				Style::Color::ButtonBodyPress,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyPress,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
 			palette.set(SPNP_UP, UPS_NORMAL, button_normal);
 			palette.set(SPNP_UP, UPS_DISABLED, button_disabled);

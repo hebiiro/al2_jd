@@ -5,7 +5,7 @@ namespace apn::dark::kuro::hook
 	//
 	// このクラスはフックを管理します。
 	//
-	inline struct Manager
+	inline struct manager_t
 	{
 		//
 		// 初期化処理を実行します。
@@ -14,7 +14,7 @@ namespace apn::dark::kuro::hook
 		{
 			MY_TRACE_FUNC("");
 
-			return Entry::init();
+			return entry_t::init();
 		}
 
 		//
@@ -24,7 +24,7 @@ namespace apn::dark::kuro::hook
 		{
 			MY_TRACE_FUNC("");
 
-			return Entry::exit();
+			return entry_t::exit();
 		}
 	} manager;
 }

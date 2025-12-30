@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはスクロールバーのマテリアルです。
 	//
-	inline struct ScrollBarMaterial : Material
+	inline struct scrollbar_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,39 +15,39 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto background = create_pigment(L"ScrollBar", L"Background",
-				Style::Color::TitleHeader,
+				style_t::color_e::TitleHeader,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto size_box = create_pigment(L"ScrollBar", L"SizeBox",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::TextDisable);
+				style_t::color_e::TextDisable);
 
 			auto button_normal = create_pigment(L"ScrollBarButton", L"Normal",
-				Style::Color::ButtonBody,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBody,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto button_hover = create_pigment(L"ScrollBarButton", L"Hover",
-				Style::Color::ButtonBodyHover,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyHover,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
 			auto button_hot = create_pigment(L"ScrollBarButton", L"Hot",
-				Style::Color::ButtonBodySelect,
-				Style::Color::BorderFocus,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodySelect,
+				style_t::color_e::BorderFocus,
+				style_t::color_e::Text);
 
 			auto button_pressed = create_pigment(L"ScrollBarButton", L"Press",
-				Style::Color::ButtonBodyPress,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyPress,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
 			auto button_disabled = create_pigment(L"ScrollBarButton", L"Disable",
-				Style::Color::ButtonBodyDisable,
-				Style::Color::Border,
-				Style::Color::TextDisable);
+				style_t::color_e::ButtonBodyDisable,
+				style_t::color_e::Border,
+				style_t::color_e::TextDisable);
 
 			auto thumb_normal = button_normal;
 			auto thumb_hover = button_hover;

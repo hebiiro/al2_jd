@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはツールバーのマテリアルです。
 	//
-	inline struct ToolBarMaterial : Material
+	inline struct toolbar_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,62 +15,62 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto background = create_pigment(L"ToolBar", L"Background",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			struct {
-				Pigment normal = create_pigment(L"ToolBarButton", L"Normal",
-					Style::Color::ButtonBody,
-					Style::Color::Border,
-					Style::Color::Text);
+				pigment_t normal = create_pigment(L"ToolBarButton", L"Normal",
+					style_t::color_e::ButtonBody,
+					style_t::color_e::Border,
+					style_t::color_e::Text);
 
-				Pigment disabled = create_pigment(L"ToolBarButton", L"Disable",
-					Style::Color::ButtonBodyDisable,
-					Style::Color::Border,
-					Style::Color::TextDisable);
+				pigment_t disabled = create_pigment(L"ToolBarButton", L"Disable",
+					style_t::color_e::ButtonBodyDisable,
+					style_t::color_e::Border,
+					style_t::color_e::TextDisable);
 
-				Pigment hot = create_pigment(L"ToolBarButton", L"Hot",
-					Style::Color::ButtonBodyHover,
-					Style::Color::Border,
-					Style::Color::Text);
+				pigment_t hot = create_pigment(L"ToolBarButton", L"Hot",
+					style_t::color_e::ButtonBodyHover,
+					style_t::color_e::Border,
+					style_t::color_e::Text);
 
-				Pigment pressed = create_pigment(L"ToolBarButton", L"Press",
-					Style::Color::ButtonBodyPress,
-					Style::Color::BorderSelect,
-					Style::Color::Text);
+				pigment_t pressed = create_pigment(L"ToolBarButton", L"Press",
+					style_t::color_e::ButtonBodyPress,
+					style_t::color_e::BorderSelect,
+					style_t::color_e::Text);
 
-				Pigment checked = create_pigment(L"ToolBarButton", L"Check",
-					Style::Color::ButtonBodySelect,
-					Style::Color::BorderFocus,
-					Style::Color::Text);
+				pigment_t checked = create_pigment(L"ToolBarButton", L"Check",
+					style_t::color_e::ButtonBodySelect,
+					style_t::color_e::BorderFocus,
+					style_t::color_e::Text);
 			} button;
 
 			struct {
-				Pigment normal = create_pigment(L"ToolBarFlatButton", L"Normal",
-					Style::Color::Background,
+				pigment_t normal = create_pigment(L"ToolBarFlatButton", L"Normal",
+					style_t::color_e::Background,
 					{},
-					Style::Color::Text);
+					style_t::color_e::Text);
 
-				Pigment disabled = create_pigment(L"ToolBarFlatButton", L"Disable",
-					Style::Color::Background,
+				pigment_t disabled = create_pigment(L"ToolBarFlatButton", L"Disable",
+					style_t::color_e::Background,
 					{},
-					Style::Color::TextDisable);
+					style_t::color_e::TextDisable);
 
-				Pigment hot = create_pigment(L"ToolBarFlatButton", L"Hot",
-					Style::Color::ButtonBodySelect,
-					Style::Color::Border,
-					Style::Color::Text);
+				pigment_t hot = create_pigment(L"ToolBarFlatButton", L"Hot",
+					style_t::color_e::ButtonBodySelect,
+					style_t::color_e::Border,
+					style_t::color_e::Text);
 
-				Pigment pressed = create_pigment(L"ToolBarFlatButton", L"Press",
-					Style::Color::ButtonBodyPress,
-					Style::Color::BorderSelect,
-					Style::Color::Text);
+				pigment_t pressed = create_pigment(L"ToolBarFlatButton", L"Press",
+					style_t::color_e::ButtonBodyPress,
+					style_t::color_e::BorderSelect,
+					style_t::color_e::Text);
 
-				Pigment checked = create_pigment(L"ToolBarFlatButton", L"Check",
-					Style::Color::ButtonBodySelect,
-					Style::Color::BorderFocus,
-					Style::Color::Text);
+				pigment_t checked = create_pigment(L"ToolBarFlatButton", L"Check",
+					style_t::color_e::ButtonBodySelect,
+					style_t::color_e::BorderFocus,
+					style_t::color_e::Text);
 			} flat_button;
 
 			const auto set = [&](auto part_id, const auto& button)

@@ -5,7 +5,7 @@ namespace apn::dark::kuro::hook
 	//
 	// このクラスはWH_CALLWNDPROCRETフックを担当します。
 	//
-	inline struct CallWndProcRet : Entry
+	inline struct cwpr_t : entry_t
 	{
 		my::win_hook::unique_ptr<> win_hook;
 

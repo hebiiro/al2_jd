@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::theme
 {
-	inline struct StaticRenderer : Renderer
+	inline struct static_renderer_t : renderer_t
 	{
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{

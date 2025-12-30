@@ -6,11 +6,11 @@ namespace apn::dark::kuro::paint
 	// このクラスはピグメントです。
 	// GDIやテーマの描画に使用されます。
 	//
-	struct Pigment
+	struct pigment_t
 	{
 		struct Base
 		{
-			ColorEntry color_entry;
+			color_entry_t color_entry;
 
 			//
 			// 描画可能な場合はTRUEを返します。
@@ -44,7 +44,7 @@ namespace apn::dark::kuro::paint
 			//
 			// (デフォルト)コンストラクタです。
 			//
-			Background(const ColorEntry& color_entry = {})
+			Background(const color_entry_t& color_entry = {})
 				: Base(color_entry)
 			{
 			}

@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはコンボボックスのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct ComboBoxRenderer : Renderer
+	inline struct combobox_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::combobox_material.palette;
+		const paint::palette_t& palette = paint::combobox_material.palette;
 
 		int border_state_id = 0;
 		int readonly_state_id = 0;

@@ -5,20 +5,20 @@ namespace apn::dark::kuro::gdi
 	//
 	// このクラスはGDIレンダラーです。
 	//
-	struct Renderer : std::enable_shared_from_this<Renderer>
+	struct renderer_t : std::enable_shared_from_this<renderer_t>
 	{
 		//
 		// このクラスは標準化されたウィンドウのクラス名です。
 		//
-		struct NormalizedClassName : my::tstring {
-			NormalizedClassName(const my::tstring& class_name) : my::tstring(class_name) {}
+		struct normalized_class_name_t : my::tstring {
+			normalized_class_name_t(const my::tstring& class_name) : my::tstring(class_name) {}
 			bool operator==(LPCTSTR b) const { return ::lstrcmpi(c_str(), b) == 0; }
 		};
 
 		//
 		// このクラスはメッセージの状態です。
 		//
-		struct MessageState {
+		struct message_state_t {
 			HWND hwnd;
 			UINT message;
 			WPARAM wParam;
@@ -28,17 +28,17 @@ namespace apn::dark::kuro::gdi
 		//
 		// 現在のメッセージの状態です。
 		//
-		thread_local inline static MessageState current_message_state;
+		thread_local inline static message_state_t current_message_state;
 
 		//
 		// レンダラーのコレクションです。
 		//
-		thread_local inline static std::unordered_map<HWND, std::shared_ptr<Renderer>> collection;
+		thread_local inline static std::unordered_map<HWND, std::shared_ptr<renderer_t>> collection;
 
 		//
 		// 仮想デストラクタです。
 		//
-		virtual ~Renderer()
+		virtual ~renderer_t()
 		{
 //			MY_TRACE_FUNC("");
 		}
@@ -54,7 +54,7 @@ namespace apn::dark::kuro::gdi
 			collection[hwnd] = shared_from_this();
 
 			// ウィンドウをサブクラス化します。
-			::SetWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)this, 0);
+			::SetWindowSubclass(hwnd, renderer_t::subclass_proc, (UINT_PTR)this, 0);
 
 			on_attach(hwnd);
 		}
@@ -69,7 +69,7 @@ namespace apn::dark::kuro::gdi
 			on_detach(hwnd);
 
 			// ウィンドウのサブクラス化を解除します。
-			::RemoveWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)this);
+			::RemoveWindowSubclass(hwnd, renderer_t::subclass_proc, (UINT_PTR)this);
 
 			// レンダラーをコレクションから削除します。
 			collection.erase(hwnd);
@@ -94,7 +94,7 @@ namespace apn::dark::kuro::gdi
 				renderer->on_detach(hwnd);
 
 				// ウィンドウのサブクラス化を解除します。
-				::RemoveWindowSubclass(hwnd, Renderer::subclass_proc, (UINT_PTR)renderer.get());
+				::RemoveWindowSubclass(hwnd, renderer_t::subclass_proc, (UINT_PTR)renderer.get());
 			}
 
 			// コレクションを消去します。
@@ -104,7 +104,7 @@ namespace apn::dark::kuro::gdi
 		//
 		// 指定されたウィンドウに関連付けられているレンダラーを返します。
 		//
-		inline static std::shared_ptr<Renderer> from_handle(HWND hwnd)
+		inline static std::shared_ptr<renderer_t> from_handle(HWND hwnd)
 		{
 			auto it = collection.find(hwnd);
 			if (it == collection.end()) return nullptr;
@@ -163,9 +163,9 @@ namespace apn::dark::kuro::gdi
 			// 現在のメッセージの状態を保存します。
 			struct MessageStateSaver
 			{
-				MessageState old_message_state;
+				message_state_t old_message_state;
 
-				MessageStateSaver(const MessageState& message_state)
+				MessageStateSaver(const message_state_t& message_state)
 				{
 					// 現在のメッセージの状態を更新します。
 					old_message_state = current_message_state;
@@ -502,57 +502,57 @@ namespace apn::dark::kuro::gdi
 			return brush;
 		}
 
-		virtual BOOL on_rectangle(MessageState* current_state, HDC dc, int left, int top, int right, int bottom)
+		virtual BOOL on_rectangle(message_state_t* current_state, HDC dc, int left, int top, int right, int bottom)
 		{
 			return hive.orig.Rectangle(dc, left, top, right, bottom);
 		}
 
-		virtual BOOL on_fill_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush)
+		virtual BOOL on_fill_rect(message_state_t* current_state, HDC dc, LPCRECT rc, HBRUSH brush)
 		{
 			return hive.orig.FillRect(dc, rc, brush);
 		}
 
-		virtual BOOL on_draw_frame(MessageState* current_state, HDC dc, LPRECT rc, UINT width, UINT type)
+		virtual BOOL on_draw_frame(message_state_t* current_state, HDC dc, LPRECT rc, UINT width, UINT type)
 		{
 			return hive.orig.DrawFrame(dc, rc, width, type);
 		}
 
-		virtual BOOL on_draw_frame_control(MessageState* current_state, HDC dc, LPRECT rc, UINT type, UINT state)
+		virtual BOOL on_draw_frame_control(message_state_t* current_state, HDC dc, LPRECT rc, UINT type, UINT state)
 		{
 			return hive.orig.DrawFrameControl(dc, rc, type, state);
 		}
 
-		virtual BOOL on_frame_rect(MessageState* current_state, HDC dc, LPCRECT rc, HBRUSH brush)
+		virtual BOOL on_frame_rect(message_state_t* current_state, HDC dc, LPCRECT rc, HBRUSH brush)
 		{
 			return hive.orig.FrameRect(dc, rc, brush);
 		}
 
-		virtual BOOL on_draw_edge(MessageState* current_state, HDC dc, LPRECT rc, UINT edge, UINT flags)
+		virtual BOOL on_draw_edge(message_state_t* current_state, HDC dc, LPRECT rc, UINT edge, UINT flags)
 		{
 			return hive.orig.DrawEdge(dc, rc, edge, flags);
 		}
 
-		virtual BOOL on_draw_focus_rect(MessageState* current_state, HDC dc, LPCRECT rc)
+		virtual BOOL on_draw_focus_rect(message_state_t* current_state, HDC dc, LPCRECT rc)
 		{
 			return hive.orig.DrawFocusRect(dc, rc);
 		}
 
-		virtual BOOL on_draw_state_w(MessageState* current_state, HDC dc, HBRUSH fore, DRAWSTATEPROC cb, LPARAM lData, WPARAM wData, int x, int y, int cx, int cy, UINT flags)
+		virtual BOOL on_draw_state_w(message_state_t* current_state, HDC dc, HBRUSH fore, DRAWSTATEPROC cb, LPARAM lData, WPARAM wData, int x, int y, int cx, int cy, UINT flags)
 		{
 			return hive.orig.DrawStateW(dc, fore, cb, lData, wData, x, y, cx, cy, flags);
 		}
 
-		virtual BOOL on_ext_text_out_w(MessageState* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx)
+		virtual BOOL on_ext_text_out_w(message_state_t* current_state, HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx)
 		{
 			return hive.orig.ExtTextOutW(dc, x, y, options, rc, text, c, dx);
 		}
 
-		virtual BOOL on_draw_text_ex_w(MessageState* current_state, HDC dc, LPWSTR text, int c, LPRECT rc, UINT flags, LPDRAWTEXTPARAMS dtp)
+		virtual BOOL on_draw_text_ex_w(message_state_t* current_state, HDC dc, LPWSTR text, int c, LPRECT rc, UINT flags, LPDRAWTEXTPARAMS dtp)
 		{
 			return hive.orig.DrawTextExW(dc, text, c, rc, flags, dtp);
 		}
 
-		virtual BOOL on_pat_blt(MessageState* current_state, HDC dc, int x, int y, int w, int h, DWORD rop)
+		virtual BOOL on_pat_blt(message_state_t* current_state, HDC dc, int x, int y, int w, int h, DWORD rop)
 		{
 			return hive.orig.PatBlt(dc, x, y, w, h, rop);
 		}

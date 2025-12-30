@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはスピンコントロールのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct SpinRenderer : Renderer
+	inline struct spin_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::spin_material.palette;
+		const paint::palette_t& palette = paint::spin_material.palette;
 
 		//
 		// スピンボタンを描画します。

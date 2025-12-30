@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはツールチップのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct ToolTipRenderer : Renderer
+	inline struct tooltip_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::tooltip_material.palette;
+		const paint::palette_t& palette = paint::tooltip_material.palette;
 
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
 		{

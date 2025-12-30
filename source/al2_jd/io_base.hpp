@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスは設定ファイル入出力のベースクラスです。
 	//
-	struct IOBase
+	struct io_base_t
 	{
 		//
 		// 入出力する設定ファイルのパスです。
@@ -33,8 +33,8 @@ namespace apn::dark
 			{
 				// スコープ終了時にupdate()が呼ばれるようにします。
 				struct Updater {
-					IOBase* io_base;
-					Updater(IOBase* io_base) : io_base(io_base) {}
+					io_base_t* io_base;
+					Updater(io_base_t* io_base) : io_base(io_base) {}
 					~Updater() { io_base->update(); }
 				} updater(this);
 

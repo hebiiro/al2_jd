@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはボタンのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct ButtonRenderer : Renderer
+	inline struct button_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::button_material.palette;
+		const paint::palette_t& palette = paint::button_material.palette;
 
 		int get_my_state_id(int part_id, int state_id)
 		{

@@ -5,7 +5,7 @@ namespace apn::dark::kuro::theme::immersive_start
 	//
 	// このクラスはメニューのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct MenuRenderer : base::MenuRenderer
+	inline struct menu_renderer_t : base::menu_renderer_t
 	{
 		virtual HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{

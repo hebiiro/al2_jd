@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme::base
 	//
 	// このクラスはメニューレンダラーのベースクラスです。
 	//
-	struct MenuRenderer : Renderer
+	struct menu_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::menu_material.palette;
+		const paint::palette_t& palette = paint::menu_material.palette;
 
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
 		{

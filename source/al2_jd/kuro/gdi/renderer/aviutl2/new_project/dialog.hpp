@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi::aviutl2::new_project
 {
-	struct DialogRenderer : gdi::DialogRenderer, Lockable
+	struct dialog_renderer_t : gdi::dialog_renderer_t, lockable_t
 	{
 		inline static constexpr size_t c_name_stat = 0;
 		inline static constexpr size_t c_name = 1;
@@ -34,7 +34,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		//
 		// コンストラクタです。
 		//
-		DialogRenderer(BOOL is_scene)
+		dialog_renderer_t(BOOL is_scene)
 			: is_scene(is_scene)
 		{
 		}
@@ -47,7 +47,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 			MY_TRACE_FUNC("{/hex}", hwnd);
 
 			struct Param {
-				DialogRenderer* dialog;
+				dialog_renderer_t* dialog;
 				int i;
 			} param = { this, 0 };
 
@@ -334,7 +334,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					// この処理はスコープ終了時(デフォルト処理の後)に実行します。
 					my::scope_exit scope_exit([&]
 					{
-						Locker locker(this);
+						locker_t locker(this);
 
 						init_controls(hwnd);
 						change_layout(hwnd);
@@ -360,7 +360,7 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					// ロックされている場合は何もしません。
 					if (is_locked()) break;
 
-					Locker locker(this);
+					locker_t locker(this);
 
 //					auto control_id = LOWORD(w_param);
 					auto code = HIWORD(w_param);

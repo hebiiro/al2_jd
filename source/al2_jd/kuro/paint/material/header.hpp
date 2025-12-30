@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはヘッダーコントロールのマテリアルです。
 	//
-	inline struct HeaderMaterial : Material
+	inline struct header_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,29 +15,29 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto his_background = create_pigment(L"Header", L"Background",
-				Style::Color::TitleHeader,
+				style_t::color_e::TitleHeader,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto his_normal = create_pigment(L"Header", L"Normal",
-				Style::Color::TitleHeader,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::TitleHeader,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto his_disabled = create_pigment(L"Header", L"Disable",
-				Style::Color::ButtonBodyDisable,
-				Style::Color::Border,
-				Style::Color::TextDisable);
+				style_t::color_e::ButtonBodyDisable,
+				style_t::color_e::Border,
+				style_t::color_e::TextDisable);
 
 			auto his_hot = create_pigment(L"Header", L"Hot",
-				Style::Color::ButtonBodyHover,
-				Style::Color::BorderFocus,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyHover,
+				style_t::color_e::BorderFocus,
+				style_t::color_e::Text);
 
 			auto his_pressed = create_pigment(L"Header", L"Press",
-				Style::Color::ButtonBodyPress,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyPress,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
 			palette.set(0, 1, his_background);
 

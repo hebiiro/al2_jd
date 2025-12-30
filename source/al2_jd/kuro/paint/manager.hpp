@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスは描画用クラスを管理します。
 	//
-	inline struct Manager
+	inline struct manager_t
 	{
 		//
 		// 初期化処理を実行します。
@@ -14,7 +14,7 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			Material::init_materials();
+			material_t::init_materials();
 
 			return TRUE;
 		}
@@ -26,7 +26,7 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			Material::exit_materials();
+			material_t::exit_materials();
 
 			return TRUE;
 		}
@@ -38,7 +38,7 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
-			Material::init_materials();
+			material_t::init_materials();
 
 			return TRUE;
 		}

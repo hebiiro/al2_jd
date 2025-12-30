@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはタブコントロールのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct TabRenderer : Renderer
+	inline struct tab_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::tab_material.palette;
+		const paint::palette_t& palette = paint::tab_material.palette;
 
 		//
 		// 背景を描画します。

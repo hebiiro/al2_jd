@@ -2,9 +2,9 @@
 
 namespace apn::dark::kuro::theme
 {
-	inline struct ToolBarRenderer : Renderer
+	inline struct toolbar_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::toolbar_material.palette;
+		const paint::palette_t& palette = paint::toolbar_material.palette;
 
 		//
 		// ドロップダウンボタンを描画します。

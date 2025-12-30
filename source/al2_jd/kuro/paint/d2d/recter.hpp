@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint::d2d
 	//
 	// このクラスはD2Dを使用した矩形の描画を担当します。
 	//
-	struct Recter
+	struct recter_t
 	{
 		//
 		// 点pと直線abの距離を返します。
@@ -132,14 +132,14 @@ namespace apn::dark::kuro::paint::d2d
 		//
 		HDC dc = {};
 		LPCRECT rc = {};
-		const Pigment* pigment = {};
+		const pigment_t* pigment = {};
 		int iw = {}, ih = {};
 		float w = {}, h = {};
 
 		//
 		// コンストラクタです。
 		//
-		Recter(HDC dc, LPCRECT rc, const Pigment* pigment)
+		recter_t(HDC dc, LPCRECT rc, const pigment_t* pigment)
 			: dc(dc), rc(rc), pigment(pigment)
 		{
 			// 引数が無効の場合は失敗します。
@@ -177,7 +177,7 @@ namespace apn::dark::kuro::paint::d2d
 			if (!is_initialized()) return 0;
 
 			// レンダーターゲットとデバイスコンテキストをバインドします。
-			Core::Binder binder(dc, rc);
+			core_t::binder_t binder(dc, rc);
 
 			// レンダーターゲットを取得します。
 			const auto& render_target = core.render_target;

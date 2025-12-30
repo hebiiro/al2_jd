@@ -6,12 +6,12 @@ namespace apn::dark::kuro::theme
 	// このクラスはテーマレンダラーを管理します。
 	// テーマレンダラーはVSCLASSをキーにして取得できます。
 	//
-	inline struct FromVSClass
+	inline struct from_vsclass_t
 	{
 		//
 		// レンダラーのマップです。キーはノーマライズされたVSCLASSです。
 		//
-		std::unordered_map<std::wstring, Renderer*> map;
+		std::unordered_map<std::wstring, renderer_t*> map;
 
 		//
 		// 指定された文字列を小文字化して返します。
@@ -27,11 +27,11 @@ namespace apn::dark::kuro::theme
 		//
 		// レンダラーを追加します。
 		//
-		void set(const std::wstring& vsclass, Renderer* renderer) { map[normalize(vsclass)] = renderer; }
+		void set(const std::wstring& vsclass, renderer_t* renderer) { map[normalize(vsclass)] = renderer; }
 
 		//
 		// レンダラーを返します。
 		//
-		Renderer* get(const std::wstring& vsclass) { return map[normalize(vsclass)]; }
+		renderer_t* get(const std::wstring& vsclass) { return map[normalize(vsclass)]; }
 	} from_vsclass;
 }

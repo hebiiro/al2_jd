@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi
 {
-	struct RendererNc : Renderer
+	struct renderer_nc_t : renderer_t
 	{
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{

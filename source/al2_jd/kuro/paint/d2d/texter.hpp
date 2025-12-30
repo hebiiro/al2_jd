@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint::d2d
 	//
 	// このクラスはD2Dを使用した文字列の描画を担当します。
 	//
-	struct Texter
+	struct texter_t
 	{
 		//
 		// 影の大きさを実数で返します。
@@ -182,7 +182,7 @@ namespace apn::dark::kuro::paint::d2d
 		// テキスト用のブラシを作成して返します。
 		//
 		inline static ComPtr<ID2D1SolidColorBrush> create_text_brush(
-			ID2D1RenderTarget* render_target, const Pigment* pigment)
+			ID2D1RenderTarget* render_target, const pigment_t* pigment)
 		{
 			// テキスト用のカラーエントリを取得します。
 			const auto& color_entry = pigment->text.color_entry;
@@ -198,7 +198,7 @@ namespace apn::dark::kuro::paint::d2d
 		// 影用のブラシを作成して返します。
 		//
 		inline static ComPtr<ID2D1SolidColorBrush> create_text_shadow_brush(
-			ID2D1RenderTarget* render_target, const Pigment* pigment)
+			ID2D1RenderTarget* render_target, const pigment_t* pigment)
 		{
 			// 影用のカラーエントリを取得します。
 			const auto& color_entry = pigment->text_shadow.color_entry;
@@ -216,7 +216,7 @@ namespace apn::dark::kuro::paint::d2d
 		HDC dc = {};
 		LPCRECT rc = {};
 		UINT text_flags = {};
-		const Pigment* pigment = {};
+		const pigment_t* pigment = {};
 		int iw = {}, ih = {};
 		float w = {}, h = {};
 		std::wstring s = {};
@@ -224,7 +224,7 @@ namespace apn::dark::kuro::paint::d2d
 		//
 		// コンストラクタです。
 		//
-		Texter(HDC dc, LPCWSTR text, int c, LPCRECT rc, UINT text_flags, const Pigment* pigment)
+		texter_t(HDC dc, LPCWSTR text, int c, LPCRECT rc, UINT text_flags, const pigment_t* pigment)
 			: dc(dc), rc(rc), text_flags(text_flags), pigment(pigment)
 		{
 			// 引数が無効の場合は失敗します。
@@ -425,7 +425,7 @@ namespace apn::dark::kuro::paint::d2d
 			if (!is_initialized()) return 0;
 
 			// レンダーターゲットとデバイスコンテキストをバインドします。
-			Core::Binder binder(dc, rc);
+			core_t::binder_t binder(dc, rc);
 
 			if (hive.shadow.flag_use && hive.shadow.flag_blur)
 				return draw_text_with_blur();

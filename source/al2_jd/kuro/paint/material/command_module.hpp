@@ -2,22 +2,25 @@
 
 namespace apn::dark::kuro
 {
-	enum COMMANDMODULEPARTS {
-		CMP_BODY = 1,
-		CMP_BUTTON = 3,
-		CMP_SPLITBUTTON = 4,
-		CMP_SPLITBUTTONDROPDOWN = 5,
-		CMP_DROPDOWNBUTTONGLYPH = 6,
-	};
+	namespace
+	{
+		enum COMMANDMODULEPARTS {
+			CMP_BODY = 1,
+			CMP_BUTTON = 3,
+			CMP_SPLITBUTTON = 4,
+			CMP_SPLITBUTTONDROPDOWN = 5,
+			CMP_DROPDOWNBUTTONGLYPH = 6,
+		};
 
-	enum COMMANDMODULESTATES {
-		CMS_BACKGROUND = 0,
-		CMS_NORMAL = 1,
-		CMS_HOT = 2,
-		CMS_PRESSED = 3,
-		CMS_FOCUSED = 4,
-		CMS_CHECKED = 5,
-	};
+		enum COMMANDMODULESTATES {
+			CMS_BACKGROUND = 0,
+			CMS_NORMAL = 1,
+			CMS_HOT = 2,
+			CMS_PRESSED = 3,
+			CMS_FOCUSED = 4,
+			CMS_CHECKED = 5,
+		};
+	}
 }
 
 namespace apn::dark::kuro::paint
@@ -25,7 +28,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはコマンドモジュールのマテリアルです。
 	//
-	inline struct CommandModuleMaterial : Material
+	inline struct command_module_material_t : material_t
 	{
 		//
 		// コマンドモジュールを描画している現在のDCです。
@@ -40,34 +43,34 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto background = create_pigment(L"ToolBar", L"Background",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
-			Pigment normal = create_pigment(L"ToolBarButton", L"Normal",
-				Style::Color::ButtonBody,
-				Style::Color::Border,
-				Style::Color::Text);
+			pigment_t normal = create_pigment(L"ToolBarButton", L"Normal",
+				style_t::color_e::ButtonBody,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
-			Pigment disabled = create_pigment(L"ToolBarButton", L"Disable",
-				Style::Color::ButtonBodyDisable,
-				Style::Color::Border,
-				Style::Color::TextDisable);
+			pigment_t disabled = create_pigment(L"ToolBarButton", L"Disable",
+				style_t::color_e::ButtonBodyDisable,
+				style_t::color_e::Border,
+				style_t::color_e::TextDisable);
 
-			Pigment hot = create_pigment(L"ToolBarButton", L"Hot",
-				Style::Color::ButtonBodyHover,
-				Style::Color::Border,
-				Style::Color::Text);
+			pigment_t hot = create_pigment(L"ToolBarButton", L"Hot",
+				style_t::color_e::ButtonBodyHover,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
-			Pigment pressed = create_pigment(L"ToolBarButton", L"Press",
-				Style::Color::ButtonBodyPress,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+			pigment_t pressed = create_pigment(L"ToolBarButton", L"Press",
+				style_t::color_e::ButtonBodyPress,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
-			Pigment checked = create_pigment(L"ToolBarButton", L"Check",
-				Style::Color::ButtonBodySelect,
-				Style::Color::BorderFocus,
-				Style::Color::Text);
+			pigment_t checked = create_pigment(L"ToolBarButton", L"Check",
+				style_t::color_e::ButtonBodySelect,
+				style_t::color_e::BorderFocus,
+				style_t::color_e::Text);
 
 			palette.set(CMP_BODY, CMS_BACKGROUND, background);
 

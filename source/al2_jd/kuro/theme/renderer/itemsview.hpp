@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはItemsViewのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct ItemsViewRenderer : Renderer
+	inline struct itemsview_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::listview_material.palette;
+		const paint::palette_t& palette = paint::listview_material.palette;
 
 		virtual HRESULT on_get_theme_color(HTHEME theme, int part_id, int state_id, int prop_id, COLORREF* result) override
 		{

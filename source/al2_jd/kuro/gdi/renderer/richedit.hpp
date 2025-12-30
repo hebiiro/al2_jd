@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi
 {
-	struct RichEditRenderer : EditBoxRenderer
+	struct richedit_renderer_t : editbox_renderer_t
 	{
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
 		{

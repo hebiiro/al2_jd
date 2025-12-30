@@ -2,9 +2,9 @@
 
 namespace apn::dark::kuro::theme
 {
-	inline struct CommandModuleRenderer : Renderer
+	inline struct command_module_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::command_module_material.palette;
+		const paint::palette_t& palette = paint::command_module_material.palette;
 
 		//
 		// ドロップダウンボタンを描画します。

@@ -5,9 +5,9 @@ namespace apn::dark::kuro::theme
 	//
 	// このクラスはツリービューのテーマをフックしてカスタム描画を実行します。
 	//
-	inline struct TreeViewRenderer : Renderer
+	inline struct treeview_renderer_t : renderer_t
 	{
-		const paint::Palette& palette = paint::treeview_material.palette;
+		const paint::palette_t& palette = paint::treeview_material.palette;
 
 		//
 		// 項目の背景を描画します。

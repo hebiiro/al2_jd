@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはコンボボックスのマテリアルです。
 	//
-	inline struct ComboBoxMaterial : Material
+	inline struct combobox_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,24 +15,24 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto border_normal = create_pigment(L"ComboBox", L"Normal",
-				Style::Color::ButtonBody,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBody,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto border_hot = create_pigment(L"ComboBox", L"Hot",
-				Style::Color::ButtonBodyHover,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyHover,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto border_pressed = create_pigment(L"ComboBox", L"Press",
-				Style::Color::ButtonBodyPress,
-				Style::Color::BorderSelect,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodyPress,
+				style_t::color_e::BorderSelect,
+				style_t::color_e::Text);
 
 			auto border_disabled = create_pigment(L"ComboBox", L"Disable",
-				Style::Color::ButtonBodyDisable,
-				Style::Color::Border,
-				Style::Color::TextDisable);
+				style_t::color_e::ButtonBodyDisable,
+				style_t::color_e::Border,
+				style_t::color_e::TextDisable);
 
 			auto readonly_normal = create_pigment(L"ComboBoxReadOnly", L"Normal", border_normal);
 			auto readonly_disabled = create_pigment(L"ComboBoxReadOnly", L"Disable", border_disabled);

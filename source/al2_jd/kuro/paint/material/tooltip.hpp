@@ -5,7 +5,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはツールチップのマテリアルです。
 	//
-	inline struct ToolTipMaterial : Material
+	inline struct tooltip_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -15,9 +15,9 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto ttss_normal = create_pigment(L"ToolTip", L"Normal",
-				Style::Color::Background,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::Background,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			palette.set(TTP_STANDARD, 0, ttss_normal);
 			palette.set(TTP_STANDARD, TTSS_NORMAL, ttss_normal);

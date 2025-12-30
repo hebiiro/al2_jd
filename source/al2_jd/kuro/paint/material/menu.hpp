@@ -2,10 +2,13 @@
 
 namespace apn::dark::kuro
 {
-	enum BARBACKGROUNDSTATES {
-		MB_HOT = 3,
-		MB_WARNING = 4,
-	};
+	namespace
+	{
+		enum BARBACKGROUNDSTATES {
+			MB_HOT = 3,
+			MB_WARNING = 4,
+		};
+	}
 }
 
 namespace apn::dark::kuro::paint
@@ -13,7 +16,7 @@ namespace apn::dark::kuro::paint
 	//
 	// このクラスはメニューのマテリアルです。
 	//
-	inline struct MenuMaterial : Material
+	inline struct menu_material_t : material_t
 	{
 		//
 		// マテリアルの初期化処理を実行します。
@@ -23,75 +26,75 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			auto background = create_pigment(L"Menu", L"Background",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto bar_active = create_pigment(L"Menu", L"Active",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto bar_inactive = create_pigment(L"Menu", L"Inactive",
-				Style::Color::TitleHeader,
+				style_t::color_e::TitleHeader,
 				{},
-				Style::Color::TextDisable);
+				style_t::color_e::TextDisable);
 
 			auto bar_hot = create_pigment(L"Menu", L"Hot",
-				Style::Color::ButtonBodySelect,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodySelect,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto bar_warning = create_pigment(L"Menu", L"Warning",
 				{ { RGB(0xCE, 0x3E, 0x2C) } },
 				{ { RGB(0xC4, 0x2B, 0x1C) } },
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto border = create_pigment(L"Menu", L"Border",
-				Style::Color::WindowBorder,
+				style_t::color_e::WindowBorder,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto gutter = create_pigment(L"Menu", L"Gutter",
-				Style::Color::TitleHeader,
+				style_t::color_e::TitleHeader,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto separator = create_pigment(L"Menu", L"Separator",
-				Style::Color::TitleHeader,
+				style_t::color_e::TitleHeader,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto item_normal = create_pigment(L"MenuItem", L"Normal",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto item_disabled = create_pigment(L"MenuItem", L"Disable",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::TextDisable);
+				style_t::color_e::TextDisable);
 
 			auto item_hot = create_pigment(L"MenuItem", L"Hot",
-				Style::Color::ButtonBodySelect,
-//				Style::Color::BorderSelect,
-				Style::Color::Border,
-				Style::Color::Text);
+				style_t::color_e::ButtonBodySelect,
+//				style_t::color_e::BorderSelect,
+				style_t::color_e::Border,
+				style_t::color_e::Text);
 
 			auto item_focus = create_pigment(L"MenuItem", L"Focus",
 				{},
-				Style::Color::BorderFocus,
-				Style::Color::Text);
+				style_t::color_e::BorderFocus,
+				style_t::color_e::Text);
 
 			auto icon_normal = create_pigment(L"MenuIcon", L"Normal",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::Text);
+				style_t::color_e::Text);
 
 			auto icon_disabled = create_pigment(L"MenuIcon", L"Disable",
-				Style::Color::Background,
+				style_t::color_e::Background,
 				{},
-				Style::Color::TextDisable);
+				style_t::color_e::TextDisable);
 
 			palette.set(MENU_BARBACKGROUND, MB_ACTIVE, bar_active);
 			palette.set(MENU_BARBACKGROUND, MB_INACTIVE, bar_inactive);

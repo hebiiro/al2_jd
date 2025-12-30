@@ -5,7 +5,7 @@ namespace apn::dark
 	//
 	// このクラスはコンフィグダイアログです。
 	//
-	inline struct ConfigDialog : my::Dialog, Lockable
+	inline struct config_dialog_t : my::Dialog, lockable_t
 	{
 		virtual void on_update_controls() {}
 		virtual void on_update_config() {}
@@ -22,7 +22,7 @@ namespace apn::dark
 			{
 				// 初期化中にエディットボックスがコマンドを発行してしまうので、
 				// それを防ぐためにロックしておきます。
-				Locker locker(this);
+				locker_t locker(this);
 
 				if (!__super::create(
 					hive.instance,
@@ -57,7 +57,7 @@ namespace apn::dark
 
 			if (is_locked()) return FALSE;
 
-			Locker locker(this);
+			locker_t locker(this);
 
 			set_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
 			set_check(IDC_JD_USE_D2D, hive.jd.use_d2d);

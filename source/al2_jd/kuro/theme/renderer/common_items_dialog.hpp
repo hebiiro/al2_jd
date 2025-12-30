@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::theme
 {
-	inline struct CommonItemsDialogRenderer : Renderer
+	inline struct common_items_dialog_renderer_t : renderer_t
 	{
 		HRESULT on_draw_theme_background(HTHEME theme, HDC dc, int part_id, int state_id, LPCRECT rc, LPCRECT rc_clip) override
 		{
@@ -17,7 +17,7 @@ namespace apn::dark::kuro::theme
 
 			if (part_id == 1 && state_id == 0)
 			{
-				const paint::Palette& palette = paint::dialog_material.palette;
+				const paint::palette_t& palette = paint::dialog_material.palette;
 
 				if (paint::stylus.draw_rect(dc, rc, palette, WP_DIALOG, ETS_NORMAL))
 					return S_OK;
