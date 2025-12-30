@@ -107,12 +107,23 @@ namespace apn::dark
 			// TRUEの場合はコモンダイアログをダークモード化から除外します。
 			//
 			BOOL exclude_comdlg32 = FALSE;
+		} jd;
+
+		//
+		// このクラスはDirect2Dの設定です。
+		//
+		struct d2d_t
+		{
+			//
+			// TRUEの場合はDirect2Dを使用して図形を描画します。
+			//
+			BOOL flag_figure = FALSE;
 
 			//
-			// TRUEの場合はDirect2Dを使用して描画します。
+			// TRUEの場合はDirect2Dを使用して文字列を描画します。
 			//
-			BOOL use_d2d = FALSE;
-		} jd;
+			BOOL flag_text = FALSE;
+		} d2d;
 
 		//
 		// このクラスはスクロールバーの設定です。

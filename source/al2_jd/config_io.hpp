@@ -56,7 +56,7 @@ namespace apn::dark
 
 //			read_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
 			read_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
-			read_bool(root, "jd.use_d2d", hive.jd.use_d2d);
+			read_bool(root, "d2d.flag_figure", hive.d2d.flag_figure);
 
 			return TRUE;
 		}
@@ -70,7 +70,32 @@ namespace apn::dark
 
 //			write_string(root, "jd.custom_color_file_name", hive.jd.custom_color_file_name);
 			write_bool(root, "jd.exclude_comdlg32", hive.jd.exclude_comdlg32);
-			write_bool(root, "jd.use_d2d", hive.jd.use_d2d);
+
+			return TRUE;
+		}
+
+		//
+		// ノードからDirect2Dの設定を読み込みます。
+		//
+		BOOL read_d2d(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			read_bool(root, "d2d.flag_figure", hive.d2d.flag_figure);
+			read_bool(root, "d2d.flag_text", hive.d2d.flag_text);
+
+			return TRUE;
+		}
+
+		//
+		// ノードにDirect2Dの設定を書き込みます。
+		//
+		BOOL write_d2d(n_json& root)
+		{
+			MY_TRACE_FUNC("");
+
+			write_bool(root, "d2d.flag_figure", hive.d2d.flag_figure);
+			write_bool(root, "d2d.flag_text", hive.d2d.flag_text);
 
 			return TRUE;
 		}
@@ -348,6 +373,7 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 			read_jd(root);
+			read_d2d(root);
 			read_scrollbar(root);
 			read_slimbar(root);
 			read_round(root);
@@ -369,6 +395,7 @@ namespace apn::dark
 			MY_TRACE_FUNC("");
 
 			write_jd(root);
+			write_d2d(root);
 			write_scrollbar(root);
 			write_slimbar(root);
 			write_round(root);

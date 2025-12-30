@@ -9,7 +9,8 @@
 #define IDC_JD_STYLE_FILE_NAME          1001
 #define IDC_JD_STYLE_FILE_NAME_REF      1002
 #define IDC_JD_EXCLUDE_COMDLG32         1003
-#define IDC_JD_USE_D2D                  1004
+#define idc_d2d_flag_figure             1005
+#define idc_d2d_flag_text               1006
 #define IDC_SLIMBAR_GROUPBOX            1100
 #define IDC_SLIMBAR_FLAG_USE            1101
 #define IDC_SLIMBAR_FLAG_WHOLE_TITLE    1102

@@ -60,7 +60,8 @@ namespace apn::dark
 			locker_t locker(this);
 
 			set_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
-			set_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
+			set_check(idc_d2d_flag_figure, hive.d2d.flag_figure);
+			set_check(idc_d2d_flag_text, hive.d2d.flag_text);
 			set_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 
 			set_check(IDC_SLIMBAR_FLAG_USE, my::slimbar_t::config.flag_use);
@@ -118,7 +119,8 @@ namespace apn::dark
 			if (is_locked()) return FALSE;
 
 //			get_text(IDC_JD_STYLE_FILE_NAME, hive.jd.style_file_name);
-			get_check(IDC_JD_USE_D2D, hive.jd.use_d2d);
+			get_check(idc_d2d_flag_figure, hive.d2d.flag_figure);
+			get_check(idc_d2d_flag_text, hive.d2d.flag_text);
 			get_check(IDC_JD_EXCLUDE_COMDLG32, hive.jd.exclude_comdlg32);
 
 			get_check(IDC_SLIMBAR_FLAG_USE, my::slimbar_t::config.flag_use);
@@ -244,7 +246,8 @@ namespace apn::dark
 
 							break;
 						}
-					case IDC_JD_USE_D2D:
+					case idc_d2d_flag_figure:
+					case idc_d2d_flag_text:
 					case IDC_ROUND_FLAG_USE:
 					case IDC_BORDER_FLAG_3D_EDGE:
 					case IDC_GRADIENT_FLAG_USE:

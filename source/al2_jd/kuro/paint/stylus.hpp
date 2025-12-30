@@ -224,7 +224,7 @@ namespace apn::dark::kuro::paint
 			auto h = my::get_height(rc);
 			auto r = std::min(w, h);
 
-			if (hive.jd.use_d2d)
+			if (hive.d2d.flag_figure)
 			{
 				auto radius = get_round_as_float(r / 2.0f);
 
@@ -375,7 +375,8 @@ namespace apn::dark::kuro::paint
 		//
 		BOOL d2d_draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const pigment_t* pigment, BOOL opaque = TRUE)
 		{
-			if (hive.jd.use_d2d)
+			// D2Dを使用する場合はD2Dで描画します。
+			if (hive.d2d.flag_text)
 			{
 				text_attribute_t text_attribute(dc, pigment, opaque);
 
@@ -383,6 +384,7 @@ namespace apn::dark::kuro::paint
 					return !!result;
 			}
 
+			// それ以外の場合はGDIで描画します。
 			return draw_text(dc, rc, text, c, text_flags, pigment, opaque);
 		}
 
@@ -391,7 +393,8 @@ namespace apn::dark::kuro::paint
 		//
 		BOOL d2d_draw_icon(HDC dc, LPCRECT rc, const pigment_t* pigment, LPCWSTR font_name, WCHAR char_code, int font_weight = 0)
 		{
-			if (hive.jd.use_d2d)
+			// D2Dを使用する場合はD2Dで描画します。
+			if (hive.d2d.flag_text)
 			{
 				icon_attribute_t icon_attribute(dc, rc, font_name, font_weight);
 
@@ -401,6 +404,7 @@ namespace apn::dark::kuro::paint
 					return !!result;
 			}
 
+			// それ以外の場合はGDIで描画します。
 			return draw_icon(dc, rc, pigment, font_name, char_code, font_weight);
 		}
 
