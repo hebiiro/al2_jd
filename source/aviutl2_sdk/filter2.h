@@ -19,6 +19,8 @@
 
 //----------------------------------------------------------------------------------
 
+struct EDIT_SECTION;
+
 // トラックバー項目構造体
 // 例：FILTER_ITEM_TRACK track = { L"数値", 100.0, 0.0, 1000.0, 0.01 };
 struct FILTER_ITEM_TRACK {
@@ -94,6 +96,27 @@ struct FILTER_ITEM_DATA {
 	T default_value;			// デフォルト値 (Tの定義でデフォルト値を指定しておく)
 };
 
+// 設定グループ項目構造体
+// 自身以降の設定項目をグループ化することが出来ます
+// ※設定名を空にするとグループの終端を定義することが出来ます
+// 例：FILTER_ITEM_GROUP group = { L"座標" };
+struct FILTER_ITEM_GROUP {
+	FILTER_ITEM_GROUP(LPCWSTR name, bool default_visible = true) : name(name), default_visible(default_visible) {}
+	LPCWSTR type = L"group";	// 設定の種別
+	LPCWSTR name;				// 設定名
+	const bool default_visible;	// デフォルトの表示状態
+};
+
+// ボタン項目構造体
+// ボタンを押すとコールバック関数が呼ばれます ※plugin2.hの編集のコールバック関数と同様な形になります
+// 例：FILTER_ITEM_BUTTON button = { L"初期化", [](EDIT_SECTION* edit) { /* ボタンを押した時の処理 */ } };
+struct FILTER_ITEM_BUTTON {
+	FILTER_ITEM_BUTTON(LPCWSTR name, void (*callback)(EDIT_SECTION* edit)) : name(name), callback(callback) {}
+	LPCWSTR type = L"button";			// 設定の種別
+	LPCWSTR name;						// 設定名
+	void (*callback)(EDIT_SECTION*);	// 設定名
+};
+
 //----------------------------------------------------------------------------------
 
 // RGBA32bit構造体
@@ -122,9 +145,15 @@ struct OBJECT_INFO {
 	int channel_num;		// オブジェクトの現在の音声チャンネル数 (音声フィルタのみ) ※通常2になります
 	int64_t effect_id;		// オブジェクトの内の対象エフェクトのID (アプリ起動毎の固有ID)
 							// ※処理対象のフィルタ効果、オブジェクト入出力の固有ID
+	int flag;				// フラグ
+	static constexpr int FLAG_FILTER_OBJECT = 1;	// フィルタオブジェクトか？
+	inline bool is_filter_object() const { return flag & FLAG_FILTER_OBJECT; }
 };
 
 //----------------------------------------------------------------------------------
+
+// d3d11.h向けの前方宣言 ※includeしないで良いように定義
+struct ID3D11Texture2D;
 
 // 画像フィルタ処理用構造体
 struct FILTER_PROC_VIDEO {
@@ -134,14 +163,24 @@ struct FILTER_PROC_VIDEO {
 	// オブジェクト情報
 	const OBJECT_INFO* object;
 
-	// 現在の画像のデータを取得する (VRAMからデータを取得します) 
+	// 現在のオブジェクトの画像データを取得する (VRAMからデータを取得します) 
 	// buffer		: 画像データの格納先へのポインタ
 	void (*get_image_data)(PIXEL_RGBA* buffer);
 
-	// 現在の画像のデータを設定します (VRAMへデータを書き込みます) 
-	// buffer		: 画像データへのポインタ
+	// 現在のオブジェクトの画像データを設定します (VRAMへデータを書き込みます) 
+	// buffer		: 画像データへのポインタ (nullptrの場合は初期データ無しで画像サイズを変更します)
 	// width,height	: 画像サイズ
 	void (*set_image_data)(PIXEL_RGBA* buffer, int width, int height);
+
+	// 現在のオブジェクトの画像データのポインタを取得する (ID3D11Texture2Dのポインタを取得します) 
+	// 戻り値		: オブジェクトの画像データへのポインタ
+	//				  ※現在の画像が変更(set_image_data)されるかフィルタ処理の終了まで有効
+	ID3D11Texture2D* (*get_image_texture2d)();
+
+	// 現在のフレームバッファの画像データのポインタを取得する (ID3D11Texture2Dのポインタを取得します) 
+	// 戻り値		: フレームバッファの画像データへのポインタ
+	//				  ※フィルタ処理の終了まで有効
+	ID3D11Texture2D* (*get_framebuffer_texture2d)();
 
 };
 
@@ -153,12 +192,12 @@ struct FILTER_PROC_AUDIO {
 	// オブジェクト情報
 	const OBJECT_INFO* object;
 
-	// 現在の音声のデータを取得する
+	// 現在のオブジェクトの音声データを取得する
 	// buffer		: 音声データの格納先へのポインタ ※音声データはPCM(float)32bit
 	// channel		: 音声データのチャンネル ( 0 = 左チャンネル / 1 = 右チャンネル )
 	void (*get_sample_data)(float* buffer, int channel);
 
-	// 現在の音声のデータを設定する
+	// 現在のオブジェクトの音声データを設定する
 	// buffer		: 音声データへのポインタ ※音声データはPCM(float)32bit
 	// channel		: 音声データのチャンネル ( 0 = 左チャンネル / 1 = 右チャンネル )
 	void (*set_sample_data)(float* buffer, int channel);
@@ -173,7 +212,9 @@ struct FILTER_PLUGIN_TABLE {
 	static constexpr int FLAG_VIDEO = 1;	// 画像フィルタをサポートする
 	static constexpr int FLAG_AUDIO = 2;	// 音声フィルタをサポートする
 											// 画像と音声のフィルタ処理は別々のスレッドで処理されます
-	static constexpr int FLAG_INPUT = 4;	// オブジェクトの初期入力をする (メディアオブジェクトにする場合)
+	static constexpr int FLAG_INPUT = 4;	// メディアオブジェクトの初期入力をする (メディアオブジェクトにする場合)
+	static constexpr int FLAG_FILTER = 8;	// フィルタオブジェクトをサポートする (フィルタオブジェクトに対応する場合)
+											// フィルタオブジェクトの場合は画像サイズの変更が出来ません
 	LPCWSTR name;				// プラグインの名前
 	LPCWSTR label;				// ラベルの初期値 (nullptrならデフォルトのラベルになります)
 	LPCWSTR information;		// プラグインの情報

@@ -4,6 +4,9 @@
 #include <windows.h>
 #include <memory>
 #include <algorithm>
+#include <d3d11.h>
+#include <wrl/client.h>
+using Microsoft::WRL::ComPtr;
 
 #include "filter2.h"
 
@@ -60,21 +63,31 @@ bool func_proc_video(FILTER_PROC_VIDEO* video) {
 	auto h = (int)height.value;
 	if (w <= 0 || h <= 0) return false;
 
-	// 指定サイズ、色の四角形の画像データを作成
-	auto col = color.value;
-	auto buffer = std::make_unique<PIXEL_RGBA[]>(w * h);
-	auto p = buffer.get();
-	for (int y = 0; y < h; y++) {
-		for (int x = 0; x < w; x++) {
-			p->r = col.r;
-			p->g = col.g;
-			p->b = col.b;
-			p->a = 255;
-			p++;
-		}
+	// 指定サイズの画像を設定してTexture2Dを取得
+	video->set_image_data(nullptr, w, h);
+	auto texture = video->get_image_texture2d();
+
+	// D3DのDevice,DeviceContextを取得
+	ComPtr<ID3D11Device> device;
+	texture->GetDevice(&device);
+	ComPtr<ID3D11DeviceContext> context;
+	device->GetImmediateContext(&context);
+
+	// Texture2DのRTVを取得
+	D3D11_TEXTURE2D_DESC desc{};
+	texture->GetDesc(&desc);
+	D3D11_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc.Format = desc.Format;
+	rtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	ComPtr<ID3D11RenderTargetView> rtv;
+	if (FAILED(device->CreateRenderTargetView(texture, &rtvDesc, &rtv))) {
+		return false;
 	}
 
-	video->set_image_data(buffer.get(), w, h);
+	// 指定の色で塗りつぶす
+	auto col = color.value;
+	const float color[4] = { col.r / 255.0f, col.g / 255.0f, col.b / 255.0f, 1.0f }; // 乗算済みアルファ
+	context->ClearRenderTargetView(rtv.Get(), color);
 	return true;
 }
 

@@ -108,3 +108,48 @@
     [2025/11/9]
     [mod2] get_param_table_boolean()を追加
 
+    [2025/11/22]
+    [auf2] FILTER_PROC_VIDEOにget_image_texture2d(),get_framebuffer_texture2d()を追加
+    [aux2] EDIT_SECTIONにcount_object_effect()を追加
+    [aux2] EDIT_HANDLEにcall_edit_section_param()を追加
+    [auf2] メディアオブジェクトのサンプルフィルタを更新
+    [aux2] ウィンドウクライアントのサンプルプラグインを更新
+
+    [2025/11/30]
+    [auf2] FILTER_ITEM_GROUPを追加
+    [aux2] 登録したオブジェクトメニューが表示されないことがあるのを修正
+
+    [2025/12/2]
+    [aux2] EDIT_HANDLEにget_edit_info()を追加
+    [aux2] EDIT_SECTIONにget_mouse_layer_frame(),pos_to_layer_frame()を追加
+    [aux2] EDIT_SECTIONにis_support_media_file(),get_media_info()を追加
+    [aux2] EDIT_SECTIONにcreate_object_from_media_file(),create_object()を追加
+    [aux2] EDIT_SECTIONにget_project_file()を追加
+    [aux2] PROJECT_FILEにget_project_file_path()を追加
+    [auf2] FILTER_ITEM_GROUPにグループの終端の設定方法を追加
+
+    [2025/12/6]
+    [aux2] EDIT_SECTIONにset_cursor_layer_frame()を追加
+    [aux2] HOST_APP_TABLEにregister_config_menu()を追加
+    [aux2] create_object_from_alias()で複数オブジェクトのエイリアスデータを利用出来るようにした
+ 
+    [2025/12/7]
+    [aux2] EDIT_INFOにレイヤー編集関連の情報を追加
+    [aux2] EDIT_SECTIONにset_display_layer_frame(),set_select_range(),set_grid_bpm()を追加
+    [aux2] EDIT_SECTIONにget_object_name(),set_object_name()を追加
+
+    [2025/12/14]
+    [aux2] set_cursor_layer_frame()が正しく反映されないことがあるのを修正
+    [auf2] FILTER_PLUGIN_TABLEにフィルタオブジェクトのサポートフラグを追加
+
+    [2025/12/20]
+    [aux2] get_object_item_value(),set_object_item_value()が正しく取得反映されないことがあるのを修正
+    [aux2] HOST_APP_TABLEにregister_edit_menu(),register_clear_cache_handler()を追加
+
+    [2025/12/27]
+    [aux2] アプリ起動時のプロジェクト初期化時にregister_project_load_handler()が呼ばれないことがあるのを修正
+    [aux2] register_input_plugin()で登録した対応ファイルの拡張子の関連付けが反映されないのを修正
+    [aux2] HOST_APP_TABLEにregister_change_scene_handlerを追加
+    [aux2] EDIT_INFOにscene_idを追加
+    [auf2] FILTER_ITEM_BUTTONを追加
+    [auf2] OBJECT_INFOにフィルタオブジェクトかのフラグを追加

@@ -5,10 +5,19 @@
 #include <commctrl.h>
 
 #include "plugin2.h"
+#include "logger2.h" // logger用 
 
 #define SampleWindowName L"SampleWindowClient"
 #define IDC_BUTTON 1001
 EDIT_HANDLE* edit_handle;
+LOG_HANDLE* logger;
+
+//---------------------------------------------------------------------
+//	ログ出力機能初期化関数 (未定義なら呼ばれません)
+//---------------------------------------------------------------------
+EXTERN_C __declspec(dllexport) void InitializeLogger(LOG_HANDLE* handle) {
+	logger = handle;
+}
 
 //---------------------------------------------------------------------
 //	プラグインDLL初期化関数 (未定義なら呼ばれません)
@@ -50,9 +59,13 @@ LRESULT CALLBACK wnd_proc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
 			switch (LOWORD(wparam)) {
 				case IDC_BUTTON:
 					// 編集セクションで処理を呼び出す
-					edit_handle->call_edit_section([](EDIT_SECTION* edit) {
+					edit_handle->call_edit_section_param(&message, [](void* message, EDIT_SECTION* edit) {
 						// エイリアスデータからオブジェクトを作成
-						edit->create_object_from_alias(alias, edit->info->layer, edit->info->frame, 10);
+						if (edit->create_object_from_alias(alias, edit->info->layer, edit->info->frame, 10)) {
+							logger->log(logger, L"create alias object");
+						} else {
+							logger->warn(logger, L"create alias failed");
+						}
 					});
 					SetFocus(NULL); // ボタンのフォーカスを外す
 					return 0;

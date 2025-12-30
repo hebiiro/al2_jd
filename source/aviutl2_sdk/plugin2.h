@@ -23,6 +23,8 @@ struct INPUT_PLUGIN_TABLE;
 struct OUTPUT_PLUGIN_TABLE;
 struct FILTER_PLUGIN_TABLE;
 struct SCRIPT_MODULE_TABLE;
+struct EDIT_HANDLE;
+struct PROJECT_FILE;
 
 // オブジェクトハンドル
 typedef void* OBJECT_HANDLE;
@@ -35,10 +37,12 @@ struct OBJECT_LAYER_FRAME {
 	int end;	// 終了フレーム番号
 };
 
-// 冗長なので後で廃止します
-struct DEPRECATED_OBJECT_FRAME_INFO {
-	int start;
-	int end;
+// メディア情報構造体
+struct MEDIA_INFO {
+	int video_track_num;	// Videoトラック数 ※0ならVideo無し
+	int audio_track_num;	// Audioトラック数 ※0ならAudio無し
+	double total_time;		// 総時間 ※静止画の場合は0
+	int width, height;		// 解像度
 };
 
 //----------------------------------------------------------------------------------
@@ -53,6 +57,16 @@ struct EDIT_INFO {
 	int layer;			// 現在の選択レイヤー番号
 	int frame_max;		// オブジェクトが存在する最大のフレーム番号
 	int layer_max;		// オブジェクトが存在する最大のレイヤー番号
+	int display_frame_start;	// レイヤー編集で表示されているフレームの開始番号
+	int display_layer_start;	// レイヤー編集で表示されているレイヤーの開始番号
+	int display_frame_num;		// レイヤー編集で表示されているフレーム数 ※厳密ではないです
+	int display_layer_num;		// レイヤー編集で表示されているレイヤー数 ※厳密ではないです
+	int select_range_start;		// フレーム範囲選択の開始フレーム番号 ※未選択の場合は-1
+	int select_range_end;		// フレーム範囲選択の終了フレーム番号 ※未選択の場合は-1
+	float grid_bpm_tempo;		// グリッド(BPM)のテンポ
+	int grid_bpm_beat;			// グリッド(BPM)の拍子
+	float grid_bpm_offset;		// グリッド(BPM)の基準時間
+	int scene_id;		// シーンのID
 };
 
 // 編集セクション構造体
@@ -64,12 +78,14 @@ struct EDIT_SECTION {
 
 	// 指定の位置にオブジェクトエイリアスを作成します
 	// alias	: オブジェクトエイリアスデータ(UTF-8)へのポインタ
-	//			  オブジェクトエイリアスファイルと同じフォーマットになります
+	//			  オブジェクトエイリアスファイル(.object)と同じフォーマットになります
 	// layer	: 作成するレイヤー番号
 	// frame	: 作成するフレーム番号
-	// length	: オブジェクトのフレーム数 ※エイリアスデータにフレーム情報が無い場合に利用します
+	// length	: オブジェクトのフレーム数 ※エイリアスデータにフレーム情報がある場合はフレーム情報から長さが設定されます
+	//			  フレーム数に0を指定した場合は長さや追加位置が自動調整されます
 	// 戻り値	: 作成したオブジェクトのハンドル (失敗した場合はnullptrを返却)
 	//			  既に存在するオブジェクトに重なったり、エイリアスデータが不正な場合に失敗します
+	//			  複数オブジェクトのエイリアスデータの場合は先頭のオブジェクトのハンドルが返却されます ※オブジェクトは全て作成されます
 	OBJECT_HANDLE (*create_object_from_alias)(LPCSTR alias, int layer, int frame, int length);
 
 	// 指定のフレーム番号以降にあるオブジェクトを検索します
@@ -78,8 +94,11 @@ struct EDIT_SECTION {
 	// 戻り値	: 検索したオブジェクトのハンドル (見つからない場合はnullptrを返却)
 	OBJECT_HANDLE (*find_object)(int layer, int frame);
 
-	// 冗長なので後で廃止します
-	DEPRECATED_OBJECT_FRAME_INFO (*deprecated_get_object_frame_info)(OBJECT_HANDLE object);
+	// オブジェクトに対象エフェクトが何個存在するかを取得します
+	// object	: オブジェクトのハンドル
+	// effect	: 対象のエフェクト名 (エイリアスファイルのeffect.nameの値)
+	// 戻り値	: 対象エフェクトの数 ※存在しない場合は0
+	int (*count_object_effect)(OBJECT_HANDLE object, LPCWSTR effect);
 
 	// オブジェクトのレイヤー・フレーム情報を取得します
 	// object	: オブジェクトのハンドル
@@ -134,8 +153,11 @@ struct EDIT_SECTION {
 	// object	: オブジェクトのハンドル
 	void (*set_focus_object)(OBJECT_HANDLE object);
 
-	// 冗長なので後で廃止します
-	void (*deprecated_output_log)(LPCWSTR message);
+	// プロジェクトファイルのポインタを取得します
+	// EDIT_HANDLE	: 編集ハンドル
+	// 戻り値		: プロジェクトファイル構造体へのポインタ
+	//				  ※コールバック処理の終了まで有効
+	PROJECT_FILE* (*get_project_file)(EDIT_HANDLE* edit);
 
 	// 選択中オブジェクトのハンドルを取得します
 	// index	: 選択中オブジェクトのインデックス(0～)
@@ -145,6 +167,86 @@ struct EDIT_SECTION {
 	// 選択中オブジェクトの数を取得します
 	// 戻り値	: 選択中オブジェクトの数
 	int (*get_selected_object_num)();
+
+	// マウス座標のレイヤー・フレーム位置を取得します
+	// 最後のマウス移動のウィンドウメッセージの座標から計算します
+	// layer	: レイヤー番号の格納先
+	// frame	: フレーム番号の格納先
+	// 戻り値	: マウス座標がレイヤー編集上の場合はtrue
+	bool (*get_mouse_layer_frame)(int* layer, int* frame);
+
+	// 指定のスクリーン座標のレイヤー・フレーム位置を取得します
+	// x,y		: 対象のスクリーン座標
+	// layer	: レイヤー番号の格納先
+	// frame	: フレーム番号の格納先
+	// 戻り値	: スクリーン座標がレイヤー編集上の場合はtrue
+	bool (*pos_to_layer_frame)(int x, int y, int* layer, int* frame);
+
+	// 指定のメディアファイルがサポートされているかを確認します
+	// file		: メディアファイルのパス
+	// strict	: trueの場合は実際に読み込めるかを確認します
+	//			  falseの場合は拡張子が対応しているかを確認します
+	// 戻り値	: サポートされている場合はtrue
+	bool (*is_support_media_file)(LPCWSTR file, bool strict);
+
+	// 指定のメディアファイルの情報を取得します ※動画、音声、画像ファイル以外では取得出来ません
+	// file			: メディアファイルのパス
+	// info			: メディア情報の格納先へのポインタ
+	// info_size	: メディア情報の格納先のサイズ ※MEDIA_INFOと異なる場合はサイズ分のみ取得されます
+	// 戻り値		: 取得出来た場合はtrue
+	bool (*get_media_info)(LPCWSTR file, MEDIA_INFO* info, int info_size);
+
+	// 指定の位置にメディアファイルからオブジェクトを作成します
+	// file		: メディアファイルのパス
+	// layer	: 作成するレイヤー番号
+	// frame	: 作成するフレーム番号
+	// length	: オブジェクトのフレーム数
+	//			  フレーム数に0を指定した場合は長さや追加位置が自動調整されます
+	// 戻り値	: 作成したオブジェクトのハンドル (失敗した場合はnullptrを返却)
+	//			  既に存在するオブジェクトに重なったり、メディアファイルに対応していない場合は失敗します
+	OBJECT_HANDLE (*create_object_from_media_file)(LPCWSTR file, int layer, int frame, int length);
+
+	// 指定の位置にオブジェクトを作成します
+	// effect	: エフェクト名 (エイリアスファイルのeffect.nameの値)
+	// layer	: 作成するレイヤー番号
+	// frame	: 作成するフレーム番号
+	// length	: オブジェクトのフレーム数
+	//			  フレーム数に0を指定した場合は長さや追加位置が自動調整されます
+	// 戻り値	: 作成したオブジェクトのハンドル (失敗した場合はnullptrを返却)
+	//			  既に存在するオブジェクトに重なったり、指定エフェクトに対応していない場合は失敗します
+	OBJECT_HANDLE (*create_object)(LPCWSTR effect, int layer, int frame, int length);
+
+	// 現在のレイヤー・フレーム位置を設定します ※設定出来る範囲に調整されます
+	// layer	: レイヤー番号
+	// frame	: フレーム番号
+	void (*set_cursor_layer_frame)(int layer, int frame);
+
+	// レイヤー編集のレイヤー・フレームの表示開始位置を設定します ※設定出来る範囲に調整されます
+	// layer	: 表示開始レイヤー番号
+	// frame	: 表示開始フレーム番号
+	void (*set_display_layer_frame)(int layer, int frame);
+
+	// フレーム範囲選択を設定します ※設定出来る範囲に調整されます
+	// start,end	: 開始終了フレーム番号
+	//				  開始終了フレームの両方に-1を指定すると選択を解除します
+	void (*set_select_range)(int start, int end);
+
+	// グリッド(BPM)を設定します
+	// tempo	: テンポ
+	// beat		: 拍子
+	// offset	: 基準時間
+	void (*set_grid_bpm)(float tempo, int beat, float offset);
+
+	// オブジェクト名を取得します
+	// object	: オブジェクトのハンドル
+	// 戻り値	: オブジェクト名へのポインタ (標準の名前の場合はnullptrを返却)　
+	//			  ※オブジェクトの編集をするかコールバック処理の終了まで有効
+	LPCWSTR (*get_object_name)(OBJECT_HANDLE object);
+
+	// オブジェクト名を設定します
+	// object	: オブジェクトのハンドル
+	// name		: オブジェクト名 (nullptrか空文字を指定すると標準の名前になります)　
+	void (*set_object_name)(OBJECT_HANDLE object, LPCWSTR name);
 
 };
 
@@ -159,17 +261,27 @@ struct EDIT_HANDLE {
 	//					  編集が出来ない場合(出力中等)に失敗します
 	bool (*call_edit_section)(void (*func_proc_edit)(EDIT_SECTION* edit));
 
+	// call_edit_section()に引数paramを渡せるようにした関数です
+	bool (*call_edit_section_param)(void* param, void (*func_proc_edit)(void* param, EDIT_SECTION* edit));
+
+	// 編集情報を取得します
+	// 既に編集処理中(EDIT_SECTIONが引数のコールバック関数内等)の場合は利用出来ません ※デッドロックします
+	// info			: 編集情報の格納先へのポインタ
+	// info_size	: 編集情報の格納先のサイズ ※EDIT_INFOと異なる場合はサイズ分のみ取得されます
+	void (*get_edit_info)(EDIT_INFO* info, int info_size);
+
 };
 
 //----------------------------------------------------------------------------------
 
 // プロジェクトファイル構造体
-// プロジェクトファイルのロード、セーブ時のコールバック関数内で利用出来ます
+// プロジェクトファイルのロード、セーブのコールバックや編集のコールバック関数内で利用出来ます
 // プロジェクトの保存データはプラグイン毎のデータ領域になります
 struct PROJECT_FILE {
 	// プロジェクトに保存されている文字列(UTF-8)を取得します
 	// key		: キー名(UTF-8)
 	// 戻り値	: 取得した文字列へのポインタ (未設定の場合はnullptr)
+	//			  ※コールバック処理の終了まで有効
 	LPCSTR (*get_param_string)(LPCSTR key);
 
 	// プロジェクトに文字列(UTF-8)を保存します
@@ -192,6 +304,12 @@ struct PROJECT_FILE {
 
 	// プロジェクトに保存されているデータを全て削除します
 	void (*clear_params)();
+
+	// プロジェクトファイルのパスを取得します
+	// key		: キー名(UTF-8)
+	// 戻り値	: プロジェクトファイルパスへのポインタ (ファイルパスは未設定の場合があります)
+	//			  ※コールバック処理の終了まで有効
+	LPCWSTR (*get_project_file_path)();
 
 };
 
@@ -256,5 +374,24 @@ struct HOST_APP_TABLE {
 	// name						: オブジェクトメニューの名称
 	// func_proc_object_menu	: オブジェクトメニュー選択時のコールバック関数
 	void (*register_object_menu)(LPCWSTR name, void (*func_proc_object_menu)(EDIT_SECTION* edit));
+
+	// 設定メニューを登録する
+	// 設定メニューの登録後にウィンドウクライアントを登録するとシステムメニューに「設定」が追加されます
+	// name				: 設定メニューの名称
+	// func_config		: 設定メニュー選択時のコールバック関数
+	void (*register_config_menu)(LPCWSTR name, void (*func_config)(HWND hwnd, HINSTANCE dll_hinst));
+
+	// 編集メニューを登録する
+	// name					: 編集メニューの名称 ※名称に'\'を入れると表示を階層に出来ます
+	// func_proc_edit_menu	: 編集メニュー選択時のコールバック関数
+	void (*register_edit_menu)(LPCWSTR name, void (*func_proc_edit_menu)(EDIT_SECTION* edit));
+
+	// キャッシュを破棄の操作時に呼ばれる関数を登録する
+	// func_proc_clear_cache	: キャッシュの破棄時のコールバック関数
+	void (*register_clear_cache_handler)(void (*func_proc_clear_cache)(EDIT_SECTION* edit));
+
+	// シーンを変更した直後に呼ばれる関数を登録する ※シーンの設定情報が更新された時にも呼ばれます
+	// func_proc_change_scene	: シーン変更時のコールバック関数
+	void (*register_change_scene_handler)(void (*func_proc_change_scene)(EDIT_SECTION* edit));
 
 };
