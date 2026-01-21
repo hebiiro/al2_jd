@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <aviutl2_dir>C:\MySpace\aviutl2\app\aviutl2</aviutl2_dir>
+    <aviutl2_plugin_ext>.aui2</aviutl2_plugin_ext>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile>main.def</ModuleDefinitionFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(TargetPath)" "$(aviutl2_dir)\data\Plugin\$(TargetName)$(aviutl2_plugin_ext)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="aviutl2_dir">
+      <Value>$(aviutl2_dir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="aviutl2_plugin_ext">
+      <Value>$(aviutl2_plugin_ext)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
