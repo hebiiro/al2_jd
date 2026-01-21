@@ -7,6 +7,11 @@ namespace apn::dark::kuro::paint::d2d
 	//
 	inline struct core_t
 	{
+		//
+		// 後始末処理完了後はTRUEになります。
+		//
+		BOOL flag_is_uninitialized = FALSE;
+
 		ComPtr<IDWriteFactory> dw_factory;
 		ComPtr<ID2D1Factory1> d2d_factory;
 		ComPtr<IWICImagingFactory> wic_factory;
@@ -26,6 +31,31 @@ namespace apn::dark::kuro::paint::d2d
 		inline static constexpr auto c_render_target_props = D2D1_RENDER_TARGET_PROPERTIES {
 			D2D1_RENDER_TARGET_TYPE_DEFAULT, c_pixel_format,
 		};
+
+		//
+		// 初期化処理を実行します。
+		//
+		BOOL init()
+		{
+			return TRUE;
+		}
+
+		//
+		// 後始末処理を実行します。
+		//
+		BOOL exit()
+		{
+			// COMオブジェクトを開放します。
+			render_target = nullptr;
+			wic_factory = nullptr;
+			d2d_factory = nullptr;
+			dw_factory = nullptr;
+
+			// 後始末が完了したのでフラグを立てます。
+			flag_is_uninitialized = TRUE;
+
+			return TRUE;
+		}
 
 		//
 		// 各種ファクトリを作成します。
@@ -77,6 +107,9 @@ namespace apn::dark::kuro::paint::d2d
 		{
 			MY_TRACE_FUNC("");
 
+			// 後始末処理が完了済みの場合は何もしません。
+			if (flag_is_uninitialized) return TRUE;
+
 			if (!d2d_factory)
 				if (FAILED(create_factory())) return FALSE;
 
@@ -111,7 +144,7 @@ namespace apn::dark::kuro::paint::d2d
 			{
 				// 描画を終了します。
 				if (core.render_target->EndDraw() == D2DERR_RECREATE_TARGET)
-					core.create_render_target();
+					core.render_target = nullptr;
 			}
 		};
 	} core;

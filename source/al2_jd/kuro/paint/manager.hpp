@@ -14,6 +14,7 @@ namespace apn::dark::kuro::paint
 		{
 			MY_TRACE_FUNC("");
 
+			d2d::core.init();
 			material_t::init_materials();
 
 			return TRUE;
@@ -27,6 +28,7 @@ namespace apn::dark::kuro::paint
 			MY_TRACE_FUNC("");
 
 			material_t::exit_materials();
+			d2d::core.exit();
 
 			return TRUE;
 		}
