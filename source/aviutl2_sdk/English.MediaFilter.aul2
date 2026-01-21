@@ -1,0 +1,10 @@
+[メディアフィルタ(sample)]
+メディアフィルタ(sample)=MediaFilter(sample)
+明るさ=Brightness
+R成分のみ=Red
+G成分のみ=Green
+B成分のみ=Blue
+RGB成分=RGB
+対象=Target
+音量=Volume
+モノラル化=Mono

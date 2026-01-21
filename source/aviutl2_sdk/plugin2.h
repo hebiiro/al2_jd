@@ -262,6 +262,7 @@ struct EDIT_HANDLE {
 	bool (*call_edit_section)(void (*func_proc_edit)(EDIT_SECTION* edit));
 
 	// call_edit_section()に引数paramを渡せるようにした関数です
+	// param			: 任意のユーザーデータのポインタ
 	bool (*call_edit_section_param)(void* param, void (*func_proc_edit)(void* param, EDIT_SECTION* edit));
 
 	// 編集情報を取得します
@@ -269,6 +270,22 @@ struct EDIT_HANDLE {
 	// info			: 編集情報の格納先へのポインタ
 	// info_size	: 編集情報の格納先のサイズ ※EDIT_INFOと異なる場合はサイズ分のみ取得されます
 	void (*get_edit_info)(EDIT_INFO* info, int info_size);
+
+	// ホストアプリケーションを再起動します
+	void (*restart_host_app)();
+
+	// エフェクト名の一覧をコールバック関数(func_proc_enum_effect)で取得します
+	// param					: 任意のユーザーデータのポインタ
+	// func_proc_enum_effect	: エフェクト名の取得処理のコールバック関数
+	void (*enum_effect_name)(void* param, void (*func_proc_enum_effect)(void* param, LPCWSTR name, int type, int flag));
+	// エフェクト種別 ※今後追加される可能性があります
+	static constexpr int EFFECT_TYPE_FILTER		= 1;	// フィルタ効果
+	static constexpr int EFFECT_TYPE_INPUT		= 2;	// メディア入力
+	static constexpr int EFFECT_TYPE_TRANSITION = 3;	// シーンチェンジ
+	// エフェクトフラグ ※今後追加される可能性があります
+	static constexpr int EFFECT_FLAG_VIDEO		= 1;	// 画像をサポート
+	static constexpr int EFFECT_FLAG_AUDIO		= 2;	// 音声をサポート
+	static constexpr int EFFECT_FLAG_FILTER		= 4;	// フィルタオブジェクトをサポート
 
 };
 

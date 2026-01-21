@@ -117,6 +117,33 @@ struct FILTER_ITEM_BUTTON {
 	void (*callback)(EDIT_SECTION*);	// 設定名
 };
 
+// 文字列項目構造体 ※1行の文字列
+// 例：FILTER_ITEM_STRING string = { L"文字列", L"" };
+struct FILTER_ITEM_STRING {
+	FILTER_ITEM_STRING(LPCWSTR name, LPCWSTR value) : name(name), value(value) {}
+	LPCWSTR type = L"string";	// 設定の種別
+	LPCWSTR name;				// 設定名
+	LPCWSTR value;				// 設定値 (フィルタ処理の呼び出し時に現在の値のポインタに更新されます)
+};
+
+// テキスト項目構造体 ※複数行の文字列
+// 例：FILTER_ITEM_TEXT text = { L"テキスト", L"" };
+struct FILTER_ITEM_TEXT {
+	FILTER_ITEM_TEXT(LPCWSTR name, LPCWSTR value) : name(name), value(value) {}
+	LPCWSTR type = L"text";		// 設定の種別
+	LPCWSTR name;				// 設定名
+	LPCWSTR value;				// 設定値 (フィルタ処理の呼び出し時に現在の値のポインタに更新されます)
+};
+
+// フォルダ選択項目構造体
+// 例：FILTER_ITEM_FOLDER folder = { L"フォルダ", L"" };
+struct FILTER_ITEM_FOLDER {
+	FILTER_ITEM_FOLDER(LPCWSTR name, LPCWSTR value) : name(name), value(value) {}
+	LPCWSTR type = L"folder";	// 設定の種別
+	LPCWSTR name;				// 設定名
+	LPCWSTR value;				// 設定値 (フィルタ処理の呼び出し時に現在の値のポインタに更新されます)
+};
+
 //----------------------------------------------------------------------------------
 
 // RGBA32bit構造体

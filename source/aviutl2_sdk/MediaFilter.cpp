@@ -25,7 +25,7 @@ void* items[] = { &luminance, &component, &volume, &mono, nullptr };
 //---------------------------------------------------------------------
 FILTER_PLUGIN_TABLE filter_plugin_table = {
 	FILTER_PLUGIN_TABLE::FLAG_VIDEO | FILTER_PLUGIN_TABLE::FLAG_AUDIO, //	フラグ
-	L"MediaFilter(sample)",							// プラグインの名前
+	L"メディアフィルタ(sample)",					// プラグインの名前
 	L"サンプル",									// ラベルの初期値 (nullptrならデフォルトのラベルになります)
 	L"Sample MediaFilter version 2.00 By ＫＥＮくん",	// プラグインの情報
 	items,											// 設定項目の定義 (FILTER_ITEM_XXXポインタを列挙してnull終端したリストへのポインタ)
