@@ -22,7 +22,7 @@ namespace apn::dark::kuro::paint
 			auto ets_disabled = create_pigment(L"EditBox", L"Disable",
 				style_t::color_e::ButtonBodyDisable,
 				{},
-				style_t::color_e::Text);
+				style_t::color_e::TextDisable);
 
 			auto ets_selected = create_pigment(L"EditBox", L"Select",
 				style_t::color_e::ButtonBodySelect,

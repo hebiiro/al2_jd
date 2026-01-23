@@ -32,7 +32,7 @@ namespace apn::dark::kuro::paint
 			auto disabled = create_pigment(L"Dialog", L"Disable",
 				style_t::color_e::ButtonBodyDisable,
 				{},
-				style_t::color_e::Text);
+				style_t::color_e::TextDisable);
 
 			auto selected = create_pigment(L"Dialog", L"Select",
 				style_t::color_e::ButtonBodySelect,
