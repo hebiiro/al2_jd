@@ -182,11 +182,11 @@ namespace apn::dark
 					// ロックされている場合はWM_COMMANDを処理しません。
 					if (is_locked()) break;
 
-					auto id = LOWORD(wParam);
+					auto control_id = LOWORD(wParam);
 					auto code = HIWORD(wParam);
 					auto control = (HWND)lParam;
 
-					switch (id)
+					switch (control_id)
 					{
 					case IDC_JD_STYLE_FILE_NAME_REF:
 						{

@@ -62,10 +62,11 @@ namespace apn::dark::kuro::hook
 					if (cs->lResult < 0) break;
 
 					auto hwnd = cs->hwnd;
+#ifdef _DEBUG
 					auto class_name = my::get_class_name(hwnd);
 
 					MY_TRACE_FUNC("{/}, {/hex}, {/}", code, hwnd, class_name);
-
+#endif
 					// ウィンドウとレンダラーを関連付けます。
 					gdi::manager.attach_renderer(hwnd);
 

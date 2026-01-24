@@ -18,11 +18,6 @@ namespace apn::dark
 		std::unique_ptr<my::FileWatcherBase> custom_color_file_watcher;
 
 		//
-		// コンストラクタです。
-		//
-		app_t() { app = this; }
-
-		//
 		// dllの初期化処理を実行します。
 		//
 		virtual BOOL dll_init() override
