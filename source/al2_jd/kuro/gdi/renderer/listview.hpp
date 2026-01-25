@@ -7,9 +7,10 @@ namespace apn::dark::kuro::gdi
 		const paint::palette_t& palette = paint::listview_material.palette;
 
 		//
-		// カスタムドローを使用している場合はTRUEになります。
+		// カスタムドローで指定されている配色です。
 		//
-		BOOL flag_custom_draw = FALSE;
+		COLORREF custom_text_color = CLR_DEFAULT;
+		COLORREF custom_background_color = CLR_DEFAULT;
 
 #if 0 // テスト用コードです。
 		virtual LRESULT on_subclass_proc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) override
@@ -36,8 +37,26 @@ namespace apn::dark::kuro::gdi
 			auto cd = (NMTVCUSTOMDRAW*)lParam;
 			auto result = __super::on_custom_draw(hwnd, message, wParam, lParam);
 
-			if (cd->nmcd.dwDrawStage == CDDS_PREPAINT)
-				flag_custom_draw = (result == CDRF_NOTIFYITEMDRAW);
+			switch (cd->nmcd.dwDrawStage)
+			{
+			case CDDS_PREPAINT:
+				{
+					if (result != CDRF_NOTIFYITEMDRAW)
+					{
+						custom_text_color = CLR_DEFAULT;
+						custom_background_color = CLR_DEFAULT;
+					}
+
+					break;
+				}
+			case CDDS_ITEMPREPAINT:
+				{
+					custom_text_color = cd->clrText;
+					custom_background_color = cd->clrTextBk;
+
+					break;
+				}
+			}
 
 			return result;
 		}
@@ -46,7 +65,7 @@ namespace apn::dark::kuro::gdi
 		{
 			MY_TRACE_FUNC("{/hex}, ({/}), {/hex}", dc, safe_string(rc), brush);
 
-			if (!flag_custom_draw)
+			if (custom_background_color == CLR_DEFAULT)
 			{
 				// 背景色を描画します。
 
@@ -120,7 +139,6 @@ namespace apn::dark::kuro::gdi
 			MY_TRACE_FUNC("{/hex}, {/}, {/}, {/hex}, {/}, {/}, {/}, {/hex}, {/hex}, {/hex}", dc, x, y, options, safe_string(rc), text, c, dx, ::GetBkColor(dc), ::GetTextColor(dc));
 #if 1
 //			if (!(options & ETO_IGNORELANGUAGE))
-			if (!flag_custom_draw)
 			{
 				if (options == ETO_OPAQUE && rc)
 				{
@@ -134,7 +152,7 @@ namespace apn::dark::kuro::gdi
 					if (auto pigment = palette.get(part_id, state_id))
 						return paint::stylus.ext_text_out(dc, x, y, options, rc, text, c, dx, pigment);
 				}
-				else
+				else if (custom_text_color == CLR_DEFAULT)
 				{
 					auto current_color = ::GetPixel(dc, x, y);
 					auto part_id = LVP_LISTITEM;
