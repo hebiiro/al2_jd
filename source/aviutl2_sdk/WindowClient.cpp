@@ -5,18 +5,27 @@
 #include <commctrl.h>
 
 #include "plugin2.h"
-#include "logger2.h" // logger用 
+#include "logger2.h" // ログ出力 
+#include "config2.h" // 設定関連
 
 #define SampleWindowName L"SampleWindowClient"
 #define IDC_BUTTON 1001
 EDIT_HANDLE* edit_handle;
 LOG_HANDLE* logger;
+CONFIG_HANDLE* config;
 
 //---------------------------------------------------------------------
 //	ログ出力機能初期化関数 (未定義なら呼ばれません)
 //---------------------------------------------------------------------
 EXTERN_C __declspec(dllexport) void InitializeLogger(LOG_HANDLE* handle) {
 	logger = handle;
+}
+
+//---------------------------------------------------------------------
+//	設定関連初期化関数 (未定義なら呼ばれません)
+//---------------------------------------------------------------------
+EXTERN_C __declspec(dllexport) void InitializeConfig(CONFIG_HANDLE* handle) {
+	config = handle;
 }
 
 //---------------------------------------------------------------------
@@ -110,9 +119,9 @@ EXTERN_C __declspec(dllexport) void RegisterPlugin(HOST_APP_TABLE* host) {
 	CreateWindowEx(
 		0,
 		WC_BUTTON,
-		L"オブジェクト作成",
+		config->translate(config, L"オブジェクト作成"),
 		WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
-		10, 10, 200, 40,
+		10, 10, 200, config->get_layout_size(config, "SettingItemHeight"),
 		hwnd,
 		(HMENU)IDC_BUTTON,
 		GetModuleHandle(0),
@@ -124,4 +133,3 @@ EXTERN_C __declspec(dllexport) void RegisterPlugin(HOST_APP_TABLE* host) {
 	// 編集ハンドルを作成
 	edit_handle = host->create_edit_handle();
 }
-

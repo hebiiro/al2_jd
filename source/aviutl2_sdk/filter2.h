@@ -16,6 +16,9 @@
 // 
 //	ログ出力機能初期化関数 (任意) ※logger2.h
 //		void InitializeLogger(LOG_HANDLE* logger)
+// 
+//	設定関連機能初期化関数 (任意) ※config2.h
+//		void InitializeConfig(CONFIG_HANDLE* config)
 
 //----------------------------------------------------------------------------------
 
@@ -114,7 +117,7 @@ struct FILTER_ITEM_BUTTON {
 	FILTER_ITEM_BUTTON(LPCWSTR name, void (*callback)(EDIT_SECTION* edit)) : name(name), callback(callback) {}
 	LPCWSTR type = L"button";			// 設定の種別
 	LPCWSTR name;						// 設定名
-	void (*callback)(EDIT_SECTION*);	// 設定名
+	void (*callback)(EDIT_SECTION*);	// ボタンを押した時のコールバック関数
 };
 
 // 文字列項目構造体 ※1行の文字列

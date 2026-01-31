@@ -16,6 +16,9 @@
 // 
 //	ログ出力機能初期化関数 (任意) ※logger2.h
 //		void InitializeLogger(LOG_HANDLE* logger)
+// 
+//	設定関連機能初期化関数 (任意) ※config2.h
+//		void InitializeConfig(CONFIG_HANDLE* config)
 
 //----------------------------------------------------------------------------------
 
