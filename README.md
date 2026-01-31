@@ -4,17 +4,26 @@
 * 現時点では「入力プラグイン」形式になっています。
 * `jd`は`just dark`または`二黒土星(jikoku dosei)`の略です。
 
+> [!IMPORTANT]
+> * このMODは以下のMODに分離され、非推奨になりました。
+>	* [UIドレッシングMOD](https://github.com/hebiiro/al2_ui_dressing) (ダークモード化機能)
+>	* [フォント視覚化MOD](https://github.com/hebiiro/al2_visual_font) (フォントプレビュー機能)
+>	* [プリセット追加MOD](https://github.com/hebiiro/al2_preset_adder) (ダイアログ拡張機能)
+>	* [スリム化MOD](https://github.com/hebiiro/al2_slimming) (スリムバー機能)
+> *	今後はダークモード化MODはアンインストールし、<br>
+>	必要な機能を持つMODだけをインストールするようにしてください。
+
+> [!IMPORTANT]
+> * `🔖r18`以降は古い出力プラグインのUIには対応していません。
+>	* `コモンダイアログを除外`にチェックを入れるか、<br>
+>	対応バージョンの出力プラグインを使用してください。
+
 ## 🚧注意事項
 
 * メインスレッドだけをダークモード化します。
 	* 「ファイルのプロパティ」ダイアログなどは対象外です。
 * `データフォルダ`とは`C:\ProgramData\aviutl2`または`aviutl2.exeがあるフォルダ\data`のことです。
 * `プラグインフォルダ`とは`データフォルダ\Plugin`のことです。
-
-> [!IMPORTANT]
-> * `🔖r18`以降は古い出力プラグインのUIには対応していません。
->	* `コモンダイアログを除外`にチェックを入れるか、<br>
->	対応バージョンの出力プラグインを使用してください。
 
 ## 🚀インストール
 
@@ -331,7 +340,7 @@ HotTextShadow=ff000080
 
 ## ⚗️動作確認
 
-* AviUtl ExEdit2 beta20 https://spring-fragrance.mints.ne.jp/aviutl/
+* AviUtl ExEdit2 beta30a https://spring-fragrance.mints.ne.jp/aviutl/
 
 ## 💳クレジット
 
