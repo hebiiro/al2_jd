@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <aviutl2_dir>C:\MySpace\aviutl2\app\aviutl2</aviutl2_dir>
+    <aviutl2_dir>C:\dev\aviutl2\app\aviutl2</aviutl2_dir>
     <aviutl2_plugin_ext>.aui2</aviutl2_plugin_ext>
   </PropertyGroup>
   <ItemDefinitionGroup>

@@ -283,34 +283,34 @@ namespace apn::dark
 		struct presets_t
 		{
 			//
-			// (全体の)プリセットです。
+			// プロジェクトのプリセットです。
 			//
 			struct preset_t {
 				std::wstring display_name;
-				std::wstring name;
+				std::wstring scene_name;
 				std::wstring video_width;
 				std::wstring video_height;
 				std::wstring video_rate;
 				std::wstring audio_rate;
 			};
-			std::vector<preset_t> preset_collection;
+			std::vector<preset_t> project_collection;
 
 			//
-			// 名前のプリセットです。
+			// シーン名のプリセットです。
 			//
 			struct name_t {
 				std::wstring display_name;
-				std::wstring name;
+				std::wstring scene_name;
 			};
-			std::vector<name_t> name_collection;
+			std::vector<name_t> scene_name_collection;
 
 			//
 			// 映像サイズのプリセットです。
 			//
 			struct video_size_t {
 				std::wstring display_name;
-				std::wstring width;
-				std::wstring height;
+				std::wstring video_width;
+				std::wstring video_height;
 			};
 			std::vector<video_size_t> video_size_collection;
 
@@ -319,7 +319,7 @@ namespace apn::dark
 			//
 			struct video_rate_t {
 				std::wstring display_name;
-				std::wstring rate;
+				std::wstring video_rate;
 			};
 			std::vector<video_rate_t> video_rate_collection;
 
@@ -328,7 +328,7 @@ namespace apn::dark
 			//
 			struct audio_rate_t {
 				std::wstring display_name;
-				std::wstring rate;
+				std::wstring audio_rate;
 			};
 			std::vector<audio_rate_t> audio_rate_collection;
 

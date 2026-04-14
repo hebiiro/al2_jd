@@ -176,7 +176,6 @@
     <ClInclude Include="kuro\paint\d2d\texter.hpp" />
     <ClInclude Include="kuro\paint\d2d\utils.hpp" />
     <ClInclude Include="kuro\paint\material\window.hpp" />
-    <ClInclude Include="lockable.hpp" />
     <ClInclude Include="hive.hpp" />
     <ClInclude Include="io_base.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2.hpp" />

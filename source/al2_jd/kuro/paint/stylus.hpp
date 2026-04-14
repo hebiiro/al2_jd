@@ -246,7 +246,7 @@ namespace apn::dark::kuro::paint
 		BOOL ext_text_out(HDC dc, int x, int y, UINT options, LPCRECT rc, LPCWSTR text, UINT c, CONST INT* dx, const pigment_t* pigment, BOOL opaque = TRUE)
 		{
 			// このスコープ内では::ExtTextOutW()をフックしないようにします。
-			locker_t locker(&ext_text_out_lock);
+			my::locker_t locker(&ext_text_out_lock);
 
 			// 影を描画する場合は
 			if (hive.shadow.flag_use && pigment->text_shadow.is_valid())
@@ -319,7 +319,7 @@ namespace apn::dark::kuro::paint
 		BOOL draw_text(HDC dc, LPCRECT rc, LPCWSTR text, int c, DWORD text_flags, const pigment_t* pigment, BOOL opaque = TRUE)
 		{
 			// このスコープ内では::ExtTextOutW()をフックしないようにします。
-			locker_t locker(&ext_text_out_lock);
+			my::locker_t locker(&ext_text_out_lock);
 #if 0 // テスト用コードです。
 			my::theme::unique_ptr<> theme(::OpenThemeData(nullptr, L"Window"));
 

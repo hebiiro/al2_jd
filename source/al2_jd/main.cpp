@@ -2,7 +2,6 @@
 #include "resource.h"
 #include "version.hpp"
 #include "app_interface.hpp"
-#include "lockable.hpp"
 #include "hive.hpp"
 #include "utils.hpp"
 #include "test_dialog.hpp"

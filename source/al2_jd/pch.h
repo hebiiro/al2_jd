@@ -100,6 +100,7 @@ using namespace my::json;
 #include "common/my/file_update_checker.hpp"
 #include "common/my/uah_menu.hpp"
 #include "common/my/slimbar.hpp"
+#include "common/my/lockable.hpp"
 
 #pragma comment(linker, "\"/manifestdependency:type='win32' \
 	name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \

@@ -270,5 +270,5 @@ namespace apn::dark
 	//
 	// ::ExtTextOut()のフックをロックします。
 	//
-	thread_local inline lockable_t ext_text_out_lock;
+	thread_local inline my::lockable_t ext_text_out_lock;
 }

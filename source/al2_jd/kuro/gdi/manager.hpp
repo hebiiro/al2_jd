@@ -67,14 +67,12 @@ namespace apn::dark::kuro::gdi
 			{
 				auto text = my::get_window_text(hwnd);
 
-				if (match(text, hive.dialog_name.new_project))
-					return std::make_shared<aviutl2::new_project::dialog_renderer_t>(FALSE);
-
-				if (match(text, hive.dialog_name.new_scene))
-					return std::make_shared<aviutl2::new_project::dialog_renderer_t>(TRUE);
-
-				if (match(text, hive.dialog_name.set_scene))
-					return std::make_shared<aviutl2::new_project::dialog_renderer_t>(TRUE);
+				if (match(text, hive.dialog_name.new_project) ||
+					match(text, hive.dialog_name.new_scene) ||
+					match(text, hive.dialog_name.set_scene))
+				{
+					return std::make_shared<aviutl2::new_project::dialog_renderer_t>();
+				}
 
 				if (match(text, hive.dialog_name.set_layer_name))
 					return std::make_shared<aviutl2::layer_name::dialog_renderer_t>();

@@ -2,42 +2,62 @@
 
 namespace apn::dark::kuro::gdi::aviutl2::new_project
 {
-	struct dialog_renderer_t : gdi::dialog_renderer_t, lockable_t
+	struct dialog_renderer_t : gdi::dialog_renderer_t, my::lockable_t
 	{
-		inline static constexpr size_t c_name_stat = 0;
-		inline static constexpr size_t c_name = 1;
-		inline static constexpr size_t c_video_size_stat = 2;
-		inline static constexpr size_t c_video_width = 3;
-		inline static constexpr size_t c_video_height = 4;
-		inline static constexpr size_t c_video_rate_stat = 5;
-		inline static constexpr size_t c_video_rate = 6;
-		inline static constexpr size_t c_audio_rate_stat = 7;
-		inline static constexpr size_t c_audio_rate = 8;
-		inline static constexpr size_t c_background_color_stat = 9;
-		inline static constexpr size_t c_background_color = 10;
-		inline static constexpr size_t c_background_color_preview = 11;
-		inline static constexpr size_t c_ok = 12;
-		inline static constexpr size_t c_nb_default_controls = 13;
-
-		HWND controls[c_nb_default_controls] = {};
-
-		HWND preset_stat = {}; // "プリセット"のスタティックコントロールです。
-		HWND preset = {}; // "プリセット"のコンボボックスです。
-		HWND swap_video_size = {}; // "縦横反転"のチェックボックスです。
-		HWND name_preset = {}; // "名前プリセット"のコンボボックスです。
-		HWND video_size_preset = {}; // "映像サイズプリセット"のコンボボックスです。
-		HWND video_rate_preset = {}; // "映像レートプリセット"のコンボボックスです。
-		HWND audio_rate_preset = {}; // "音声レートプリセット"のコンボボックスです。
-
-		BOOL is_scene = {}; // シーンを作成する場合はTRUEになります。
+		//
+		// このクラスは既存のコントロールです。
+		//
+		struct control_t {
+			HWND hwnd;
+			RECT rc;
+			operator HWND() const { return hwnd; }
+		};
 
 		//
-		// コンストラクタです。
+		// 既存のコントロールのコレクションです。
 		//
-		dialog_renderer_t(BOOL is_scene)
-			: is_scene(is_scene)
-		{
-		}
+		std::vector<control_t> controls;
+
+		//
+		// 既存のコントロールです。
+		//
+		struct readymade_t {
+			using element_t = const control_t*;
+			element_t name_stc, name;
+			element_t video_size_stc, video_width, video_height;
+			element_t video_rate_stc, video_rate;
+			element_t audio_rate_stc, audio_rate;
+			element_t background_color_stc, background_color, background_color_picker;
+			element_t horz_border;
+			element_t output_size_stc, output_width, output_height;
+			element_t output_audio_stc, output_audio;
+			element_t tip_stc;
+			element_t ok;
+		} readymade = {};
+
+		//
+		// 後付けのコントロールです。
+		//
+		struct retrofit_t {
+			HWND preset_stc; // "プリセット"のスタティックコントロールです。
+			HWND preset; // "プリセット"のコンボボックスです。
+			HWND swap_video_size; // "縦横反転"のチェックボックスです。
+			HWND name_preset; // "名前プリセット"のコンボボックスです。
+			HWND video_size_preset; // "映像サイズプリセット"のコンボボックスです。
+			HWND video_rate_preset; // "映像レートプリセット"のコンボボックスです。
+			HWND audio_rate_preset; // "音声レートプリセット"のコンボボックスです。
+			HWND cancel; // キャンセルボタンです。
+		} retrofit = {};
+
+		//
+		// 指定されたテキストを翻訳して返します。
+		//
+		inline static LPCWSTR tr(LPCWSTR text) { return text; }
+
+		//
+		// 指定されたテキストを翻訳して返します。
+		//
+		inline static LPCWSTR tr(LPCWSTR category, LPCWSTR text) { return text; }
 
 		//
 		// コントロール配列を初期化します。
@@ -46,79 +66,95 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
 
-			struct Param {
-				dialog_renderer_t* dialog;
-				int i;
-			} param = { this, 0 };
-
-			// 子ウィンドウを列挙します。
+			// 既存のコントロールを列挙します。
 			::EnumChildWindows(hwnd,
 				[](HWND child, LPARAM l_param) -> BOOL
 			{
 				MY_TRACE_HWND(child);
 
-				// パラメータポインタを取得します。
-				auto p = (Param*)l_param;
+				// thisポインタを取得します。
+				auto p = (dialog_renderer_t*)l_param;
 
-				// 子ウィンドウを配列に追加します。
-				p->dialog->add_control(child, p->i++);
+				// 既存のコントロールの矩形を取得します。
+				auto rc = my::get_window_rect(child);
+				my::map_window_points(nullptr, ::GetParent(child), &rc);
+
+				// 既存のコントロールをコレクションに追加します。
+				p->controls.emplace_back(child, rc);
 
 				return TRUE;
-			}, (LPARAM)&param);
+			},
+			(LPARAM)this);
+
+			// 既存のコントロールの数が無効の場合は失敗します。
+			if (controls.size() < 13) return FALSE;
+
+			{
+				// コントロールのインデックスです。
+				auto index = size_t {};
+
+				// 基準となるコントロールを取得します。
+				const auto& control = controls[2];
+
+				// 基準となるコントロールのクラス名を取得します。
+				auto class_name = my::get_class_name(control);
+
+				// 基準となるコントロールがエディットボックスの場合は
+				if (::lstrcmpiW(class_name.c_str(), WC_EDITW) == 0)
+				{
+					// 「プロジェクトを新規作成」または(出力時の)「シーンの設定」ダイアログです。
+				}
+				else
+				{
+					// 「シーンを新規作成」または(通常の)「シーンの設定」ダイアログです。
+
+					readymade.name_stc = &controls[index++];
+					readymade.name = &controls[index++];
+				}
+
+				readymade.video_size_stc = &controls[index++];
+				readymade.video_width = &controls[index++];
+				readymade.video_height = &controls[index++];
+				readymade.video_rate_stc = &controls[index++];
+				readymade.video_rate = &controls[index++];
+				readymade.audio_rate_stc = &controls[index++];
+				readymade.audio_rate = &controls[index++];
+				readymade.background_color_stc = &controls[index++];
+				readymade.background_color = &controls[index++];
+				readymade.background_color_picker = &controls[index++];
+				readymade.horz_border = &controls[index++];
+				readymade.output_size_stc = &controls[index++];
+				readymade.output_width = &controls[index++];
+				readymade.output_height = &controls[index++];
+				readymade.output_audio_stc = &controls[index++];
+				readymade.output_audio = &controls[index++];
+				readymade.tip_stc = &controls[index++];
+				readymade.ok = &controls.back();
+			}
 
 			return TRUE;
 		}
 
 		//
-		// コントロールを配列に追加します。
+		// コントロールを再配置します。
 		//
-		void add_control(HWND control, int i)
-		{
-			if (is_scene)
-			{
-				auto index = c_name_stat + i;
-				if (index < c_nb_default_controls)
-					controls[index] = control;
-			}
-			else
-			{
-				auto index = c_video_size_stat + i;
-				if (index < c_nb_default_controls)
-					controls[index] = control;
-			}
-		}
-
-		//
-		// ダイアログのレイアウトを変更します。
-		//
-		BOOL change_layout(HWND hwnd)
+		BOOL arrange_controls(HWND hwnd)
 		{
 			MY_TRACE_FUNC("{/hex}", hwnd);
 
-			//
-			// この関数はコントロール矩形を返します。
-			//
-			const auto get_rc = [&](size_t control_index) {
-				auto rc = my::get_window_rect(controls[control_index]);
-				my::map_window_points(nullptr, hwnd, &rc);
-				return rc;
-			};
-
-			// コントロール矩形を取得します。
-			RECT rcs[c_nb_default_controls] = {};
-			for (size_t i = 0; i < c_nb_default_controls; i++)
-				rcs[i] = get_rc(i);
+			// クライアント矩形を取得します。
+			auto client_rc = my::get_client_rect(hwnd);
 
 			// 基準サイズを取得します。
 			auto base = SIZE {
-				my::get_width(rcs[c_video_rate]),
-				my::get_height(rcs[c_video_rate]),
+				my::get_width(readymade.video_rate->rc),
+				my::get_height(readymade.video_rate->rc),
 			};
 
 			// 余白サイズを取得します。
 			auto space = SIZE {
-				rcs[c_video_height].left - rcs[c_video_width].right,
-				rcs[c_video_rate].top - rcs[c_video_width].bottom,
+				readymade.video_height->rc.left - readymade.video_width->rc.right,
+				readymade.video_rate->rc.top - readymade.video_width->rc.bottom,
 			};
 
 			// 移動予定のオフセットサイズを取得します。
@@ -130,17 +166,17 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 			// 追加のコントロールを作成します。
 			{
 				// コントロールのフォントです。
-				auto font = (HFONT)::SendMessage(controls[c_ok], WM_GETFONT, 0, 0);
+				auto font = (HFONT)::SendMessage(*readymade.ok, WM_GETFONT, 0, 0);
 
 				// 追加コントロールの基準X座標です。
-				auto x = rcs[c_video_height].right + space.cx;
+				auto x = readymade.video_height->rc.right + space.cx;
 
 				{
-					// Y座標の基準となるコントロール(一番上のコントロール)のインデックスです。
-					auto base_control_index = is_scene ? c_name_stat : c_video_size_stat;
+					// Y座標の基準となるコントロール(一番上のコントロール)です。
+					auto base_control = readymade.name_stc ? readymade.name_stc : readymade.video_size_stc;
 
 					// 追加コントロールの基準Y座標です。
-					auto y = rcs[base_control_index].top;
+					auto y = base_control->rc.top;
 
 					//
 					// この関数はコントロールを作成します。
@@ -170,16 +206,25 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 							x, y, w, h * 20);
 					};
 
-					preset_stat = create_control(
-						WC_STATICW, L"プリセット", SS_CENTERIMAGE, rcs[c_video_size_stat].left, y, base.cx, base.cy);
-					preset = create_combobox(rcs[c_video_width].left, y, base.cx, base.cy);
-					swap_video_size = create_control(
-						WC_BUTTONW, L"縦横反転", BS_AUTOCHECKBOX, x, y, base.cx, base.cy);
-					if (is_scene)
-						name_preset = create_combobox(x, rcs[c_name_stat].top + offset.cy, base.cx, base.cy);
-					video_size_preset = create_combobox(x, rcs[c_video_size_stat].top + offset.cy, base.cx, base.cy);
-					video_rate_preset = create_combobox(x, rcs[c_video_rate_stat].top + offset.cy, base.cx, base.cy);
-					audio_rate_preset = create_combobox(x, rcs[c_audio_rate_stat].top + offset.cy, base.cx, base.cy);
+					retrofit.preset_stc = create_control(
+						WC_STATICW, tr(L"プリセット"), SS_CENTERIMAGE, readymade.video_size_stc->rc.left, y, base.cx, base.cy);
+					retrofit.preset = create_combobox(readymade.video_width->rc.left, y, base.cx, base.cy);
+					retrofit.swap_video_size = create_control(
+						WC_BUTTONW, tr(L"縦横反転"), BS_AUTOCHECKBOX, x, y, base.cx, base.cy);
+					if (readymade.name_stc)
+						retrofit.name_preset = create_combobox(x, readymade.name_stc->rc.top + offset.cy, base.cx, base.cy);
+					retrofit.video_size_preset = create_combobox(x, readymade.video_size_stc->rc.top + offset.cy, base.cx, base.cy);
+					retrofit.video_rate_preset = create_combobox(x, readymade.video_rate_stc->rc.top + offset.cy, base.cx, base.cy);
+					retrofit.audio_rate_preset = create_combobox(x, readymade.audio_rate_stc->rc.top + offset.cy, base.cx, base.cy);
+
+					{
+						auto w = my::get_width(readymade.ok->rc);
+						auto h = my::get_height(readymade.ok->rc);
+						auto x = client_rc.right + offset.cx - (w + space.cx * 2);
+						auto y = client_rc.bottom + offset.cy - (h + space.cy * 2);
+
+						retrofit.cancel = create_control(WC_BUTTONW, tr(L"Dialog", L"キャンセル"), BS_PUSHBUTTON, x, y, w, h);
+					}
 
 					//
 					// この関数はコンボボックスをカスタマイズします。
@@ -191,18 +236,18 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					};
 
 					{
-						// (全体の)プリセットのコンボボックスを初期化します。
-						auto combobox = preset;
+						// プロジェクトプリセットのコンボボックスを初期化します。
+						auto combobox = retrofit.preset;
 						customize_combobox(combobox);
-						for (const auto& preset : hive.presets.preset_collection)
+						for (const auto& preset : hive.presets.project_collection)
 						{
 							if (preset.display_name.empty())
 							{
-								if (preset.name.length())
+								if (preset.scene_name.length())
 								{
 									my::combobox::add_text(combobox,
 										my::format(L"{/}, {/} x {/} px, {/} fps, {/} Hz",
-											preset.name,
+											preset.scene_name,
 											preset.video_width, preset.video_height,
 											preset.video_rate, preset.audio_rate).c_str());
 								}
@@ -223,71 +268,62 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 
 					{
 						// 名前プリセットのコンボボックスを初期化します。
-						auto combobox = name_preset;
+						auto combobox = retrofit.name_preset;
 						customize_combobox(combobox);
-						for (const auto& name : hive.presets.name_collection)
-						{
-							if (name.display_name.empty())
-							{
-								my::combobox::add_text(combobox, name.name.c_str());
-							}
-							else
-							{
-								my::combobox::add_text(combobox, name.display_name.c_str());
-							}
-						}
+						for (const auto& preset : hive.presets.scene_name_collection)
+							my::combobox::add_text(combobox, preset.scene_name.c_str());
 					}
 
 					{
 						// 映像サイズプリセットのコンボボックスを初期化します。
-						auto combobox = video_size_preset;
+						auto combobox = retrofit.video_size_preset;
 						customize_combobox(combobox);
-						for (const auto& video_size : hive.presets.video_size_collection)
+						for (const auto& preset : hive.presets.video_size_collection)
 						{
-							if (video_size.display_name.empty())
+							if (preset.display_name.empty())
 							{
 								my::combobox::add_text(combobox,
-									my::format(L"{/} x {/}", video_size.width, video_size.height).c_str());
+									my::format(L"{/} x {/}", preset.video_width, preset.video_height).c_str());
 							}
 							else
 							{
-								my::combobox::add_text(combobox, video_size.display_name.c_str());
+								my::combobox::add_text(combobox, preset.display_name.c_str());
 							}
 						}
 					}
 
 					{
 						// 映像レートプリセットのコンボボックスを初期化します。
-						auto combobox = video_rate_preset;
+						auto combobox = retrofit.video_rate_preset;
 						customize_combobox(combobox);
-						for (const auto& video_rate : hive.presets.video_rate_collection)
+						for (const auto& preset : hive.presets.video_rate_collection)
 						{
-							if (video_rate.display_name.empty())
+							if (preset.display_name.empty())
 							{
 								my::combobox::add_text(combobox,
-									my::format(L"{/}fps", video_rate.rate).c_str());
+									my::format(L"{/}fps", preset.video_rate).c_str());
 							}
 							else
 							{
-								my::combobox::add_text(combobox, video_rate.display_name.c_str());
+								my::combobox::add_text(combobox, preset.display_name.c_str());
 							}
 						}
 					}
 
 					{
 						// 音声レートのコンボボックスを初期化します。
-						auto combobox = audio_rate_preset;
+						auto combobox = retrofit.audio_rate_preset;
 						customize_combobox(combobox);
-						for (const auto& audio_rate : hive.presets.audio_rate_collection)
+						for (const auto& preset : hive.presets.audio_rate_collection)
 						{
-							if (audio_rate.display_name.empty())
+							if (preset.display_name.empty())
 							{
 								my::combobox::add_text(combobox,
-									my::format(L"{/}Hz", audio_rate.rate).c_str());
+									my::format(L"{/}Hz", preset.audio_rate).c_str());
 							}
 							else
 							{
-								my::combobox::add_text(combobox, audio_rate.display_name.c_str());
+								my::combobox::add_text(combobox, preset.display_name.c_str());
 							}
 						}
 					}
@@ -307,13 +343,26 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 			{
 				my::DeferWindowPos dwp;
 
-				for (size_t i = 0; i < c_nb_default_controls; i++)
+				for (const auto& control : controls)
 				{
-					if (!controls[i]) continue;
+					auto rc = control.rc;
 
-					auto rc = rcs[i];
-					::OffsetRect(&rc, 0, offset.cy);
-					dwp.set_window_pos(controls[i], nullptr, &rc, SWP_NOZORDER);
+					if (&control == readymade.ok)
+					{
+						auto w = my::get_width(rc);
+						auto h = my::get_height(rc);
+
+						rc.left = client_rc.right + offset.cx - (w + space.cx * 2) * 2;
+						rc.top = client_rc.bottom + offset.cy - (h + space.cy * 2);
+						rc.right = rc.left + w;
+						rc.bottom = rc.top + h;
+					}
+					else
+					{
+						::OffsetRect(&rc, 0, offset.cy);
+					}
+
+					dwp.set_window_pos(control, nullptr, &rc, SWP_NOZORDER);
 				}
 			}
 
@@ -331,13 +380,13 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 			{
 			case WM_INITDIALOG:
 				{
-					// この処理はスコープ終了時(デフォルト処理の後)に実行します。
-					my::scope_exit scope_exit([&]
+					// スコープ終了時(デフォルト処理の後)に実行します。
+					my::scope_exit scope_exit([&]()
 					{
-						locker_t locker(this);
+						my::locker_t locker(this);
 
-						init_controls(hwnd);
-						change_layout(hwnd);
+						if (init_controls(hwnd))
+							arrange_controls(hwnd);
 					});
 
 					return __super::on_subclass_proc(hwnd, message, w_param, l_param);
@@ -347,20 +396,42 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					//
 					// この関数はコントロールのテキストを変更します。
 					//
-					const auto set_control_text = [this](size_t index, const std::wstring& text)
+					const auto set_control_text = [this](const control_t* control, const std::wstring& text)
 					{
-						// コントロールとテキストが両方とも有効の場合は
-						if (controls[index] && text.length())
+						// コントロールとテキストがどちらも有効の場合は
+						if (control && ::IsWindowEnabled(*control) && text.length())
 						{
 							// コントロールのテキストを変更します。
-							::SetWindowTextW(controls[index], text.c_str());
+							::SetWindowTextW(*control, text.c_str());
 						}
+					};
+
+					//
+					// この関数は映像サイズのコントロールを返します。
+					//
+					const auto get_video_size_controls = [this]()
+					{
+						// 映像サイズのコントロールを取得します。
+						auto video_width = readymade.video_width;
+						auto video_height = readymade.video_height;
+
+						// 映像サイズのコントロールが無効状態の場合は
+						if (!::IsWindowEnabled(*video_width) || !::IsWindowEnabled(*video_height))
+						{
+							// 出力サイズのコントロールを取得します。
+							video_width = readymade.output_width;
+							video_height = readymade.output_height;
+						}
+
+						// 縦横反転にチェックが入っている場合はコントロールを入れ替えます。
+						return (::SendMessage(retrofit.swap_video_size, BM_GETCHECK, 0, 0) == BST_CHECKED) ?
+							std::make_pair(video_height, video_width) : std::make_pair(video_width, video_height);
 					};
 
 					// ロックされている場合は何もしません。
 					if (is_locked()) break;
 
-					locker_t locker(this);
+					my::locker_t locker(this);
 
 //					auto control_id = LOWORD(w_param);
 					auto code = HIWORD(w_param);
@@ -369,96 +440,120 @@ namespace apn::dark::kuro::gdi::aviutl2::new_project
 					// コントロールが無効の場合は何もしません。
 					if (!control) break;
 
-					if (control == preset)
+					if (control == retrofit.preset)
 					{
 						if (code != CBN_SELCHANGE) break;
 
+						// コンボボックスから選択されているプリセットのインデックスを取得します。
 						auto index = (size_t)my::combobox::get_cur_sel(control);
 						if (index >= hive.presets.video_size_collection.size()) break;
 
-						// 全体のプリセットを適用します。
-						const auto& preset = hive.presets.preset_collection[index];
-						if (::SendMessage(swap_video_size, BM_GETCHECK, 0, 0) == BST_CHECKED)
-						{
-							set_control_text(c_video_width, preset.video_height);
-							set_control_text(c_video_height, preset.video_width);
-						}
-						else
-						{
-							set_control_text(c_video_width, preset.video_width);
-							set_control_text(c_video_height, preset.video_height);
-						}
+						// テーブルからプロジェクトのプリセットを取得します。
+						const auto& preset = hive.presets.project_collection[index];
 
-						set_control_text(c_video_rate, preset.video_rate);
-						set_control_text(c_audio_rate, preset.audio_rate);
+						// プロジェクトのプリセットを適用します。
+						{
+							auto video_size = get_video_size_controls();
 
-						if (is_scene)
-							set_control_text(c_name, preset.name);
+							set_control_text(video_size.first, preset.video_width);
+							set_control_text(video_size.second, preset.video_height);
+
+							set_control_text(readymade.video_rate, preset.video_rate);
+							set_control_text(readymade.audio_rate, preset.audio_rate);
+
+							if (readymade.name)
+								set_control_text(readymade.name, preset.scene_name);
+						}
 					}
-					else if (control == name_preset)
+					else if (control == retrofit.name_preset)
 					{
 						if (code != CBN_SELCHANGE) break;
 
+						// コンボボックスから選択されているプリセットのインデックスを取得します。
 						auto index = (size_t)my::combobox::get_cur_sel(control);
-						if (index >= hive.presets.name_collection.size()) break;
+						if (index >= hive.presets.scene_name_collection.size()) break;
 
-						// 名前のプリセットを適用します。
-						const auto& name = hive.presets.name_collection[index];
-						set_control_text(c_name, name.name);
+						// テーブルからシーン名のプリセットを取得します。
+						const auto& preset = hive.presets.scene_name_collection[index];
+
+						// シーン名のプリセットを適用します。
+						{
+							if (readymade.name)
+								set_control_text(readymade.name, preset.scene_name);
+						}
 					}
-					else if (control == video_size_preset)
+					else if (control == retrofit.video_size_preset)
 					{
 						if (code != CBN_SELCHANGE) break;
 
+						// コンボボックスから選択されているプリセットのインデックスを取得します。
 						auto index = (size_t)my::combobox::get_cur_sel(control);
 						if (index >= hive.presets.video_size_collection.size()) break;
+
+						// テーブルから映像サイズのプリセットを取得します。
+						const auto& preset = hive.presets.video_size_collection[index];
 
 						// 映像サイズのプリセットを適用します。
-						const auto& video_size = hive.presets.video_size_collection[index];
-						if (::SendMessage(swap_video_size, BM_GETCHECK, 0, 0) == BST_CHECKED)
 						{
-							set_control_text(c_video_width, video_size.height);
-							set_control_text(c_video_height, video_size.width);
-						}
-						else
-						{
-							set_control_text(c_video_width, video_size.width);
-							set_control_text(c_video_height, video_size.height);
+							auto video_size = get_video_size_controls();
+
+							set_control_text(video_size.first, preset.video_width);
+							set_control_text(video_size.second, preset.video_height);
 						}
 					}
-					else if (control == video_rate_preset)
+					else if (control == retrofit.video_rate_preset)
 					{
 						if (code != CBN_SELCHANGE) break;
 
+						// コンボボックスから選択されているプリセットのインデックスを取得します。
 						auto index = (size_t)my::combobox::get_cur_sel(control);
 						if (index >= hive.presets.video_rate_collection.size()) break;
 
+						// テーブルから映像レートのプリセットを取得します。
+						const auto& preset = hive.presets.video_rate_collection[index];
+
 						// 映像レートのプリセットを適用します。
-						const auto& video_rate = hive.presets.video_rate_collection[index];
-						set_control_text(c_video_rate, video_rate.rate);
+						{
+							set_control_text(readymade.video_rate, preset.video_rate);
+						}
 					}
-					else if (control == audio_rate_preset)
+					else if (control == retrofit.audio_rate_preset)
 					{
 						if (code != CBN_SELCHANGE) break;
 
+						// コンボボックスから選択されているプリセットのインデックスを取得します。
 						auto index = (size_t)my::combobox::get_cur_sel(control);
 						if (index >= hive.presets.audio_rate_collection.size()) break;
 
+						// テーブルから音声レートのプリセットを取得します。
+						const auto& preset = hive.presets.audio_rate_collection[index];
+
 						// 音声レートのプリセットを適用します。
-						const auto& audio_rate = hive.presets.audio_rate_collection[index];
-						set_control_text(c_audio_rate, audio_rate.rate);
+						{
+							set_control_text(readymade.audio_rate, preset.audio_rate);
+						}
 					}
-					else if (control == swap_video_size)
+					else if (control == retrofit.swap_video_size)
 					{
 						if (code != BN_CLICKED) break;
 
 						// 映像サイズの縦横を入れ替えます。
+						{
+							auto video_size = get_video_size_controls();
 
-						auto width = my::get_window_text(controls[c_video_width]);
-						auto height = my::get_window_text(controls[c_video_height]);
+							auto first = my::get_window_text(*video_size.first);
+							auto second = my::get_window_text(*video_size.second);
 
-						::SetWindowText(controls[c_video_width], height.c_str());
-						::SetWindowText(controls[c_video_height], width.c_str());
+							::SetWindowTextW(*video_size.first, second.c_str());
+							::SetWindowTextW(*video_size.second, first.c_str());
+						}
+					}
+					else if (control == retrofit.cancel)
+					{
+						MY_TRACE("キャンセルボタンがクリックされました\n");
+
+						// エスケープキーをエミュレートします。
+						::PostMessage(hwnd, WM_KEYDOWN, VK_ESCAPE, 0);
 					}
 
 					break;

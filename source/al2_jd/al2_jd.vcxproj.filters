@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="framework">
-      <UniqueIdentifier>{7f11dba5-0fb0-455f-882d-36166962a4a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="kuro">
       <UniqueIdentifier>{93bd8007-1536-423f-becb-73cccbdc584e}</UniqueIdentifier>
     </Filter>
@@ -37,10 +34,6 @@
     <Filter Include="kuro\gdi\renderer\comdlg32">
       <UniqueIdentifier>{2a7b4353-6efb-4f1c-821f-da3c05c25adf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="resource">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="kuro\gdi\renderer\aviutl2">
       <UniqueIdentifier>{f74f7b6b-3cc1-41c0-a8af-4226535c83e0}</UniqueIdentifier>
     </Filter>
@@ -65,18 +58,25 @@
     <Filter Include="kuro\paint\d2d">
       <UniqueIdentifier>{281acd33-2053-4673-9842-93418e09662c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_">
+      <UniqueIdentifier>{7f11dba5-0fb0-455f-882d-36166962a4a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="_\resource">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
-      <Filter>framework</Filter>
+      <Filter>_</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>framework</Filter>
+      <Filter>_</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
-      <Filter>framework</Filter>
+      <Filter>_</Filter>
     </ClInclude>
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="hive.hpp" />
@@ -218,7 +218,7 @@
       <Filter>kuro\theme\renderer</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>resource</Filter>
+      <Filter>_\resource</Filter>
     </ClInclude>
     <ClInclude Include="test_dialog.hpp" />
     <ClInclude Include="kuro\theme\renderer\button.hpp">
@@ -343,9 +343,8 @@
       <Filter>kuro\paint\material</Filter>
     </ClInclude>
     <ClInclude Include="version.hpp">
-      <Filter>framework</Filter>
+      <Filter>_</Filter>
     </ClInclude>
-    <ClInclude Include="lockable.hpp" />
     <ClInclude Include="kuro\gdi\renderer\aviutl2\layer_name\dialog.hpp">
       <Filter>kuro\gdi\renderer\aviutl2\layer_name</Filter>
     </ClInclude>
@@ -393,12 +392,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="main.def">
-      <Filter>framework</Filter>
+      <Filter>_</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="al2_jd.rc">
-      <Filter>resource</Filter>
+      <Filter>_\resource</Filter>
     </ResourceCompile>
   </ItemGroup>
 </Project>

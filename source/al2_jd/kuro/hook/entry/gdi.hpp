@@ -382,7 +382,7 @@ namespace apn::dark::kuro::hook
 				}
 
 				// ::ExtTextOut()のフックをロックします。
-				locker_t locker(&ext_text_out_lock);
+				my::locker_t locker(&ext_text_out_lock);
 
 				MY_TRACE_FUNC("{/hex}, {/hex}, {/}, {/}, {/hex}, ({/}), {/}, {/} : {/}",
 					ret_addr(&dc), dc, x, y, options, safe_string(rc),

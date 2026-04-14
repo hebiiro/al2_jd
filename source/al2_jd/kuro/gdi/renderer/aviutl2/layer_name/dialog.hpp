@@ -2,7 +2,7 @@
 
 namespace apn::dark::kuro::gdi::aviutl2::layer_name
 {
-	struct dialog_renderer_t : gdi::dialog_renderer_t, lockable_t
+	struct dialog_renderer_t : gdi::dialog_renderer_t, my::lockable_t
 	{
 		inline static constexpr size_t c_name_stat = 0;
 		inline static constexpr size_t c_name = 1;
@@ -208,7 +208,7 @@ namespace apn::dark::kuro::gdi::aviutl2::layer_name
 
 					auto result = __super::on_subclass_proc(hwnd, message, wParam, lParam);
 
-					locker_t locker(this);
+					my::locker_t locker(this);
 
 					init_controls(hwnd);
 					change_layout(hwnd);
@@ -230,7 +230,7 @@ namespace apn::dark::kuro::gdi::aviutl2::layer_name
 					// ロックされている場合は何もしません。
 					if (is_locked()) break;
 
-					locker_t locker(this);
+					my::locker_t locker(this);
 
 //					auto control_id = LOWORD(wParam);
 					auto code = HIWORD(wParam);
